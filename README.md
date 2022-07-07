@@ -3,45 +3,56 @@
 Rabbitmq consumer for TOL data input
 
 
-### Requirements for Development
+## Getting Started
 
 The following tools are required for development:
 
 - python (use pyenv or something similar to install the python version specified in the `Pipfile`)
 
-### Getting Started
+Use pyenv or something similar to install the version of python
+defined in the `Pipfile`:
 
-#### Setup
-
-- Use pyenv or something similar to install the version of python
-  defined in the `Pipfile`:
-
-        brew install pyenv
-        pyenv install <python_version>
+```bash
+    brew install pyenv
+    pyenv install <python_version>
+```
         
-- Use pipenv to install the required python packages for the application and development:
+Use pipenv to install the required python packages for the application and development:
 
-        pipenv install --dev
+```bash
+     pipenv install --dev
+```
 
-### Running
+
+### Setting up with Docker
+
+If you want to setup a local development environment with Docker please check
+the instructions in [SETUP_DOCKER.md](SETUP_DOCKER.md)
+
+
+## Running
 
 1. Enter the python virtual environment using:
-
-        pipenv shell
+```bash
+    pipenv shell
+```
 
 1. Run the app using:
 
-        flask run
+```bash
+    python tol_consumer
+```
 
-### Testing
+## Testing
 
 Run the tests using pytest (flags are for verbose and exit early):
 
+```bash
     python -m pytest -vx
+```
 
 ## Deployment
 
 This project uses a Docker image as the unit of deployment. Update `.release-version` with
 major/minor/patch. On merging a pull request into *develop* or *master*, a release will be created
 along with the Docker image associated to that release.
-
