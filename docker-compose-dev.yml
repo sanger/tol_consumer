@@ -1,0 +1,13 @@
+#
+# Basic version of stack, for Github
+#
+version: "3.3"
+services:
+  tol_consumer:
+    build: .
+    image: tol_consumer
+    depends_on:
+      - rabbitmq
+      - schema_registry
+    environment:
+    entrypoint: "bash -c ./entrypoint.sh"
