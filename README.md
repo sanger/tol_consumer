@@ -23,11 +23,6 @@ Use pipenv to install the required python packages for the application and devel
      pipenv install --dev
 ```
 
-Then you can start a shell with:
-
-```bash
-    pipenv shell
-```
 
 ### Setting up with Docker
 
@@ -38,7 +33,9 @@ the instructions in [SETUP_DOCKER.md](SETUP_DOCKER.md)
 ## Running
 
 1. Enter the python virtual environment using:
-
+```bash
+    pipenv shell
+```
 
 1. Run the app using:
 

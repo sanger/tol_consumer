@@ -5,7 +5,7 @@ tol_consumer. start a stack of services that include a Redpanda schema registry 
 You can do all together by running the command:
 
 ```shell
-docker-compose up
+docker-compose up -d
 ```
 
 With this we should have started tol_consumer and all required services. 
@@ -19,12 +19,12 @@ with:
 
 ## Local development setup 
 
-You may want to start only the required services for sm_workflow_lims and use your local version of them
-instead of the Docker version, in that case you can start this setup with the
+You may want to start only the container for tol_consumer standalone and use your local version of the
+related services instead of the Docker version, in that case you can start this setup with the
 command:
 
 ```shell
-docker-compose -f docker-compose-dev.yml up
+docker-compose -f docker-compose-standalone.yml up -d
 ```
 
 ## Recreating Docker images 
