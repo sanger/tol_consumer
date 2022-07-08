@@ -39,7 +39,7 @@ COPY . .
 #   command (and then use CMD as the default flags)."
 #   https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#entrypoint
 ENTRYPOINT ["python"]
-CMD ["tol_consumer"]
+CMD ["tol-lab-share"]
 
 # https://docs.docker.com/engine/reference/builder/#healthcheck
 #HEALTHCHECK --interval=1m --timeout=3s \
