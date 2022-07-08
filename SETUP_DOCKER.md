@@ -1,16 +1,16 @@
 # Getting started using Docker
 
 To set up a local development environment in Docker, you have to build a new Docker image for
-tol_consumer. start a stack of services that include a Redpanda schema registry and Rabbitmq. 
+tol-lab-share. start a stack of services that include a Redpanda schema registry and Rabbitmq. 
 You can do all together by running the command:
 
 ```shell
 docker-compose up -d
 ```
 
-With this we should have started tol_consumer and all required services. 
+With this we should have started tol-lab-share and all required services. 
 
-After the services have started, in another terminal, you can enter start and interactive shell in the tol_consumer container
+After the services have started, in another terminal, you can enter start and interactive shell in the tol-lab-share container
 with:
 
 ```shell
@@ -19,7 +19,7 @@ with:
 
 ## Local development setup 
 
-You may want to start only the container for tol_consumer standalone and use your local version of the
+You may want to start only the container for tol-lab-share standalone and use your local version of the
 related services instead of the Docker version, in that case you can start this setup with the
 command:
 

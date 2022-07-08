@@ -1,4 +1,4 @@
-# tol_consumer
+# tol-lab-share
 
 Rabbitmq consumer for TOL data input
 
@@ -40,7 +40,7 @@ the instructions in [SETUP_DOCKER.md](SETUP_DOCKER.md)
 1. Run the app using:
 
 ```bash
-    python tol_consumer
+    python tol-lab-share
 ```
 
 ## Testing
