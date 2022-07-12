@@ -40,7 +40,7 @@ the instructions in [SETUP_DOCKER.md](SETUP_DOCKER.md)
 1. Run the app using:
 
 ```bash
-    python tol-lab-share
+    python main.py
 ```
 
 ## Testing
