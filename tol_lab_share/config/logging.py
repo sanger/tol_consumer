@@ -32,9 +32,14 @@ LOGGING: Dict[str, Any] = {
         },
     },
     "loggers": {
+        "tol_lab_share": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
         "lab_share_lib": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": "DEBUG",
             "propagate": True,
         },
     },
