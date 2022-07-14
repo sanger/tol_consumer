@@ -1,14 +1,11 @@
 from typing import Dict, cast
 
 from lab_share_lib.processing.base_processor import BaseProcessor
-#from lab_share_lib.processing.create_plate_processor import CreatePlateProcessor
-#from lab_share_lib.processing.update_sample_processor import UpdateSampleProcessor
-
-
-RABBITMQ_SUBJECT_CREATE_PLATE = "create-plate-map"
-RABBITMQ_SUBJECT_UPDATE_SAMPLE = "update-plate-map-sample"
+from tol_lab_share.processors.create_labware_processor import CreateLabwareProcessor
+from tol_lab_share.processors.update_labware_processor import UpdateLabwareProcessor
+from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE, RABBITMQ_SUBJECT_UPDATE_LABWARE
 
 PROCESSORS: Dict[str, BaseProcessor] = {
-    #RABBITMQ_SUBJECT_CREATE_PLATE: cast(BaseProcessor, CreatePlateProcessor),
-    #RABBITMQ_SUBJECT_UPDATE_SAMPLE: cast(BaseProcessor, UpdateSampleProcessor),
+    RABBITMQ_SUBJECT_CREATE_LABWARE: cast(BaseProcessor, CreateLabwareProcessor),
+    RABBITMQ_SUBJECT_UPDATE_LABWARE: cast(BaseProcessor, UpdateLabwareProcessor),
 }

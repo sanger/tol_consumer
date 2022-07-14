@@ -1,0 +1,2 @@
+RABBITMQ_SUBJECT_CREATE_LABWARE = "create-labware"
+RABBITMQ_SUBJECT_UPDATE_LABWARE = "update-labware"
