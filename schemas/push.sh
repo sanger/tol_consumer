@@ -1,7 +1,21 @@
-curl -X POST -d @create-labware/1.txt -H "Content-Type: application/vnd.schemaregistry.v1+json" http://localhost:8081/subjects/create-labware/versions
+#!/bin/bash
+if [ $# -ne 2 ]; then
+  echo "Syntax:"
+  echo "  push.sh <SCHEMAS_FOLDER> <REDPANDA_URL>"
+  echo "where:"
+  echo "  <SCHEMAS_FOLDER>: folder that contains the schemas (schemas filename must end with -schema.txt)"
+  echo "  <REDPANDA_URL>: Url to connect to Redpanda where the schemas will be uploaded"
+  exit 1
+fi
+LOCAL_PATH=$1
+URL=$2
 
-curl -X POST -d @create-labware-feedback/1.txt -H "Content-Type: application/vnd.schemaregistry.v1+json" http://localhost:8081/subjects/create-labware-feedback/versions
+CONTENT_TYPE="Content-Type: application/vnd.schemaregistry.v1+json"
 
-curl  -X POST -d @update-labware/1.txt -H "Content-Type: application/vnd.schemaregistry.v1+json" http://localhost:8081/subjects/update-labware/versions
+pushd $LOCAL_PATH 1>/dev/null
 
-curl -X POST -d @update-labware-feedback/1.txt -H "Content-Type: application/vnd.schemaregistry.v1+json" http://localhost:8081/subjects/update-labware-feedback/versions
+for schema in `find . -name "*-schema.txt"`; do
+  curl -X POST -d @$schema -H "$CONTENT_TYPE" $URL/subjects/create-labware/versions
+done
+
+popd 1>/dev/null
