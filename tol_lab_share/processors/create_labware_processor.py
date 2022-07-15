@@ -1,5 +1,4 @@
-# mypy: allow-untyped-defs
-from lab_share_lib.rabbit.avro_encoder import AvroEncoder  # type: ignore
+from lab_share_lib.rabbit.avro_encoder import AvroEncoder
 import logging
 
 from tol_lab_share.constants import (
@@ -7,7 +6,7 @@ from tol_lab_share.constants import (
     RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
 )
 
-from lab_share_lib.processing.rabbit_message import RabbitMessage  # type: ignore
+from lab_share_lib.processing.rabbit_message import RabbitMessage
 
 logger = logging.getLogger(__name__)
 
