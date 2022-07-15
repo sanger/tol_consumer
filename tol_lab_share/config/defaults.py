@@ -21,7 +21,7 @@ RABBITMQ_PORT = 5672
 RABBITMQ_USERNAME = "admin"
 RABBITMQ_PASSWORD = "development"
 RABBITMQ_VHOST = "tol"
-RABBITMQ_CRUD_QUEUE = "tol.crud-labware"
+RABBITMQ_CRUD_QUEUE = "tol.crud-operations"
 RABBITMQ_FEEDBACK_EXCHANGE = "psd.tol"
 
 ###
