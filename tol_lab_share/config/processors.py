@@ -1,6 +1,6 @@
 from typing import Dict, cast
 
-from lab_share_lib.processing.base_processor import BaseProcessor
+from lab_share_lib.processing.base_processor import BaseProcessor  # type: ignore
 from tol_lab_share.processors.create_labware_processor import CreateLabwareProcessor
 from tol_lab_share.processors.update_labware_processor import UpdateLabwareProcessor
 from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE, RABBITMQ_SUBJECT_UPDATE_LABWARE

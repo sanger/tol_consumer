@@ -2,20 +2,20 @@ import time
 import logging
 import logging.config
 from tol_lab_share.helpers import get_config
-from lab_share_lib.rabbit.rabbit_stack import RabbitStack
+from lab_share_lib.rabbit.rabbit_stack import RabbitStack  # type: ignore
 
 config = get_config("")
 logging.config.dictConfig(config.LOGGING)
 
 logger = logging.getLogger(__name__)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Starting TOL consumer")
     rabbit_stack = RabbitStack(config)
 
     rabbit_stack.bring_stack_up()
 
-    try: 
+    try:
         while True:
             if rabbit_stack.is_healthy:
                 logger.debug("RabbitStack thread is running healthy")
