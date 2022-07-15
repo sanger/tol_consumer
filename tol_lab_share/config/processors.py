@@ -1,3 +1,4 @@
+# mypy: allow-untyped-defs
 from typing import Dict, cast
 
 from lab_share_lib.processing.base_processor import BaseProcessor  # type: ignore

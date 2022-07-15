@@ -1,3 +1,4 @@
+# mypy: allow-untyped-defs
 from lab_share_lib.rabbit.avro_encoder import AvroEncoder  # type: ignore
 import logging
 
