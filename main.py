@@ -2,7 +2,7 @@ import time
 import logging
 import logging.config
 from tol_lab_share.helpers import get_config
-from lab_share_lib.rabbit.rabbit_stack import RabbitStack  # type: ignore
+from lab_share_lib.rabbit.rabbit_stack import RabbitStack
 
 config = get_config("")
 logging.config.dictConfig(config.LOGGING)
