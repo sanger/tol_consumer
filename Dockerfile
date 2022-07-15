@@ -36,6 +36,9 @@ RUN pipenv sync --dev --system && \
 # Copy all the source to the image
 COPY . .
 
+RUN pipenv install --dev
+
+CMD pipenv run python main.py
 # "The best use for ENTRYPOINT is to set the image’s main command, allowing that image to be run as though it was that
 #   command (and then use CMD as the default flags)."
 #   https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#entrypoint
