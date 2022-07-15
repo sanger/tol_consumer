@@ -56,3 +56,4 @@ Run the tests using pytest (flags are for verbose and exit early):
 This project uses a Docker image as the unit of deployment. Update `.release-version` with
 major/minor/patch. On merging a pull request into *develop* or *master*, a release will be created
 along with the Docker image associated to that release.
+

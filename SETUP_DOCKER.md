@@ -1,36 +1,41 @@
-# Getting started using Docker
+## Setting up a complete development environment from scratch
 
-To set up a local development environment in Docker, you have to build a new Docker image for
-tol-lab-share. start a stack of services that include a Redpanda schema registry and Rabbitmq. 
-You can do all together by running the command:
-
-```shell
-docker-compose up -d
+1. Start dependent services: Rabbitmq and Redpanda
+```bash
+  cd docker
+  docker-compose up -d
+  cd ..
 ```
 
-With this we should have started tol-lab-share and all required services. 
-
-After the services have started, in another terminal, you can enter start and interactive shell in the tol-lab-share container
-with:
-
-```shell
-./bin/tolc_docker_exec.sh bash
+2. Setup Rabbitmq configuration (queues, etc)
+```bash
+    python setup_dev_rabbit.py
 ```
 
-## Local development setup 
-
-You may want to start only the container for tol-lab-share standalone and use your local version of the
-related services instead of the Docker version, in that case you can start this setup with the
-command:
-
-```shell
-docker-compose -f docker-compose-standalone.yml up -d
+3. Load Redpanda schemas:
+```bash
+    cd schemas
+    ./push.sh . http://localhost:8081
+    cd ..
 ```
 
-## Recreating Docker images 
-If you need to recreate the image built on first start (because you made modifications
-to the Dockerfile file or in configuration) you can run a building process with:
+4. Build docker image
+```bash
+    docker build . -t tol-lab-share:develop
+```
 
-```shell
-docker-compose build
+5. Create .env file with contents
+```
+SETTINGS_MODULE=tol_lab_share.config.defaults
+LOCALHOST=host.docker.internal
+```
+
+6. Start interactive bash in docker container
+```bash
+    docker run -ti -v $(pwd):/code --env-file=.env tol-lab-share:develop bash
+```
+
+7. Start service (inside the previous bash)
+```bash
+    pipenv run python main.py
 ```

@@ -18,8 +18,7 @@ for schema in `find $SCHEMAS_FOLDER -name "*-schema.txt"`; do
   echo "Uploading schema $schema"
   schema_name=`dirname $schema | sed 's/\.//g' | sed 's/\///g'`
   curl -X POST -d @$schema -H "$CONTENT_TYPE" "$REDPANDA_URL/subjects/$schema_name/versions"
-  curl -X GET -H "$CONTENT_TYPE" "$REDPANDA_URL/subjects/$schema_name/versions/1"
-  echo "Done"
+  #curl -X GET -H "$CONTENT_TYPE" "$REDPANDA_URL/subjects/$schema_name/versions/1"
 done
 
 popd 1>/dev/null
