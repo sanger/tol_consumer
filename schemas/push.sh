@@ -4,7 +4,7 @@ if [ $# -ne 2 ]; then
   echo "  push.sh <SCHEMAS_FOLDER> <REDPANDA_URL>"
   echo "where:"
   echo "  <SCHEMAS_FOLDER>: folder that contains the subfolders with the schemas (schemas filename must end with -schema.txt)"
-  echo "  <REDPANDA_URL>: Url to connect to Redpanda where the schemas will be uploaded"
+  echo "  <REDPANDA_URL>: URL to connect to RedPanda where the schemas will be uploaded"
   exit 1
 fi
 SCHEMAS_FOLDER=$1
