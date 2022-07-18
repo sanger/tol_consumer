@@ -3,7 +3,7 @@ if [ $# -ne 1 ]; then
   echo "Syntax:"
   echo "  push.sh <REDPANDA_URL>"
   echo "where:"
-  echo "  <REDPANDA_URL>: Url to connect to Redpanda where the schemas will be uploaded"
+  echo "  <REDPANDA_URL>: URL to connect to RedPanda where the schemas will be uploaded"
   exit 1
 fi
 REDPANDA_URL=$1
