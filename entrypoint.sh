@@ -14,4 +14,4 @@ TIMEOUT=120
 ./wait_for_connection.sh "${RABBITMQ_HOST}" "${RABBITMQ_PORT}" "${TIMEOUT}"
 
 echo "Starting service"
-exec python tol-lab-share
+exec pipenv run python main.py
