@@ -7,7 +7,7 @@
   cd ..
 ```
 
-2. Setup Rabbitmq configuration (queues, etc)
+2. Setup RabbitMQ configuration (queues, etc)
 ```bash
     python setup_dev_rabbit.py
 ```
