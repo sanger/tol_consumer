@@ -18,8 +18,8 @@ ROOT_PASSWORD = os.environ.get("ROOT_PASSWORD", "")
 RABBITMQ_HOST = os.environ.get("LOCALHOST", "127.0.0.1")
 RABBITMQ_SSL = False
 RABBITMQ_PORT = 5672
-RABBITMQ_USERNAME = "admin"
-RABBITMQ_PASSWORD = "development"
+RABBITMQ_USERNAME = os.environ.get("RABBITMQ_USER", "admin")
+RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "development")
 RABBITMQ_VHOST = "tol"
 RABBITMQ_CRUD_QUEUE = "tol.crud-operations"
 RABBITMQ_FEEDBACK_EXCHANGE = "psd.tol"
@@ -29,10 +29,3 @@ RABBITMQ_FEEDBACK_EXCHANGE = "psd.tol"
 ###
 REDPANDA_BASE_URI = f"http://{os.environ.get('LOCALHOST', '127.0.0.1')}:8081"
 REDPANDA_API_KEY = ""
-
-
-###
-# slack details
-###
-SLACK_API_TOKEN = ""
-SLACK_CHANNEL_ID = ""

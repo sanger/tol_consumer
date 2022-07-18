@@ -2,9 +2,7 @@
 
 1. Start dependent services: RabbitMQ and RedPanda
 ```bash
-  cd docker
-  docker-compose up -d
-  cd ..
+  ./docker/dependencies/up.sh
 ```
 
 2. Setup RabbitMQ configuration (queues, etc)
@@ -14,9 +12,7 @@
 
 3. Load Redpanda schemas:
 ```bash
-    cd schemas
-    ./push.sh . http://localhost:8081
-    cd ..
+    ./schemas/push.sh http://localhost:8081
 ```
 
 4. Build docker image
