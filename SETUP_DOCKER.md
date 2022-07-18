@@ -1,6 +1,6 @@
 ## Setting up a complete development environment from scratch
 
-1. Start dependent services: Rabbitmq and Redpanda
+1. Start dependent services: RabbitMQ and RedPanda
 ```bash
   cd docker
   docker-compose up -d
