@@ -13,6 +13,7 @@ RUN apt-get update && \
     build-essential \
     curl \
     netcat \
+    git \
     unixodbc-dev
 
 # Install the package manager - pipenv
@@ -35,11 +36,12 @@ RUN pipenv sync --dev --system && \
 # Copy all the source to the image
 COPY . .
 
+RUN pipenv install --dev
+
 # "The best use for ENTRYPOINT is to set the image’s main command, allowing that image to be run as though it was that
 #   command (and then use CMD as the default flags)."
 #   https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#entrypoint
-ENTRYPOINT ["python"]
-CMD ["tol_consumer"]
+ENTRYPOINT ["pipenv", "run", "python", "main.py"]
 
 # https://docs.docker.com/engine/reference/builder/#healthcheck
 #HEALTHCHECK --interval=1m --timeout=3s \

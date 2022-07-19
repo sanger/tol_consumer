@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2dc7fcdc7155ff5b06f17dcf8f808e914ed7f41a7410057a6f4b438fa0887224"
+            "sha256": "dc36eb8f1998e5e093ad01936991b3f70154d953185b085123b0da1ef878cb74"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -230,6 +230,11 @@
             ],
             "version": "==3.3"
         },
+        "lab-share-lib": {
+            "editable": true,
+            "git": "https://github.com/sanger/lab-share-lib",
+            "ref": "471bebcebc4b166addeecebef2f641ba9d048745"
+        },
         "more-itertools": {
             "hashes": [
                 "sha256:a42901a0a5b169d925f6f217cd5a190e32ef54360905b9c39ee7db5313bfec0f",
@@ -336,10 +341,10 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14",
-                "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"
+                "sha256:8298d6d56d39be0e3bc13c1c97d133f9b45d797169a0e11cdd0e0489d786f7ec",
+                "sha256:879ba4d1e89654d9769ce13121e0f94310ea32e8d2f8cf587b77c08bbcdb30d6"
             ],
-            "version": "==1.26.9"
+            "version": "==1.26.10"
         },
         "yarl": {
             "hashes": [
@@ -750,10 +755,10 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14",
-                "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"
+                "sha256:8298d6d56d39be0e3bc13c1c97d133f9b45d797169a0e11cdd0e0489d786f7ec",
+                "sha256:879ba4d1e89654d9769ce13121e0f94310ea32e8d2f8cf587b77c08bbcdb30d6"
             ],
-            "version": "==1.26.9"
+            "version": "==1.26.10"
         }
     }
 }

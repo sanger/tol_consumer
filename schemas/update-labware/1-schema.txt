@@ -1,0 +1,1 @@
+{"schema": "{\"type\":\"record\",\"name\":\"updatelabware\",\"fields\":[{\"name\":\"barcode\",\"type\":\"string\"}]}"}

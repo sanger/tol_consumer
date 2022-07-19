@@ -4,6 +4,6 @@
 # connect to web and rabbitmq UI
 version: "3.3"
 services:
-  tol_consumer:
+  tol-lab-share:
     volumes:
       - ".:/code"

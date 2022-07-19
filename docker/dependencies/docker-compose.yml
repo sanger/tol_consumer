@@ -3,20 +3,6 @@
 #
 version: "3.3"
 services:
-  tol-lab-share:
-    build: .
-    image: tol-lab-share
-    depends_on:
-      - rabbitmq
-      - schema_registry
-    environment:
-      REDPANDA_HOST: host.docker.internal
-      REDPANDA_PORT: 8081
-      RABBITMQ_HOST: host.docker.internal
-      RABBITMQ_PORT: 5672
-
-    entrypoint: "bash -c ./entrypoint.sh"
-
   # An instance of RedPanda Schema Registry
   # To run it as a standalone container:
   #   docker network create redpanda-network
