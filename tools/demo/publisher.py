@@ -2,19 +2,19 @@ import os
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.avro_encoder import AvroEncoder
-from lab_share_lib.types import  RabbitServerDetails
+from lab_share_lib.types import RabbitServerDetails
 
-REDPANDA_URL=os.getenv("REDPANDA_URL", "http://localhost")
-REDPANDA_API_KEY=os.getenv("REDPANDA_API_KEY", "test")
-REDPANDA_SUBJECT=os.getenv("REDPANDA_SUBJECT", "create-labware")
+REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost")
+REDPANDA_API_KEY = os.getenv("REDPANDA_API_KEY", "test")
+REDPANDA_SUBJECT = os.getenv("REDPANDA_SUBJECT", "create-labware")
 
-RABBITMQ_HOST=os.getenv("RABBITMQ_HOST", "localhost")
-RABBITMQ_PORT=os.getenv("RABBITMQ_PORT", "5671")
-RABBITMQ_USERNAME=os.getenv("RABBITMQ_USERNAME", "psd")
-RABBITMQ_PASSWORD=os.getenv("RABBITMQ_PASSWORD", "psd")
-RABBITMQ_VHOST=os.getenv("RABBITMQ_VHOST", "tol")
-RABBITMQ_EXCHANGE=os.getenv("RABBITMQ_EXCHANGE", "tol-team.tol")
-RABBITMQ_ROUTING_KEY=os.getenv("RABBITMQ_ROUTING_KEY", "crud.1")
+RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
+RABBITMQ_PORT = os.getenv("RABBITMQ_PORT", "5671")
+RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME", "psd")
+RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD", "psd")
+RABBITMQ_VHOST = os.getenv("RABBITMQ_VHOST", "tol")
+RABBITMQ_EXCHANGE = os.getenv("RABBITMQ_EXCHANGE", "tol-team.tol")
+RABBITMQ_ROUTING_KEY = os.getenv("RABBITMQ_ROUTING_KEY", "crud.1")
 
 if __name__ == "__main__":
     registry = SchemaRegistry(REDPANDA_URL, REDPANDA_API_KEY)
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     )
     publisher = BasicPublisher(rabbitmq_details)
 
-    for barcode in range(0,20):
+    for barcode in range(0, 20):
         msg = {"barcode": str(barcode), "plate_name": f"Plate_{ barcode }"}
 
         print(f"Want to send message { msg }\n")
@@ -46,4 +46,3 @@ if __name__ == "__main__":
             REDPANDA_SUBJECT,
             encoded_message.version,
         )
-
