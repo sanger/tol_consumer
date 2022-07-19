@@ -30,12 +30,14 @@ if __name__ == "__main__":
     )
     publisher = BasicPublisher(rabbitmq_details)
 
-    for barcode in range(1,2):
-        msg = {"barcode": str(barcode), "name": "1234"}
+    for barcode in range(0,20):
+        msg = {"barcode": str(barcode), "plate_name": f"Plate_{ barcode }"}
 
-        print(f"Publishing message { msg }\n")
+        print(f"Want to send message { msg }\n")
 
-        encoded_message = encoder.encode([msg])
+        encoded_message = encoder.encode([msg], version="latest")
+
+        print(f"Publishing message { encoded_message }\n")
 
         publisher.publish_message(
             RABBITMQ_EXCHANGE,
