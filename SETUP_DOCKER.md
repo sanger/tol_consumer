@@ -32,7 +32,7 @@ LOCALHOST=host.docker.internal
     docker run -ti -v $(pwd):/code --env-file=.env --entrypoint bash tol-lab-share:develop
 ```
 
-7. Start service (inside the previous bash)
+7. Start the consumer service (inside the previous bash)
 ```bash
     pipenv run python main.py
 ```
@@ -42,3 +42,6 @@ After this you should have:
 * Consumer (python main.py) running connected to Rabbitmq queue
 * Rabbitmq service running in http://localhost:8080/ with user/password: admin/development
 * Redpanda API service running in local in http://localhost:8081/
+
+
+If you want to perform any changes in code, you can kill the consumer with Control-C, modify the code in local and then restart the consumer again using the same command
