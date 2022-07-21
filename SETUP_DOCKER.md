@@ -5,14 +5,15 @@
   ./docker/dependencies/up.sh
 ```
 
-2. Setup RabbitMQ configuration (queues, etc)
+2. Setup RabbitMQ configuration (queues, etc). You may need to wait 30 seconds from the previous command
+to run this one as it requires Rabbitmq to have started completely:
 ```bash
     python setup_dev_rabbit.py
 ```
 
 3. Load Redpanda schemas:
 ```bash
-    ./schemas/push.sh http://localhost:8081
+    ./schemas/push.sh http://localhost:8081 redpanda-test
 ```
 
 4. Build docker image
@@ -35,3 +36,9 @@ LOCALHOST=host.docker.internal
 ```bash
     pipenv run python main.py
 ```
+
+After this you should have:
+
+* Consumer (python main.py) running connected to Rabbitmq queue
+* Rabbitmq service running in http://localhost:8080/ with user/password: admin/development
+* Redpanda API service running in local in http://localhost:8081/
