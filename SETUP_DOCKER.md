@@ -28,7 +28,7 @@ LOCALHOST=host.docker.internal
 
 6. Start interactive bash in docker container
 ```bash
-    docker run -ti -v $(pwd):/code --env-file=.env tol-lab-share:develop bash
+    docker run -ti -v $(pwd):/code --env-file=.env --entrypoint bash tol-lab-share:develop
 ```
 
 7. Start service (inside the previous bash)
