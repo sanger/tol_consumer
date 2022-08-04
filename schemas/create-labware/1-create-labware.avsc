@@ -1,0 +1,109 @@
+{
+  "namespace": "uk.ac.sanger.psd",
+  "type": "record",
+  "name": "CreateLabwareMessage",
+  "doc": "A create message to process new labware.",
+  "fields": [
+    {
+      "name": "messageUuid",
+      "doc": "Unique message ID.",
+      "type": {"name": "version4MessageUuid", "type": "fixed", "size": 36}
+    },
+    {
+      "name": "messageCreateDateUtc",
+      "doc": "Date (UTC) that the message was created.",
+      "type": { "type": "long", "logicalType": "timestamp-millis" }
+    },
+    {
+      "name": "labware",
+      "doc": "Labware to process.",
+      "type": {
+        "name": "Labware", "type": "record",
+        "doc": "Labware data.",
+        "fields": [
+          {
+            "name": "labwareType",
+            "type": "string"
+          },
+          {
+            "name": "barcode", "type": "string",
+            "doc": "The barcode for this labware."
+          },
+          {
+            "name": "samples",
+            "doc": "An array of data for samples on the labware.",
+            "type": {
+              "type": "array",
+              "items": {
+                "name": "Sample", 
+                "type": "record",
+                "doc": "A labware sample",
+                "fields": [
+                  {
+                    "name": "sampleUuid",
+                    "doc": "Unique sample ID.",
+                    "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
+                  },
+                  {
+                    "name": "studyUuid",
+                    "doc": "Unique study ID.",
+                    "type": {"name": "version4StudyUuid", "type": "fixed", "size": 36}
+                  },
+                  {
+                    "name": "sangerSampleId", "type": "string",
+                    "doc": "Sanger sample ID."
+                  },
+                  {
+                    "name": "location", "type": ["string","null"],
+                    "doc": "The location for the sample inside the labware."
+                  },
+                  {
+                    "name": "supplierSampleName", "type": "string",
+                    "doc": "Supplier sample name."
+                  },
+                  {
+                    "name": "volume", "type": "string",
+                    "doc": "Volume of the sample."
+                  },
+                  {
+                    "name": "concentration", "type": "string",
+                    "doc": "Concentration of the sample."
+                  },
+                  {
+                    "name": "publicName", "type": "string",
+                    "doc": "Public name of the sample."
+                  },
+                  {
+                    "name": "taxonId", "type": "string",
+                    "doc": "Taxonomy Identifier."
+                  },
+                  {
+                    "name": "commonName", "type": "string",
+                    "doc": "Common name"
+                  },
+                  {
+                    "name": "donorId", "type": "string",
+                    "doc": "Donor id"
+                  },
+                  {
+                    "name": "libraryType", "type": "string",
+                    "doc": "Library Type"
+                  },
+                  {
+                    "name": "countryOfOrigin", "type": "string",
+                    "doc": "CountryOfOrigin"
+                  },
+                  {
+                    "name": "sampleCollectionDateUtc",
+                    "doc": "Sample Collection (UTC) of the sample.",
+                    "type": { "type": "long", "logicalType": "timestamp-millis" }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
