@@ -23,8 +23,8 @@ class UpdateLabwareProcessor:
         logger.debug(f"Received: { message.message }")
 
         message = {
-            "sourceMessageUuid": str(message.message['messageUuid'].decode("utf-8")),
-            "operationWasErrorFree": str(True), 
+            "sourceMessageUuid": str(message.message["messageUuid"].decode("utf-8")),
+            "operationWasErrorFree": str(True),
             "errors": [],
         }
 

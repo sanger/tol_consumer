@@ -22,7 +22,7 @@ CREATE_LABWARE_MSG = {
                 "donorId": "cichlid_pacbio8196429",
                 "libraryType": "Library1",
                 "countryOfOrigin": "United Kingdom",
-                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000
+                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -38,36 +38,33 @@ CREATE_LABWARE_MSG = {
                 "donorId": "cichlid_pacbio8196430",
                 "libraryType": "Library1",
                 "countryOfOrigin": "United Kingdom",
-                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000
-
-            }
-        ]
-    }
+                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+            },
+        ],
+    },
 }
 
 UPDATE_LABWARE_MSG = {
     "messageUuid": "78fedc85-fa9d-494d-951e-779d208e8c0g".encode(),
     "messageCreateDateUtc": datetime.now().timestamp() * 1000,
-    "labwareUpdates": [{
-        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
-        "name": "barcode", 
-        "value": "BARCODE0002",
-    }],
+    "labwareUpdates": [
+        {
+            "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
+            "name": "barcode",
+            "value": "BARCODE0002",
+        }
+    ],
     "sampleUpdates": [
         {
             "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
-            "name": "sangerSampleId", 
-            "value": "cichlid_pacbio8196429"
+            "name": "sangerSampleId",
+            "value": "cichlid_pacbio8196429",
         },
         {
             "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
-            "name": "supplierSampleName", 
-            "value": "SampleSupplied1"
+            "name": "supplierSampleName",
+            "value": "SampleSupplied1",
         },
-        {
-            "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6".encode(),
-            "name": "commonName", 
-            "value": "Mus Musculus"
-        },
+        {"sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6".encode(), "name": "commonName", "value": "Mus Musculus"},
     ],
 }

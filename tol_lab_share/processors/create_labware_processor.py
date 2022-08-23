@@ -10,7 +10,7 @@ from lab_share_lib.processing.rabbit_message import RabbitMessage
 
 logger = logging.getLogger(__name__)
 
-from uuid import uuid4
+
 class CreateLabwareProcessor:
     def __init__(self, schema_registry, basic_publisher, config):
         logger.debug("CreateLabwareProcessor::__init__")
@@ -23,10 +23,10 @@ class CreateLabwareProcessor:
         logger.debug(f"Received: { message.message }")
 
         message = {
-            "sourceMessageUuid": str(message.message['messageUuid'].decode("utf-8")),
-            "countOfTotalSamples": len(message.message['labware']['samples']),
-            "countOfValidSamples": len(message.message['labware']['samples']),
-            "operationWasErrorFree": str(True), 
+            "sourceMessageUuid": str(message.message["messageUuid"].decode("utf-8")),
+            "countOfTotalSamples": len(message.message["labware"]["samples"]),
+            "countOfValidSamples": len(message.message["labware"]["samples"]),
+            "operationWasErrorFree": str(True),
             "errors": [],
         }
 

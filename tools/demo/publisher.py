@@ -3,7 +3,6 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.avro_encoder import AvroEncoder
 from lab_share_lib.types import RabbitServerDetails
-from datetime import datetime
 
 from testing_data import CREATE_LABWARE_MSG, UPDATE_LABWARE_MSG
 
@@ -48,8 +47,8 @@ if __name__ == "__main__":
         vhost=RABBITMQ_VHOST,
     )
     publisher = BasicPublisher(rabbitmq_details)
-    
-    for barcode in range(0, 20):
+
+    for _barcode in range(0, 20):
 
         send_message(CREATE_LABWARE_MSG, "create-labware", registry, publisher)
         send_message(UPDATE_LABWARE_MSG, "update-labware", registry, publisher)
