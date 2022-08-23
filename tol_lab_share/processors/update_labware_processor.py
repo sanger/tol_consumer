@@ -20,8 +20,18 @@ class UpdateLabwareProcessor:
 
     def process(self, message: RabbitMessage) -> bool:
         logger.debug("UpdateLabwareProcessor::process")
-        barcode = message.message["barcode"]
-        encoded_message = self._encoder.encode([{"success": f"ok update for barcode: { barcode }"}])
+        logger.debug(f"Received: { message.message }")
+
+        message = {
+            "sourceMessageUuid": str(message.message["messageUuid"].decode("utf-8")),
+            "operationWasErrorFree": str(True),
+            "errors": [],
+        }
+
+        encoded_message = self._encoder.encode([message])
+
+        logger.debug(f"Sending: { encoded_message }")
+
         self._basic_publisher.publish_message(
             self._config.RABBITMQ_FEEDBACK_EXCHANGE,
             RABBITMQ_ROUTING_KEY_UPDATE_LABWARE_FEEDBACK,

@@ -1,0 +1,69 @@
+{
+  "namespace": "uk.ac.sanger.psd",
+  "type": "record",
+  "name": "UpdateLabwareMessage",
+  "doc": "A message describing the field level updates needed to be applied to a labware.",
+  "fields": [
+    {
+      "name": "messageUuid",
+      "doc": "Unique message ID.",
+      "type": {"name": "version4MessageUuid", "type": "fixed", "size": 36}
+    },
+    {
+      "name": "messageCreateDateUtc",
+      "doc": "Date (UTC) that the message was created.",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "labwareUpdates",
+      "doc": "Labware object data.",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": {
+            "name": "Labware", "type": "record",
+            "doc": "Labware data.",
+            "fields": [
+              {
+                "name": "labwareUuid",
+                "doc": "Unique labware ID, assigned by PAM.",
+                "type": {"name": "version4LabwareUuid", "type": "fixed", "size": 36}
+              },
+              { "name": "name", "type": "string"},
+              { "name": "value", "type": "string" }
+            ]
+          }
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "sampleUpdates",
+      "doc": "Sample object data.",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": {
+            "name": "LabwareSample", "type": "record",
+            "doc": "Labware sample data.",
+            "fields": [
+              {
+                "name": "sampleUuid",
+                "doc": "Unique sample ID, assigned by PAM.",
+                "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
+              },
+              { "name": "name", "type": "string" },
+              { "name": "value", "type": "string" }
+            ]
+          }
+        }
+      ],
+      "default": null
+    }
+  ]
+}
