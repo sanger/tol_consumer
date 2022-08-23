@@ -1,1 +1,0 @@
-{"schema": "{\"type\":\"record\",\"name\":\"createlabwarefeedback\",\"fields\":[{\"name\":\"success\",\"type\":\"string\"}]}"}

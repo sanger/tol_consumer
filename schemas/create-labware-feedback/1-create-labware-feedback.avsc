@@ -28,6 +28,7 @@
         "items": {
           "name": "ProcessingError", "type": "record",
           "doc": "An error generated during processing of the create message.",
+          "default": [],
           "fields": [
             { "name": "typeId", "type": "int", "doc": "An ID indicating the type of the error." },
             {

@@ -18,34 +18,52 @@
       }
     },
     {
-      "name": "sample",
-      "doc": "Sample object data.",
-      "type": {
-        "name": "LabwareSample", "type": "record",
-        "doc": "Labware sample data.",
-        "fields": [
-          {
-            "name": "sampleUuid",
-            "doc": "Unique sample ID, assigned by PAM.",
-            "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
-          },
-          {
-            "name": "updatedFields",
-            "doc": "An array of field data to update. All included fields will be updated. Missing fields will be left unchanged.",
-            "type": {
-              "type": "array",
-              "items": {
-                "name": "booleanField", "type": "record",
-                "doc": "A field with a required boolean value.",
-                "fields": [
-                  { "name": "name", "type": { "name": "requiredBooleanFields", "type": "enum", "symbols": ["sangerSampleId", "supplierSampleName", "commonName"] } },
-                  { "name": "value", "type": "string" }
-                ]
-              }
-            }
+      "name": "labwareUpdates",
+      "doc": "Labware object data.",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": {
+            "name": "Labware", "type": "record",
+            "doc": "Labware data.",
+            "fields": [
+              {
+                "name": "labwareUuid",
+                "doc": "Unique labware ID, assigned by PAM.",
+                "type": {"name": "version4LabwareUuid", "type": "fixed", "size": 36}
+              },
+              { "name": "name", "type": "string"},
+              { "name": "value", "type": "string" }
+            ]
           }
-        ]
-      }
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "sampleUpdates",
+      "doc": "Sample object data.",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": {
+            "name": "LabwareSample", "type": "record",
+            "doc": "Labware sample data.",
+            "fields": [
+              {
+                "name": "sampleUuid",
+                "doc": "Unique sample ID, assigned by PAM.",
+                "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
+              },
+              { "name": "name", "type": "string" },
+              { "name": "value", "type": "string" }
+            ]
+          }
+        }
+      ],
+      "default": null
     }
   ]
 }
