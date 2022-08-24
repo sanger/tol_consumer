@@ -46,7 +46,7 @@ if __name__ == "__main__":
         password=RABBITMQ_PASSWORD,
         vhost=RABBITMQ_VHOST,
     )
-    publisher = BasicPublisher(rabbitmq_details)
+    publisher = BasicPublisher(rabbitmq_details, publish_retry_delay=5,publish_max_retries=36)
 
     for _barcode in range(0, 20):
 
