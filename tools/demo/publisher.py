@@ -1,7 +1,7 @@
 import os
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
-from lab_share_lib.rabbit.avro_encoder import AvroEncoder
+from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary
 from lab_share_lib.types import RabbitServerDetails
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 
@@ -23,7 +23,7 @@ RABBITMQ_ROUTING_KEY = os.getenv("RABBITMQ_ROUTING_KEY", "crud.1")
 def send_message(msg, subject, registry, publisher):
     print(f"Want to send { subject } message { msg }\n")
 
-    encoder = AvroEncoder(registry, subject)
+    encoder = AvroEncoderBinary(registry, subject)
     encoded_message = encoder.encode([msg], version="latest")
 
     print(f"Publishing message { encoded_message }\n")
