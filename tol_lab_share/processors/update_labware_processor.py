@@ -1,4 +1,4 @@
-from lab_share_lib.rabbit.avro_encoder import AvroEncoder
+from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary
 import logging
 
 from tol_lab_share.constants import (
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class UpdateLabwareProcessor:
     def __init__(self, schema_registry, basic_publisher, config):
         logger.debug("UpdateLabwareProcessor::__init__")
-        self._encoder = AvroEncoder(schema_registry, RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK)
+        self._encoder = AvroEncoderBinary(schema_registry, RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK)
         self._basic_publisher = basic_publisher
         self._config = config
 
