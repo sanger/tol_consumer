@@ -5,6 +5,7 @@ from tol_lab_share.constants import (
     RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK,
     RABBITMQ_ROUTING_KEY_UPDATE_LABWARE_FEEDBACK,
 )
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 
@@ -38,5 +39,6 @@ class UpdateLabwareProcessor:
             encoded_message.body,
             RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK,
             encoded_message.version,
+            RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
         )
         return True
