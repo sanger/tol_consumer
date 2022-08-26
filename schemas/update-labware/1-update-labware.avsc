@@ -37,7 +37,7 @@
                 "doc": "Name of the attribute of the labware we want to update (eg: 'barcode')"
               },
               { "name": "value", "type": "string",
-                "doc": "Value we want to set for the atttribute (eg: for name='barcode' the value could be for example '1234')" 
+                "doc": "Value we want to set for the attribute (eg: for name='barcode' the value could be for example '1234')" 
               }
             ]
           }
@@ -67,7 +67,7 @@
                },
               { 
                 "name": "value", "type": "string",
-                "doc": "Value we want to set for the atttribute (eg: for name='volume' the value could be for example '2 ml')" 
+                "doc": "Value we want to set for the attribute (eg: for name='volume' the value could be for example '2 ml')" 
               }
             ]
           }
