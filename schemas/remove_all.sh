@@ -15,7 +15,7 @@ API_KEY_HEADER="X-API-KEY: $API_KEY"
 
 pushd "$(dirname "$0")"
 
-for schema in `find . -name "*-schema.txt"`; do
+for schema in `find . -name "*.avsc"`; do
   schema_name=`dirname $schema | sed 's/\.//g' | sed 's/\///g'`
   echo "Deleting all schemas from $schema_name"
   curl -X DELETE -H "$CONTENT_TYPE" -H "$API_KEY_HEADER" "$REDPANDA_URL/subjects/$schema_name/versions/latest"

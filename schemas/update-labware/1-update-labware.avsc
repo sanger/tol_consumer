@@ -1,0 +1,79 @@
+{
+  "namespace": "uk.ac.sanger.psd",
+  "type": "record",
+  "name": "UpdateLabwareMessage",
+  "doc": "A message describing the field level updates needed to be applied to a labware.",
+  "fields": [
+    {
+      "name": "messageUuid",
+      "doc": "Unique message ID.",
+      "type": {"name": "version4MessageUuid", "type": "fixed", "size": 36}
+    },
+    {
+      "name": "messageCreateDateUtc",
+      "doc": "Date (UTC) that the message was created.",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "labwareUpdates",
+      "doc": "Labware object data.",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": {
+            "name": "Labware", "type": "record",
+            "doc": "Labware data.",
+            "fields": [
+              {
+                "name": "labwareUuid",
+                "doc": "Unique labware ID, assigned by GSU.",
+                "type": {"name": "version4LabwareUuid", "type": "fixed", "size": 36}
+              },
+              { "name": "name", "type": "string",
+                "doc": "Name of the attribute of the labware we want to update (eg: 'barcode')"
+              },
+              { "name": "value", "type": "string",
+                "doc": "Value we want to set for the attribute (eg: for name='barcode' the value could be for example '1234')" 
+              }
+            ]
+          }
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "sampleUpdates",
+      "doc": "Sample object data.",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": {
+            "name": "LabwareSample", "type": "record",
+            "doc": "Labware sample data.",
+            "fields": [
+              {
+                "name": "sampleUuid",
+                "doc": "Unique sample ID, assigned by GSU.",
+                "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
+              },
+              { 
+                "name": "name", "type": "string", 
+                "doc": "Name of the attribute of the sample we want to update (eg: 'volume')"
+               },
+              { 
+                "name": "value", "type": "string",
+                "doc": "Value we want to set for the attribute (eg: for name='volume' the value could be for example '2 ml')" 
+              }
+            ]
+          }
+        }
+      ],
+      "default": null
+    }
+  ]
+}

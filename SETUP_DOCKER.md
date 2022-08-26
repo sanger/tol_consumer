@@ -5,14 +5,15 @@
   ./docker/dependencies/up.sh
 ```
 
-2. Setup RabbitMQ configuration (queues, etc)
+2. Setup RabbitMQ configuration (queues, etc). You may need to wait 30 seconds from the previous command
+to run this one as it requires Rabbitmq to have started completely:
 ```bash
     python setup_dev_rabbit.py
 ```
 
 3. Load Redpanda schemas:
 ```bash
-    ./schemas/push.sh http://localhost:8081
+    ./schemas/push.sh http://localhost:8081 redpanda-test
 ```
 
 4. Build docker image
@@ -28,10 +29,19 @@ LOCALHOST=host.docker.internal
 
 6. Start interactive bash in docker container
 ```bash
-    docker run -ti -v $(pwd):/code --env-file=.env tol-lab-share:develop bash
+    docker run -ti -v $(pwd):/code --env-file=.env --entrypoint bash tol-lab-share:develop
 ```
 
-7. Start service (inside the previous bash)
+7. Start the consumer service (inside the previous bash)
 ```bash
     pipenv run python main.py
 ```
+
+After this you should have:
+
+* Consumer (python main.py) running connected to Rabbitmq queue
+* Rabbitmq service running in http://localhost:8080/ with user/password: admin/development
+* Redpanda API service running in local in http://localhost:8081/
+
+
+If you want to perform any changes in code, you can kill the consumer with Control-C, modify the code in local and then restart the consumer again using the same command

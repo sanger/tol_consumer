@@ -3,12 +3,14 @@ How to run
 
 1. Create a docker image for the project that we will use to run the code.
 This saves a lot of problems when installing dependent libraries in local.
+To build you have to reference to the root folder of the project that contains the 
+Dockerfile file, for example, if you run the command from inside this folder it should be:
 
 ```bash
-  docker build . -t tol-lab-share:develop
+  docker build ../../ -t tol-lab-share:develop
 ```
 
-2. Create a file .env with this content:
+2. Create a file .env with this content (fill in the data on the entries that have ...):
 
 ```
 SETTINGS_MODULE=tol_lab_share.config.defaults
