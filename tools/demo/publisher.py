@@ -24,6 +24,7 @@ def send_message(msg, subject, registry, publisher):
     print(f"Want to send { subject } message { msg }\n")
 
     encoder = AvroEncoderBinary(registry, subject)
+    encoder.set_compression_codec("snappy")
     encoded_message = encoder.encode([msg], version="latest")
 
     print(f"Publishing message { encoded_message }\n")
