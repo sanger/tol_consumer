@@ -33,7 +33,7 @@
                 "doc": "Unique labware ID, assigned by GSU.",
                 "type": {"name": "version4LabwareUuid", "type": "fixed", "size": 36}
               },
-              { "name": "name", "type": "string"
+              { "name": "name", "type": "string",
                 "doc": "Name of the attribute of the labware we want to update (eg: 'barcode')"
               },
               { "name": "value", "type": "string",

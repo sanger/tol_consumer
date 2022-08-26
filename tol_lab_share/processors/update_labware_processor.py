@@ -5,6 +5,7 @@ from tol_lab_share.constants import (
     RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK,
     RABBITMQ_ROUTING_KEY_UPDATE_LABWARE_FEEDBACK,
 )
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 
 logger = logging.getLogger(__name__)
@@ -31,9 +32,13 @@ class UpdateLabwareProcessor:
 
         logger.debug(f"Sending: { encoded_message }")
 
-        self._basic_publisher.publish_rabbit_message(
-            encoded_message,
+        self._basic_publisher.publish_message(
             self._config.RABBITMQ_FEEDBACK_EXCHANGE,
             RABBITMQ_ROUTING_KEY_UPDATE_LABWARE_FEEDBACK,
+            encoded_message.body,
+            RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK,
+            encoded_message.version,
+            RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
         )
+
         return True
