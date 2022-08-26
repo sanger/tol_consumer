@@ -4,7 +4,7 @@ from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK
 
 
 def test_create_labware_processor(config):
-    with patch("tol_lab_share.processors.create_labware_processor.AvroEncoder") as mock_avro_encoder:
+    with patch("tol_lab_share.processors.create_labware_processor.AvroEncoderBinary") as mock_avro_encoder:
         schema_registry = MagicMock()
         assert CreateLabwareProcessor(schema_registry, MagicMock(), config) is not None
 

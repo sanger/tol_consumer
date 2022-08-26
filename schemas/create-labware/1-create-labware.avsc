@@ -50,16 +50,14 @@
                     "type": {"name": "version4StudyUuid", "type": "fixed", "size": 36}
                   },
                   {
-                    "name": "sangerSampleId", "type": "string",
-                    "doc": "Sanger sample ID."
+                    "name": "sangerSampleId", "type": "string"
                   },
                   {
                     "name": "location", "type": ["string","null"],
-                    "doc": "The location for the sample inside the labware."
+                    "doc": "The location for the sample inside the labware, or null if location is not relevant in labware (Eg: tube)."
                   },
                   {
-                    "name": "supplierSampleName", "type": "string",
-                    "doc": "Supplier sample name."
+                    "name": "supplierSampleName", "type": "string"
                   },
                   {
                     "name": "volume", "type": "string",
@@ -78,24 +76,20 @@
                     "doc": "Taxonomy Identifier."
                   },
                   {
-                    "name": "commonName", "type": "string",
-                    "doc": "Common name"
+                    "name": "commonName", "type": "string"
                   },
                   {
-                    "name": "donorId", "type": "string",
-                    "doc": "Donor id"
+                    "name": "donorId", "type": "string"
                   },
                   {
-                    "name": "libraryType", "type": "string",
-                    "doc": "Library Type"
+                    "name": "libraryType", "type": "string"
                   },
                   {
-                    "name": "countryOfOrigin", "type": "string",
-                    "doc": "CountryOfOrigin"
+                    "name": "countryOfOrigin", "type": "string"
                   },
                   {
                     "name": "sampleCollectionDateUtc",
-                    "doc": "Sample Collection (UTC) of the sample.",
+                    "doc": "Sample Collection of the sample in UTC format.",
                     "type": { "type": "long", "logicalType": "timestamp-millis" }
                   }
                 ]

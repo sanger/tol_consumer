@@ -30,11 +30,15 @@
             "fields": [
               {
                 "name": "labwareUuid",
-                "doc": "Unique labware ID, assigned by PAM.",
+                "doc": "Unique labware ID, assigned by GSU.",
                 "type": {"name": "version4LabwareUuid", "type": "fixed", "size": 36}
               },
-              { "name": "name", "type": "string"},
-              { "name": "value", "type": "string" }
+              { "name": "name", "type": "string",
+                "doc": "Name of the attribute of the labware we want to update (eg: 'barcode')"
+              },
+              { "name": "value", "type": "string",
+                "doc": "Value we want to set for the attribute (eg: for name='barcode' the value could be for example '1234')" 
+              }
             ]
           }
         }
@@ -54,11 +58,17 @@
             "fields": [
               {
                 "name": "sampleUuid",
-                "doc": "Unique sample ID, assigned by PAM.",
+                "doc": "Unique sample ID, assigned by GSU.",
                 "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
               },
-              { "name": "name", "type": "string" },
-              { "name": "value", "type": "string" }
+              { 
+                "name": "name", "type": "string", 
+                "doc": "Name of the attribute of the sample we want to update (eg: 'volume')"
+               },
+              { 
+                "name": "value", "type": "string",
+                "doc": "Value we want to set for the attribute (eg: for name='volume' the value could be for example '2 ml')" 
+              }
             ]
           }
         }

@@ -42,5 +42,10 @@ LOGGING: Dict[str, Any] = {
             "level": "DEBUG",
             "propagate": True,
         },
+        "rabbit_messages": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
     },
 }

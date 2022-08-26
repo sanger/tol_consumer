@@ -1,8 +1,10 @@
 import os
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
-from lab_share_lib.rabbit.avro_encoder import AvroEncoder
+from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary
 from lab_share_lib.types import RabbitServerDetails
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
+
 
 from testing_data import CREATE_LABWARE_MSG, UPDATE_LABWARE_MSG
 
@@ -21,7 +23,8 @@ RABBITMQ_ROUTING_KEY = os.getenv("RABBITMQ_ROUTING_KEY", "crud.1")
 def send_message(msg, subject, registry, publisher):
     print(f"Want to send { subject } message { msg }\n")
 
-    encoder = AvroEncoder(registry, subject)
+    encoder = AvroEncoderBinary(registry, subject)
+    encoder.set_compression_codec("snappy")
     encoded_message = encoder.encode([msg], version="latest")
 
     print(f"Publishing message { encoded_message }\n")
@@ -32,11 +35,12 @@ def send_message(msg, subject, registry, publisher):
         encoded_message.body,
         subject,
         encoded_message.version,
+        RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
     )
 
 
 if __name__ == "__main__":
-    registry = SchemaRegistry(REDPANDA_URL, REDPANDA_API_KEY)
+    registry = SchemaRegistry(REDPANDA_URL, REDPANDA_API_KEY, verify=False)
 
     rabbitmq_details = RabbitServerDetails(
         uses_ssl=True,
@@ -46,7 +50,7 @@ if __name__ == "__main__":
         password=RABBITMQ_PASSWORD,
         vhost=RABBITMQ_VHOST,
     )
-    publisher = BasicPublisher(rabbitmq_details)
+    publisher = BasicPublisher(rabbitmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
 
     for _barcode in range(0, 20):
 
