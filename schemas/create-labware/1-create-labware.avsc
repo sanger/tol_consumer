@@ -30,7 +30,7 @@
             "doc": "The barcode for this labware."
           },
           {
-            "name": "labwareUuid", "type": "string",
+            "name": "labwareUuid", "type": "string"
           },
           {
             "name": "samples",
