@@ -8,6 +8,8 @@ from tol_lab_share.constants import (
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 
+from tol_lab_share.messages import InputCreateLabwareMessage
+
 logger = logging.getLogger(__name__)
 
 
@@ -22,25 +24,6 @@ class CreateLabwareProcessor:
         logger.debug("CreateLabwareProcessor::process")
         logger.debug(f"Received: { message.message }")
 
-        message = {
-            "sourceMessageUuid": str(message.message["messageUuid"].decode()),
-            "countOfTotalSamples": len(message.message["labware"]["samples"]),
-            "countOfValidSamples": len(message.message["labware"]["samples"]),
-            "operationWasErrorFree": str(True),
-            "errors": [],
-        }
+        input = InputCreateLabwareMessage(message)
 
-        encoded_message = self._encoder.encode([message])
-
-        logger.debug(f"Sending: { encoded_message }")
-
-        self._basic_publisher.publish_message(
-            self._config.RABBITMQ_FEEDBACK_EXCHANGE,
-            RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
-            encoded_message.body,
-            RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
-            encoded_message.version,
-            RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
-        )
-
-        return True
+        return input.validate()
