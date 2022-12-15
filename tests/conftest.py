@@ -7,7 +7,7 @@ from lab_share_lib.constants import (
     RABBITMQ_HEADER_KEY_SUBJECT,
     RABBITMQ_HEADER_KEY_VERSION,
 )
-from data.examples_create_labware_message import TEST_CREATE_LABWARE_MSG_OBJECT, TEST_INVALID_CREATE_LABWARE_MSG_OBJECT
+from data.examples_create_labware_messages import TEST_CREATE_LABWARE_MSG_OBJECT, TEST_INVALID_CREATE_LABWARE_MSG_OBJECT
 
 from unittest.mock import MagicMock
 
