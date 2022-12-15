@@ -1,20 +1,23 @@
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from typing import Optional, Any
 from tol_lab_share.message_properties.exceptions import (
-    InvalidInputMessageProperty, ValueNotReadyForMessageProperty, ErrorWhenObtainingMessageProperty
+    InvalidInputMessageProperty,
+    ValueNotReadyForMessageProperty,
+    ErrorWhenObtainingMessageProperty,
 )
 from functools import cached_property
 
 from statemachine import StateMachine, State
 
+
 class MessagePropertyStateMachine(StateMachine):
     # states
-    pending = State('pending', initial=True)
-    valid = State('valid')
-    invalid = State('invalid')
-    resolving = State('resolving')
-    resolved = State('resolved')
-    error = State('error')
+    pending = State("pending", initial=True)
+    valid = State("valid")
+    invalid = State("invalid")
+    resolving = State("resolving")
+    resolved = State("resolved")
+    error = State("error")
 
     # transitions
     validation_passed = pending.to(valid)
@@ -22,6 +25,7 @@ class MessagePropertyStateMachine(StateMachine):
     request_resolution = valid.to(resolving)
     resolution_successful = resolving.to(resolved)
     resolution_failed = resolving.to(error)
+
 
 class MessageProperty:
     def __init__(self, input):
@@ -32,7 +36,7 @@ class MessageProperty:
         self.state = MessagePropertyStateMachine()
 
     def validate(self):
-        result =  all([validator() for validator in self._validators])
+        result = all([validator() for validator in self._validators])
 
         if result:
             self.state.validation_passed()
@@ -52,9 +56,8 @@ class MessageProperty:
         else:
             raise ValueNotReadyForMessageProperty()
 
-
     def set_validators(self):
         self._validators = []
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
-        return True
+        pass

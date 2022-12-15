@@ -2,7 +2,9 @@ from .message_property import MessageProperty
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from uuid import UUID
 from tol_lab_share.message_properties.exceptions import (
-    InvalidInputMessageProperty, ValueNotReadyForMessageProperty, ErrorWhenObtainingMessageProperty
+    InvalidInputMessageProperty,
+    ValueNotReadyForMessageProperty,
+    ErrorWhenObtainingMessageProperty,
 )
 
 
@@ -30,11 +32,11 @@ class Uuid(MessageProperty):
             return False
         return str(uuid_obj) == str(str_rep)
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage):
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         if self.state.is_resolved:
             feedback_message.source_message_uuid = self.value
             if feedback_message.operation_was_error_free is None:
                 feedback_message.operation_was_error_free = True
-        else: 
+        else:
             feedback_message.operation_was_error_free = False
             raise ValueNotReadyForMessageProperty()

@@ -10,7 +10,8 @@ from lab_share_lib.processing.rabbit_message import RabbitMessage
 
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
-#from tol_lab_share.messages import InputCreateLabwareMessage, OutputFeedbackMessage
+
+# from tol_lab_share.messages import InputCreateLabwareMessage, OutputFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
@@ -32,4 +33,4 @@ class CreateLabwareProcessor:
         output_feedback_message = OutputFeedbackMessage()
         input.add_to_feedback_message(output_feedback_message)
 
-        return output_feedback_message.operation_was_error_free
+        return output_feedback_message.operation_was_error_free == True

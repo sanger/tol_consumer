@@ -15,9 +15,9 @@ class InputCreateLabwareMessage:
         self._message = m.message
 
         self._properties = {
-            'uuid': Uuid(self._message[INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID]),
-            'labware': Labware(self._message[INPUT_CREATE_LABWARE_MESSAGE_LABWARE]),
-            'create_date_utc': CreatedDateUtc(self._message[INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC]) 
+            "uuid": Uuid(self._message[INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID]),
+            "labware": Labware(self._message[INPUT_CREATE_LABWARE_MESSAGE_LABWARE]),
+            "create_date_utc": CreatedDateUtc(self._message[INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC]),
         }
 
     def validate(self) -> bool:
@@ -26,6 +26,7 @@ class InputCreateLabwareMessage:
     def resolve(self) -> bool:
         for prop_name in self._properties.keys():
             self._properties[prop_name].resolve()
+        return True
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> bool:
         for prop_name in self._properties.keys():
