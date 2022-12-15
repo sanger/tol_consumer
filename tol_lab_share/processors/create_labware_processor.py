@@ -8,7 +8,9 @@ from tol_lab_share.constants import (
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 
-from tol_lab_share.messages import InputCreateLabwareMessage
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
+#from tol_lab_share.messages import InputCreateLabwareMessage, OutputFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
@@ -25,5 +27,9 @@ class CreateLabwareProcessor:
         logger.debug(f"Received: { message.message }")
 
         input = InputCreateLabwareMessage(message)
+        input.validate()
+        input.resolve()
+        output_feedback_message = OutputFeedbackMessage()
+        input.add_to_feedback_message(output_feedback_message)
 
-        return input.validate()
+        return output_feedback_message.operation_was_error_free
