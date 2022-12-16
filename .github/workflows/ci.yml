@@ -11,6 +11,8 @@ on:
       - develop-*
       - develop
       - master
+env:
+  PYTHON_VERSION: 3.11
 
 jobs:
   black:
@@ -20,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: $PYTHON_VERSION
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -44,7 +46,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: $PYTHON_VERSION
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -68,7 +70,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: $PYTHON_VERSION
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -91,7 +93,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: $PYTHON_VERSION
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
