@@ -55,6 +55,8 @@ def test_uuid_validate_when_not_valid():
     instance = Uuid(1234)
     assert instance.validate() is False
 
+    assert len(instance._errors) > 0
+
 
 def test_uuid_validate_when_valid():
     # Not binary

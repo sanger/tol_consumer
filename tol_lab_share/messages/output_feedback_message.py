@@ -47,3 +47,8 @@ class OutputFeedbackMessage:
 
     def add_error(self, type_id, origin, sample_uuid, field, description):
         self._errors.append([type_id, origin, sample_uuid, field, description])
+
+    def add_error_code(self, error_code, sample_uuid=None):
+        self._errors.append(
+            [error_code.type_id, error_code.origin, sample_uuid, error_code.field, error_code.description]
+        )

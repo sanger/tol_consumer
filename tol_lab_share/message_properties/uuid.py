@@ -6,6 +6,8 @@ from tol_lab_share.message_properties.exceptions import (
     ValueNotReadyForMessageProperty,
     ErrorWhenObtainingMessageProperty,
 )
+from tol_lab_share import error_codes
+
 from functools import cached_property
 from typing import Optional, Any
 
@@ -17,31 +19,36 @@ class Uuid(MessageProperty):
     def check_is_binary(self):
         try:
             self._input.decode("utf-8")
+            return True
         except AttributeError:
-            self._errors.append("The string for uuid is not a binary")
-            return False
-        return True
+            pass
+        self.errors.append(error_codes.ERROR_1_UUID_NOT_BINARY)
+        return False
 
     def check_is_uuid(self):
         try:
             str_rep = self._input.decode("utf-8")
             uuid_obj = UUID(str_rep, version=4)
+            if str(uuid_obj) == str(str_rep):
+                return True
         except ValueError:
-            self._errors.append("The string is not a uuid")
-            return False
+            pass
         except AttributeError:
-            self._errors.append("The string is not a binary")
-            return False
-        return str(uuid_obj) == str(str_rep)
+            pass
+        self.errors.append(error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT)
+        return False
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        self.state.retrieve_feedback()
+        if len(self.errors) > 0:
+            feedback_message.operation_was_error_free = False
+            for error in self.errors:
+                feedback_message.add_error_code(error)
+
         if self.state.is_resolved:
             feedback_message.source_message_uuid = self.value
             if feedback_message.operation_was_error_free is None:
                 feedback_message.operation_was_error_free = True
-        else:
-            feedback_message.operation_was_error_free = False
-            raise ValueNotReadyForMessageProperty()
 
     @cached_property
     def value(self) -> Optional[Any]:
