@@ -12,10 +12,6 @@ on:
       - develop
       - master
 
-strategy:
-  matrix:
-    python-version: ["3.11.1"]
-
 jobs:
   black:
     runs-on: ubuntu-latest
@@ -24,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -48,7 +44,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -72,7 +68,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -95,7 +91,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
