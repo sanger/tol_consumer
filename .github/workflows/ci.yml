@@ -27,6 +27,9 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+      - name: Install snappy
+        run: |
+          apt install -y libsnappy-dev            
       - name: Install pipenv
         run: |
           pip install pipenv
@@ -54,6 +57,9 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
+      - name: Install snappy
+        run: |
+          apt install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
@@ -78,6 +84,9 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
+      - name: Install snappy
+        run: |
+          apt install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
@@ -101,6 +110,9 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
+      - name: Install snappy
+        run: |
+          apt install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
