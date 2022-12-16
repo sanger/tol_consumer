@@ -14,6 +14,8 @@ class MessageProperty:
         self.state = DataResolution()
 
     def validate(self):
+        self.state.performing_validation()
+
         result = all([validator() for validator in self._validators])
 
         if result:

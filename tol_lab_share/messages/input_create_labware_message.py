@@ -26,6 +26,8 @@ class InputCreateLabwareMessage:
         self.state = DataResolution()
 
     def validate(self) -> bool:
+        self.state.performing_validation()
+
         result = all([self._properties[prop_name].validate() for prop_name in self._properties.keys()])
         if result:
             self.state.validation_passed()
