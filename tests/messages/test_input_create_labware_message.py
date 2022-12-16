@@ -43,4 +43,9 @@ def test_input_create_labware_message_cannot_add_to_feedback_message_if_resolved
     subject.validate()
     subject.resolve()
     feedback_message = OutputFeedbackMessage()
+
+    assert feedback_message.source_message_uuid is None
+
     assert subject.add_to_feedback_message(feedback_message) is True
+
+    assert feedback_message.source_message_uuid == "b01aa0ad-7b19-4f94-87e9-70d74fb8783c"

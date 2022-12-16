@@ -1,9 +1,7 @@
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary
 import logging
 
-from tol_lab_share.constants import (
-    RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
-)
+from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
