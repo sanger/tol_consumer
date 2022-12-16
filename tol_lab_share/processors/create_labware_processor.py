@@ -33,4 +33,4 @@ class CreateLabwareProcessor:
         output_feedback_message = OutputFeedbackMessage()
         input.add_to_feedback_message(output_feedback_message)
 
-        return output_feedback_message.operation_was_error_free == True
+        return output_feedback_message.operation_was_error_free is True

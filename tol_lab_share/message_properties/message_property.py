@@ -20,11 +20,12 @@ class MessagePropertyStateMachine(StateMachine):
     error = State("error")
 
     # transitions
-    validation_passed = pending.to(valid)
-    validation_failed = pending.to(invalid)
-    request_resolution = valid.to(resolving)
-    resolution_successful = resolving.to(resolved)
-    resolution_failed = resolving.to(error)
+    validation_passed = pending.to(valid) | valid.to(valid) | invalid.to(valid) | resolved.to(resolved)
+    validation_failed = pending.to(invalid) | invalid.to(invalid) | valid.to(invalid)
+    request_resolution = valid.to(resolving) | resolved.to(resolved)
+    resolution_successful = resolving.to(resolved) | resolved.to(resolved)
+    resolution_failed = resolving.to(error) | resolved.to(error)
+    retrieve_value = resolved.to(resolved)
 
 
 class MessageProperty:
@@ -49,12 +50,11 @@ class MessageProperty:
         self.state.request_resolution()
         self.state.resolution_successful()
 
-    @property
+    @cached_property
     def value(self) -> Optional[Any]:
-        if self.state.is_resolved:
-            return self._value
-        else:
-            raise ValueNotReadyForMessageProperty()
+        self.state.retrieve_value()
+
+        return self._input
 
     def set_validators(self):
         self._validators = []

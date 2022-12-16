@@ -6,6 +6,8 @@ from tol_lab_share.message_properties.exceptions import (
     ValueNotReadyForMessageProperty,
     ErrorWhenObtainingMessageProperty,
 )
+from functools import cached_property
+from typing import Optional, Any
 
 
 class Uuid(MessageProperty):
@@ -40,3 +42,10 @@ class Uuid(MessageProperty):
         else:
             feedback_message.operation_was_error_free = False
             raise ValueNotReadyForMessageProperty()
+
+    @cached_property
+    def value(self) -> Optional[Any]:
+        self.state.retrieve_value()
+
+        self._value = self._input.decode("utf-8")
+        return self._value
