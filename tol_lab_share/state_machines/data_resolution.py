@@ -1,4 +1,4 @@
-from statemachine import StateMachine, State
+from statemachine import StateMachine, State  # type: ignore
 
 
 class DataResolution(StateMachine):

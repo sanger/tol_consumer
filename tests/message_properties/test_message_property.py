@@ -1,7 +1,6 @@
 import pytest
-import statemachine
+import statemachine  # type: ignore
 from tol_lab_share.message_properties.message_property import MessageProperty
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 
 def test_message_property_state_machine_init_to_pending():

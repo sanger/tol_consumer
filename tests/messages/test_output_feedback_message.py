@@ -1,4 +1,4 @@
-from tol_lab_share.messages import OutputFeedbackMessage
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 
 def test_output_feedback_message_can_instate():

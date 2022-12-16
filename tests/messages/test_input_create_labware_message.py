@@ -1,7 +1,7 @@
 import pytest
-import statemachine
-from tol_lab_share.messages import InputCreateLabwareMessage, OutputFeedbackMessage
-from tol_lab_share.message_properties.exceptions import ValueNotReadyForMessageProperty
+import statemachine  # type: ignore
+from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 
 def test_input_create_labware_message_can_create_instance(valid_create_labware_message):

@@ -7,7 +7,9 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_LABWARE,
 )
 import itertools
-from tol_lab_share.message_properties import Uuid, Labware, CreatedDateUtc
+from tol_lab_share.message_properties.uuid import Uuid
+from tol_lab_share.message_properties.labware import Labware
+from tol_lab_share.message_properties.created_date_utc import CreatedDateUtc
 from tol_lab_share.state_machines.data_resolution import DataResolution
 from tol_lab_share.error_codes import ErrorCode
 
