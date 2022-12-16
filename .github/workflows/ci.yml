@@ -12,7 +12,7 @@ on:
       - develop
       - master
 env:
-  PYTHON_VERSION: 3.11
+  PYTHON_VERSION: 3.11.1
 
 jobs:
   black:
