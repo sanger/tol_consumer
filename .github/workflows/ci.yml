@@ -112,7 +112,7 @@ jobs:
           pip install pipenv
       - name: Install snappy
         run: |
-          apt install -y libsnappy-dev
+          sudo apt-get install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
