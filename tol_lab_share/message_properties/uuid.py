@@ -3,8 +3,8 @@ from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from uuid import UUID
 from tol_lab_share import error_codes
 
-from functools import cached_property
 from typing import Optional, Any
+from functools import cached_property
 
 
 class Uuid(MessageProperty):
@@ -34,20 +34,11 @@ class Uuid(MessageProperty):
         return False
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
-        self.state.retrieve_feedback()
-        if len(self.errors) > 0:
-            feedback_message.operation_was_error_free = False
-            for error in self.errors:
-                feedback_message.add_error_code(error)
-
-        if self.state.is_resolved:
-            feedback_message.source_message_uuid = self.value
-            if feedback_message.operation_was_error_free is None:
-                feedback_message.operation_was_error_free = True
+        self.add_errors_to_feedback_message(feedback_message)
+        feedback_message.source_message_uuid = self.value
+        if feedback_message.operation_was_error_free is None:
+            feedback_message.operation_was_error_free = True
 
     @cached_property
     def value(self) -> Optional[Any]:
-        self.state.retrieve_value()
-
-        self._value = self._input.decode("utf-8")
-        return self._value
+        return self._input.decode("utf-8")

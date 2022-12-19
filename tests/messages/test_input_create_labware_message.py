@@ -2,6 +2,7 @@ import pytest
 import statemachine  # type: ignore
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.state_machines.data_resolver import DataResolver
 
 
 def test_input_create_labware_message_can_create_instance(valid_create_labware_message):
@@ -21,14 +22,24 @@ def test_input_create_labware_message_can_validate_when_invalid(invalid_create_l
     assert len(instance.errors) == 1
 
 
-def test_input_create_labware_message_cannot_add_to_feedback_message_if_not_evaluated(invalid_create_labware_message):
+def test_input_create_labware_message_cannot_add_to_feedback_message_if_valid_but_not_resolved(
+    valid_create_labware_message,
+):
 
-    subject = InputCreateLabwareMessage(invalid_create_labware_message)
+    subject = DataResolver(InputCreateLabwareMessage(valid_create_labware_message))
     feedback_message = OutputFeedbackMessage()
 
-    # Not validated yet
+    assert subject.state.is_pending
+    assert subject.validate() is True
+    assert subject.state.is_valid
+
     with pytest.raises(statemachine.exceptions.TransitionNotAllowed):
         subject.add_to_feedback_message(feedback_message)
+
+
+def test_input_create_labware_message_can_add_to_feedback_message_if_invalid(invalid_create_labware_message):
+    subject = DataResolver(InputCreateLabwareMessage(invalid_create_labware_message))
+    feedback_message = OutputFeedbackMessage()
 
     assert subject.state.is_pending
     assert subject.validate() is False
@@ -39,13 +50,13 @@ def test_input_create_labware_message_cannot_add_to_feedback_message_if_not_eval
 
 
 def test_input_create_labware_message_can_add_to_feedback_message_if_resolved(valid_create_labware_message):
-    subject = InputCreateLabwareMessage(valid_create_labware_message)
+    subject = DataResolver(InputCreateLabwareMessage(valid_create_labware_message))
     subject.validate()
     subject.resolve()
     feedback_message = OutputFeedbackMessage()
 
     assert feedback_message.source_message_uuid is None
 
-    assert subject.add_to_feedback_message(feedback_message) is True
+    subject.add_to_feedback_message(feedback_message)
 
     assert feedback_message.source_message_uuid == "b01aa0ad-7b19-4f94-87e9-70d74fb8783c"

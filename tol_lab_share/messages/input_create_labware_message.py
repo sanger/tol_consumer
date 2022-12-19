@@ -10,8 +10,8 @@ import itertools
 from tol_lab_share.message_properties.uuid import Uuid
 from tol_lab_share.message_properties.labware import Labware
 from tol_lab_share.message_properties.created_date_utc import CreatedDateUtc
-from tol_lab_share.state_machines.data_resolution import DataResolution
 from tol_lab_share.error_codes import ErrorCode
+from tol_lab_share.state_machines.data_resolver import DataResolver
 
 
 class InputCreateLabwareMessage:
@@ -19,22 +19,16 @@ class InputCreateLabwareMessage:
         self._message = m.message
 
         self._properties = {
-            "uuid": Uuid(self._message[INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID]),
-            "labware": Labware(self._message[INPUT_CREATE_LABWARE_MESSAGE_LABWARE]),
-            "create_date_utc": CreatedDateUtc(self._message[INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC]),
+            "uuid": DataResolver(Uuid(self._message[INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID])),
+            "labware": DataResolver(Labware(self._message[INPUT_CREATE_LABWARE_MESSAGE_LABWARE])),
+            "create_date_utc": DataResolver(
+                CreatedDateUtc(self._message[INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC])
+            ),
         }
-        self.state = DataResolution()
 
     def validate(self) -> bool:
-        self.state.performing_validation()
-
-        result = all([self._properties[prop_name].validate() for prop_name in self._properties.keys()])
-        if result:
-            self.state.validation_passed()
-        else:
-            self.state.validation_failed()
-
-        return result
+        result_list = [self._properties[prop_name].validate() for prop_name in self._properties.keys()]
+        return all(result_list)
 
     @property
     def errors(self) -> List[ErrorCode]:
@@ -42,17 +36,14 @@ class InputCreateLabwareMessage:
         return list(itertools.chain(*list_of_lists))
 
     def resolve(self) -> bool:
-        self.state.request_resolution()
-
         for prop_name in self._properties.keys():
-            self._properties[prop_name].resolve()
-
-        self.state.resolution_successful()
+            if self._properties[prop_name].state.is_valid:
+                self._properties[prop_name].resolve()
         return True
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> bool:
-        self.state.retrieve_feedback()
-
+        self.validate()
+        self.resolve()
         for prop_name in self._properties.keys():
             self._properties[prop_name].add_to_feedback_message(feedback_message)
         return True

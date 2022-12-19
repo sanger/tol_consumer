@@ -1,8 +1,7 @@
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from typing import Optional, Any, List
-from tol_lab_share.state_machines.data_resolution import DataResolution
-from functools import cached_property
+from typing import List
 from tol_lab_share.error_codes import ErrorCode
+from functools import cached_property
 
 
 class MessageProperty:
@@ -10,37 +9,27 @@ class MessageProperty:
         self._input = input
         self._errors = []
         self.set_validators()
-        self._value = None
-        self.state = DataResolution()
 
     def validate(self):
-        self.state.performing_validation()
+        return all([validator() for validator in self._validators])
 
-        result = all([validator() for validator in self._validators])
-
-        if result:
-            self.state.validation_passed()
-        else:
-            self.state.validation_failed()
-
-        return result
+    @cached_property
+    def value(self):
+        return self._input
 
     def resolve(self):
-        self.state.request_resolution()
-        self.state.resolution_successful()
+        pass
+
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        self.add_errors_to_feedback_message(feedback_message)
 
     @property
     def errors(self) -> List[ErrorCode]:
         return self._errors
 
-    @cached_property
-    def value(self) -> Optional[Any]:
-        self.state.retrieve_value()
-
-        return self._input
+    def add_errors_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        for error in self.errors:
+            feedback_message.add_error_code(error)
 
     def set_validators(self):
         self._validators = []
-
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
-        pass

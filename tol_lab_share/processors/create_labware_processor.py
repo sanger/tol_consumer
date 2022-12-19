@@ -8,6 +8,7 @@ from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 
 # from tol_lab_share.messages import InputCreateLabwareMessage, OutputFeedbackMessage
+from tol_lab_share.state_machines.data_resolver import DataResolver
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class CreateLabwareProcessor:
         logger.debug("CreateLabwareProcessor::process")
         logger.debug(f"Received: { message.message }")
 
-        input = InputCreateLabwareMessage(message)
+        input = DataResolver(InputCreateLabwareMessage(message))
         input.validate()
         input.resolve()
         output_feedback_message = OutputFeedbackMessage()

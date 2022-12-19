@@ -5,48 +5,60 @@ from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 def test_uuid_check_is_uuid_detects_invalid_uuid():
     instance = Uuid("1234")
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
     instance = Uuid("dd490ee5-fd1d-456d-99fd-eb9d3861e0f9")
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
     instance = Uuid("1234")
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
     instance = Uuid(b"1234")
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
     instance = Uuid("")
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
     instance = Uuid(None)
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
     instance = Uuid(1234)
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
     instance = Uuid({})
     assert instance.check_is_uuid() is False
+    assert instance.validate() is False
 
 
 def test_uuid_check_is_uuid_detects_valid_uuid():
     instance = Uuid(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9")
     assert instance.check_is_uuid() is True
+    assert instance.validate() is True
 
 
 def test_uuid_check_is_binary_when_not_binary():
     instance = Uuid("dd490ee5-fd1d-456d-99fd-eb9d3861e0f9")
     assert instance.check_is_binary() is False
+    assert instance.validate() is False
 
 
 def test_uuid_check_is_binary_when_is_binary():
     instance = Uuid(b"1234")
     assert instance.check_is_binary() is True
+    assert instance.validate() is False
 
     instance = Uuid(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9")
     assert instance.check_is_binary() is True
+    assert instance.validate() is True
 
 
-def test_uuid_validate_when_not_valid():
+def test_validate_when_not_valid():
     # Not binary
     instance = Uuid("dd490ee5-fd1d-456d-99fd-eb9d3861e0f9")
     assert instance.validate() is False
@@ -64,7 +76,7 @@ def test_uuid_validate_when_valid():
     assert instance.validate() is True
 
 
-def test_add_to_feedback_message_when_resolved():
+def test_uuid_add_to_feedback_message_when_resolved():
     instance = Uuid(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9")
     feedback = OutputFeedbackMessage()
 
