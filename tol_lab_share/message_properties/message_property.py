@@ -33,3 +33,6 @@ class MessageProperty:
 
     def set_validators(self):
         self._validators = []
+
+    def check_is_string(self):
+        return isinstance(self._input, str)
