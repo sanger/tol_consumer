@@ -1,14 +1,18 @@
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary
 import logging
 
-from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK
+from tol_lab_share.constants import (
+    RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
+    RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
+)
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 
 # from tol_lab_share.messages import InputCreateLabwareMessage, OutputFeedbackMessage
-from tol_lab_share.state_machines.data_resolver import DataResolver
+from tol_lab_share.data_resolvers.data_resolver import DataResolver
 
 logger = logging.getLogger(__name__)
 
@@ -29,5 +33,19 @@ class CreateLabwareProcessor:
         input.resolve()
         output_feedback_message = OutputFeedbackMessage()
         input.add_to_feedback_message(output_feedback_message)
+
+        message = output_feedback_message.to_json()
+        encoded_message = self._encoder.encode([message])
+
+        logger.debug(f"Sending: { encoded_message }")
+
+        self._basic_publisher.publish_message(
+            self._config.RABBITMQ_FEEDBACK_EXCHANGE,
+            RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
+            encoded_message.body,
+            RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
+            encoded_message.version,
+            RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
+        )
 
         return output_feedback_message.operation_was_error_free is True

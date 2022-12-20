@@ -2,7 +2,7 @@ import pytest
 import statemachine  # type: ignore
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.state_machines.data_resolver import DataResolver
+from tol_lab_share.data_resolvers.data_resolver import DataResolver
 
 
 def test_input_create_labware_message_can_create_instance(valid_create_labware_message):

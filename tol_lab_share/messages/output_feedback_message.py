@@ -52,3 +52,12 @@ class OutputFeedbackMessage:
         self._errors.append(
             [error_code.type_id, error_code.origin, sample_uuid, error_code.field, error_code.description]
         )
+
+    def to_json(self):
+        return {
+            "sourceMessageUuid": self.source_message_uuid,
+            "countOfTotalSamples": self.count_of_total_samples,
+            "countOfValidSamples": self.count_of_valid_samples,
+            "operationWasErrorFree": self.operation_was_error_free,
+            "errors": self.errors,
+        }

@@ -1,7 +1,7 @@
 import pytest
 import statemachine  # type: ignore
 from tol_lab_share.message_properties.message_property import MessageProperty
-from tol_lab_share.state_machines.data_resolver import DataResolver
+from tol_lab_share.data_resolvers.data_resolver import DataResolver
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 

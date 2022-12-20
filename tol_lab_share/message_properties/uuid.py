@@ -17,7 +17,7 @@ class Uuid(MessageProperty):
             return True
         except AttributeError:
             pass
-        self.errors.append(error_codes.ERROR_1_UUID_NOT_BINARY)
+        self.add_error(error_codes.ERROR_1_UUID_NOT_BINARY)
         return False
 
     def check_is_uuid(self):
@@ -30,7 +30,7 @@ class Uuid(MessageProperty):
             pass
         except AttributeError:
             pass
-        self.errors.append(error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT)
+        self.add_error(error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT)
         return False
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:

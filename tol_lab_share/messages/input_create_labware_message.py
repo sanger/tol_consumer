@@ -11,10 +11,13 @@ from tol_lab_share.message_properties.uuid import Uuid
 from tol_lab_share.message_properties.labware import Labware
 from tol_lab_share.message_properties.created_date_utc import CreatedDateUtc
 from tol_lab_share.error_codes import ErrorCode
-from tol_lab_share.state_machines.data_resolver import DataResolver
+from tol_lab_share.data_resolvers.data_resolver import DataResolver
+from tol_lab_share.data_resolvers.data_resolver_interface import DataResolverInterface
+from functools import cached_property
+from typing import Any
 
 
-class InputCreateLabwareMessage:
+class InputCreateLabwareMessage(DataResolverInterface):
     def __init__(self, m: RabbitMessage):
         self._message = m.message
 
@@ -41,9 +44,12 @@ class InputCreateLabwareMessage:
                 self._properties[prop_name].resolve()
         return True
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> bool:
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         self.validate()
         self.resolve()
         for prop_name in self._properties.keys():
             self._properties[prop_name].add_to_feedback_message(feedback_message)
+
+    @cached_property
+    def value(self) -> Any:
         return True
