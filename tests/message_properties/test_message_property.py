@@ -42,3 +42,23 @@ def test_message_property_check_is_string():
 
     instance = MessageProperty({})
     assert instance.check_is_string() is False
+
+
+def test_message_property_check_is_date_utc():
+    instance = MessageProperty("1234")
+    assert instance.check_is_date_utc() is False
+
+    instance = MessageProperty(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9")
+    assert instance.check_is_date_utc() is False
+
+    instance = MessageProperty("")
+    assert instance.check_is_date_utc() is False
+
+    instance = MessageProperty(None)
+    assert instance.check_is_date_utc() is False
+
+    instance = MessageProperty(1234)
+    assert instance.check_is_date_utc() is True
+
+    instance = MessageProperty({})
+    assert instance.check_is_date_utc() is False

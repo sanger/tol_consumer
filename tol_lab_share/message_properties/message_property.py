@@ -46,7 +46,10 @@ class MessageProperty(DataResolverInterface):
         return list(chain.from_iterable([self._errors, self._errors_properties]))
 
     def add_error(self, error: ErrorCode) -> None:
-        self._errors.append(error)
+        self._errors.append(error.build(self.identification()))
+
+    def identification(self):
+        return type(self)
 
     def add_errors_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         for error in self.errors:
@@ -64,7 +67,7 @@ class MessageProperty(DataResolverInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(self.default_error_code)
+            self.add_error(error_codes.ERROR_2_NOT_STRING)
         return result
 
     def check_is_integer(self):
@@ -75,7 +78,29 @@ class MessageProperty(DataResolverInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(self.default_error_code)
+            self.add_error(error_codes.ERROR_3_NOT_INTEGER)
+        return result
+
+    def check_is_float(self):
+        logger.debug("MessageProperty::check_is_float")
+        result = False
+        try:
+            result = isinstance(self._input, float)
+        except AttributeError:
+            pass
+        if not result:
+            self.add_error(error_codes.ERROR_5_NOT_FLOAT)
+        return result
+
+    def check_is_date_utc(self):
+        logger.debug("MessageProperty::check_is_date_utc")
+        result = False
+        try:
+            result = isinstance(self._input, int)
+        except AttributeError:
+            pass
+        if not result:
+            self.add_error(error_codes.ERROR_3_NOT_INTEGER)
         return result
 
     def _validate_properties(self):
