@@ -12,3 +12,4 @@ ERROR_2_UUID_NOT_RIGHT_FORMAT = ErrorCode(2, "plate", "uuid", "Uuid has wrong fo
 ERROR_3_BARCODE_NOT_STRING = ErrorCode(3, "plate", "barcode", "Barcode is not a string")
 ERROR_2_NOT_STRING = ErrorCode(2, "plate", "unknown", "Not string")
 ERROR_3_NOT_INTEGER = ErrorCode(3, "plate", "unknown", "Not integer")
+ERROR_4_NOT_VALID_COUNTRY_INSDC = ErrorCode(4, "plate", "country_of_origin", "Not a valid insdc country of origin")
