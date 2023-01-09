@@ -13,7 +13,6 @@ class DataResolver(DataResolverInterface):
     def __init__(self, instance):
         self._instance = instance
         self._errors = []
-        self.set_validators()
         self._value = None
         self.state = DataResolverStateMachine()
 
@@ -44,9 +43,6 @@ class DataResolver(DataResolverInterface):
         logger.debug("DataResolver::value")
         self.state.retrieve_value()
         return self._instance.value
-
-    def set_validators(self):
-        self._validators = []
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         logger.debug("DataResolver::add_to_feedback_message")

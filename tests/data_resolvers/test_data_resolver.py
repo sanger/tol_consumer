@@ -4,6 +4,8 @@ from tol_lab_share.message_properties.message_property import MessageProperty
 from tol_lab_share.data_resolvers.data_resolver import DataResolver
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
+from unittest import mock
+
 
 def build_property():
     return MessageProperty("test")
@@ -76,9 +78,14 @@ def test_data_resolver_state_machine_cannot_transition_wrongly():
 def test_data_resolver_validate_when_instance_not_valid_resolver_is_not_valid():
     # Not binary
     prop = build_property()
-    prop._validators = [lambda: False]
-    instance = DataResolver(prop)
-    assert instance.validate() is False
+
+    with mock.patch(
+        "tol_lab_share.message_properties.message_property.MessageProperty.validators", new_callable=mock.PropertyMock
+    ) as mock_my_property:
+        mock_my_property.return_value = [lambda: False]
+
+        instance = DataResolver(prop)
+        assert instance.validate() is False
 
 
 def test_data_resolver_validate_when_valid_resolver_is_valid():

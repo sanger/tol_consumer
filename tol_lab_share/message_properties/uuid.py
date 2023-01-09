@@ -11,8 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class Uuid(MessageProperty):
-    def set_validators(self):
-        self._validators = [self.check_is_binary, self.check_is_uuid]
+    @property
+    def validators(self):
+        return [self.check_is_binary, self.check_is_uuid]
 
     def check_is_binary(self):
         logger.debug("Uuid::check_is_binary")

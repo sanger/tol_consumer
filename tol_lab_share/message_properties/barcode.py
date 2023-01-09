@@ -6,12 +6,10 @@ logger = logging.getLogger(__name__)
 
 
 class Barcode(MessageProperty):
-    def set_validators(self):
-        self._validators = [self.check_barcode_is_string]
+    @property
+    def default_error_code(self):
+        return error_codes.ERROR_3_BARCODE_NOT_STRING
 
-    def check_barcode_is_string(self):
-        logger.debug("Barcode::check_barcode_is_string")
-        result = self.check_is_string()
-        if not result:
-            self.errors.append(error_codes.ERROR_3_BARCODE_NOT_STRING)
-        return result
+    @property
+    def validators(self):
+        return [self.check_is_string]

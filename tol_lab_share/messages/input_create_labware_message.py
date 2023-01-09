@@ -15,7 +15,6 @@ class InputCreateLabwareMessage(MessageProperty):
     def __init__(self, m: RabbitMessage):
         super().__init__(m)
         self._message = m.message
-        # self._validators = []
         self._properties = {
             "uuid": DataResolver(Uuid(self._message[INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID])),
             "labware": DataResolver(Labware(self._message[INPUT_CREATE_LABWARE_MESSAGE_LABWARE])),

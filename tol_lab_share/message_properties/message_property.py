@@ -6,6 +6,7 @@ from functools import cached_property
 from tol_lab_share.data_resolvers.data_resolver_interface import DataResolverInterface
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
 from itertools import chain
+from tol_lab_share import error_codes
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,6 @@ class MessageProperty(DataResolverInterface):
         self._input = input
         self._errors = []
         self._properties = {}
-        self.set_validators()
 
     def validate(self):
         logger.debug("MessageProperty::validate")
@@ -52,17 +52,30 @@ class MessageProperty(DataResolverInterface):
         for error in self.errors:
             feedback_message.add_error_code(error)
 
-    def set_validators(self):
-        self._validators = []
+    @property
+    def validators(self):
+        return []
 
     def check_is_string(self):
-        return isinstance(self._input, str)
+        logger.debug("MessageProperty::check_is_string")
+        result = False
+        try:
+            result = isinstance(self._input, str)
+        except AttributeError:
+            pass
+        if not result:
+            self.add_error(self.default_error_code)
+        return result
 
     def _validate_properties(self):
         return all(list([property.validate() for property in self._properties_instances]))
 
     def _validate_instance(self):
-        return all(list([validator() for validator in self._validators]))
+        return all(list([validator() for validator in self.validators]))
+
+    @property
+    def default_error_code(self):
+        return error_codes.ERROR_1_UNKNOWN
 
     @property
     def _errors_properties(self) -> List[ErrorCode]:
