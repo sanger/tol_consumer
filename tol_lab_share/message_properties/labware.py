@@ -10,6 +10,9 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_BARCODE,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLES,
 )
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Labware(MessageProperty):
@@ -22,6 +25,7 @@ class Labware(MessageProperty):
         }
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        logger.debug("Labware::add_to_feedback_message")
         super().add_to_feedback_message(feedback_message)
         feedback_message.count_of_total_samples = 96
         feedback_message.count_of_valid_samples = 96

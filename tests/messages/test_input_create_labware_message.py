@@ -45,6 +45,7 @@ def test_input_create_labware_message_can_add_to_feedback_message_if_invalid(inv
     assert subject.validate() is False
     assert subject.state.is_invalid
 
+    subject.resolve()
     subject.add_to_feedback_message(feedback_message)
     assert len(feedback_message.errors) > 0
 

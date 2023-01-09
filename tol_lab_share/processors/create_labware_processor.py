@@ -29,11 +29,17 @@ class CreateLabwareProcessor:
         logger.debug(f"Received: { message.message }")
 
         input = DataResolver(InputCreateLabwareMessage(message))
-        input.validate()
-        input.resolve()
+        if input.validate():
+            input.resolve()
+
         output_feedback_message = OutputFeedbackMessage()
         input.add_to_feedback_message(output_feedback_message)
 
+        self.publish(output_feedback_message)
+
+        return output_feedback_message.operation_was_error_free is True
+
+    def publish(self, output_feedback_message: OutputFeedbackMessage) -> None:
         message = output_feedback_message.to_json()
         encoded_message = self._encoder.encode([message])
 
@@ -47,5 +53,3 @@ class CreateLabwareProcessor:
             encoded_message.version,
             RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
         )
-
-        return output_feedback_message.operation_was_error_free is True
