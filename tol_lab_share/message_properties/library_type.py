@@ -2,5 +2,6 @@ from .message_property import MessageProperty
 
 
 class LibraryType(MessageProperty):
-    def __init__(self):
-        pass
+    @property
+    def validators(self):
+        return [self.check_is_string]
