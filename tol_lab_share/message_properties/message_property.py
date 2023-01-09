@@ -67,6 +67,17 @@ class MessageProperty(DataResolverInterface):
             self.add_error(self.default_error_code)
         return result
 
+    def check_is_integer(self):
+        logger.debug("MessageProperty::check_is_integer")
+        result = False
+        try:
+            result = isinstance(self._input, int)
+        except AttributeError:
+            pass
+        if not result:
+            self.add_error(self.default_error_code)
+        return result
+
     def _validate_properties(self):
         return all(list([property.validate() for property in self._properties_instances]))
 
