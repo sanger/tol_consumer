@@ -29,3 +29,13 @@ def test_LabwareType_check_LabwareType_is_string():
     instance = LabwareType("Tube")
     assert instance.validate() is True
     assert len(instance.errors) == 0
+
+
+def test_valid_locations():
+    instance = LabwareType("Tube")
+    assert instance.valid_locations() == []
+
+    instance = LabwareType("Plate12x8")
+    assert len(instance.valid_locations()) == 96
+    assert instance.valid_locations()[95] == "H12"
+    assert instance.valid_locations()[1] == "B01"

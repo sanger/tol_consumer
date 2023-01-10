@@ -24,3 +24,29 @@ class LabwareType(MessageProperty):
         if not result:
             self.add_error(error_codes.ERROR_6_LABWARE_TYPE)
         return result
+
+    def pad_number(self, number):
+        padded_number = str(number)
+        if len(padded_number) == 1:
+            padded_number = f"0{padded_number}"
+        return padded_number
+
+    def _locations_for_plate12x8_row_order(self):
+        locations = []
+        for letter_ord in range(ord("A"), ord("H") + 1):
+            for number in range(12):
+                locations.append(f"{chr(letter_ord)}{self.pad_number(number+1)}")
+        return locations
+
+    def _locations_for_plate12x8_column_order(self):
+        locations = []
+        for number in range(12):
+            for letter_ord in range(ord("A"), ord("H") + 1):
+                locations.append(f"{chr(letter_ord)}{self.pad_number(number+1)}")
+        return locations
+
+    def valid_locations(self):
+        if self.value == "Plate12x8":
+            return self._locations_for_plate12x8_column_order()
+        else:
+            return []
