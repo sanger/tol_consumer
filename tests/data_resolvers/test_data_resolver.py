@@ -3,12 +3,12 @@ import statemachine  # type: ignore
 from tol_lab_share.message_properties.message_property import MessageProperty
 from tol_lab_share.data_resolvers.data_resolver import DataResolver
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-
+from tol_lab_share.message_properties.input import Input
 from unittest import mock
 
 
 def build_property():
-    return MessageProperty("test")
+    return MessageProperty(Input("test"))
 
 
 def test_data_resolver_state_machine_init_to_pending():

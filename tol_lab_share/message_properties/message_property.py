@@ -24,7 +24,7 @@ class MessageProperty(DataResolverInterface):
     @cached_property
     def value(self):
         logger.debug("MessageProperty::value")
-        return self._input
+        return self._input.value
 
     def resolve(self):
         logger.debug("MessageProperty::resolve")
@@ -59,11 +59,26 @@ class MessageProperty(DataResolverInterface):
     def validators(self):
         return []
 
-    def check_is_string(self):
-        logger.debug("MessageProperty::check_is_string")
+    def check_is_valid_input(self):
+        logger.debug("MessageProperty::check_is_valid_input")
         result = False
         try:
-            result = isinstance(self._input, str)
+            result = self._input.validate()
+        except AttributeError:
+            pass
+        except KeyError:
+            pass
+        if not result:
+            self.add_error(error_codes.ERROR_9_INVALID_INPUT)
+        return result
+
+    def check_is_string(self):
+        logger.debug("MessageProperty::check_is_string")
+        if not self.check_is_valid_input():
+            return False
+        result = False
+        try:
+            result = isinstance(self._input.value, str)
         except AttributeError:
             pass
         if not result:
@@ -72,9 +87,12 @@ class MessageProperty(DataResolverInterface):
 
     def check_is_integer(self):
         logger.debug("MessageProperty::check_is_integer")
+        if not self.check_is_valid_input():
+            return False
+
         result = False
         try:
-            result = isinstance(self._input, int)
+            result = isinstance(self._input.value, int)
         except AttributeError:
             pass
         if not result:
@@ -83,9 +101,12 @@ class MessageProperty(DataResolverInterface):
 
     def check_is_float(self):
         logger.debug("MessageProperty::check_is_float")
+        if not self.check_is_valid_input():
+            return False
+
         result = False
         try:
-            result = isinstance(self._input, float)
+            result = isinstance(self._input.value, float)
         except AttributeError:
             pass
         if not result:
@@ -94,9 +115,12 @@ class MessageProperty(DataResolverInterface):
 
     def check_is_date_utc(self):
         logger.debug("MessageProperty::check_is_date_utc")
+        if not self.check_is_valid_input():
+            return False
+
         result = False
         try:
-            result = isinstance(self._input, int)
+            result = isinstance(self._input.value, int)
         except AttributeError:
             pass
         if not result:

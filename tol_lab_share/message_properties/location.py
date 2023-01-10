@@ -21,10 +21,13 @@ class Location(MessageProperty):
         if not self._labware_type.validate():
             self.add_error(error_codes.ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION)
             return False
+        if not self._input.validate():
+            return False
+
         try:
-            if (self._input is None) and (len(self._labware_type.valid_locations()) == 0):
+            if (self._input.value is None) and (len(self._labware_type.valid_locations()) == 0):
                 return True
-            result = self._labware_type.valid_locations().index(self._input) >= 0
+            result = self._labware_type.valid_locations().index(self._input.value) >= 0
         except AttributeError:
             pass
         except ValueError:

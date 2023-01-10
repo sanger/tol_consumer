@@ -1,41 +1,42 @@
 from tol_lab_share.message_properties.labware_type import LabwareType
+from tol_lab_share.message_properties.input import Input
 
 
 def test_LabwareType_check_LabwareType_is_string():
-    instance = LabwareType(None)
+    instance = LabwareType(Input(None))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = LabwareType(1234)
+    instance = LabwareType(Input(1234))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = LabwareType([])
+    instance = LabwareType(Input([]))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = LabwareType("1234")
+    instance = LabwareType(Input("1234"))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = LabwareType("plate")
+    instance = LabwareType(Input("plate"))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = LabwareType("Plate12x8")
+    instance = LabwareType(Input("Plate12x8"))
     assert instance.validate() is True
     assert len(instance.errors) == 0
 
-    instance = LabwareType("Tube")
+    instance = LabwareType(Input("Tube"))
     assert instance.validate() is True
     assert len(instance.errors) == 0
 
 
 def test_valid_locations():
-    instance = LabwareType("Tube")
+    instance = LabwareType(Input("Tube"))
     assert instance.valid_locations() == []
 
-    instance = LabwareType("Plate12x8")
+    instance = LabwareType(Input("Plate12x8"))
     assert len(instance.valid_locations()) == 96
     assert instance.valid_locations()[95] == "H12"
     assert instance.valid_locations()[1] == "B01"

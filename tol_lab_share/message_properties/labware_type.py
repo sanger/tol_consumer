@@ -16,7 +16,7 @@ class LabwareType(MessageProperty):
         logger.debug("MessageProperty::check_labware_type")
         result = False
         try:
-            result = VALID_LABWARE_TYPE.index(self._input) >= 0
+            result = VALID_LABWARE_TYPE.index(self._input.value) >= 0
         except AttributeError:
             pass
         except ValueError:

@@ -13,9 +13,12 @@ class CountryOfOrigin(MessageProperty):
 
     def check_is_valid_country(self):
         logger.debug("MessageProperty::check_is_valid_country")
+        if not self._input.validate():
+            return False
+
         result = False
         try:
-            result = COUNTRIES.index(self._input) >= 0
+            result = COUNTRIES.index(self._input.value) >= 0
         except AttributeError:
             pass
         except ValueError:

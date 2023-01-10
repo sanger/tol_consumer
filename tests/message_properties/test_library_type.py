@@ -1,19 +1,6 @@
 from tol_lab_share.message_properties.library_type import LibraryType
+from helpers import check_validates_string
 
 
 def test_LibraryType_check_LibraryType_is_string():
-    instance = LibraryType(None)
-    assert instance.validate() is False
-    assert len(instance.errors) > 0
-
-    instance = LibraryType(1234)
-    assert instance.validate() is False
-    assert len(instance.errors) > 0
-
-    instance = LibraryType([])
-    assert instance.validate() is False
-    assert len(instance.errors) > 0
-
-    instance = LibraryType("1234")
-    assert instance.validate() is True
-    assert len(instance.errors) == 0
+    check_validates_string(LibraryType)
