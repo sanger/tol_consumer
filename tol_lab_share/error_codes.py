@@ -32,3 +32,4 @@ ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION = ErrorCode(8, "plate", "location type
 ERROR_9_INVALID_INPUT = ErrorCode(9, "plate", "input", "Not valid input")
 ERROR_10_DICT_WRONG_KEY = ErrorCode(10, "plate", "dict", "Not valid key")
 ERROR_11_PARENT_DICT_WRONG = ErrorCode(11, "plate", "dict", "Parent dict is wrong")
+ERROR_12_DICT_NOT_ITERABLE = ErrorCode(12, "plate", "dict", "Dict is not iterable")

@@ -26,10 +26,24 @@ class DictInput(MessageProperty):
             self.add_error(error_codes.ERROR_11_PARENT_DICT_WRONG)
             return False
 
+        if not self.check_iterable():
+            return False
+
         if self._key not in self._input.value:
             self.add_error(error_codes.ERROR_10_DICT_WRONG_KEY)
             return False
         return True
+
+    def check_iterable(self):
+        if not self._input.validate():
+            return False
+
+        try:
+            iter(self._input.value)
+            return True
+        except TypeError:
+            self.add_error(error_codes.ERROR_12_DICT_NOT_ITERABLE)
+            return False
 
     @cached_property
     def value(self):
