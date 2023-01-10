@@ -2,4 +2,6 @@ from .message_property import MessageProperty
 
 
 class TaxonId(MessageProperty):
-    pass
+    @property
+    def validators(self):
+        return [self.check_is_integer]
