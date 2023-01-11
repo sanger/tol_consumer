@@ -53,6 +53,5 @@ if __name__ == "__main__":
     publisher = BasicPublisher(rabbitmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
 
     for _barcode in range(0, 20):
-
         send_message(CREATE_LABWARE_MSG, "create-labware", registry, publisher)
         send_message(UPDATE_LABWARE_MSG, "update-labware", registry, publisher)
