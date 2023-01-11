@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 from tol_lab_share.processors.create_labware_processor import CreateLabwareProcessor
 from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK
-import requests_mock  # type: ignore
+import requests_mock
 import requests
 from pytest import raises
 

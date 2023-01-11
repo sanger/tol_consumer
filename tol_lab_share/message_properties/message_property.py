@@ -158,7 +158,6 @@ class MessageProperty(DataResolverInterface):
     def _properties_instances(self) -> List[DataResolverInterface]:
         prop_list = []
         for property in list(self._properties.values()):
-
             if isinstance(property, list):
                 for elem in list(property):
                     prop_list.append(elem)

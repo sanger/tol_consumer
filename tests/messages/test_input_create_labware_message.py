@@ -25,7 +25,6 @@ def test_input_create_labware_message_can_validate_when_invalid(invalid_create_l
 def test_input_create_labware_message_cannot_add_to_feedback_message_if_valid_but_not_resolved(
     valid_create_labware_message,
 ):
-
     subject = DataResolver(InputCreateLabwareMessage(valid_create_labware_message))
     feedback_message = OutputFeedbackMessage()
 
