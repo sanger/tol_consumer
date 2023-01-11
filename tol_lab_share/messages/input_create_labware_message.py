@@ -6,7 +6,7 @@ from tol_lab_share.constants import (
 )
 from tol_lab_share.message_properties.message_uuid import MessageUuid
 from tol_lab_share.message_properties.labware import Labware
-from tol_lab_share.message_properties.created_date_utc import CreatedDateUtc
+from tol_lab_share.message_properties.date_utc import DateUtc
 from tol_lab_share.message_properties.message_property import MessageProperty
 from tol_lab_share.data_resolvers.data_resolver import DataResolver
 from tol_lab_share.message_properties.dict_input import DictInput
@@ -20,7 +20,7 @@ class InputCreateLabwareMessage(MessageProperty):
             "uuid": DataResolver(MessageUuid(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID))),
             "labware": DataResolver(Labware(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_LABWARE))),
             "create_date_utc": DataResolver(
-                CreatedDateUtc(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC))
+                DateUtc(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC))
             ),
         }
 

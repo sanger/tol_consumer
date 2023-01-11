@@ -1,5 +1,6 @@
 from tol_lab_share.message_properties.sample import Sample
 from tol_lab_share.message_properties.labware_type import LabwareType
+from tol_lab_share.message_properties.labware import Labware
 from datetime import datetime
 from tol_lab_share.message_properties.input import Input
 
@@ -23,15 +24,20 @@ def test_sample_is_valid():
         "countryOfOrigin": "United Kingdom",
         "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
     }
+    labware = Labware(Input("Bubidibu"))
+    labware._properties["labware_type"] = lt
 
-    instance = Sample(lt, sample)
+    instance = Sample(sample, labware, 0)
     assert instance.validate() is True
     assert len(instance.errors) == 0
 
 
 def test_sample_is_invalid():
     lt = LabwareType(Input("Plate12x8"))
-    instance = Sample(lt, {"publicName": 1234})
+    labware = Labware(Input("Bubidibu"))
+    labware._properties["labware_type"] = lt
+
+    instance = Sample({"publicName": 1234}, labware, 0)
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
@@ -52,6 +58,9 @@ def test_sample_is_invalid():
         "sampleCollectionDateUtc": str(datetime.now().timestamp() * 1000),
     }
 
-    instance = Sample(lt, sample)
+    labware = Labware(Input("Bubidibu"))
+    labware._properties["labware_type"] = lt
+
+    instance = Sample(sample, labware, 0)
     assert instance.validate() is False
     assert len(instance.errors) > 0

@@ -24,7 +24,10 @@ class Labware(MessageProperty):
         labware_type = LabwareType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE))
         samples_dict = DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLES)
         if samples_dict.validate():
-            samples_list_dict = list([DataResolver(Sample(labware_type, sample)) for sample in samples_dict.value])
+            samples_list_dict = []
+            for position in range(len(samples_dict.value)):
+                sample = samples_dict.value[position]
+                samples_list_dict.append(DataResolver(Sample(sample, self, position)))
         else:
             samples_list_dict = [DataResolver(samples_dict)]
 
@@ -34,6 +37,15 @@ class Labware(MessageProperty):
             "barcode": DataResolver(Barcode(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_BARCODE))),
             "samples": samples_list_dict,
         }
+
+    def labware_type(self):
+        return self._properties["labware_type"]
+
+    def container_type(self):
+        if self._properties["labware_type"].value == "Tube":
+            return "tubes"
+        else:
+            return "wells"
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         logger.debug("Labware::add_to_feedback_message")

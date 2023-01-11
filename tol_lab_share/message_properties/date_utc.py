@@ -6,7 +6,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 
-class CreatedDateUtc(MessageProperty):
+class DateUtc(MessageProperty):
     @property
     def validators(self):
         return [self.check_is_float]

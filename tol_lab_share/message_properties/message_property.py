@@ -21,6 +21,12 @@ class MessageProperty(DataResolverInterface):
         logger.debug("MessageProperty::validate")
         return all(list([self._validate_properties(), self._validate_instance()]))
 
+    def properties(self, key):
+        # This is supposing a DataResolver (do we want it?)
+        if hasattr(self._properties[key], "_instance"):
+            return self._properties[key]._instance
+        return self._properties[key]
+
     @cached_property
     def value(self):
         logger.debug("MessageProperty::value")
@@ -40,6 +46,8 @@ class MessageProperty(DataResolverInterface):
 
     def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
         logger.debug("MessageProperty::add_to_traction_message")
+        for property in self._properties_instances:
+            property.add_to_traction_message(traction_message)
 
     @property
     def errors(self) -> List[ErrorCode]:

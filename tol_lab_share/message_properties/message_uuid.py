@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 class MessageUuid(Uuid):
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        super().add_to_feedback_message(feedback_message)
         logger.debug("Uuid::add_to_feedback_message")
         self.add_errors_to_feedback_message(feedback_message)
         feedback_message.source_message_uuid = self.value

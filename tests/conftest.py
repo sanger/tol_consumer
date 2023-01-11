@@ -70,3 +70,15 @@ def invalid_create_labware_message(unchecked_create_labware_message, invalid_dec
     unchecked_create_labware_message.decode(invalid_decoder)
 
     return unchecked_create_labware_message
+
+
+@pytest.fixture
+def mocked_response():
+    return {
+        "data": {
+            "id": "52",
+            "type": "receptions",
+            "links": {"self": "http://localhost:3000/v1/receptions/52"},
+            "attributes": {"source": "traction-ui.sequencescape"},
+        }
+    }
