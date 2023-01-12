@@ -1,4 +1,13 @@
 from typing import List, Optional
+from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
+from tol_lab_share.constants import (
+    RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
+    RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
+)
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class OutputFeedbackMessage:
@@ -61,3 +70,23 @@ class OutputFeedbackMessage:
             "operationWasErrorFree": self.operation_was_error_free,
             "errors": self.errors,
         }
+
+    def publish(self, publisher, schema_registry, exchange):
+        encoder = AvroEncoderBinary(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+
+        message = self.to_json()
+        encoded_message = encoder.encode([message])
+
+        logger.debug(f"Sending: { encoded_message }")
+
+        publisher.publish_message(
+            exchange,
+            RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
+            encoded_message.body,
+            RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
+            encoded_message.version,
+            RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
+        )
+
+    def validate(self):
+        return True

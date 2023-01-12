@@ -14,7 +14,7 @@ def test_sample_is_valid():
         "sangerSampleId": "cichlid_pacbio8196429",
         "location": "A01",
         "supplierSampleName": "SampleSupplied1",
-        "volume": "5",
+        "volume": 5,
         "concentration": 5,
         "publicName": "SamplePublicName1",
         "taxonId": 10090,

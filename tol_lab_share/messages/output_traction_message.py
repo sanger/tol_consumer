@@ -1,4 +1,11 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, List
+from json import dumps
+from requests import post, codes
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+
+from tol_lab_share import error_codes
+from tol_lab_share.error_codes import ErrorCode
+from requests.exceptions import JSONDecodeError
 
 
 class OutputTractionMessageRequest:
@@ -68,24 +75,14 @@ class OutputTractionMessageRequest:
         self._study_uuid = value
 
     def serializer(self):
-        for serializerClass in SERIALIZERS:
-            if serializerClass.match(self):
-                return serializerClass(self)
+        return RequestSerializer(self)
 
 
 class RequestSerializer:
+    # "cost_code": "0000", "data_type": "basecalls"
+
     def __init__(self, instance: OutputTractionMessageRequest):
         self.instance = instance
-
-    @staticmethod
-    def match(instance: OutputTractionMessageRequest) -> bool:
-        return False
-
-
-class SaphyrRequestSerializer(RequestSerializer):
-    @staticmethod
-    def match(instance: OutputTractionMessageRequest) -> bool:
-        return instance.library_type == "Saphyr_v1"
 
     def request_payload(self):
         return {"library_type": self.instance.library_type, "external_study_id": self.instance.study_uuid}
@@ -111,12 +108,10 @@ class SaphyrRequestSerializer(RequestSerializer):
         }
 
 
-SERIALIZERS = [SaphyrRequestSerializer]
-
-
 class OutputTractionMessage:
     def __init__(self):
         self._requests: Dict[int, OutputTractionMessageRequest] = {}
+        self._errors: List[ErrorCode] = []
 
     def requests(self, position: int) -> OutputTractionMessageRequest:
         if position not in self._requests:
@@ -137,3 +132,32 @@ class OutputTractionMessage:
 
     def validate(self):
         return True
+
+    def error_code_traction_problem(self, status_code, error_str):
+        return error_codes.ERROR_13_TRACTION_REQUEST_FAILED.with_description(
+            f"HTTP CODE: { status_code }, MSG: {error_str}"
+        )
+
+    def send(self, url):
+        headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
+
+        r = post(url, headers=headers, data=dumps(self.payload()), verify=False)
+
+        self._sent = r.status_code == codes.ok
+
+        if not self._sent:
+            try:
+                json = r.json()
+                self._errors = [
+                    self.error_code_traction_problem(r.status_code, error_str) for error_str in json["errors"]
+                ]
+            except JSONDecodeError:
+                self._errors = [self.error_code_traction_problem(r.status_code, r.text)]
+
+        return self._sent
+
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        if len(self._errors) > 0:
+            feedback_message.operation_was_error_free = False
+            for error_code in self._errors:
+                feedback_message.add_error_code(error_code)

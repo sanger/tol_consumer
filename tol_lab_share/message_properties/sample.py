@@ -2,6 +2,7 @@ from .message_property import MessageProperty
 from tol_lab_share.message_properties.public_name import PublicName
 from tol_lab_share.message_properties.common_name import CommonName
 from tol_lab_share.message_properties.concentration import Concentration
+from tol_lab_share.message_properties.volume import Volume
 from tol_lab_share.message_properties.country_of_origin import CountryOfOrigin
 from tol_lab_share.message_properties.donor_id import DonorId
 from tol_lab_share.message_properties.library_type import LibraryType
@@ -28,6 +29,7 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE,
+    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME,
 )
 
 import logging
@@ -42,25 +44,38 @@ class Sample(MessageProperty):
         self._labware = labware
 
         self._properties = {
+            # Done
             "study_uuid": DataResolver(Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID))),
+            # TODO
             "common_name": DataResolver(CommonName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME))),
+            # TODO
             "concentration": DataResolver(
                 Concentration(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_CONCENTRATION))
             ),
+            "volume": DataResolver(Volume(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME))),
+            # TODO
             "country_of_origin": DataResolver(
                 CountryOfOrigin(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COUNTRY_OF_ORIGIN))
             ),
+            # TODO
             "donor_id": DataResolver(DonorId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_DONOR_ID))),
+            # DONE
             "library_type": DataResolver(
                 LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE))
             ),
+            # DONE
             "location": DataResolver(Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION), labware)),
+            # DONE
             "public_name": DataResolver(PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME))),
+            # TODO
             "sanger_sample_id": DataResolver(
                 SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID))
             ),
+            # SPECIES?
             "taxon_id": DataResolver(TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID))),
+            # DONE
             "uuid": DataResolver(Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID))),
+            # TODO
             "collection_date": DataResolver(
                 DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE))
             ),

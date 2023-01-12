@@ -19,7 +19,7 @@ def test_input_create_labware_message_can_validate_when_valid(valid_create_labwa
 def test_input_create_labware_message_can_validate_when_invalid(invalid_create_labware_message):
     instance = InputCreateLabwareMessage(invalid_create_labware_message)
     assert instance.validate() is False
-    assert len(instance.errors) == 7
+    assert len(instance.errors) == 9
 
 
 def test_input_create_labware_message_cannot_add_to_feedback_message_if_valid_but_not_resolved(

@@ -28,6 +28,7 @@ lab-share-lib = {editable = false,git = 'https://github.com/sanger/lab-share-lib
 python-snappy = "~=0.6"
 python-statemachine = "*"
 requests-mock = "*"
+types-requests = "*"
 
 [requires]
 python_version = "3.11"

@@ -17,6 +17,11 @@ class ErrorCode:
         instance.identification = identification
         return instance
 
+    def with_description(self, description):
+        self.description = description
+
+        return self
+
 
 ERROR_1_UNKNOWN = ErrorCode(1, "plate", "unknown", "Unknown error")
 ERROR_1_UUID_NOT_BINARY = ErrorCode(1, "plate", "uuid", "Uuid is not binary")
@@ -33,3 +38,4 @@ ERROR_9_INVALID_INPUT = ErrorCode(9, "plate", "input", "Not valid input")
 ERROR_10_DICT_WRONG_KEY = ErrorCode(10, "plate", "dict", "Not valid key")
 ERROR_11_PARENT_DICT_WRONG = ErrorCode(11, "plate", "dict", "Parent dict is wrong")
 ERROR_12_DICT_NOT_ITERABLE = ErrorCode(12, "plate", "dict", "Dict is not iterable")
+ERROR_13_TRACTION_REQUEST_FAILED = ErrorCode(13, "plate", "dict", "Traction send request failed")
