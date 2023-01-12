@@ -15,7 +15,7 @@ class OutputFeedbackMessage:
         self._source_message_uuid: Optional[bytes] = None
         self._count_of_total_samples: Optional[int] = None
         self._count_of_valid_samples: Optional[int] = None
-        self._operation_was_error_free: Optional[bool] = None
+        self._operation_was_error_free: Optional[bool] = True
         self._errors: List[List[str]] = []
 
     @property
@@ -89,4 +89,4 @@ class OutputFeedbackMessage:
         )
 
     def validate(self):
-        return True
+        return self._operation_was_error_free

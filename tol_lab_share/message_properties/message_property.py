@@ -1,17 +1,45 @@
 import logging
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from typing import List
+from typing import List, Any, Optional
 from tol_lab_share.error_codes import ErrorCode
 from functools import cached_property
-from tol_lab_share.data_resolvers.data_resolver_interface import DataResolverInterface
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
 from itertools import chain
 from tol_lab_share import error_codes
+from abc import ABC, abstractmethod
 
 logger = logging.getLogger(__name__)
 
 
-class MessageProperty(DataResolverInterface):
+class MessagePropertyInterface(ABC):
+    @abstractmethod
+    def validate(self):
+        ...
+
+    @abstractmethod
+    def resolve(self):
+        ...
+
+    @property
+    @abstractmethod
+    def errors(self) -> Any:
+        ...
+
+    @cached_property
+    @abstractmethod
+    def value(self) -> Optional[Any]:
+        ...
+
+    @abstractmethod
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        ...
+
+    @abstractmethod
+    def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
+        ...
+
+
+class MessageProperty(MessagePropertyInterface):
     def __init__(self, input):
         self._input = input
         self._errors = []
@@ -22,9 +50,6 @@ class MessageProperty(DataResolverInterface):
         return all(list([self._validate_properties(), self._validate_instance()]))
 
     def properties(self, key):
-        # This is supposing a DataResolver (do we want it?)
-        if hasattr(self._properties[key], "_instance"):
-            return self._properties[key]._instance
         return self._properties[key]
 
     @cached_property
@@ -155,7 +180,7 @@ class MessageProperty(DataResolverInterface):
         return error_list
 
     @cached_property
-    def _properties_instances(self) -> List[DataResolverInterface]:
+    def _properties_instances(self) -> List[MessagePropertyInterface]:
         prop_list = []
         for property in list(self._properties.values()):
             if isinstance(property, list):

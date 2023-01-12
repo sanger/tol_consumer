@@ -13,7 +13,6 @@ from tol_lab_share.message_properties.uuid import Uuid
 from tol_lab_share.message_properties.dict_input import DictInput
 from tol_lab_share.message_properties.date_utc import DateUtc
 
-from tol_lab_share.data_resolvers.data_resolver import DataResolver
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
 
 from tol_lab_share.constants import (
@@ -44,41 +43,28 @@ class Sample(MessageProperty):
         self._labware = labware
 
         self._properties = {
-            # Done
-            "study_uuid": DataResolver(Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID))),
+            "study_uuid": Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID)),
             # TODO
-            "common_name": DataResolver(CommonName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME))),
+            "common_name": CommonName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME)),
             # TODO
-            "concentration": DataResolver(
-                Concentration(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_CONCENTRATION))
-            ),
-            "volume": DataResolver(Volume(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME))),
+            "concentration": Concentration(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_CONCENTRATION)),
+            "volume": Volume(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME)),
             # TODO
-            "country_of_origin": DataResolver(
-                CountryOfOrigin(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COUNTRY_OF_ORIGIN))
+            "country_of_origin": CountryOfOrigin(
+                DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COUNTRY_OF_ORIGIN)
             ),
             # TODO
-            "donor_id": DataResolver(DonorId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_DONOR_ID))),
-            # DONE
-            "library_type": DataResolver(
-                LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE))
-            ),
-            # DONE
-            "location": DataResolver(Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION), labware)),
-            # DONE
-            "public_name": DataResolver(PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME))),
+            "donor_id": DonorId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_DONOR_ID)),
+            "library_type": LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE)),
+            "location": Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION), labware),
+            "public_name": PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME)),
             # TODO
-            "sanger_sample_id": DataResolver(
-                SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID))
-            ),
+            "sanger_sample_id": SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID)),
             # SPECIES?
-            "taxon_id": DataResolver(TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID))),
-            # DONE
-            "uuid": DataResolver(Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID))),
+            "taxon_id": TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID)),
+            "uuid": Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID)),
             # TODO
-            "collection_date": DataResolver(
-                DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE))
-            ),
+            "collection_date": DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE)),
         }
 
     def position(self):
@@ -95,16 +81,3 @@ class Sample(MessageProperty):
         traction_message.requests(self.position()).container_barcode = self._labware.properties("barcode").value
         traction_message.requests(self.position()).container_location = self.properties("location").value
         traction_message.requests(self.position()).container_type = self._labware.container_type()
-        # traction_message.requests(self.position()).common = self._properties["common_name"].value
-
-    # def resolve(self):
-    #     logger.debug("Sample::resolve")
-    #     super().resolve()
-    #     output_traction_message = OutputTractionMessage()
-    #     for prop in self._properties_instances:
-    #         prop.add_to_traction_message(output_traction_message)
-
-    #     if output_traction_message.validate():
-    #         output_traction_message.send()
-
-    #     self._resolved = output_traction_message.was_sent_correctly()

@@ -112,6 +112,7 @@ class OutputTractionMessage:
     def __init__(self):
         self._requests: Dict[int, OutputTractionMessageRequest] = {}
         self._errors: List[ErrorCode] = []
+        self._sent = False
 
     def requests(self, position: int) -> OutputTractionMessageRequest:
         if position not in self._requests:
@@ -131,7 +132,7 @@ class OutputTractionMessage:
         }
 
     def validate(self):
-        return True
+        return len(self._errors) == 0
 
     def error_code_traction_problem(self, status_code, error_str):
         return error_codes.ERROR_13_TRACTION_REQUEST_FAILED.with_description(
@@ -157,7 +158,8 @@ class OutputTractionMessage:
         return self._sent
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
-        if len(self._errors) > 0:
+        if not self._sent:
             feedback_message.operation_was_error_free = False
+        if len(self._errors) > 0:
             for error_code in self._errors:
                 feedback_message.add_error_code(error_code)
