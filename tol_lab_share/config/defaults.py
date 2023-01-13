@@ -35,3 +35,5 @@ RABBITMQ_PUBLISH_RETRY_DELAY = 5
 RABBITMQ_PUBLISH_RETRIES = 36  # 3 minutes of retries
 
 TRACTION_URL = f"https://{os.environ.get('LOCALHOST', '127.0.0.1')}:3000/v1/receptions"
+
+EBI_TAXONOMY_URL = "https://www.ebi.ac.uk/ena/taxonomy/rest/tax-id"

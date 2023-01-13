@@ -11,13 +11,13 @@ from abc import ABC, abstractmethod
 logger = logging.getLogger(__name__)
 
 
+class ExceptionMessageProperty(BaseException):
+    pass
+
+
 class MessagePropertyInterface(ABC):
     @abstractmethod
     def validate(self):
-        ...
-
-    @abstractmethod
-    def resolve(self):
         ...
 
     @property
@@ -57,11 +57,9 @@ class MessageProperty(MessagePropertyInterface):
         logger.debug("MessageProperty::value")
         return self._input.value
 
-    def resolve(self):
-        logger.debug("MessageProperty::resolve")
-        for property in self._properties_instances:
-            # if property.state.is_valid:
-            property.resolve()
+    def raise_exception(self, error_code: ErrorCode) -> None:
+        self.add_error(error_code)
+        raise ExceptionMessageProperty()
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         logger.debug("MessageProperty::add_to_feedback_message")

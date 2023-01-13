@@ -82,3 +82,24 @@ def mocked_response():
             "attributes": {"source": "traction-ui.sequencescape"},
         }
     }
+
+
+@pytest.fixture
+def taxonomy_record():
+    return {
+        "taxId": "9600",
+        "scientificName": "Pongo pygmaeus",
+        "commonName": "Bornean orangutan",
+        "formalName": "true",
+        "rank": "species",
+        "division": "MAM",
+        "lineage": (
+            "Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; "
+            "Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini; "
+            "Catarrhini; Hominidae; Pongo; "
+        ),
+        "geneticCode": "1",
+        "mitochondrialGeneticCode": "2",
+        "submittable": "true",
+        "binomial": "true",
+    }

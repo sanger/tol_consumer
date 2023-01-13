@@ -29,7 +29,7 @@ def test_input_create_labware_message_can_add_to_feedback_message_if_invalid(inv
     assert len(feedback_message.errors) > 0
 
 
-def test_input_create_labware_message_can_add_to_feedback_message_if_resolved(valid_create_labware_message):
+def test_input_create_labware_message_can_add_to_feedback_message_if_valid(valid_create_labware_message):
     subject = InputCreateLabwareMessage(valid_create_labware_message)
     subject.validate()
     feedback_message = OutputFeedbackMessage()
