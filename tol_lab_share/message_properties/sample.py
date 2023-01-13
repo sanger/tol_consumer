@@ -9,6 +9,7 @@ from tol_lab_share.message_properties.library_type import LibraryType
 from tol_lab_share.message_properties.location import Location
 from tol_lab_share.message_properties.sanger_sample_id import SangerSampleId
 from tol_lab_share.message_properties.taxon_id import TaxonId
+from tol_lab_share.message_properties.scientific_name_from_taxon_id import ScientificNameFromTaxonId
 from tol_lab_share.message_properties.uuid import Uuid
 from tol_lab_share.message_properties.dict_input import DictInput
 from tol_lab_share.message_properties.date_utc import DateUtc
@@ -61,7 +62,9 @@ class Sample(MessageProperty):
             # TODO
             "sanger_sample_id": SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID)),
             # SPECIES?
-            "taxon_id": TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID)),
+            "scientific_name": ScientificNameFromTaxonId(
+                TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID))
+            ),
             "uuid": Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID)),
             # TODO
             "collection_date": DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE)),
@@ -78,6 +81,7 @@ class Sample(MessageProperty):
         traction_message.requests(self.position()).sample_name = self.properties("public_name").value
         traction_message.requests(self.position()).sample_uuid = self.properties("uuid").value
         traction_message.requests(self.position()).library_type = self.properties("library_type").value
+        traction_message.requests(self.position()).species = self.properties("scientific_name").value
         traction_message.requests(self.position()).container_barcode = self._labware.properties("barcode").value
         traction_message.requests(self.position()).container_location = self.properties("location").value
         traction_message.requests(self.position()).container_type = self._labware.container_type()

@@ -17,6 +17,15 @@ class OutputTractionMessageRequest:
         self._container_barcode = None
         self._container_location = None
         self._container_type = None
+        self._species = None
+
+    @property
+    def species(self) -> Optional[str]:
+        return self._species
+
+    @species.setter
+    def species(self, value: Optional[str]) -> None:
+        self._species = value
 
     @property
     def container_type(self) -> Optional[str]:
@@ -88,7 +97,11 @@ class RequestSerializer:
         return {"library_type": self.instance.library_type, "external_study_id": self.instance.study_uuid}
 
     def sample_payload(self):
-        return {"name": self.instance.sample_name, "external_id": self.instance.sample_uuid, "species": "human"}
+        return {
+            "name": self.instance.sample_name,
+            "external_id": self.instance.sample_uuid,
+            "species": self.instance.species,
+        }
 
     def container_payload(self):
         if self.instance.container_type == "tubes":
