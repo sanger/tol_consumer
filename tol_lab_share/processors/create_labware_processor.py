@@ -33,13 +33,16 @@ class CreateLabwareProcessor:
             output_traction_message.send(url=self._config.TRACTION_URL)
             output_traction_message.add_to_feedback_message(output_feedback_message)
 
-        if output_feedback_message.validate():
-            output_feedback_message.publish(
-                publisher=self._basic_publisher,
-                schema_registry=self._schema_registry,
-                exchange=self._config.RABBITMQ_FEEDBACK_EXCHANGE,
-            )
-        else:
-            logger.fatal("The feedback message generated does not validate. Please contact the development team.")
+            if output_feedback_message.validate():
+                output_feedback_message.publish(
+                    publisher=self._basic_publisher,
+                    schema_registry=self._schema_registry,
+                    exchange=self._config.RABBITMQ_FEEDBACK_EXCHANGE,
+                )
+            else:
+                logger.fatal("The feedback message generated does not validate. Please contact the development team.")
+                return False
 
-        return output_feedback_message.operation_was_error_free is True
+            return output_feedback_message.operation_was_error_free is True
+
+        return False
