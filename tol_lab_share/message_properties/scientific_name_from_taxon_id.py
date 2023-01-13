@@ -1,7 +1,7 @@
 from .message_property import MessageProperty
 from requests import get, codes
 from functools import cached_property
-from lab_share_lib.config_readers import get_config
+from tol_lab_share.helpers import get_config
 from tol_lab_share import error_codes
 
 CACHE_TAXON_IDS = {}
@@ -14,7 +14,7 @@ class ScientificNameFromTaxonId(MessageProperty):
 
     @cached_property
     def taxonomy_url(self):
-        return get_config("")[0].EBI_TAXONOMY_URL
+        return get_config("").EBI_TAXONOMY_URL
 
     @cached_property
     def value(self):
