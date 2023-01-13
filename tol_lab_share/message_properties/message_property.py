@@ -46,7 +46,6 @@ class MessageProperty(MessagePropertyInterface):
         self._properties = {}
 
     def validate(self):
-        logger.debug("MessageProperty::validate")
         return all(list([self._validate_properties(), self._validate_instance()]))
 
     def properties(self, key):
@@ -54,7 +53,6 @@ class MessageProperty(MessagePropertyInterface):
 
     @cached_property
     def value(self):
-        logger.debug("MessageProperty::value")
         return self._input.value
 
     def raise_exception(self, error_code: ErrorCode) -> None:
@@ -62,13 +60,11 @@ class MessageProperty(MessagePropertyInterface):
         raise ExceptionMessageProperty()
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
-        logger.debug("MessageProperty::add_to_feedback_message")
         for property in self._properties_instances:
             property.add_to_feedback_message(feedback_message)
         self.add_errors_to_feedback_message(feedback_message)
 
     def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
-        logger.debug("MessageProperty::add_to_traction_message")
         for property in self._properties_instances:
             property.add_to_traction_message(traction_message)
 
@@ -77,10 +73,7 @@ class MessageProperty(MessagePropertyInterface):
         return list(chain.from_iterable([self._errors, self._errors_properties]))
 
     def add_error(self, error: ErrorCode) -> None:
-        self._errors.append(error.build(self.identification()))
-
-    def identification(self):
-        return type(self)
+        self._errors.append(error)
 
     def add_errors_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         for error in self.errors:

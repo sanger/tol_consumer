@@ -12,7 +12,7 @@ class CountryOfOrigin(MessageProperty):
         return [self.check_is_string, self.check_is_valid_country]
 
     def check_is_valid_country(self):
-        logger.debug("MessageProperty::check_is_valid_country")
+        logger.debug("CountryOfOrigin::check_is_valid_country")
         if not self._input.validate():
             return False
 

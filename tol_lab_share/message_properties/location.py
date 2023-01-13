@@ -19,7 +19,7 @@ class Location(MessageProperty):
         return self._labware.properties("labware_type")
 
     def check_is_location(self):
-        logger.debug("MessageProperty::check_is_location")
+        logger.debug("Location::check_is_location")
         result = False
         if not self.labware_type().validate():
             self.add_error(error_codes.ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION)

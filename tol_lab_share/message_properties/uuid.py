@@ -45,5 +45,4 @@ class Uuid(MessageProperty):
 
     @cached_property
     def value(self) -> Optional[Any]:
-        logger.debug("Uuid::value")
         return self._input.value.decode("utf-8")

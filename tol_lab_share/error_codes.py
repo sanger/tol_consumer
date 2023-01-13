@@ -7,20 +7,28 @@ class ErrorCode:
         self.field = field
         self.origin = origin
         self.description = description
-        self.identification = None
 
-    def __str__(self):
-        return f"{self.type_id}, {self.field} {self.origin} {self.description} { self.identification }"
-
-    def build(self, identification):
-        instance = copy.deepcopy(self)
-        instance.identification = identification
-        return instance
+    def validate(self):
+        return (
+            isinstance(self.type_id, str)
+            and isinstance(self.field, str)
+            and isinstance(self.origin, str)
+            and isinstance(self.description, str)
+        )
 
     def with_description(self, description):
-        self.description = description
+        instance = copy.deepcopy(self)
+        instance.description = description
 
-        return self
+        return instance
+
+    def json(self):
+        return {
+            "type_id": self.type_id,
+            "field": self.field,
+            "origin": self.origin,
+            "description": self.description,
+        }
 
 
 ERROR_1_UNKNOWN = ErrorCode(1, "plate", "unknown", "Unknown error")
@@ -40,3 +48,6 @@ ERROR_11_PARENT_DICT_WRONG = ErrorCode(11, "plate", "dict", "Parent dict is wron
 ERROR_12_DICT_NOT_ITERABLE = ErrorCode(12, "plate", "dict", "Dict is not iterable")
 ERROR_13_TRACTION_REQUEST_FAILED = ErrorCode(13, "plate", "dict", "Traction send request failed")
 ERROR_14_PROBLEM_ACCESSING_TAXON_ID = ErrorCode(14, "plate", "taxon_id", "Problem when accessing the taxon id service")
+ERROR_15_FEEDBACK_UNDEFINED_KEY = ErrorCode(
+    15, "plate", "feedback", "Feedback message is missing to define some fields"
+)

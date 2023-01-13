@@ -13,7 +13,7 @@ class LabwareType(MessageProperty):
         return [self.check_is_string, self.check_labware_type]
 
     def check_labware_type(self):
-        logger.debug("MessageProperty::check_labware_type")
+        logger.debug("LabwareType::check_labware_type")
         result = False
         try:
             result = VALID_LABWARE_TYPE.index(self._input.value) >= 0

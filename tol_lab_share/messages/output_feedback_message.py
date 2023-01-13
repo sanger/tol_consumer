@@ -5,12 +5,18 @@ from tol_lab_share.constants import (
     RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
     RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
 )
+from tol_lab_share import error_codes
+from tol_lab_share.messages.message import Message
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class OutputFeedbackMessage:
+class OutputFeedbackMessage(Message):
+    @property
+    def validators(self):
+        return [self.check_defined_keys, self.check_errors_correct]
+
     def __init__(self):
         self._source_message_uuid: Optional[bytes] = None
         self._count_of_total_samples: Optional[int] = None
@@ -50,25 +56,13 @@ class OutputFeedbackMessage:
     def operation_was_error_free(self, value: bool) -> None:
         self._operation_was_error_free = value
 
-    @property
-    def errors(self) -> List[List[str]]:
-        return self._errors
-
-    def add_error(self, type_id, origin, sample_uuid, field, description):
-        self._errors.append([type_id, origin, sample_uuid, field, description])
-
-    def add_error_code(self, error_code, sample_uuid=None):
-        self._errors.append(
-            [error_code.type_id, error_code.origin, sample_uuid, error_code.field, error_code.description]
-        )
-
     def to_json(self):
         return {
             "sourceMessageUuid": self.source_message_uuid,
             "countOfTotalSamples": self.count_of_total_samples,
             "countOfValidSamples": self.count_of_valid_samples,
             "operationWasErrorFree": self.operation_was_error_free,
-            "errors": self.errors,
+            "errors": [error.json() for error in self.errors],
         }
 
     def publish(self, publisher, schema_registry, exchange):
@@ -88,5 +82,17 @@ class OutputFeedbackMessage:
             RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
         )
 
-    def validate(self):
-        return self._operation_was_error_free
+    def check_defined_keys(self):
+        json = self.to_json()
+        for key in ["sourceMessageUuid", "countOfTotalSamples", "countOfValidSamples", "operationWasErrorFree"]:
+            if json[key] is None:
+                self.add_error_code(
+                    error_codes.ERROR_15_FEEDBACK_UNDEFINED_KEY.with_description(
+                        f"Key {key} is undefined in feedback message"
+                    )
+                )
+                return False
+        return True
+
+    def check_errors_correct(self):
+        return all([error.validate() for error in self.errors])

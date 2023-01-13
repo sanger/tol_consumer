@@ -1,4 +1,5 @@
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share import error_codes
 
 
 def test_output_feedback_message_can_instate():
@@ -25,17 +26,22 @@ def test_output_feedback_can_get_and_set_props():
     assert instance.errors == []
 
 
-def test_output_feedback_add_error_add_errors():
+def test_output_feedback_add_error_code():
     instance = OutputFeedbackMessage()
 
-    instance.add_error(
-        type_id=1, origin="sample", sample_uuid=b"1234", field="sample_name", description="An error when writing..."
-    )
-    instance.add_error(
-        type_id=2, origin="plate", sample_uuid=None, field="barcode", description="An error when writing (again)..."
-    )
+    instance.add_error_code(error_codes.ERROR_1_UNKNOWN)
+    instance.add_error_code(error_codes.ERROR_1_UNKNOWN)
 
-    assert instance.errors == [
-        [1, "sample", b"1234", "sample_name", "An error when writing..."],
-        [2, "plate", None, "barcode", "An error when writing (again)..."],
-    ]
+    assert len(instance.errors) == 2
+
+
+def test_output_feedback_validate():
+    instance = OutputFeedbackMessage()
+    assert not instance.validate()
+
+    instance.count_of_total_samples = 0
+    instance.count_of_valid_samples = 0
+    instance.source_message_uuid = b"b01aa0ad-7b19-4f94-87e9-70d74fb8783c"
+    instance.operation_was_error_free = False
+
+    assert instance.validate()

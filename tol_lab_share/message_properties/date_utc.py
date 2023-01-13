@@ -13,5 +13,4 @@ class DateUtc(MessageProperty):
 
     @cached_property
     def value(self):
-        logger.debug("MessageProperty::value")
         return datetime.fromtimestamp(self._input.value)
