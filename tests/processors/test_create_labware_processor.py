@@ -38,7 +38,7 @@ def test_create_labware_processor_when_traction_sends_422(config, valid_create_l
             m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
             m.post(config.TRACTION_URL, text="This is an error", status_code=422)
 
-            assert instance.process(valid_create_labware_message) is False
+            assert instance.process(valid_create_labware_message) is True
 
         mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
         publisher.publish_message.assert_called_once()
@@ -54,7 +54,7 @@ def test_create_labware_processor_when_traction_sends_500(config, valid_create_l
         with requests_mock.Mocker() as m:
             m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
             m.post(config.TRACTION_URL, text="This is an error", status_code=500)
-            assert instance.process(valid_create_labware_message) is False
+            assert instance.process(valid_create_labware_message) is True
 
         mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
         publisher.publish_message.assert_called_once()
