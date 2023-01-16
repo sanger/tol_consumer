@@ -8,6 +8,7 @@ from tol_lab_share.constants import (
 from tol_lab_share import error_codes
 from tol_lab_share.messages.message import Message
 import logging
+from tol_lab_share.helpers import get_config
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,7 @@ class OutputFeedbackMessage(Message):
             return {"encoder_class": AvroEncoderBinary, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
 
     def publish(self, publisher, schema_registry, exchange):
-        encoder_selected = "json"
+        encoder_selected = get_config("").SELECTED_ENCODER_FOR_FEEDBACK_MESSAGE
         encoder_class = self.encoder_config_for(encoder_selected)["encoder_class"]
         encoder_type = self.encoder_config_for(encoder_selected)["encoder_type"]
 
