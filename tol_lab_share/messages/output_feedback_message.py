@@ -1,6 +1,6 @@
 from typing import List, Optional
-from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary
-from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
+from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
 from tol_lab_share.constants import (
     RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
     RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
@@ -65,8 +65,18 @@ class OutputFeedbackMessage(Message):
             "errors": [error.json() for error in self.errors],
         }
 
+    def encoder_config_for(self, encoder_type_selection):
+        if encoder_type_selection == "json":
+            return {"encoder_class": AvroEncoderJson, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON}
+        else:
+            return {"encoder_class": AvroEncoderBinary, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
+
     def publish(self, publisher, schema_registry, exchange):
-        encoder = AvroEncoderBinary(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+        encoder_selected = "json"
+        encoder_class = self.encoder_config_for(encoder_selected)["encoder_class"]
+        encoder_type = self.encoder_config_for(encoder_selected)["encoder_type"]
+
+        encoder = encoder_class(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
 
         message = self.to_json()
         encoded_message = encoder.encode([message])
@@ -79,7 +89,7 @@ class OutputFeedbackMessage(Message):
             encoded_message.body,
             RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK,
             encoded_message.version,
-            RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY,
+            encoder_type,
         )
 
     def check_defined_keys(self):

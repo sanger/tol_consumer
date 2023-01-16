@@ -12,7 +12,7 @@ def test_create_labware_processor(config):
 def test_create_labware_processor_can_run_process(
     config, valid_create_labware_message, mocked_response, taxonomy_record
 ):
-    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
         schema_registry = MagicMock()
         publisher = MagicMock()
 
@@ -28,7 +28,7 @@ def test_create_labware_processor_can_run_process(
 
 
 def test_create_labware_processor_when_traction_sends_422(config, valid_create_labware_message, taxonomy_record):
-    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
         schema_registry = MagicMock()
         publisher = MagicMock()
 
@@ -45,7 +45,7 @@ def test_create_labware_processor_when_traction_sends_422(config, valid_create_l
 
 
 def test_create_labware_processor_when_traction_sends_500(config, valid_create_labware_message, taxonomy_record):
-    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
         schema_registry = MagicMock()
         publisher = MagicMock()
 
