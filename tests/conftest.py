@@ -103,3 +103,43 @@ def taxonomy_record():
         "submittable": "true",
         "binomial": "true",
     }
+
+
+@pytest.fixture
+def valid_sample():
+    return {
+        "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6".encode(),
+        "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014".encode(),
+        "sangerSampleId": "cichlid_pacbio8196429",
+        "location": "A01",
+        "supplierSampleName": "SampleSupplied1",
+        "volume": 5,
+        "concentration": 5,
+        "publicName": "SamplePublicName1",
+        "taxonId": 10090,
+        "commonName": "Mus Musculus",
+        "donorId": "cichlid_pacbio8196429",
+        "libraryType": "Library1",
+        "countryOfOrigin": "United Kingdom",
+        "sampleCollectionDateUtc": 1673883031871.293,
+    }
+
+
+@pytest.fixture
+def invalid_sample():
+    return {
+        "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6",
+        "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+        "sangerSampleId": 1234,
+        "location": "A001",
+        "supplierSampleName": "1234",
+        "volume": "5",
+        "concentration": "5",
+        "publicName": "1234",
+        "taxonId": "10090",
+        "commonName": 1234,
+        "donorId": 1234,
+        "libraryType": 1234,
+        "countryOfOrigin": 1234,
+        "sampleCollectionDateUtc": "1673883031871.293",
+    }

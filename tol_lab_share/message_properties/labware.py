@@ -47,8 +47,14 @@ class Labware(MessageProperty):
         else:
             return "wells"
 
+    def count_of_total_samples(self):
+        return len(self._properties["samples"])
+
+    def count_of_valid_samples(self):
+        return [sample.validate() for sample in self._properties["samples"]].count(True)
+
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         logger.debug("Labware::add_to_feedback_message")
         super().add_to_feedback_message(feedback_message)
-        feedback_message.count_of_total_samples = 96
-        feedback_message.count_of_valid_samples = 96
+        feedback_message.count_of_total_samples = self.count_of_total_samples()
+        feedback_message.count_of_valid_samples = self.count_of_valid_samples()

@@ -41,7 +41,9 @@ ERROR_4_NOT_VALID_COUNTRY_INSDC = ErrorCode(4, "plate", "country_of_origin", "No
 ERROR_5_NOT_FLOAT = ErrorCode(5, "plate", "unknown", "Not a float")
 ERROR_6_LABWARE_TYPE = ErrorCode(6, "plate", "labware type", "Not valid labware type")
 ERROR_7_INVALID_LOCATION = ErrorCode(7, "plate", "locatiob", "Not valid location")
-ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION = ErrorCode(8, "plate", "location type", "Not valid location")
+ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION = ErrorCode(
+    8, "plate", "location type", "Not valid labware type for location"
+)
 ERROR_9_INVALID_INPUT = ErrorCode(9, "plate", "input", "Not valid input")
 ERROR_10_DICT_WRONG_KEY = ErrorCode(10, "plate", "dict", "Not valid key")
 ERROR_11_PARENT_DICT_WRONG = ErrorCode(11, "plate", "dict", "Parent dict is wrong")
