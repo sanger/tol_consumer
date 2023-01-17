@@ -36,8 +36,8 @@ class CreateLabwareProcessor:
         else:
             logger.error(f"There was a problem while validating the input message: {input.errors}")
 
-        if len(output_traction_message.errors()) > 0:
-            logger.error(f"There was a problem while processing the input message: {output_traction_message.errors()}")
+        if len(output_traction_message.errors) > 0:
+            logger.error(f"There was a problem while processing the input message: {output_traction_message.errors}")
 
         if output_feedback_message.validate():
             output_feedback_message.publish(
