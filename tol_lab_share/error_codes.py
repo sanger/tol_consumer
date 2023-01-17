@@ -8,6 +8,12 @@ class ErrorCode:
         self.origin = origin
         self.description = description
 
+    def __repr__(self):
+        return self.text()
+
+    def __str__(self):
+        return self.text()
+
     def validate(self):
         return (
             isinstance(self.type_id, str)
@@ -21,6 +27,9 @@ class ErrorCode:
         instance.description = description
 
         return instance
+
+    def text(self):
+        return f"type_id={self.type_id}, field={self.field}, origin={self.origin} description={self.description}"
 
     def json(self):
         return {

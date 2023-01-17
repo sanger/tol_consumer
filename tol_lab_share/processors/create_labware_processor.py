@@ -30,8 +30,14 @@ class CreateLabwareProcessor:
         if input.validate():
             output_traction_message = OutputTractionMessage()
             input.add_to_traction_message(output_traction_message)
+            logger.info("Attempting to send to traction")
             output_traction_message.send(url=self._config.TRACTION_URL)
             output_traction_message.add_to_feedback_message(output_feedback_message)
+        else:
+            logger.error(f"There was a problem while validating the input message: {input.errors}")
+
+        if len(output_traction_message.errors()) > 0:
+            logger.error(f"There was a problem while processing the input message: {output_traction_message.errors()}")
 
         if output_feedback_message.validate():
             output_feedback_message.publish(
@@ -39,6 +45,7 @@ class CreateLabwareProcessor:
                 schema_registry=self._schema_registry,
                 exchange=self._config.RABBITMQ_FEEDBACK_EXCHANGE,
             )
+            logger.info("Message process completed")
         else:
             logger.fatal(
                 "The feedback message generated does not validate. Please contact the development team."

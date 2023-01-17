@@ -136,6 +136,9 @@ class OutputTractionMessage:
     def request_attributes(self):
         return [self.requests(position).serializer().payload() for position in range(len(self._requests))]
 
+    def errors(self):
+        return self._errors
+
     def payload(self):
         return {
             "data": {
