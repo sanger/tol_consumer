@@ -30,7 +30,7 @@ class DictInput(MessageProperty):
             return False
 
         if self._key not in self._input.value:
-            self.add_error(error_codes.ERROR_10_DICT_WRONG_KEY.trigger(instance=self))
+            self.add_error(error_codes.ERROR_10_DICT_WRONG_KEY.trigger(instance=self, text=f"wrong key: {self._key}"))
             return False
         return True
 

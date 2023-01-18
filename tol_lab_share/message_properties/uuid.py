@@ -40,7 +40,9 @@ class Uuid(MessageProperty):
             pass
         except AttributeError:
             pass
-        self.add_error(error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT.trigger(instance=self))
+        self.add_error(
+            error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT.trigger(instance=self, text=f"input: {self._input.value}")
+        )
         return False
 
     @cached_property

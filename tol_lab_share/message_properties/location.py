@@ -36,5 +36,7 @@ class Location(MessageProperty):
         except ValueError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_7_INVALID_LOCATION.trigger(instance=self))
+            self.add_error(
+                error_codes.ERROR_7_INVALID_LOCATION.trigger(instance=self, text=f"input: {self._input.value}")
+            )
         return result
