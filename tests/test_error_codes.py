@@ -1,4 +1,13 @@
-from tol_lab_share.error_codes import ErrorCode
+from tol_lab_share.error_codes import (
+    ErrorCode,
+    LEVEL_ERROR,
+    LEVEL_FATAL,
+    HANDLER_LOG,
+    HANDLER_RAISE,
+    ExceptionErrorCode,
+)
+from unittest.mock import patch
+import pytest
 
 
 def build_instance():
@@ -27,37 +36,54 @@ def test_error_code_json():
     }
 
 
-def test_error_code_with_description():
-    instance = build_instance().with_description("this is a test")
-    assert instance.json() == {
-        "description": "this is a test",
-        "field": "my field",
-        "origin": "my origin",
-        "type_id": "my type id",
-    }
-
-
-def test_error_code_with_description_does_not_overwrite_definition():
+def test_error_code_trigger_default_logs_error():
     instance = build_instance()
-    assert instance.json() == {
-        "description": "my description",
-        "field": "my field",
-        "origin": "my origin",
-        "type_id": "my type id",
-    }
+    with patch("tol_lab_share.error_codes.logger.error") as logger:
+        assert isinstance(instance.trigger(), ErrorCode)
+        logger.assert_called_with(instance.description)
+        assert isinstance(instance.trigger("this is a test"), ErrorCode)
+        logger.assert_called_with(instance.description + ": this is a test")
 
-    instance = build_instance().with_description("this is a test")
-    assert instance.json() == {
-        "description": "this is a test",
-        "field": "my field",
-        "origin": "my origin",
-        "type_id": "my type id",
-    }
 
-    instance = build_instance()
-    assert instance.json() == {
-        "description": "my description",
-        "field": "my field",
-        "origin": "my origin",
-        "type_id": "my type id",
-    }
+def test_error_code_trigger_logging_can_log():
+    instance = ErrorCode(
+        "my type id", "my origin", "my field", "my description", level=LEVEL_ERROR, handler=HANDLER_LOG
+    )
+    with patch("tol_lab_share.error_codes.logger.error") as logger:
+        assert isinstance(instance.trigger(), ErrorCode)
+        logger.assert_called_with(instance.description)
+        assert isinstance(instance.trigger("this is a test"), ErrorCode)
+        logger.assert_called_with(instance.description + ": this is a test")
+
+    instance = ErrorCode(
+        "my type id", "my origin", "my field", "my description", level=LEVEL_FATAL, handler=HANDLER_LOG
+    )
+    with patch("tol_lab_share.error_codes.logger.fatal") as logger:
+        assert isinstance(instance.trigger(), ErrorCode)
+        logger.assert_called_with(instance.description)
+        assert isinstance(instance.trigger("this is a test"), ErrorCode)
+        logger.assert_called_with(instance.description + ": this is a test")
+
+
+def test_error_code_trigger_logging_can_raise():
+    instance = ErrorCode(
+        "my type id", "my origin", "my field", "my description", level=LEVEL_ERROR, handler=HANDLER_RAISE
+    )
+    with patch("tol_lab_share.error_codes.logger.error") as logger:
+        with pytest.raises(ExceptionErrorCode):
+            instance.trigger()
+        logger.assert_called_with(instance.description)
+        with pytest.raises(ExceptionErrorCode):
+            instance.trigger("this is a test")
+        logger.assert_called_with(instance.description + ": this is a test")
+
+    instance = ErrorCode(
+        "my type id", "my origin", "my field", "my description", level=LEVEL_FATAL, handler=HANDLER_RAISE
+    )
+    with patch("tol_lab_share.error_codes.logger.fatal") as logger:
+        with pytest.raises(ExceptionErrorCode):
+            instance.trigger()
+        logger.assert_called_with(instance.description)
+        with pytest.raises(ExceptionErrorCode):
+            instance.trigger("this is a test")
+        logger.assert_called_with(instance.description + ": this is a test")

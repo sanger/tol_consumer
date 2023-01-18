@@ -22,7 +22,7 @@ class Location(MessageProperty):
         logger.debug("Location::check_is_location")
         result = False
         if not self.labware_type().validate():
-            self.add_error(error_codes.ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION)
+            self.add_error(error_codes.ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION.trigger())
             return False
         if not self._input.validate():
             return False
@@ -36,5 +36,5 @@ class Location(MessageProperty):
         except ValueError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_7_INVALID_LOCATION)
+            self.add_error(error_codes.ERROR_7_INVALID_LOCATION.trigger())
         return result

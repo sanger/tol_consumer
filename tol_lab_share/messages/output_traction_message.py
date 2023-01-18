@@ -152,9 +152,7 @@ class OutputTractionMessage:
         return len(self._errors) == 0
 
     def error_code_traction_problem(self, status_code, error_str):
-        return error_codes.ERROR_13_TRACTION_REQUEST_FAILED.with_description(
-            f"HTTP CODE: { status_code }, MSG: {error_str}"
-        )
+        return error_codes.ERROR_13_TRACTION_REQUEST_FAILED.trigger(f"HTTP CODE: { status_code }, MSG: {error_str}")
 
     def send(self, url):
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}

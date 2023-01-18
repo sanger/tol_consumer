@@ -1,12 +1,25 @@
-import copy
+import logging
+
+LEVEL_FATAL = "level_fatal"
+LEVEL_ERROR = "leverl_error"
+HANDLER_LOG = "handler_log"
+HANDLER_RAISE = "handler_raise"
+
+logger = logging.getLogger(__name__)
+
+
+class ExceptionErrorCode(BaseException):
+    pass
 
 
 class ErrorCode:
-    def __init__(self, type_id, origin, field, description):
+    def __init__(self, type_id, origin, field, description, level=LEVEL_ERROR, handler=HANDLER_LOG):
         self.type_id = type_id
         self.field = field
         self.origin = origin
         self.description = description
+        self.level = level
+        self.handler = handler
 
     def __repr__(self):
         return self.text()
@@ -22,11 +35,11 @@ class ErrorCode:
             and isinstance(self.description, str)
         )
 
-    def with_description(self, description):
-        instance = copy.deepcopy(self)
-        instance.description = description
+    # def with_description(self, description):
+    #     instance = copy.deepcopy(self)
+    #     instance.description = description
 
-        return instance
+    #     return instance
 
     def text(self):
         return f"type_id={self.type_id}, field={self.field}, origin={self.origin} description={self.description}"
@@ -38,6 +51,24 @@ class ErrorCode:
             "origin": self.origin,
             "description": self.description,
         }
+
+    def _message_for_trigger(self, text):
+        message = self.description
+        if text is not None:
+            message += ": " + text
+        return message
+
+    def trigger(self, text=None):
+        message = self._message_for_trigger(text)
+        if self.level == LEVEL_ERROR:
+            logger.error(message)
+        if self.level == LEVEL_FATAL:
+            logger.fatal(message)
+
+        if self.handler == HANDLER_RAISE:
+            raise ExceptionErrorCode(message)
+
+        return self
 
 
 ERROR_1_UNKNOWN = ErrorCode(1, "plate", "unknown", "Unknown error")
@@ -58,7 +89,24 @@ ERROR_10_DICT_WRONG_KEY = ErrorCode(10, "plate", "dict", "Not valid key")
 ERROR_11_PARENT_DICT_WRONG = ErrorCode(11, "plate", "dict", "Parent dict is wrong")
 ERROR_12_DICT_NOT_ITERABLE = ErrorCode(12, "plate", "dict", "Dict is not iterable")
 ERROR_13_TRACTION_REQUEST_FAILED = ErrorCode(13, "plate", "dict", "Traction send request failed")
-ERROR_14_PROBLEM_ACCESSING_TAXON_ID = ErrorCode(14, "plate", "taxon_id", "Problem when accessing the taxon id service")
+ERROR_14_PROBLEM_ACCESSING_TAXON_ID = ErrorCode(
+    14, "plate", "taxon_id", "Problem when accessing the taxon id service", level=LEVEL_FATAL, handler=HANDLER_RAISE
+)
 ERROR_15_FEEDBACK_UNDEFINED_KEY = ErrorCode(
     15, "plate", "feedback", "Feedback message is missing to define some fields"
+)
+ERROR_16_PROBLEM_TALKING_WITH_TRACTION = ErrorCode(
+    16, "message", "traction", "There was a problem while sending to traction"
+)
+ERROR_17_INPUT_MESSAGE_INVALID = ErrorCode(
+    17, "message", "create-message", "There was a problem while validating the input message"
+)
+ERROR_18_FEEDBACK_MESSAGE_INVALID = ErrorCode(
+    18,
+    "message",
+    "feedback",
+    "The feedback message generated does not validate. Please contact the development team."
+    "Original message will be rejected and send to the dead letters queue.",
+    level=LEVEL_FATAL,
+    handler=HANDLER_RAISE,
 )

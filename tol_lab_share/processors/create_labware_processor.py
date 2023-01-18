@@ -6,6 +6,7 @@ from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
 
+from tol_lab_share import error_codes
 
 logger = logging.getLogger(__name__)
 
@@ -33,11 +34,11 @@ class CreateLabwareProcessor:
             logger.info("Attempting to send to traction")
             output_traction_message.send(url=self._config.TRACTION_URL)
             output_traction_message.add_to_feedback_message(output_feedback_message)
-        else:
-            logger.error(f"There was a problem while validating the input message: {input.errors}")
 
-        if len(output_traction_message.errors) > 0:
-            logger.error(f"There was a problem while processing the input message: {output_traction_message.errors}")
+            if len(output_traction_message.errors) > 0:
+                error_codes.ERROR_16_PROBLEM_TALKING_WITH_TRACTION.trigger(text=f":{output_traction_message.errors}")
+        else:
+            logger.error(error_codes.ERROR_17_INPUT_MESSAGE_INVALID.trigger(text=f":{input.errors}"))
 
         if output_feedback_message.validate():
             output_feedback_message.publish(
@@ -47,10 +48,7 @@ class CreateLabwareProcessor:
             )
             logger.info("Message process completed")
         else:
-            logger.fatal(
-                "The feedback message generated does not validate. Please contact the development team."
-                "Original message will be rejected and send to the dead letters queue."
-            )
+            error_codes.ERROR_18_FEEDBACK_MESSAGE_INVALID.trigger()
             return False
 
         return True
