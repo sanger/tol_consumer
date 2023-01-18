@@ -93,7 +93,7 @@ class MessageProperty(MessagePropertyInterface):
         except KeyError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_9_INVALID_INPUT.trigger())
+            self.add_error(error_codes.ERROR_9_INVALID_INPUT.trigger(instance=self))
         return result
 
     def check_is_string(self):
@@ -106,7 +106,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_2_NOT_STRING.trigger())
+            self.add_error(error_codes.ERROR_2_NOT_STRING.trigger(instance=self))
         return result
 
     def check_is_integer(self):
@@ -120,7 +120,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_3_NOT_INTEGER.trigger())
+            self.add_error(error_codes.ERROR_3_NOT_INTEGER.trigger(instance=self))
         return result
 
     def check_is_float(self):
@@ -134,7 +134,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_5_NOT_FLOAT.trigger())
+            self.add_error(error_codes.ERROR_5_NOT_FLOAT.trigger(instance=self))
         return result
 
     def check_is_date_utc(self):
@@ -148,7 +148,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_3_NOT_INTEGER.trigger())
+            self.add_error(error_codes.ERROR_3_NOT_INTEGER.trigger(instance=self))
         return result
 
     def _validate_properties(self):
@@ -159,7 +159,7 @@ class MessageProperty(MessagePropertyInterface):
 
     @property
     def default_error_code(self):
-        return error_codes.ERROR_1_UNKNOWN.trigger()
+        return error_codes.ERROR_1_UNKNOWN.trigger(instance=self)
 
     @property
     def _errors_properties(self) -> List[ErrorCode]:

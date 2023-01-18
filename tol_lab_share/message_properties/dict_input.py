@@ -23,14 +23,14 @@ class DictInput(MessageProperty):
 
     def check_has_key(self):
         if not self._input.validate():
-            self.add_error(error_codes.ERROR_11_PARENT_DICT_WRONG.trigger())
+            self.add_error(error_codes.ERROR_11_PARENT_DICT_WRONG.trigger(instance=self))
             return False
 
         if not self.check_iterable():
             return False
 
         if self._key not in self._input.value:
-            self.add_error(error_codes.ERROR_10_DICT_WRONG_KEY.trigger())
+            self.add_error(error_codes.ERROR_10_DICT_WRONG_KEY.trigger(instance=self))
             return False
         return True
 
@@ -42,7 +42,7 @@ class DictInput(MessageProperty):
             iter(self._input.value)
             return True
         except TypeError:
-            self.add_error(error_codes.ERROR_12_DICT_NOT_ITERABLE.trigger())
+            self.add_error(error_codes.ERROR_12_DICT_NOT_ITERABLE.trigger(instance=self))
             return False
 
     @cached_property

@@ -24,5 +24,5 @@ class CountryOfOrigin(MessageProperty):
         except ValueError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_4_NOT_VALID_COUNTRY_INSDC.trigger())
+            self.add_error(error_codes.ERROR_4_NOT_VALID_COUNTRY_INSDC.trigger(instance=self))
         return result

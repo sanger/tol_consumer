@@ -28,7 +28,8 @@ class ScientificNameFromTaxonId(MessageProperty):
                 CACHE_TAXON_IDS[self._input.value] = json["scientificName"]
             else:
                 error_codes.ERROR_14_PROBLEM_ACCESSING_TAXON_ID.trigger(
-                    text=f"HTTP code {r.status_code} - Problem when accessing taxon id {self._input.value}"
+                    text=f"HTTP code {r.status_code} - Problem when accessing taxon id {self._input.value}",
+                    instance=self,
                 )
                 # self.raise_exception(
                 #    error_codes.ERROR_14_PROBLEM_ACCESSING_TAXON_ID.with_description(

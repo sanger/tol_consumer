@@ -22,7 +22,7 @@ class LabwareType(MessageProperty):
         except ValueError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_6_LABWARE_TYPE.trigger())
+            self.add_error(error_codes.ERROR_6_LABWARE_TYPE.trigger(instance=self))
         return result
 
     def pad_number(self, number):

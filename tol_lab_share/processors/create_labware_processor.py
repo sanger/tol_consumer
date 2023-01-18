@@ -36,9 +36,11 @@ class CreateLabwareProcessor:
             output_traction_message.add_to_feedback_message(output_feedback_message)
 
             if len(output_traction_message.errors) > 0:
-                error_codes.ERROR_16_PROBLEM_TALKING_WITH_TRACTION.trigger(text=f":{output_traction_message.errors}")
+                error_codes.ERROR_16_PROBLEM_TALKING_WITH_TRACTION.trigger(
+                    text=f":{output_traction_message.errors}", instance=self
+                )
         else:
-            logger.error(error_codes.ERROR_17_INPUT_MESSAGE_INVALID.trigger(text=f":{input.errors}"))
+            error_codes.ERROR_17_INPUT_MESSAGE_INVALID.trigger(text=f":{input.errors}", instance=self)
 
         if output_feedback_message.validate():
             output_feedback_message.publish(
@@ -48,7 +50,7 @@ class CreateLabwareProcessor:
             )
             logger.info("Message process completed")
         else:
-            error_codes.ERROR_18_FEEDBACK_MESSAGE_INVALID.trigger()
+            error_codes.ERROR_18_FEEDBACK_MESSAGE_INVALID.trigger(instance=self)
             return False
 
         return True

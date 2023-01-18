@@ -98,7 +98,9 @@ class OutputFeedbackMessage(Message):
         for key in ["sourceMessageUuid", "countOfTotalSamples", "countOfValidSamples", "operationWasErrorFree"]:
             if json[key] is None:
                 self.add_error_code(
-                    error_codes.ERROR_15_FEEDBACK_UNDEFINED_KEY.trigger(f"Key {key} is undefined in feedback message")
+                    error_codes.ERROR_15_FEEDBACK_UNDEFINED_KEY.trigger(
+                        text=f"Key {key} is undefined in feedback message", instance=self
+                    )
                 )
                 return False
         return True

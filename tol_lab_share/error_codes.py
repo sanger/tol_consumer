@@ -1,4 +1,5 @@
 import logging
+import copy
 
 LEVEL_FATAL = "level_fatal"
 LEVEL_ERROR = "leverl_error"
@@ -35,12 +36,6 @@ class ErrorCode:
             and isinstance(self.description, str)
         )
 
-    # def with_description(self, description):
-    #     instance = copy.deepcopy(self)
-    #     instance.description = description
-
-    #     return instance
-
     def text(self):
         return f"type_id={self.type_id}, field={self.field}, origin={self.origin} description={self.description}"
 
@@ -52,14 +47,16 @@ class ErrorCode:
             "description": self.description,
         }
 
-    def _message_for_trigger(self, text):
+    def message_for_trigger(self, text=None, instance=None):
         message = self.description
+        if instance is not None:
+            message += ", instance: " + str(type(instance).__name__)
         if text is not None:
-            message += ": " + text
+            message += ", text: " + text
         return message
 
-    def trigger(self, text=None):
-        message = self._message_for_trigger(text)
+    def trigger(self, text=None, instance=None):
+        message = self.message_for_trigger(text, instance)
         if self.level == LEVEL_ERROR:
             logger.error(message)
         if self.level == LEVEL_FATAL:
@@ -68,7 +65,10 @@ class ErrorCode:
         if self.handler == HANDLER_RAISE:
             raise ExceptionErrorCode(message)
 
-        return self
+        copied_instance = copy.deepcopy(self)
+        copied_instance.description = message
+
+        return copied_instance
 
 
 ERROR_1_UNKNOWN = ErrorCode(1, "plate", "unknown", "Unknown error")
