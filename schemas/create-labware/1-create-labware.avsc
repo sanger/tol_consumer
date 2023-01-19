@@ -26,6 +26,10 @@
             "type": "string"
           },
           {
+            "name": "labwareUuid",
+            "type": "version4MessageUuid"
+          },
+          {
             "name": "barcode", "type": "string",
             "doc": "The barcode for this labware."
           },
@@ -42,29 +46,29 @@
                   {
                     "name": "sampleUuid",
                     "doc": "Unique sample ID.",
-                    "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
+                    "type": "version4MessageUuid"
                   },
                   {
                     "name": "studyUuid",
                     "doc": "Unique study ID.",
-                    "type": {"name": "version4StudyUuid", "type": "fixed", "size": 36}
+                    "type": "version4MessageUuid"
                   },
                   {
                     "name": "sangerSampleId", "type": "string"
                   },
                   {
-                    "name": "location", "type": ["string","null"],
+                    "name": "location", "type": "string",
                     "doc": "The location for the sample inside the labware, or null if location is not relevant in labware (Eg: tube)."
                   },
                   {
                     "name": "supplierSampleName", "type": "string"
                   },
                   {
-                    "name": "volume", "type": "string",
+                    "name": "volume", "type": "int",
                     "doc": "Volume of the sample."
                   },
                   {
-                    "name": "concentration", "type": "string",
+                    "name": "concentration", "type": "int",
                     "doc": "Concentration of the sample."
                   },
                   {
@@ -72,7 +76,7 @@
                     "doc": "Public name of the sample."
                   },
                   {
-                    "name": "taxonId", "type": "string",
+                    "name": "taxonId", "type": "int",
                     "doc": "Taxonomy Identifier."
                   },
                   {

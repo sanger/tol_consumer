@@ -55,7 +55,7 @@ class ErrorCode:
             message += ", text: " + text
         return message
 
-    def trigger(self, text=None, instance=None):
+    def trigger(self, text=None, instance=None, origin=None, field=None):
         message = self.message_for_trigger(text, instance)
         if self.level == LEVEL_ERROR:
             logger.error(message)
@@ -67,6 +67,11 @@ class ErrorCode:
 
         copied_instance = copy.deepcopy(self)
         copied_instance.description = message
+
+        if origin:
+            copied_instance.origin = origin
+        if field:
+            copied_instance.field = field
 
         return copied_instance
 

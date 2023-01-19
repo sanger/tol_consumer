@@ -38,18 +38,66 @@ class MessagePropertyInterface(ABC):
     def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
         ...
 
+    @property
+    @abstractmethod
+    def property_name(self) -> Optional[str]:
+        ...
+
+    @property_name.setter
+    @abstractmethod
+    def property_name(self, value: str) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def property_source(self) -> Optional[Any]:
+        ...
+
+    @property_source.setter
+    @abstractmethod
+    def property_source(self, value: Any) -> None:
+        ...
+
 
 class MessageProperty(MessagePropertyInterface):
     def __init__(self, input):
         self._input = input
         self._errors = []
         self._properties = {}
+        self.property_name = None
+        self.property_source = None
 
     def validate(self):
         return all(list([self._validate_properties(), self._validate_instance()]))
 
     def properties(self, key):
         return self._properties[key]
+
+    def has_property(self, key):
+        return key in self._properties
+
+    def add_property(self, property_name: str, instance: MessagePropertyInterface) -> None:
+        instance.property_name = property_name
+        instance.property_source = self
+        if not hasattr(self, "_properties"):
+            self._properties = {}
+        self._properties[property_name] = instance
+
+    @property
+    def property_name(self) -> Optional[str]:
+        return self._property_name
+
+    @property_name.setter
+    def property_name(self, value: str) -> None:
+        self._property_name = value
+
+    @property
+    def property_source(self) -> Optional[MessagePropertyInterface]:
+        return self._property_source
+
+    @property_source.setter
+    def property_source(self, value: MessagePropertyInterface) -> None:
+        self._property_source = value
 
     @cached_property
     def value(self):
@@ -58,6 +106,19 @@ class MessageProperty(MessagePropertyInterface):
     def raise_exception(self, error_code: ErrorCode) -> None:
         self.add_error(error_code)
         raise ExceptionMessageProperty()
+
+    @property
+    def origin(self):
+        if self.property_source:
+            return self.property_source.property_name
+        return None
+
+    @property
+    def field(self):
+        return self.property_name
+
+    def trigger_error(self, error_code: ErrorCode, text: Optional[str] = None) -> None:
+        self.add_error(error_code.trigger(instance=self, origin=self.origin, field=self.field, text=text))
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
         for property in self._properties_instances:

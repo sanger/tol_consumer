@@ -80,6 +80,20 @@ def test_error_code_trigger_replicates_original_copy():
     assert instance3.description != instance.description
 
 
+def test_error_code_trigger_can_setup_origin_and_field():
+    instance = build_instance()
+    instance2 = instance.trigger("my new text", origin="a new origin", field="field modified")
+    assert instance.origin != instance2.origin
+    assert instance.field != instance2.field
+    assert instance2.origin == "a new origin"
+    assert instance2.field == "field modified"
+
+    # It does not overwrite when not defined
+    instance3 = instance.trigger("my other new text")
+    assert instance3.field == instance.field
+    assert instance3.origin == instance.origin
+
+
 def test_error_code_trigger_logging_can_log():
     instance = ErrorCode(
         "my type id", "my origin", "my field", "my description", level=LEVEL_ERROR, handler=HANDLER_LOG
