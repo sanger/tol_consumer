@@ -47,6 +47,7 @@ def send_message(msg, subject, registry, publisher):
     encoded_message = encoder.encode([msg], version="latest")
 
     print(f"Publishing message { encoded_message }\n")
+
     publisher.publish_message(
         RABBITMQ_EXCHANGE,
         RABBITMQ_ROUTING_KEY,

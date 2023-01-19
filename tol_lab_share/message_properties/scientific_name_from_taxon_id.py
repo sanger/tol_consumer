@@ -10,7 +10,7 @@ CACHE_TAXON_IDS = {}
 class ScientificNameFromTaxonId(MessageProperty):
     @property
     def validators(self):
-        return [self.check_is_integer]
+        return [self.check_is_integer_string]
 
     @cached_property
     def taxonomy_url(self):

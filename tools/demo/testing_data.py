@@ -12,7 +12,6 @@ def build_create_labware_96_msg(unique_id, labware_uuid):
         "messageCreateDateUtc": datetime.now().timestamp() * 1000,
         "labware": {
             "labwareType": "Plate12x8",
-            "labwareUuid": labware_uuid,
             "barcode": barcode_for_unique_id(unique_id),
             "samples": [
                 {
@@ -21,18 +20,18 @@ def build_create_labware_96_msg(unique_id, labware_uuid):
                     "sangerSampleId": f"sangerId-{unique_id}-{(letter-ord('A'))*pos}",
                     "location": f"{chr(letter) + ('0' if len(str(pos)) == 1 else '') + str(pos)}",
                     "supplierSampleName": f"SampleSupplied-{unique_id}-{(letter-ord('A'))*pos}",
-                    "volume": 5,
-                    "concentration": 5,
+                    "volume": "5",
+                    "concentration": "5",
                     "publicName": f"SamplePublicName-{unique_id}-{(letter-ord('A'))*pos}",
-                    "taxonId": 10090,
+                    "taxonId": "10090",
                     "commonName": "Mus Musculus",
                     "donorId": f"donor{(letter-ord('A'))*pos}",
                     "libraryType": "Library1",
                     "countryOfOrigin": "United Kingdom",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
-                for letter in range(ord("A"), ord("H") + 1)
-                for pos in range(1, 13)
+                for letter in range(ord("A"), ord("A") + 1)
+                for pos in range(1, 2)
             ],
         },
     }
@@ -42,13 +41,6 @@ def build_update_labware_msg(sample_msg):
     return {
         "messageUuid": str(uuid4()).encode(),
         "messageCreateDateUtc": datetime.now().timestamp() * 1000,
-        "labwareUpdates": [
-            {
-                "labwareUuid": sample_msg["labware"]["labwareUuid"],
-                "name": "barcode",
-                "value": f"MODIFIEDBARCODE-{sample_msg['labware']['barcode']}",
-            }
-        ],
         "sampleUpdates": [
             {
                 "sampleUuid": sample_msg["labware"]["samples"][3]["sampleUuid"],

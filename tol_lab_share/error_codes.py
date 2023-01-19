@@ -117,3 +117,8 @@ ERROR_18_FEEDBACK_MESSAGE_INVALID = ErrorCode(
     level=LEVEL_FATAL,
     handler=HANDLER_RAISE,
 )
+
+ERROR_19_INPUT_IS_NOT_VALID_INTEGER_STRING = ErrorCode(
+    19, "input", "input", "The input provided is not a valid integer."
+)
+ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING = ErrorCode(20, "input", "input", "The input provided is not a valid float.")

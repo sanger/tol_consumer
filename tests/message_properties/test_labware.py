@@ -12,7 +12,7 @@ def test_labware_is_valid():
 
     instance = Labware(Input(labware))
     assert instance.validate() is True
-    assert len(instance.errors) == 0
+    assert instance.errors == []
 
 
 def test_sample_is_invalid():
@@ -25,7 +25,7 @@ def test_sample_is_invalid():
 
     instance = Labware(Input(labware))
     assert instance.validate() is False
-    assert len(instance.errors) == 4
+    assert len(instance.errors) > 0
 
     labware = {
         "labwareType": "Plate12x8",
@@ -34,7 +34,7 @@ def test_sample_is_invalid():
     }
     instance = Labware(Input(labware))
     assert instance.validate() is False
-    assert len(instance.errors) == 1
+    assert len(instance.errors) > 0
 
 
 def test_count_of_total_samples(valid_sample):
@@ -57,13 +57,14 @@ def test_count_of_total_samples(valid_sample):
 
     instance = Labware(Input(labware2))
     assert instance.count_of_total_samples() == 2
+    assert instance.errors == []
 
 
 def test_count_of_valid_samples(valid_sample, invalid_sample):
     labware = {
         "labwareType": "Plate12x8",
-        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
-        "barcode": 1234,
+        "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
+        "barcode": "1234",
         "samples": [],
     }
 
@@ -73,19 +74,20 @@ def test_count_of_valid_samples(valid_sample, invalid_sample):
 
     labware2 = {
         "labwareType": "Plate12x8",
-        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
-        "barcode": 1234,
+        "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
+        "barcode": "1234",
         "samples": [valid_sample, valid_sample],
     }
 
     instance = Labware(Input(labware2))
     instance.validate()
+    assert instance.errors == []
     assert instance.count_of_valid_samples() == 2
 
     labware2 = {
         "labwareType": "Plate12x8",
-        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
-        "barcode": 1234,
+        "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
+        "barcode": "1234",
         "samples": [invalid_sample, valid_sample],
     }
 

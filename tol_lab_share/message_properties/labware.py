@@ -1,7 +1,7 @@
 from .message_property import MessageProperty
 from tol_lab_share.message_properties.labware_type import LabwareType
 from tol_lab_share.message_properties.barcode import Barcode
-from tol_lab_share.message_properties.uuid import Uuid
+
 from tol_lab_share.message_properties.sample import Sample
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.message_properties.dict_input import DictInput
@@ -11,7 +11,6 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE,
     INPUT_CREATE_LABWARE_MESSAGE_BARCODE,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLES,
-    INPUT_CREATE_LABWARE_MESSAGE_UUID,
 )
 import logging
 
@@ -22,7 +21,6 @@ class Labware(MessageProperty):
     def __init__(self, input):
         super().__init__(input)
 
-        self.add_property("labware_uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_UUID)))
         self.add_property("labware_type", LabwareType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE)))
         self.add_property("barcode", Barcode(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_BARCODE)))
         self.add_property("samples", self._parse_samples(input))

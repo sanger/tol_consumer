@@ -242,6 +242,38 @@ class MessageProperty(MessagePropertyInterface):
             self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
         return result
 
+    def check_is_integer_string(self):
+        logger.debug("MessageProperty::check_is_integer_string")
+        if not self.check_is_string():
+            return False
+
+        result = None
+        try:
+            result = int(self._input.value)
+        except TypeError:
+            pass
+        except ValueError:
+            pass
+        if result is None:
+            self.trigger_error(error_codes.ERROR_19_INPUT_IS_NOT_VALID_INTEGER_STRING)
+        return result is not None
+
+    def check_is_float_string(self):
+        logger.debug("MessageProperty::check_is_float_string")
+        if not self.check_is_string():
+            return False
+
+        result = None
+        try:
+            result = float(self._input.value)
+        except TypeError:
+            pass
+        except ValueError:
+            pass
+        if result is None:
+            self.trigger_error(error_codes.ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING)
+        return result is not None
+
     def check_is_float(self):
         logger.debug("MessageProperty::check_is_float")
         if not self.check_is_valid_input():

@@ -26,10 +26,6 @@
             "type": "string"
           },
           {
-            "name": "labwareUuid",
-            "type": "version4MessageUuid"
-          },
-          {
             "name": "barcode", "type": "string",
             "doc": "The barcode for this labware."
           },
@@ -64,11 +60,11 @@
                     "name": "supplierSampleName", "type": "string"
                   },
                   {
-                    "name": "volume", "type": "int",
+                    "name": "volume", "type": "string",
                     "doc": "Volume of the sample."
                   },
                   {
-                    "name": "concentration", "type": "int",
+                    "name": "concentration", "type": "string",
                     "doc": "Concentration of the sample."
                   },
                   {
@@ -76,7 +72,7 @@
                     "doc": "Public name of the sample."
                   },
                   {
-                    "name": "taxonId", "type": "int",
+                    "name": "taxonId", "type": "string",
                     "doc": "Taxonomy Identifier."
                   },
                   {
