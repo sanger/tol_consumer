@@ -3,7 +3,7 @@ from typing import Dict, Any
 
 TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
     "messageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c".encode(),
-    "messageCreateDateUtc": datetime.now().timestamp() * 1000,
+    "messageCreateDateUtc": datetime.now(),
     "labware": {
         "labwareType": "Plate12x8",
         "barcode": "BARCODE001",
@@ -22,7 +22,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "donorId": "cichlid_pacbio8196429",
                 "libraryType": "Saphyr_v1",
                 "countryOfOrigin": "United Kingdom",
-                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                "sampleCollectionDateUtc": datetime.now(),
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -38,7 +38,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "donorId": "cichlid_pacbio8196430",
                 "libraryType": "Saphyr_v1",
                 "countryOfOrigin": "United Kingdom",
-                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                "sampleCollectionDateUtc": datetime.now(),
             },
         ],
     },
@@ -47,7 +47,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
 
 TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
     "messageUuid": "b01aa0ad7b19-4f94-87e9-70d74fb8783c".encode(),
-    "messageCreateDateUtc": datetime.now().timestamp() * 1000,
+    "messageCreateDateUtc": datetime.now(),
     "labware": {
         "labwareType": "Plate12x8",
         "barcode": "BARCODE001",
@@ -66,7 +66,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "donorId": "cichlid_pacbio8196429",
                 "libraryType": "Saphyr_v1",
                 "countryOfOrigin": "United Kingdom",
-                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                "sampleCollectionDateUtc": datetime.now(),
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -82,7 +82,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "donorId": "cichlid_pacbio8196430",
                 "libraryType": "Saphyr_v1",
                 "countryOfOrigin": "United Kingdom",
-                "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                "sampleCollectionDateUtc": datetime.now(),
             },
         ],
     },

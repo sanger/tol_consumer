@@ -7,6 +7,7 @@ from lab_share_lib.constants import (
     RABBITMQ_HEADER_KEY_SUBJECT,
     RABBITMQ_HEADER_KEY_VERSION,
 )
+from datetime import datetime
 from data.examples_create_labware_messages import TEST_CREATE_LABWARE_MSG_OBJECT, TEST_INVALID_CREATE_LABWARE_MSG_OBJECT
 
 from unittest.mock import MagicMock
@@ -29,12 +30,6 @@ HEADERS = {
 ENCODED_BODY = "Encoded body"
 VALID_DECODED_LIST = [TEST_CREATE_LABWARE_MSG_OBJECT]
 INVALID_DECODED_LIST = [TEST_INVALID_CREATE_LABWARE_MSG_OBJECT]
-
-# DECODED_LIST = [{
-#     INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID: '1234',
-#     INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC: '1234',
-#     INPUT_CREATE_LABWARE_MESSAGE_LABWARE: '1234'
-# }]
 
 
 @pytest.fixture
@@ -121,7 +116,7 @@ def valid_sample():
         "donorId": "cichlid_pacbio8196429",
         "libraryType": "Library1",
         "countryOfOrigin": "United Kingdom",
-        "sampleCollectionDateUtc": 1673883031871.293,
+        "sampleCollectionDateUtc": datetime.now(),
     }
 
 
@@ -141,5 +136,5 @@ def invalid_sample():
         "donorId": 1234,
         "libraryType": 1234,
         "countryOfOrigin": 1234,
-        "sampleCollectionDateUtc": "1673883031871.293",
+        "sampleCollectionDateUtc": datetime.now(),
     }

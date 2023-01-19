@@ -166,14 +166,17 @@ class OutputTractionMessage(Message):
 
         r = post(url, headers=headers, data=dumps(self.payload()), verify=False)
 
-        self._sent = r.status_code == codes.ok
+        self._sent = r.status_code == codes.created
 
         if not self._sent:
             try:
                 json = r.json()
-                self._errors = [
-                    self.error_code_traction_problem(r.status_code, error_str) for error_str in json["errors"]
-                ]
+                if 'errors' in json:
+                    self._errors = [
+                        self.error_code_traction_problem(r.status_code, error_str) for error_str in json["errors"]
+                    ]
+                else:
+                    self.error_code_traction_problem(r.status_code, json)
             except JSONDecodeError:
                 self._errors = [self.error_code_traction_problem(r.status_code, r.text)]
 

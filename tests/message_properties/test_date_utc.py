@@ -21,7 +21,7 @@ def test_DateUtc_check_DateUtc_is_valid():
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = DateUtc(Input(1234.4))
+    instance = DateUtc(Input(datetime(1970, 1, 1, 0, 20, 34, 400000)))
     assert instance.validate() is True
     assert len(instance.errors) == 0
 
@@ -35,5 +35,5 @@ def test_DateUtc_check_DateUtc_is_valid():
 
 
 def test_DateUtc_check_DateUtc_value():
-    instance = DateUtc(Input(1234.4))
+    instance = DateUtc(Input(datetime(1970, 1, 1, 0, 20, 34, 400000)))
     assert instance.value == datetime(1970, 1, 1, 0, 20, 34, 400000)

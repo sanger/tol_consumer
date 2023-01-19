@@ -7,6 +7,7 @@ from tol_lab_share.messages.output_traction_message import OutputTractionMessage
 from itertools import chain
 from tol_lab_share import error_codes
 from abc import ABC, abstractmethod
+import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -295,11 +296,11 @@ class MessageProperty(MessagePropertyInterface):
 
         result = False
         try:
-            result = isinstance(self._input.value, int)
+            result = isinstance(self._input.value, datetime.datetime)
         except AttributeError:
             pass
         if not result:
-            self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
+            self.trigger_error(error_codes.ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC)
         return result
 
     def _validate_properties(self):

@@ -122,3 +122,4 @@ ERROR_19_INPUT_IS_NOT_VALID_INTEGER_STRING = ErrorCode(
     19, "input", "input", "The input provided is not a valid integer."
 )
 ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING = ErrorCode(20, "input", "input", "The input provided is not a valid float.")
+ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC = ErrorCode(21, "input", "input", "The input provided is not a valid date.")

@@ -3,6 +3,7 @@ from unittest import mock
 from tol_lab_share.message_properties.input import Input
 from tol_lab_share import error_codes
 import pytest
+from datetime import datetime
 
 
 def test_message_property_can_initialize():
@@ -96,7 +97,7 @@ def test_message_property_check_is_date_utc():
     instance = MessageProperty(Input(None))
     assert instance.check_is_date_utc() is False
 
-    instance = MessageProperty(Input(1234))
+    instance = MessageProperty(Input(datetime.now()))
     assert instance.check_is_date_utc() is True
 
     instance = MessageProperty(Input({}))

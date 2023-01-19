@@ -6,7 +6,8 @@ def barcode_for_unique_id(unique_id):
     return f"BARCODE{unique_id}"
 
 
-def build_create_labware_96_msg(unique_id, labware_uuid):
+def build_create_labware_96_msg(unique_id, num_msg):
+    unique_id_lab = f"TOLTESTING-{unique_id}-{num_msg}"
     return {
         "messageUuid": str(uuid4()).encode(),
         "messageCreateDateUtc": datetime.now().timestamp() * 1000,
@@ -17,16 +18,16 @@ def build_create_labware_96_msg(unique_id, labware_uuid):
                 {
                     "sampleUuid": str(uuid4()).encode(),
                     "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014".encode(),
-                    "sangerSampleId": f"sangerId-{unique_id}-{(letter-ord('A'))*pos}",
+                    "sangerSampleId": f"sangerId-{unique_id_lab}-{(letter-ord('A'))*pos}",
                     "location": f"{chr(letter) + ('0' if len(str(pos)) == 1 else '') + str(pos)}",
-                    "supplierSampleName": f"SampleSupplied-{unique_id}-{(letter-ord('A'))*pos}",
+                    "supplierSampleName": f"SampleSupplied-{unique_id_lab}-{(letter-ord('A'))*pos}",
                     "volume": "5",
                     "concentration": "5",
-                    "publicName": f"SamplePublicName-{unique_id}-{(letter-ord('A'))*pos}",
+                    "publicName": f"SamplePublicName-{unique_id_lab}-{(letter-ord('A'))*pos}",
                     "taxonId": "10090",
                     "commonName": "Mus Musculus",
-                    "donorId": f"donor{(letter-ord('A'))*pos}",
-                    "libraryType": "Library1",
+                    "donorId": f"donor-{unique_id_lab}-{(letter-ord('A'))*pos}",
+                    "libraryType": "Saphyr_v1",
                     "countryOfOrigin": "United Kingdom",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
