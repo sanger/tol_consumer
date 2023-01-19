@@ -2,6 +2,7 @@ from typing import Dict, Optional, List
 from json import dumps
 from requests import post, codes
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.message import Message
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
@@ -121,11 +122,15 @@ class RequestSerializer:
         }
 
 
-class OutputTractionMessage:
+class OutputTractionMessage(Message):
     def __init__(self):
         self._requests: Dict[int, OutputTractionMessageRequest] = {}
         self._errors: List[ErrorCode] = []
         self._sent = False
+
+    @property
+    def origin(self):
+        return "OutputFeedbackMessage"
 
     def requests(self, position: int) -> OutputTractionMessageRequest:
         if position not in self._requests:
@@ -152,8 +157,8 @@ class OutputTractionMessage:
         return len(self._errors) == 0
 
     def error_code_traction_problem(self, status_code, error_str):
-        return error_codes.ERROR_13_TRACTION_REQUEST_FAILED.trigger(
-            text=f"HTTP CODE: { status_code }, MSG: {error_str}", instance=self
+        return self.trigger_error(
+            error_codes.ERROR_13_TRACTION_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
         )
 
     def send(self, url):

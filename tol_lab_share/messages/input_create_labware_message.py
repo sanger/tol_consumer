@@ -16,7 +16,9 @@ class InputCreateLabwareMessage(MessageProperty):
         super().__init__(m)
         self._message = m.message
 
-        self.add_property("uuid", MessageUuid(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID)))
+        self.add_property(
+            "message_uuid", MessageUuid(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID))
+        )
         self.add_property("labware", Labware(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_LABWARE)))
         self.add_property(
             "create_date_utc", DateUtc(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC))

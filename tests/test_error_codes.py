@@ -39,11 +39,11 @@ def test_error_code_json():
 def test_message_for_trigger():
     instance = build_instance()
     assert instance.message_for_trigger() == "my description"
-    assert instance.message_for_trigger(text="one more thing") == "my description, text: one more thing"
-    assert instance.message_for_trigger(instance=instance) == "my description, instance: ErrorCode"
+    assert instance.message_for_trigger(text="one more thing") == 'my description, text: "one more thing"'
+    assert instance.message_for_trigger(instance=instance) == 'my description, instance: "ErrorCode"'
     assert (
         instance.message_for_trigger(text="one more thing", instance=instance)
-        == "my description, instance: ErrorCode, text: one more thing"
+        == 'my description, instance: "ErrorCode", text: "one more thing"'
     )
 
 

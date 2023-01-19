@@ -4,99 +4,104 @@ from tol_lab_share.message_properties.labware import Labware
 from tol_lab_share.message_properties.input import Input
 
 
+def build_location(location_data, labware_type_data):
+    labware = Labware(Input(None))
+    sample = Input(None)
+    lt = LabwareType(Input(labware_type_data))
+    labware.add_property("labware_type", lt)
+    labware.add_property("samples", [sample])
+
+    instance = Location(Input(location_data))
+    sample.add_property("location", instance)
+
+    return instance
+
+
 def test_Location_with_wrong_labware_type():
-    labware = Labware(Input(None))
-    lt = LabwareType(Input(None))
-    labware._properties["labware_type"] = lt
+    instance = build_location("A01", None)
 
-    instance = Location("A01", labware)
-    assert instance.validate() is False
-    assert len(instance.errors) > 0
-
-    instance = Location(None, labware)
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
 
-def test_Location_check_Location_when_plate12x8():
-    labware = Labware(Input(None))
-    lt = LabwareType(Input("Plate12x8"))
-    labware._properties["labware_type"] = lt
+def test_location_with_wrong_location_info():
+    instance = build_location(None, "Plate12x8")
 
-    instance = Location(Input(None), labware)
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input(1234), labware)
+
+def test_location_check_Location_when_plate12x8():
+    instance = build_location(None, "Plate12x8")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input([]), labware)
+    instance = build_location(1234, "Plate12x8")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("1234"), labware)
+    instance = build_location([], "Plate12x8")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("a01"), labware)
+    instance = build_location("1234", "Plate12x8")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("N01"), labware)
+    instance = build_location("a01", "Plate12x8")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("A1"), labware)
+    instance = build_location("N01", "Plate12x8")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("A01"), labware)
+    instance = build_location("A1", "Plate12x8")
+    assert instance.validate() is False
+    assert len(instance.errors) > 0
+
+    instance = build_location("A01", "Plate12x8")
     assert instance.validate() is True
     assert len(instance.errors) == 0
 
-    instance = Location(Input("A12"), labware)
+    instance = build_location("A12", "Plate12x8")
     assert instance.validate() is True
     assert len(instance.errors) == 0
 
 
 def test_Location_check_Location_when_tube():
-    labware = Labware(Input(None))
-    labware_type = LabwareType(Input("Tube"))
-    labware._properties["labware_type"] = labware_type
-
-    instance = Location(Input(1234), labware)
+    instance = build_location(1234, "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input([]), labware)
+    instance = build_location([], "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("1234"), labware)
+    instance = build_location("1234", "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("a01"), labware)
+    instance = build_location("a01", "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("N01"), labware)
+    instance = build_location("N01", "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("A1"), labware)
+    instance = build_location("A1", "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("A01"), labware)
+    instance = build_location("A01", "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input("A12"), labware)
+    instance = build_location("A12", "Tube")
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = Location(Input(None), labware)
+    instance = build_location(None, "Tube")
     assert instance.validate() is True
     assert len(instance.errors) == 0

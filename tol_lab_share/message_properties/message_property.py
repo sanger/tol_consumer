@@ -1,6 +1,6 @@
 import logging
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from typing import List, Any, Optional
+from typing import List, Any, Optional, Union
 from tol_lab_share.error_codes import ErrorCode
 from functools import cached_property
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
@@ -58,6 +58,26 @@ class MessagePropertyInterface(ABC):
     def property_source(self, value: Any) -> None:
         ...
 
+    @property
+    @abstractmethod
+    def property_position(self) -> Optional[int]:
+        ...
+
+    @property_position.setter
+    @abstractmethod
+    def property_position(self, value: Any) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def property_type(self) -> Optional[str]:
+        ...
+
+    @property_type.setter
+    @abstractmethod
+    def property_type(self, value: Any) -> None:
+        ...
+
 
 class MessageProperty(MessagePropertyInterface):
     def __init__(self, input):
@@ -66,6 +86,8 @@ class MessageProperty(MessagePropertyInterface):
         self._properties = {}
         self.property_name = None
         self.property_source = None
+        self.property_position = None
+        self.property_type = "Property"
 
     def validate(self):
         return all(list([self._validate_properties(), self._validate_instance()]))
@@ -76,12 +98,32 @@ class MessageProperty(MessagePropertyInterface):
     def has_property(self, key):
         return key in self._properties
 
-    def add_property(self, property_name: str, instance: MessagePropertyInterface) -> None:
-        instance.property_name = property_name
-        instance.property_source = self
+    def _add_property_instance(self, property_name: str, instance: MessagePropertyInterface) -> None:
         if not hasattr(self, "_properties"):
             self._properties = {}
+        instance.property_name = property_name
+        instance.property_source = self
+        instance.property_position = None
+        instance.property_type = "Property"
         self._properties[property_name] = instance
+
+    def _add_property_list(self, property_name: str, input: List[MessagePropertyInterface]) -> None:
+        self._properties[property_name] = []
+        for pos in range(len(input)):
+            instance = input[pos]
+            instance.property_name = property_name
+            instance.property_source = self
+            instance.property_position = pos
+            instance.property_type = "Array"
+            self._properties[property_name].append(instance)
+
+    def add_property(
+        self, property_name: str, input: Union[MessagePropertyInterface, List[MessagePropertyInterface]]
+    ) -> None:
+        if isinstance(input, list):
+            self._add_property_list(property_name, input)
+        else:
+            self._add_property_instance(property_name, input)
 
     @property
     def property_name(self) -> Optional[str]:
@@ -98,6 +140,22 @@ class MessageProperty(MessagePropertyInterface):
     @property_source.setter
     def property_source(self, value: MessagePropertyInterface) -> None:
         self._property_source = value
+
+    @property
+    def property_position(self) -> Optional[int]:
+        return self._property_position
+
+    @property_position.setter
+    def property_position(self, value: int) -> None:
+        self._property_position = value
+
+    @property
+    def property_type(self) -> Optional[str]:
+        return self._property_type
+
+    @property_type.setter
+    def property_type(self, value: str) -> None:
+        self._property_type = value
 
     @cached_property
     def value(self):
@@ -154,7 +212,7 @@ class MessageProperty(MessagePropertyInterface):
         except KeyError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_9_INVALID_INPUT.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_9_INVALID_INPUT)
         return result
 
     def check_is_string(self):
@@ -167,7 +225,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_2_NOT_STRING.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_2_NOT_STRING)
         return result
 
     def check_is_integer(self):
@@ -181,7 +239,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_3_NOT_INTEGER.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
         return result
 
     def check_is_float(self):
@@ -195,7 +253,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_5_NOT_FLOAT.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_5_NOT_FLOAT)
         return result
 
     def check_is_date_utc(self):
@@ -209,7 +267,7 @@ class MessageProperty(MessagePropertyInterface):
         except AttributeError:
             pass
         if not result:
-            self.add_error(error_codes.ERROR_3_NOT_INTEGER.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
         return result
 
     def _validate_properties(self):
@@ -220,7 +278,7 @@ class MessageProperty(MessagePropertyInterface):
 
     @property
     def default_error_code(self):
-        return error_codes.ERROR_1_UNKNOWN.trigger(instance=self)
+        return error_codes.ERROR_1_UNKNOWN
 
     @property
     def _errors_properties(self) -> List[ErrorCode]:

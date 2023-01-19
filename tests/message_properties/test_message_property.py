@@ -128,9 +128,32 @@ def test_message_property_can_add_property():
 
     assert instance2.property_name == "test"
     assert instance2.property_source == instance
+    assert instance2.property_type == "Property"
+    assert instance2.property_position is None
 
     assert instance.has_property("test")
     assert instance.properties("test") == instance2
+
+
+def test_message_property_can_add_property_when_list():
+    instance = MessageProperty(Input("1234"))
+    instance2 = MessageProperty(Input("1234"))
+    instance3 = MessageProperty(Input("1234"))
+
+    instance.add_property("test", [instance2, instance3])
+
+    assert instance2.property_name == "test"
+    assert instance2.property_source == instance
+    assert instance2.property_type == "Array"
+    assert instance2.property_position == 0
+
+    assert instance3.property_name == "test"
+    assert instance3.property_source == instance
+    assert instance3.property_type == "Array"
+    assert instance3.property_position == 1
+
+    assert instance.has_property("test")
+    assert instance.properties("test") == [instance2, instance3]
 
 
 def test_message_property_trigger_error():

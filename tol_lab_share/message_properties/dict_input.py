@@ -9,13 +9,12 @@ logger = logging.getLogger(__name__)
 
 class DictInput(MessageProperty):
     def __init__(self, input, key):
+        super().__init__(input)
         if not isinstance(input, MessageProperty):
             self._input = Input(input)
         else:
             self._input = input
         self._key = key
-        self._errors = []
-        self._properties = {}
 
     @property
     def validators(self):
@@ -23,14 +22,14 @@ class DictInput(MessageProperty):
 
     def check_has_key(self):
         if not self._input.validate():
-            self.add_error(error_codes.ERROR_11_PARENT_DICT_WRONG.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_11_PARENT_DICT_WRONG)
             return False
 
         if not self.check_iterable():
             return False
 
         if self._key not in self._input.value:
-            self.add_error(error_codes.ERROR_10_DICT_WRONG_KEY.trigger(instance=self, text=f"wrong key: {self._key}"))
+            self.trigger_error(error_codes.ERROR_10_DICT_WRONG_KEY, text=f"wrong key: {self._key}")
             return False
         return True
 
@@ -42,7 +41,7 @@ class DictInput(MessageProperty):
             iter(self._input.value)
             return True
         except TypeError:
-            self.add_error(error_codes.ERROR_12_DICT_NOT_ITERABLE.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_12_DICT_NOT_ITERABLE)
             return False
 
     @cached_property

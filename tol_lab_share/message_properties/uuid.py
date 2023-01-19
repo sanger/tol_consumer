@@ -23,7 +23,7 @@ class Uuid(MessageProperty):
             return True
         except AttributeError:
             pass
-        self.add_error(error_codes.ERROR_1_UUID_NOT_BINARY.trigger(instance=self))
+        self.trigger_error(error_codes.ERROR_1_UUID_NOT_BINARY)
         return False
 
     def check_is_uuid(self):
@@ -40,9 +40,7 @@ class Uuid(MessageProperty):
             pass
         except AttributeError:
             pass
-        self.add_error(
-            error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT.trigger(instance=self, text=f"input: {self._input.value}")
-        )
+        self.trigger_error(error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT, text=f"input: {self._input.value}")
         return False
 
     @cached_property

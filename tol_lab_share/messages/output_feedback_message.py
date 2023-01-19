@@ -18,6 +18,10 @@ class OutputFeedbackMessage(Message):
     def validators(self):
         return [self.check_defined_keys, self.check_errors_correct]
 
+    @property
+    def origin(self):
+        return "OutputFeedbackMessage"
+
     def __init__(self):
         self._source_message_uuid: Optional[bytes] = None
         self._count_of_total_samples: Optional[int] = None
@@ -97,11 +101,11 @@ class OutputFeedbackMessage(Message):
         json = self.to_json()
         for key in ["sourceMessageUuid", "countOfTotalSamples", "countOfValidSamples", "operationWasErrorFree"]:
             if json[key] is None:
-                self.add_error_code(
-                    error_codes.ERROR_15_FEEDBACK_UNDEFINED_KEY.trigger(
-                        text=f"Key {key} is undefined in feedback message", instance=self
-                    )
+                self.trigger_error(
+                    error_codes.ERROR_15_FEEDBACK_UNDEFINED_KEY,
+                    text=f"Key {key} is undefined in feedback message",
                 )
+
                 return False
         return True
 

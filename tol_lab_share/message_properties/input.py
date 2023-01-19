@@ -6,14 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class Input(MessageProperty):
-    def __init__(self, value):
-        self._value = value
-        self._errors = []
-        self._properties = {}
-
     @cached_property
     def value(self):
-        return self._value
+        return self._input
 
     @property
     def validators(self):

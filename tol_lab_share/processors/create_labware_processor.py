@@ -5,7 +5,7 @@ from lab_share_lib.processing.rabbit_message import RabbitMessage
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
-
+from typing import Optional
 from tol_lab_share import error_codes
 
 logger = logging.getLogger(__name__)
@@ -54,3 +54,6 @@ class CreateLabwareProcessor:
             return False
 
         return True
+
+    def trigger_error(self, error_code: error_codes.ErrorCode, text: Optional[str] = None) -> None:
+        error_code.trigger(instance=self, text=text)

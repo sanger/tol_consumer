@@ -7,22 +7,24 @@ logger = logging.getLogger(__name__)
 
 
 class Location(MessageProperty):
-    def __init__(self, input, labware):
-        super().__init__(input)
-        self._labware = labware
-
     @property
     def validators(self):
         return [self.check_is_location]
 
+    def sample(self):
+        return self.property_source
+
+    def labware(self):
+        return self.sample().property_source
+
     def labware_type(self):
-        return self._labware.properties("labware_type")
+        return self.labware().properties("labware_type")
 
     def check_is_location(self):
         logger.debug("Location::check_is_location")
         result = False
         if not self.labware_type().validate():
-            self.add_error(error_codes.ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION.trigger(instance=self))
+            self.trigger_error(error_codes.ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION)
             return False
         if not self._input.validate():
             return False
@@ -36,7 +38,5 @@ class Location(MessageProperty):
         except ValueError:
             pass
         if not result:
-            self.add_error(
-                error_codes.ERROR_7_INVALID_LOCATION.trigger(instance=self, text=f"input: {self._input.value}")
-            )
+            self.trigger_error(error_codes.ERROR_7_INVALID_LOCATION, text=f"input: {self._input.value}")
         return result

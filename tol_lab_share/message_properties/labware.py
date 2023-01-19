@@ -21,31 +21,25 @@ logger = logging.getLogger(__name__)
 class Labware(MessageProperty):
     def __init__(self, input):
         super().__init__(input)
-        labware_type = LabwareType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE))
+
+        self.add_property("labware_uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_UUID)))
+        self.add_property("labware_type", LabwareType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE)))
+        self.add_property("barcode", Barcode(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_BARCODE)))
+        self.add_property("samples", self._parse_samples(input))
+
+    def _parse_samples(self, input):
         samples_dict = DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLES)
         if samples_dict.validate():
             samples_list_dict: List[MessageProperty] = []
             for position in range(len(samples_dict.value)):
                 sample = samples_dict.value[position]
-                samples_list_dict.append(Sample(sample, self, position))
+                samples_list_dict.append(Sample(sample))
         else:
             samples_list_dict = [samples_dict]
-
-        self._properties = {
-            "labware_uuid": Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_UUID)),
-            "labware_type": labware_type,
-            "barcode": Barcode(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_BARCODE)),
-            "samples": samples_list_dict,
-        }
+        return samples_list_dict
 
     def labware_type(self):
-        return self._properties["labware_type"]
-
-    def container_type(self):
-        if self._properties["labware_type"].value == "Tube":
-            return "tubes"
-        else:
-            return "wells"
+        return self.properties("labware_type")
 
     def count_of_total_samples(self):
         return len(self._properties["samples"])
@@ -58,3 +52,9 @@ class Labware(MessageProperty):
         super().add_to_feedback_message(feedback_message)
         feedback_message.count_of_total_samples = self.count_of_total_samples()
         feedback_message.count_of_valid_samples = self.count_of_valid_samples()
+
+    def traction_container_type(self):
+        if self.labware_type().value == "Tube":
+            return "tubes"
+        else:
+            return "wells"

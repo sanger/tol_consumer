@@ -37,7 +37,9 @@ class ErrorCode:
         )
 
     def text(self):
-        return f"type_id={self.type_id}, field={self.field}, origin={self.origin} description={self.description}"
+        return (
+            f'(type_id="{self.type_id}", field="{self.field}", origin="{self.origin}" description="{self.description}")'
+        )
 
     def json(self):
         return {
@@ -50,9 +52,9 @@ class ErrorCode:
     def message_for_trigger(self, text=None, instance=None):
         message = self.description
         if instance is not None:
-            message += ", instance: " + str(type(instance).__name__)
+            message += ', instance: "' + str(type(instance).__name__) + '"'
         if text is not None:
-            message += ", text: " + text
+            message += ', text: "' + text + '"'
         return message
 
     def trigger(self, text=None, instance=None, origin=None, field=None):

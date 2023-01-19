@@ -38,42 +38,44 @@ logger = logging.getLogger(__name__)
 
 
 class Sample(MessageProperty):
-    def __init__(self, input, labware, position):
+    def __init__(self, input):
         super().__init__(input)
-        self._position = position
-        self._labware = labware
 
-        self._properties = {
-            "study_uuid": Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID)),
-            # TODO
-            "common_name": CommonName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME)),
-            # TODO
-            "concentration": Concentration(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_CONCENTRATION)),
-            "volume": Volume(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME)),
-            # TODO
-            "country_of_origin": CountryOfOrigin(
-                DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COUNTRY_OF_ORIGIN)
-            ),
-            # TODO
-            "donor_id": DonorId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_DONOR_ID)),
-            "library_type": LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE)),
-            "location": Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION), labware),
-            "public_name": PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME)),
-            # TODO
-            "sanger_sample_id": SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID)),
-            # SPECIES?
-            "scientific_name": ScientificNameFromTaxonId(
-                TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID))
-            ),
-            "uuid": Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID)),
-            # TODO
-            "collection_date": DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE)),
-        }
+        self.add_property("study_uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID)))
+        self.add_property("common_name", CommonName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME)))
+        self.add_property(
+            "concentration", Concentration(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_CONCENTRATION))
+        )
+        self.add_property("volume", Volume(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME)))
+        self.add_property(
+            "country_of_origin",
+            CountryOfOrigin(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COUNTRY_OF_ORIGIN)),
+        )
+        self.add_property("donor_id", DonorId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_DONOR_ID)))
+        self.add_property(
+            "library_type", LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE))
+        )
+        self.add_property("location", Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION)))
+        self.add_property("public_name", PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME)))
+        self.add_property(
+            "sanger_sample_id", SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID))
+        )
+        self.add_property(
+            "scientific_name",
+            ScientificNameFromTaxonId(TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID))),
+        )
+        self.add_property("uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID)))
+        self.add_property(
+            "collection_date", DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE))
+        )
 
     def position(self):
-        if self._position is None:
+        if self.property_position is None:
             return "Empty"
-        return self._position
+        return self.property_position
+
+    def labware(self):
+        return self.property_source
 
     def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
         super().add_to_traction_message(traction_message)
@@ -82,6 +84,6 @@ class Sample(MessageProperty):
         traction_message.requests(self.position()).sample_uuid = self.properties("uuid").value
         traction_message.requests(self.position()).library_type = self.properties("library_type").value
         traction_message.requests(self.position()).species = self.properties("scientific_name").value
-        traction_message.requests(self.position()).container_barcode = self._labware.properties("barcode").value
+        traction_message.requests(self.position()).container_barcode = self.labware().properties("barcode").value
         traction_message.requests(self.position()).container_location = self.properties("location").value
-        traction_message.requests(self.position()).container_type = self._labware.container_type()
+        traction_message.requests(self.position()).container_type = self.labware().traction_container_type()
