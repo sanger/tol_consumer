@@ -2,8 +2,12 @@ from datetime import datetime
 from uuid import uuid4
 
 
-def barcode_for_unique_id(unique_id):
-    return f"BARCODE{unique_id}"
+def barcode_for_unique_id(unique_id, num_msg):
+    return f"BARCODE-{unique_id}-{num_msg}"
+
+
+def unique_pos(letter, pos):
+    return f"{letter}-{pos}"
 
 
 def build_create_labware_96_msg(unique_id, num_msg):
@@ -13,26 +17,26 @@ def build_create_labware_96_msg(unique_id, num_msg):
         "messageCreateDateUtc": datetime.now().timestamp() * 1000,
         "labware": {
             "labwareType": "Plate12x8",
-            "barcode": barcode_for_unique_id(unique_id),
+            "barcode": barcode_for_unique_id(unique_id, num_msg),
             "samples": [
                 {
                     "sampleUuid": str(uuid4()).encode(),
                     "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014".encode(),
-                    "sangerSampleId": f"sangerId-{unique_id_lab}-{(letter-ord('A'))*pos}",
+                    "sangerSampleId": f"sangerId-{unique_id_lab}-{unique_pos(letter, pos)}",
                     "location": f"{chr(letter) + ('0' if len(str(pos)) == 1 else '') + str(pos)}",
-                    "supplierSampleName": f"SampleSupplied-{unique_id_lab}-{(letter-ord('A'))*pos}",
+                    "supplierSampleName": f"SampleSupplied-{unique_id_lab}-{unique_pos(letter, pos)}",
                     "volume": "5",
                     "concentration": "5",
-                    "publicName": f"SamplePublicName-{unique_id_lab}-{(letter-ord('A'))*pos}",
+                    "publicName": f"SamplePublicName-{unique_id_lab}-{unique_pos(letter, pos)}",
                     "taxonId": "10090",
                     "commonName": "Mus Musculus",
-                    "donorId": f"donor-{unique_id_lab}-{(letter-ord('A'))*pos}",
-                    "libraryType": "Saphyr_v1",
+                    "donorId": f"donor-{unique_id_lab}-{unique_pos(letter, pos)}",
+                    "libraryType": "Pacbio_HiFi",
                     "countryOfOrigin": "United Kingdom",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
-                for letter in range(ord("A"), ord("A") + 1)
-                for pos in range(1, 2)
+                for letter in range(ord("A"), ord("H") + 1)
+                for pos in range(1, 13)
             ],
         },
     }
