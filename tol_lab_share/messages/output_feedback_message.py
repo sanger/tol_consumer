@@ -91,7 +91,8 @@ class OutputFeedbackMessage(Message):
             self.trigger_error(error_codes.ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE)
             return
 
-        logger.debug(f"Sending: { encoded_message }")
+
+        logger.info(f"Sending json: { message }")
 
         publisher.publish_message(
             exchange,
