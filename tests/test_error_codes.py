@@ -11,7 +11,7 @@ import pytest
 
 
 def build_instance():
-    return ErrorCode(1, "my origin", "my field", "my description")
+    return ErrorCode(1, "root", "my field", "my description")
 
 
 def test_error_code_init():
@@ -31,8 +31,8 @@ def test_error_code_json():
     assert instance.json() == {
         "description": "my description",
         "field": "my field",
-        "origin": "my origin",
-        "type_id": 1,
+        "origin": "root",
+        "typeId": 1,
     }
 
 
@@ -95,18 +95,14 @@ def test_error_code_trigger_can_setup_origin_and_field():
 
 
 def test_error_code_trigger_logging_can_log():
-    instance = ErrorCode(
-        "my type id", "my origin", "my field", "my description", level=LEVEL_ERROR, handler=HANDLER_LOG
-    )
+    instance = ErrorCode("my type id", "root", "my field", "my description", level=LEVEL_ERROR, handler=HANDLER_LOG)
     with patch("tol_lab_share.error_codes.logger.error") as logger:
         assert isinstance(instance.trigger(), ErrorCode)
         logger.assert_called_with(instance.message_for_trigger())
         assert isinstance(instance.trigger("this is a test"), ErrorCode)
         logger.assert_called_with(instance.message_for_trigger("this is a test"))
 
-    instance = ErrorCode(
-        "my type id", "my origin", "my field", "my description", level=LEVEL_FATAL, handler=HANDLER_LOG
-    )
+    instance = ErrorCode("my type id", "root", "my field", "my description", level=LEVEL_FATAL, handler=HANDLER_LOG)
     with patch("tol_lab_share.error_codes.logger.fatal") as logger:
         assert isinstance(instance.trigger(), ErrorCode)
         logger.assert_called_with(instance.message_for_trigger())
@@ -115,9 +111,7 @@ def test_error_code_trigger_logging_can_log():
 
 
 def test_error_code_trigger_logging_can_raise():
-    instance = ErrorCode(
-        "my type id", "my origin", "my field", "my description", level=LEVEL_ERROR, handler=HANDLER_RAISE
-    )
+    instance = ErrorCode("my type id", "root", "my field", "my description", level=LEVEL_ERROR, handler=HANDLER_RAISE)
     with patch("tol_lab_share.error_codes.logger.error") as logger:
         with pytest.raises(ExceptionErrorCode):
             instance.trigger()
@@ -126,9 +120,7 @@ def test_error_code_trigger_logging_can_raise():
             instance.trigger("this is a test")
         logger.assert_called_with(instance.message_for_trigger("this is a test"))
 
-    instance = ErrorCode(
-        "my type id", "my origin", "my field", "my description", level=LEVEL_FATAL, handler=HANDLER_RAISE
-    )
+    instance = ErrorCode("my type id", "root", "my field", "my description", level=LEVEL_FATAL, handler=HANDLER_RAISE)
     with patch("tol_lab_share.error_codes.logger.fatal") as logger:
         with pytest.raises(ExceptionErrorCode):
             instance.trigger()

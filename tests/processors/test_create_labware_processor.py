@@ -75,7 +75,7 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                         "operationWasErrorFree": False,
                         "errors": [
                             {
-                                "type_id": 2,
+                                "typeId": 2,
                                 "field": "message_uuid",
                                 "origin": "plate",
                                 "description": (
@@ -84,51 +84,51 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 ),
                             },
                             {
-                                "type_id": 20,
+                                "typeId": 20,
                                 "field": "concentration",
-                                "origin": "samples[0]",
+                                "origin": "sample",
                                 "description": 'The input provided is not a valid float., instance: "Concentration"',
                             },
                             {
-                                "type_id": 20,
+                                "typeId": 20,
                                 "field": "volume",
-                                "origin": "samples[0]",
+                                "origin": "sample",
                                 "description": 'The input provided is not a valid float., instance: "Volume"',
                             },
                             {
-                                "type_id": 7,
+                                "typeId": 7,
                                 "field": "location",
-                                "origin": "samples[0]",
+                                "origin": "sample",
                                 "description": 'Not valid location, instance: "Location", text: "input: A001"',
                             },
                             {
-                                "type_id": 9,
+                                "typeId": 9,
                                 "field": "scientific_name",
-                                "origin": "samples[0]",
+                                "origin": "sample",
                                 "description": 'Not valid input, instance: "ScientificNameFromTaxonId"',
                             },
                             {
-                                "type_id": 20,
+                                "typeId": 20,
                                 "field": "concentration",
-                                "origin": "samples[1]",
+                                "origin": "sample",
                                 "description": 'The input provided is not a valid float., instance: "Concentration"',
                             },
                             {
-                                "type_id": 20,
+                                "typeId": 20,
                                 "field": "volume",
-                                "origin": "samples[1]",
+                                "origin": "sample",
                                 "description": 'The input provided is not a valid float., instance: "Volume"',
                             },
                             {
-                                "type_id": 7,
+                                "typeId": 7,
                                 "field": "location",
-                                "origin": "samples[1]",
+                                "origin": "sample",
                                 "description": 'Not valid location, instance: "Location", text: "input: B001"',
                             },
                             {
-                                "type_id": 9,
+                                "typeId": 9,
                                 "field": "scientific_name",
-                                "origin": "samples[1]",
+                                "origin": "sample",
                                 "description": 'Not valid input, instance: "ScientificNameFromTaxonId"',
                             },
                         ],
@@ -172,9 +172,9 @@ def test_create_labware_processor_when_traction_sends_422(
                         "operationWasErrorFree": False,
                         "errors": [
                             {
-                                "type_id": 13,
+                                "typeId": 13,
                                 "field": "dict",
-                                "origin": "OutputFeedbackMessage",
+                                "origin": "root",
                                 "description": (
                                     'Traction send request failed, instance: "OutputTractionMessage",'
                                     ' text: "HTTP CODE: 422, MSG: This is an error"'
@@ -199,7 +199,7 @@ def test_create_labware_processor_when_traction_sends_500(config, valid_create_l
 
         with requests_mock.Mocker() as m:
             m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
-            m.post(config.TRACTION_URL, json={"errors": ["This is an error", "and another one"]}, status_code=500)
+            m.post(config.TRACTION_URL, text="Another error", status_code=500)
             assert instance.process(valid_create_labware_message) is True
 
         mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
@@ -212,12 +212,12 @@ def test_create_labware_processor_when_traction_sends_500(config, valid_create_l
                     "operationWasErrorFree": False,
                     "errors": [
                         {
-                            "type_id": 13,
+                            "typeId": 13,
                             "field": "dict",
-                            "origin": "OutputFeedbackMessage",
+                            "origin": "root",
                             "description": (
                                 'Traction send request failed, instance: "OutputTractionMessage",'
-                                " text: \"HTTP CODE: 500, MSG: {'errors': ['This is an error', 'and another one']}\""
+                                ' text: "HTTP CODE: 500, MSG: Another error"'
                             ),
                         }
                     ],

@@ -6,7 +6,6 @@ from tol_lab_share.messages.message import Message
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
-from requests.exceptions import JSONDecodeError
 
 
 class OutputTractionMessageRequest:
@@ -168,11 +167,9 @@ class OutputTractionMessage(Message):
 
         self._sent = r.status_code == codes.created
         if not self._sent:
-            try:
-                json = r.json()
-                self.error_code_traction_problem(r.status_code, json)
-            except JSONDecodeError:
-                self.error_code_traction_problem(r.status_code, r.text)
+            # problem = (r.text[:75] + '..') if len(r.text) > 75 else r.text
+            problem = r.text
+            self.error_code_traction_problem(r.status_code, problem)
 
         return self._sent
 

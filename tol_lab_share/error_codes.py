@@ -41,11 +41,18 @@ class ErrorCode:
             f'(type_id="{self.type_id}", field="{self.field}", origin="{self.origin}" description="{self.description}")'
         )
 
+    def origin_for_json(self):
+        if self.origin in ["parsing", "root", "plate", "sample"]:
+            return self.origin
+        if "sample" in self.origin:
+            return "sample"
+        return "root"
+
     def json(self):
         return {
-            "type_id": self.type_id,
+            "typeId": self.type_id,
             "field": self.field,
-            "origin": self.origin,
+            "origin": self.origin_for_json(),
             "description": self.description,
         }
 
@@ -103,14 +110,14 @@ ERROR_15_FEEDBACK_UNDEFINED_KEY = ErrorCode(
     15, "plate", "feedback", "Feedback message is missing to define some fields"
 )
 ERROR_16_PROBLEM_TALKING_WITH_TRACTION = ErrorCode(
-    16, "message", "traction", "There was a problem while sending to traction"
+    16, "root", "traction", "There was a problem while sending to traction"
 )
 ERROR_17_INPUT_MESSAGE_INVALID = ErrorCode(
-    17, "message", "create-message", "There was a problem while validating the input message"
+    17, "parsing", "create-message", "There was a problem while validating the input message"
 )
 ERROR_18_FEEDBACK_MESSAGE_INVALID = ErrorCode(
     18,
-    "message",
+    "parsing",
     "feedback",
     "The feedback message generated does not validate. Please contact the development team."
     "Original message will be rejected and send to the dead letters queue.",
@@ -119,7 +126,15 @@ ERROR_18_FEEDBACK_MESSAGE_INVALID = ErrorCode(
 )
 
 ERROR_19_INPUT_IS_NOT_VALID_INTEGER_STRING = ErrorCode(
-    19, "input", "input", "The input provided is not a valid integer."
+    19, "parsing", "input", "The input provided is not a valid integer."
 )
-ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING = ErrorCode(20, "input", "input", "The input provided is not a valid float.")
-ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC = ErrorCode(21, "input", "input", "The input provided is not a valid date.")
+ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING = ErrorCode(20, "parsing", "input", "The input provided is not a valid float.")
+ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC = ErrorCode(21, "parsing", "input", "The input provided is not a valid date.")
+ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE = ErrorCode(
+    22,
+    "parsing",
+    "feedback",
+    "There was a problem while trying to encode feedback message.",
+    level=LEVEL_FATAL,
+    handler=HANDLER_RAISE,
+)

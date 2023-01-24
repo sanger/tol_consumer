@@ -84,7 +84,12 @@ class OutputFeedbackMessage(Message):
         encoder = encoder_class(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
 
         message = self.to_json()
-        encoded_message = encoder.encode([message])
+        encoded_message = None
+        try:
+            encoded_message = encoder.encode([message])
+        except BaseException:
+            self.trigger_error(error_codes.ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE)
+            return
 
         logger.debug(f"Sending: { encoded_message }")
 
