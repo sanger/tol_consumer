@@ -30,7 +30,7 @@ class ErrorCode:
 
     def validate(self):
         return (
-            isinstance(self.type_id, str)
+            isinstance(self.type_id, int)
             and isinstance(self.field, str)
             and isinstance(self.origin, str)
             and isinstance(self.description, str)

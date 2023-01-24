@@ -11,10 +11,11 @@ def test_message_property_can_initialize():
     assert instance is not None
 
 
-def test_message_property_state_machine_can_validate():
+def test_message_property_can_validate():
     instance = MessageProperty(Input("1234"))
     assert instance.validate() is True
 
+    instance = MessageProperty(Input("1234"))
     with mock.patch(
         "tol_lab_share.message_properties.message_property.MessageProperty.validators", new_callable=mock.PropertyMock
     ) as mock_my_property:
@@ -23,7 +24,7 @@ def test_message_property_state_machine_can_validate():
         assert instance.validate() is False
 
 
-def test_message_property_state_machine_can_get_value():
+def test_message_property_can_get_value():
     instance = MessageProperty(Input("1234"))
     assert instance.value == "1234"
 
@@ -143,12 +144,12 @@ def test_message_property_can_add_property_when_list():
 
     instance.add_property("test", [instance2, instance3])
 
-    assert instance2.property_name == "test"
+    assert instance2.property_name == "test[0]"
     assert instance2.property_source == instance
     assert instance2.property_type == "Array"
     assert instance2.property_position == 0
 
-    assert instance3.property_name == "test"
+    assert instance3.property_name == "test[1]"
     assert instance3.property_source == instance
     assert instance3.property_type == "Array"
     assert instance3.property_position == 1

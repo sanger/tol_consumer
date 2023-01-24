@@ -25,10 +25,11 @@ class CreateLabwareProcessor:
 
         output_feedback_message = OutputFeedbackMessage()
         input = InputCreateLabwareMessage(message)
-        input.validate()
+        validation = input.validate()
+
         input.add_to_feedback_message(output_feedback_message)
 
-        if input.validate():
+        if validation:
             output_traction_message = OutputTractionMessage()
             input.add_to_traction_message(output_traction_message)
             logger.info("Attempting to send to traction")

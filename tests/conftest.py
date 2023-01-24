@@ -68,7 +68,7 @@ def invalid_create_labware_message(unchecked_create_labware_message, invalid_dec
 
 
 @pytest.fixture
-def mocked_response():
+def traction_success_creation_response():
     return {
         "data": {
             "id": "52",

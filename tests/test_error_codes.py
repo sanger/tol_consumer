@@ -11,7 +11,7 @@ import pytest
 
 
 def build_instance():
-    return ErrorCode("my type id", "my origin", "my field", "my description")
+    return ErrorCode(1, "my origin", "my field", "my description")
 
 
 def test_error_code_init():
@@ -32,7 +32,7 @@ def test_error_code_json():
         "description": "my description",
         "field": "my field",
         "origin": "my origin",
-        "type_id": "my type id",
+        "type_id": 1,
     }
 
 

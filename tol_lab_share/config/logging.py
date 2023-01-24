@@ -1,5 +1,7 @@
 from typing import Any, Dict
 
+DEFAULT_LOGGING_LEVEL = "INFO"
+
 LOGGING: Dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -21,12 +23,12 @@ LOGGING: Dict[str, Any] = {
     },
     "handlers": {
         "colored_stream": {
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "class": "colorlog.StreamHandler",
             "formatter": "colored",
         },
         "console": {
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
@@ -34,12 +36,12 @@ LOGGING: Dict[str, Any] = {
     "loggers": {
         "tol_lab_share": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "propagate": True,
         },
         "lab_share_lib": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "propagate": True,
         },
         "rabbit_messages": {

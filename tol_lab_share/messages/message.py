@@ -19,7 +19,6 @@ class Message:
         return None
 
     def validate(self):
-        self._errors = []
         return all(list([validator() for validator in self.validators]))
 
     @property

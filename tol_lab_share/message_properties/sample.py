@@ -6,7 +6,7 @@ from tol_lab_share.message_properties.volume import Volume
 from tol_lab_share.message_properties.country_of_origin import CountryOfOrigin
 from tol_lab_share.message_properties.donor_id import DonorId
 from tol_lab_share.message_properties.library_type import LibraryType
-from tol_lab_share.message_properties.location import Location
+from tol_lab_share.message_properties.location import Location, PaddedLocationString
 from tol_lab_share.message_properties.sanger_sample_id import SangerSampleId
 from tol_lab_share.message_properties.taxon_id import TaxonId
 from tol_lab_share.message_properties.scientific_name_from_taxon_id import ScientificNameFromTaxonId
@@ -55,7 +55,9 @@ class Sample(MessageProperty):
         self.add_property(
             "library_type", LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE))
         )
-        self.add_property("location", Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION)))
+        self.add_property(
+            "location", Location(PaddedLocationString(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION)))
+        )
         self.add_property("public_name", PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME)))
         self.add_property(
             "sanger_sample_id", SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID))

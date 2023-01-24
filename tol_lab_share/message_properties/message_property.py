@@ -91,6 +91,10 @@ class MessageProperty(MessagePropertyInterface):
         self.property_type = "Property"
 
     def validate(self):
+        return self._validation_status
+
+    @cached_property
+    def _validation_status(self):
         return all(list([self._validate_properties(), self._validate_instance()]))
 
     def properties(self, key):
@@ -108,11 +112,14 @@ class MessageProperty(MessagePropertyInterface):
         instance.property_type = "Property"
         self._properties[property_name] = instance
 
+    def _property_name_for_list_instance(self, property_name: str, pos: int) -> str:
+        return f"{property_name}[{pos}]"
+
     def _add_property_list(self, property_name: str, input: List[MessagePropertyInterface]) -> None:
         self._properties[property_name] = []
         for pos in range(len(input)):
             instance = input[pos]
-            instance.property_name = property_name
+            instance.property_name = self._property_name_for_list_instance(property_name, pos)
             instance.property_source = self
             instance.property_position = pos
             instance.property_type = "Array"
@@ -180,9 +187,9 @@ class MessageProperty(MessagePropertyInterface):
         self.add_error(error_code.trigger(instance=self, origin=self.origin, field=self.field, text=text))
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+        logger.debug("MessageProperty::add_to_feedback_message")
         for property in self._properties_instances:
             property.add_to_feedback_message(feedback_message)
-        self.add_errors_to_feedback_message(feedback_message)
 
     def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
         for property in self._properties_instances:
@@ -194,10 +201,6 @@ class MessageProperty(MessagePropertyInterface):
 
     def add_error(self, error: ErrorCode) -> None:
         self._errors.append(error)
-
-    def add_errors_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
-        for error in self.errors:
-            feedback_message.add_error_code(error)
 
     @property
     def validators(self):
