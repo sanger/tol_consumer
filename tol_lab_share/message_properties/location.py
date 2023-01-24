@@ -10,6 +10,9 @@ logger = logging.getLogger(__name__)
 class PaddedLocationString(MessageProperty):
     @cached_property
     def value(self):
+        if self._input.value is None:
+            return None
+
         if len(self._input.value) == 2:
             if self._input.value[1] != 0:
                 return f"{self._input.value[0]}0{self._input.value[1]}"

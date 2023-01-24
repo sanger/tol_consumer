@@ -31,12 +31,42 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "taxonId": "10090",
                     "commonName": "Mus Musculus",
                     "donorId": f"donor-{unique_id_lab}-{unique_pos(letter, pos)}",
-                    "libraryType": "Pacbio_HiFi",
+                    "libraryType": "ONT_GridIon",
                     "countryOfOrigin": "United Kingdom",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
                 for letter in range(ord("A"), ord("H") + 1)
                 for pos in range(1, 13)
+            ],
+        },
+    }
+
+
+def build_create_tube_msg(unique_id, num_msg):
+    unique_id_lab = f"TOLTESTING-{unique_id}-{num_msg}"
+    return {
+        "messageUuid": str(uuid4()).encode(),
+        "messageCreateDateUtc": datetime.now().timestamp() * 1000,
+        "labware": {
+            "labwareType": "Tube",
+            "barcode": barcode_for_unique_id(unique_id, num_msg),
+            "samples": [
+                {
+                    "sampleUuid": str(uuid4()).encode(),
+                    "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014".encode(),
+                    "sangerSampleId": f"sangerId-{unique_id_lab}",
+                    "supplierSampleName": f"SampleSupplied-{unique_id_lab}",
+                    "location": None,
+                    "volume": "5",
+                    "concentration": "5",
+                    "publicName": f"SamplePublicName-{unique_id_lab}",
+                    "taxonId": "10090",
+                    "commonName": "Mus Musculus",
+                    "donorId": f"donor-{unique_id_lab}",
+                    "libraryType": "Saphyr_v1",
+                    "countryOfOrigin": "United Kingdom",
+                    "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                }
             ],
         },
     }

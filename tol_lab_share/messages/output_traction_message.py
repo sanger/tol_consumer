@@ -94,7 +94,15 @@ class RequestSerializer:
         self.instance = instance
 
     def request_payload(self):
-        return {"library_type": self.instance.library_type, "external_study_id": self.instance.study_uuid}
+        if self.instance.library_type and ("ONT" in self.instance.library_type):
+            return {
+                "data_type": "basecalls",
+                "cost_code": "0000",
+                "library_type": self.instance.library_type,
+                "external_study_id": self.instance.study_uuid,
+            }
+        else:
+            return {"library_type": self.instance.library_type, "external_study_id": self.instance.study_uuid}
 
     def sample_payload(self):
         return {
