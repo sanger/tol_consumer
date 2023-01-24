@@ -170,12 +170,7 @@ class OutputTractionMessage(Message):
         if not self._sent:
             try:
                 json = r.json()
-                if "errors" in json:
-                    self._errors = [
-                        self.error_code_traction_problem(r.status_code, error_str) for error_str in json["errors"]
-                    ]
-                else:
-                    self.error_code_traction_problem(r.status_code, json)
+                self.error_code_traction_problem(r.status_code, json)
             except JSONDecodeError:
                 self.error_code_traction_problem(r.status_code, r.text)
 

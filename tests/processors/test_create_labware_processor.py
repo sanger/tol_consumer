@@ -147,6 +147,9 @@ def test_create_labware_processor_when_traction_sends_422(
 ):
     with patch(error_code_checks) as error_code:
         with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
+            mocked_instance_encoder = MagicMock()
+            mock_avro_encoder.return_value = mocked_instance_encoder
+
             schema_registry = MagicMock()
             publisher = MagicMock()
 
@@ -160,11 +163,35 @@ def test_create_labware_processor_when_traction_sends_422(
                 error_code.trigger.assert_called()
 
             mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+            mocked_instance_encoder.encode.assert_called_once_with(
+                [
+                    {
+                        "sourceMessageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c",
+                        "countOfTotalSamples": 2,
+                        "countOfValidSamples": 2,
+                        "operationWasErrorFree": False,
+                        "errors": [
+                            {
+                                "type_id": 13,
+                                "field": "dict",
+                                "origin": "OutputFeedbackMessage",
+                                "description": (
+                                    'Traction send request failed, instance: "OutputTractionMessage",'
+                                    ' text: "HTTP CODE: 422, MSG: This is an error"'
+                                ),
+                            }
+                        ],
+                    }
+                ]
+            )
             publisher.publish_message.assert_called_once()
 
 
 def test_create_labware_processor_when_traction_sends_500(config, valid_create_labware_message, taxonomy_record):
     with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
+        mocked_instance_encoder = MagicMock()
+        mock_avro_encoder.return_value = mocked_instance_encoder
+
         schema_registry = MagicMock()
         publisher = MagicMock()
 
@@ -172,8 +199,29 @@ def test_create_labware_processor_when_traction_sends_500(config, valid_create_l
 
         with requests_mock.Mocker() as m:
             m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
-            m.post(config.TRACTION_URL, text="This is an error", status_code=500)
+            m.post(config.TRACTION_URL, json={"errors": ["This is an error", "and another one"]}, status_code=500)
             assert instance.process(valid_create_labware_message) is True
 
         mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+        mocked_instance_encoder.encode.assert_called_once_with(
+            [
+                {
+                    "sourceMessageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c",
+                    "countOfTotalSamples": 2,
+                    "countOfValidSamples": 2,
+                    "operationWasErrorFree": False,
+                    "errors": [
+                        {
+                            "type_id": 13,
+                            "field": "dict",
+                            "origin": "OutputFeedbackMessage",
+                            "description": (
+                                'Traction send request failed, instance: "OutputTractionMessage",'
+                                " text: \"HTTP CODE: 500, MSG: {'errors': ['This is an error', 'and another one']}\""
+                            ),
+                        }
+                    ],
+                }
+            ]
+        )
         publisher.publish_message.assert_called_once()
