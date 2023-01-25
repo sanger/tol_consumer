@@ -6,7 +6,7 @@ from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
 from lab_share_lib.types import RabbitServerDetails
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 from uuid import uuid4
-from testing_data import build_create_labware_96_msg, build_update_labware_msg
+from testing_data import build_create_labware_96_msg, build_update_labware_msg, build_create_tube_msg
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost")
 REDPANDA_API_KEY = os.getenv("REDPANDA_API_KEY", "test")
@@ -76,5 +76,7 @@ if __name__ == "__main__":
     for pos in range(0, 5):
         sample_msg = build_create_labware_96_msg(args.unique_id, pos)
         update_msg = build_update_labware_msg(sample_msg)
+        tube_msg = build_create_tube_msg(args.unique_id, pos)
         send_message(sample_msg, "create-labware", registry, publisher)
         send_message(update_msg, "update-labware", registry, publisher)
+        send_message(tube_msg, "create-labware", registry, publisher)

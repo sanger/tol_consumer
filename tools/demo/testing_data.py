@@ -1,9 +1,11 @@
 from datetime import datetime
 from uuid import uuid4
 
+LIBRARY_TYPE = "Pacbio_HiFi"
 
-def barcode_for_unique_id(unique_id, num_msg):
-    return f"BARCODE-{unique_id}-{num_msg}"
+
+def barcode_for_unique_id(labtype, unique_id, num_msg):
+    return f"BARCODE-{labtype}-{unique_id}-{num_msg}"
 
 
 def unique_pos(letter, pos):
@@ -11,13 +13,13 @@ def unique_pos(letter, pos):
 
 
 def build_create_labware_96_msg(unique_id, num_msg):
-    unique_id_lab = f"TOLTESTING-{unique_id}-{num_msg}"
+    unique_id_lab = f"TOLTESTING-PLATE-{unique_id}-{num_msg}"
     return {
         "messageUuid": str(uuid4()).encode(),
         "messageCreateDateUtc": datetime.now().timestamp() * 1000,
         "labware": {
             "labwareType": "Plate12x8",
-            "barcode": barcode_for_unique_id(unique_id, num_msg),
+            "barcode": barcode_for_unique_id("PLATE", unique_id, num_msg),
             "samples": [
                 {
                     "sampleUuid": str(uuid4()).encode(),
@@ -31,7 +33,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "taxonId": "10090",
                     "commonName": "Mus Musculus",
                     "donorId": f"donor-{unique_id_lab}-{unique_pos(letter, pos)}",
-                    "libraryType": "ONT_GridIon",
+                    "libraryType": LIBRARY_TYPE,
                     "countryOfOrigin": "United Kingdom",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
@@ -43,13 +45,13 @@ def build_create_labware_96_msg(unique_id, num_msg):
 
 
 def build_create_tube_msg(unique_id, num_msg):
-    unique_id_lab = f"TOLTESTING-{unique_id}-{num_msg}"
+    unique_id_lab = f"TOLTESTING-TUBE-{unique_id}-{num_msg}"
     return {
         "messageUuid": str(uuid4()).encode(),
         "messageCreateDateUtc": datetime.now().timestamp() * 1000,
         "labware": {
             "labwareType": "Tube",
-            "barcode": barcode_for_unique_id(unique_id, num_msg),
+            "barcode": barcode_for_unique_id("TUBE", unique_id, num_msg),
             "samples": [
                 {
                     "sampleUuid": str(uuid4()).encode(),
@@ -63,7 +65,7 @@ def build_create_tube_msg(unique_id, num_msg):
                     "taxonId": "10090",
                     "commonName": "Mus Musculus",
                     "donorId": f"donor-{unique_id_lab}",
-                    "libraryType": "Saphyr_v1",
+                    "libraryType": LIBRARY_TYPE,
                     "countryOfOrigin": "United Kingdom",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }

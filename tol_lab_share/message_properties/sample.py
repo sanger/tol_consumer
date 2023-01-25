@@ -79,6 +79,12 @@ class Sample(MessageProperty):
     def labware(self):
         return self.property_source
 
+    def unpadded_location(self):
+        text = self.properties("location").value
+        if text and len(text) == 3 and text[1] == "0":
+            return f"{text[0]}{text[2]}"
+        return text
+
     def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
         super().add_to_traction_message(traction_message)
         traction_message.requests(self.position()).study_uuid = self.properties("study_uuid").value
@@ -87,5 +93,5 @@ class Sample(MessageProperty):
         traction_message.requests(self.position()).library_type = self.properties("library_type").value
         traction_message.requests(self.position()).species = self.properties("scientific_name").value
         traction_message.requests(self.position()).container_barcode = self.labware().properties("barcode").value
-        traction_message.requests(self.position()).container_location = self.properties("location").value
+        traction_message.requests(self.position()).container_location = self.unpadded_location()
         traction_message.requests(self.position()).container_type = self.labware().traction_container_type()
