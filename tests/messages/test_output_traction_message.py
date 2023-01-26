@@ -100,6 +100,65 @@ def test_output_traction_message_can_generate_payload_for_plates():
         }
     }
 
+def test_output_traction_message_can_generate_payload_for_ont_library_types():
+    instance = OutputTractionMessage()
+    instance.requests(0).container_barcode = "1"
+    instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+    instance.requests(1).container_location = "A1"
+    instance.requests(0).library_type = "ONT_mylib"
+    instance.requests(0).sample_name = "test1"
+    instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
+    instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
+    instance.requests(0).species = "test species"
+
+    instance.requests(1).container_barcode = "1"
+    instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+    instance.requests(1).container_location = "B1"
+    instance.requests(1).library_type = "ONT_mylib"
+    instance.requests(1).sample_name = "test1"
+    instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
+    instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
+    instance.requests(1).species = "test species"
+
+    assert instance.payload() == {
+        "data": {
+            "attributes": {
+                "request_attributes": [
+                    {
+                        "container": {"barcode": "1", "position": None, "type": "wells"},
+                        "request": {
+                            "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                            "library_type": "ONT_mylib",
+                            'cost_code': '0000',
+                            'data_type': 'basecalls',
+                        },
+                        "sample": {
+                            "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                            "name": "test1",
+                            "species": "test " "species",
+                        },
+                    },
+                    {
+                        "container": {"barcode": "1", "position": "B1", "type": "wells"},
+                        "request": {
+                            "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                            "library_type": "ONT_mylib",
+                            'cost_code': '0000',
+                            'data_type': 'basecalls',
+                        },
+                        "sample": {
+                            "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                            "name": "test1",
+                            "species": "test " "species",
+                        },
+                    },
+                ],
+                "source": "traction-ui.sequencescape",
+            },
+            "type": "receptions",
+        }
+    }
+
 
 def test_output_traction_message_can_generate_payload_for_tubes():
     instance = OutputTractionMessage()

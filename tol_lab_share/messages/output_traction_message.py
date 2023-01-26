@@ -107,15 +107,17 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def serializer(self):
         return RequestSerializer(self)
 
-
 class RequestSerializer:
     # "cost_code": "0000", "data_type": "basecalls"
 
     def __init__(self, instance: OutputTractionMessageRequest):
         self.instance = instance
 
+    def is_ont_library_type(self):
+        return self.instance.library_type and ("ONT" in self.instance.library_type)
+
     def request_payload(self):
-        if self.instance.library_type and ("ONT" in self.instance.library_type):
+        if self.is_ont_library_type():
             return {
                 "data_type": "basecalls",
                 "cost_code": "0000",
