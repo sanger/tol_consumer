@@ -1,5 +1,5 @@
-from tol_lab_share.message_properties.scientific_name_from_taxon_id import ScientificNameFromTaxonId
-from tol_lab_share.message_properties.input import Input
+from tol_lab_share.message_properties.definitions.scientific_name_from_taxon_id import ScientificNameFromTaxonId
+from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.error_codes import ExceptionErrorCode
 from helpers import check_validates_integer_string
 import requests_mock

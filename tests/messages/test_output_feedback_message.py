@@ -26,11 +26,11 @@ def test_output_feedback_can_get_and_set_props():
     assert instance.errors == []
 
 
-def test_output_feedback_add_error_code():
+def test_output_feedback_add_error():
     instance = OutputFeedbackMessage()
 
-    instance.add_error_code(error_codes.ERROR_1_UNKNOWN)
-    instance.add_error_code(error_codes.ERROR_1_UNKNOWN)
+    instance.add_error(error_codes.ERROR_1_UNKNOWN)
+    instance.add_error(error_codes.ERROR_1_UNKNOWN)
 
     assert len(instance.errors) == 2
 
@@ -39,6 +39,7 @@ def test_output_feedback_validate():
     instance = OutputFeedbackMessage()
     assert not instance.validate()
 
+    instance = OutputFeedbackMessage()
     instance.count_of_total_samples = 0
     instance.count_of_valid_samples = 0
     instance.source_message_uuid = b"b01aa0ad-7b19-4f94-87e9-70d74fb8783c"

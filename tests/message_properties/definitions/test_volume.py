@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.volume import Volume
+from tol_lab_share.message_properties.definitions.volume import Volume
 from helpers import check_validates_float_string
 
 

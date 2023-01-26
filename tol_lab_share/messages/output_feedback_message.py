@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
 from tol_lab_share.constants import (
@@ -6,14 +6,16 @@ from tol_lab_share.constants import (
     RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
 )
 from tol_lab_share import error_codes
-from tol_lab_share.messages.message import Message
+from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 import logging
 from tol_lab_share.helpers import get_config
+from tol_lab_share.message_properties.definitions.input import Input
 
 logger = logging.getLogger(__name__)
 
 
-class OutputFeedbackMessage(Message):
+class OutputFeedbackMessage(MessageProperty, OutputFeedbackMessageInterface):
     @property
     def validators(self):
         return [self.check_defined_keys, self.check_errors_correct]
@@ -23,11 +25,12 @@ class OutputFeedbackMessage(Message):
         return "OutputFeedbackMessage"
 
     def __init__(self):
+        super().__init__(Input(self))
+
         self._source_message_uuid: Optional[bytes] = None
         self._count_of_total_samples: Optional[int] = None
         self._count_of_valid_samples: Optional[int] = None
         self._operation_was_error_free: Optional[bool] = True
-        self._errors: List[List[str]] = []
 
     @property
     def source_message_uuid(self) -> Optional[bytes]:

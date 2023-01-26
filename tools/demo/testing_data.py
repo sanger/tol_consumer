@@ -1,7 +1,8 @@
 from datetime import datetime
 from uuid import uuid4
 
-LIBRARY_TYPE = "Pacbio_HiFi"
+# Pacbio_HiFi, Saphyr_v1, ONT_Ultralong
+LIBRARY_TYPE = "ONT_Ultralong"
 
 
 def barcode_for_unique_id(labtype, unique_id, num_msg):

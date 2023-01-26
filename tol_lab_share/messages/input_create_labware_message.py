@@ -4,12 +4,12 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC,
     INPUT_CREATE_LABWARE_MESSAGE_LABWARE,
 )
-from tol_lab_share.message_properties.message_uuid import MessageUuid
-from tol_lab_share.message_properties.labware import Labware
-from tol_lab_share.message_properties.date_utc import DateUtc
-from tol_lab_share.message_properties.message_property import MessageProperty
-from tol_lab_share.message_properties.dict_input import DictInput
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.message_properties.definitions.message_uuid import MessageUuid
+from tol_lab_share.message_properties.definitions.labware import Labware
+from tol_lab_share.message_properties.definitions.date_utc import DateUtc
+from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 
 import logging
 
@@ -29,10 +29,10 @@ class InputCreateLabwareMessage(MessageProperty):
             "create_date_utc", DateUtc(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC))
         )
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
         logger.debug("InputCreateLabware::add_to_feedback_message")
         super().add_to_feedback_message(feedback_message)
         if len(self.errors) > 0:
             for error in self.errors:
-                feedback_message.errors.append(error)
+                feedback_message.add_error(error)
             feedback_message.operation_was_error_free = False

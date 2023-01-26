@@ -2,7 +2,7 @@ from .message_property import MessageProperty
 from functools import cached_property
 from tol_lab_share import error_codes
 import logging
-from tol_lab_share.message_properties.input import Input
+from tol_lab_share.message_properties.definitions.input import Input
 
 logger = logging.getLogger(__name__)
 

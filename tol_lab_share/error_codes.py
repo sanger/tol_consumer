@@ -138,3 +138,9 @@ ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE = ErrorCode(
     level=LEVEL_FATAL,
     handler=HANDLER_RAISE,
 )
+ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS = ErrorCode(
+    23, "parsing", "input", "The message to traction has no requests."
+)
+ERROR_24_TRACTION_MESSAGE_REQUESTS_HAVE_MISSING_DATA = ErrorCode(
+    24, "parsing", "input", "The message to traction is missing relevant fields info."
+)

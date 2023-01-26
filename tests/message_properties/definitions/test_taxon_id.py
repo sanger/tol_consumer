@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.taxon_id import TaxonId
+from tol_lab_share.message_properties.definitions.taxon_id import TaxonId
 from helpers import check_validates_integer_string
 
 

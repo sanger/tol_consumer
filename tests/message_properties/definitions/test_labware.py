@@ -1,5 +1,5 @@
-from tol_lab_share.message_properties.labware import Labware
-from tol_lab_share.message_properties.input import Input
+from tol_lab_share.message_properties.definitions.labware import Labware
+from tol_lab_share.message_properties.definitions.input import Input
 
 
 def test_labware_is_valid():

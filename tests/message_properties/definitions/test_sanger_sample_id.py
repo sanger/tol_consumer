@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.sanger_sample_id import SangerSampleId
+from tol_lab_share.message_properties.definitions.sanger_sample_id import SangerSampleId
 from helpers import check_validates_string
 
 

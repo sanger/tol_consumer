@@ -1,83 +1,19 @@
 import logging
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from typing import List, Any, Optional, Union
+from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface, OutputTractionMessageInterface
+from typing import List, Optional, Union
 from tol_lab_share.error_codes import ErrorCode
 from functools import cached_property
-from tol_lab_share.messages.output_traction_message import OutputTractionMessage
+
 from itertools import chain
 from tol_lab_share import error_codes
-from abc import ABC, abstractmethod
 import datetime
+from tol_lab_share.message_properties.interfaces import MessagePropertyInterface
 
 logger = logging.getLogger(__name__)
 
 
 class ExceptionMessageProperty(BaseException):
     pass
-
-
-class MessagePropertyInterface(ABC):
-    @abstractmethod
-    def validate(self):
-        ...
-
-    @property
-    @abstractmethod
-    def errors(self) -> Any:
-        ...
-
-    @cached_property
-    @abstractmethod
-    def value(self) -> Optional[Any]:
-        ...
-
-    @abstractmethod
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
-        ...
-
-    @abstractmethod
-    def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def property_name(self) -> Optional[str]:
-        ...
-
-    @property_name.setter
-    @abstractmethod
-    def property_name(self, value: str) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def property_source(self) -> Optional[Any]:
-        ...
-
-    @property_source.setter
-    @abstractmethod
-    def property_source(self, value: Any) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def property_position(self) -> Optional[int]:
-        ...
-
-    @property_position.setter
-    @abstractmethod
-    def property_position(self, value: Any) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def property_type(self) -> Optional[str]:
-        ...
-
-    @property_type.setter
-    @abstractmethod
-    def property_type(self, value: Any) -> None:
-        ...
 
 
 class MessageProperty(MessagePropertyInterface):
@@ -186,12 +122,12 @@ class MessageProperty(MessagePropertyInterface):
     def trigger_error(self, error_code: ErrorCode, text: Optional[str] = None) -> None:
         self.add_error(error_code.trigger(instance=self, origin=self.origin, field=self.field, text=text))
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
         logger.debug("MessageProperty::add_to_feedback_message")
         for property in self._properties_instances:
             property.add_to_feedback_message(feedback_message)
 
-    def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
+    def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
         for property in self._properties_instances:
             property.add_to_traction_message(traction_message)
 

@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.donor_id import DonorId
+from tol_lab_share.message_properties.definitions.donor_id import DonorId
 from helpers import check_validates_string
 
 

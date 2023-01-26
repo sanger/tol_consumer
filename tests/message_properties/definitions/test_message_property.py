@@ -1,6 +1,6 @@
-from tol_lab_share.message_properties.message_property import MessageProperty
+from tol_lab_share.message_properties.definitions.message_property import MessageProperty
 from unittest import mock
-from tol_lab_share.message_properties.input import Input
+from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share import error_codes
 import pytest
 from datetime import datetime
@@ -17,7 +17,8 @@ def test_message_property_can_validate():
 
     instance = MessageProperty(Input("1234"))
     with mock.patch(
-        "tol_lab_share.message_properties.message_property.MessageProperty.validators", new_callable=mock.PropertyMock
+        "tol_lab_share.message_properties.definitions.message_property.MessageProperty.validators",
+        new_callable=mock.PropertyMock,
     ) as mock_my_property:
         mock_my_property.return_value = [lambda: False]
 

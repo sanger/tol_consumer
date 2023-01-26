@@ -1,14 +1,21 @@
-from typing import Dict, Optional, List
+from typing import Dict, Optional
 from json import dumps
 from requests import post, codes
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.messages.message import Message
-
+from tol_lab_share.messages.interfaces import (
+    OutputTractionMessageInterface,
+    OutputFeedbackMessageInterface,
+    OutputTractionMessageRequestInterface,
+)
+from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.message_properties.definitions.input import Input
+from tol_lab_share.constants import (
+    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
+    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
+)
 from tol_lab_share import error_codes
-from tol_lab_share.error_codes import ErrorCode
 
 
-class OutputTractionMessageRequest:
+class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def __init__(self):
         self._library_type = None
         self._study_uuid = None
@@ -18,6 +25,20 @@ class OutputTractionMessageRequest:
         self._container_location = None
         self._container_type = None
         self._species = None
+
+    def validate(self) -> bool:
+        return (
+            (self._library_type is not None)
+            and (self._study_uuid is not None)
+            and (self._sample_name is not None)
+            and (self._container_barcode is not None)
+            and (self._species is not None)
+            and (
+                (self._container_type == OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS)
+                or (self._container_type == OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES)
+            )
+            and (self._species is not None)
+        )
 
     @property
     def species(self) -> Optional[str]:
@@ -129,28 +150,47 @@ class RequestSerializer:
         }
 
 
-class OutputTractionMessage(Message):
+class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
     def __init__(self):
+        super().__init__(Input(self))
         self._requests: Dict[int, OutputTractionMessageRequest] = {}
-        self._errors: List[ErrorCode] = []
         self._sent = False
 
     @property
     def origin(self):
         return "OutputFeedbackMessage"
 
-    def requests(self, position: int) -> OutputTractionMessageRequest:
+    @property
+    def validators(self):
+        return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
+
+    def requests(self, position: int) -> OutputTractionMessageRequestInterface:
         if position not in self._requests:
             self._requests[position] = OutputTractionMessageRequest()
 
         return self._requests[position]
 
     def request_attributes(self):
-        return [self.requests(position).serializer().payload() for position in range(len(self._requests))]
+        return [self._requests[position].serializer().payload() for position in range(len(self._requests))]
 
     @property
     def errors(self):
         return self._errors
+
+    def check_has_requests(self):
+        if len(self._requests) > 0:
+            return True
+        else:
+            self.trigger_error(error_codes.ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS)
+
+    def check_no_errors(self):
+        return len(self.errors) == 0
+
+    def check_requests_have_all_content(self):
+        if all([self.requests(key).validate() for key in self._requests]):
+            return True
+        else:
+            self.trigger_error(error_codes.ERROR_24_TRACTION_MESSAGE_REQUESTS_HAVE_MISSING_DATA)
 
     def payload(self):
         return {
@@ -159,9 +199,6 @@ class OutputTractionMessage(Message):
                 "attributes": {"source": "traction-ui.sequencescape", "request_attributes": self.request_attributes()},
             }
         }
-
-    def validate(self):
-        return len(self._errors) == 0
 
     def error_code_traction_problem(self, status_code, error_str):
         return self.trigger_error(
@@ -181,9 +218,9 @@ class OutputTractionMessage(Message):
 
         return self._sent
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
         if not self._sent:
             feedback_message.operation_was_error_free = False
         if len(self._errors) > 0:
             for error_code in self._errors:
-                feedback_message.add_error_code(error_code)
+                feedback_message.add_error(error_code)

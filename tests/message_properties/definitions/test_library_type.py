@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.library_type import LibraryType
+from tol_lab_share.message_properties.definitions.library_type import LibraryType
 from helpers import check_validates_string
 
 

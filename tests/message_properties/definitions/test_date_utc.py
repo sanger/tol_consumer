@@ -1,7 +1,7 @@
-from tol_lab_share.message_properties.date_utc import DateUtc
+from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 
 from datetime import datetime
-from tol_lab_share.message_properties.input import Input
+from tol_lab_share.message_properties.definitions.input import Input
 
 
 def test_DateUtc_check_DateUtc_is_valid():

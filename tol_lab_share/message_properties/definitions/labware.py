@@ -1,11 +1,15 @@
 from .message_property import MessageProperty
-from tol_lab_share.message_properties.labware_type import LabwareType
-from tol_lab_share.message_properties.barcode import Barcode
+from tol_lab_share.message_properties.definitions.labware_type import LabwareType
+from tol_lab_share.message_properties.definitions.barcode import Barcode
 
-from tol_lab_share.message_properties.sample import Sample
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.message_properties.dict_input import DictInput
+from tol_lab_share.message_properties.definitions.sample import Sample
+from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
+from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from typing import List
+from tol_lab_share.constants import (
+    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
+    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
+)
 
 from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE,
@@ -45,7 +49,7 @@ class Labware(MessageProperty):
     def count_of_valid_samples(self):
         return [sample.validate() for sample in self._properties["samples"]].count(True)
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessage) -> None:
+    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
         logger.debug("Labware::add_to_feedback_message")
         super().add_to_feedback_message(feedback_message)
         feedback_message.count_of_total_samples = self.count_of_total_samples()
@@ -53,6 +57,6 @@ class Labware(MessageProperty):
 
     def traction_container_type(self):
         if self.labware_type().value == "Tube":
-            return "tubes"
+            return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
         else:
-            return "wells"
+            return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS

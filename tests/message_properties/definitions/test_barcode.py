@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.barcode import Barcode
+from tol_lab_share.message_properties.definitions.barcode import Barcode
 from helpers import check_validates_string
 
 

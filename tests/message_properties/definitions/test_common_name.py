@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.common_name import CommonName
+from tol_lab_share.message_properties.definitions.common_name import CommonName
 from helpers import check_validates_string
 
 

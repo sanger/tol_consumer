@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.dict_input import DictInput
+from tol_lab_share.message_properties.definitions.dict_input import DictInput
 
 
 def test_dict_input_can_validate_when_valid():

@@ -1,5 +1,5 @@
-from tol_lab_share.message_properties.uuid import Uuid
-from tol_lab_share.message_properties.input import Input
+from tol_lab_share.message_properties.definitions.uuid import Uuid
+from tol_lab_share.message_properties.definitions.input import Input
 
 
 def test_uuid_check_is_uuid_detects_invalid_uuid():

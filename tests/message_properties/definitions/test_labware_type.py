@@ -1,5 +1,5 @@
-from tol_lab_share.message_properties.labware_type import LabwareType
-from tol_lab_share.message_properties.input import Input
+from tol_lab_share.message_properties.definitions.labware_type import LabwareType
+from tol_lab_share.message_properties.definitions.input import Input
 
 
 def test_LabwareType_check_LabwareType_is_string():

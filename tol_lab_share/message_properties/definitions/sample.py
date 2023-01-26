@@ -1,20 +1,20 @@
 from .message_property import MessageProperty
-from tol_lab_share.message_properties.public_name import PublicName
-from tol_lab_share.message_properties.common_name import CommonName
-from tol_lab_share.message_properties.concentration import Concentration
-from tol_lab_share.message_properties.volume import Volume
-from tol_lab_share.message_properties.country_of_origin import CountryOfOrigin
-from tol_lab_share.message_properties.donor_id import DonorId
-from tol_lab_share.message_properties.library_type import LibraryType
-from tol_lab_share.message_properties.location import Location, PaddedLocationString
-from tol_lab_share.message_properties.sanger_sample_id import SangerSampleId
-from tol_lab_share.message_properties.taxon_id import TaxonId
-from tol_lab_share.message_properties.scientific_name_from_taxon_id import ScientificNameFromTaxonId
-from tol_lab_share.message_properties.uuid import Uuid
-from tol_lab_share.message_properties.dict_input import DictInput
-from tol_lab_share.message_properties.date_utc import DateUtc
+from tol_lab_share.message_properties.definitions.public_name import PublicName
+from tol_lab_share.message_properties.definitions.common_name import CommonName
+from tol_lab_share.message_properties.definitions.concentration import Concentration
+from tol_lab_share.message_properties.definitions.volume import Volume
+from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
+from tol_lab_share.message_properties.definitions.donor_id import DonorId
+from tol_lab_share.message_properties.definitions.library_type import LibraryType
+from tol_lab_share.message_properties.definitions.location import Location, PaddedLocationString
+from tol_lab_share.message_properties.definitions.sanger_sample_id import SangerSampleId
+from tol_lab_share.message_properties.definitions.taxon_id import TaxonId
+from tol_lab_share.message_properties.definitions.scientific_name_from_taxon_id import ScientificNameFromTaxonId
+from tol_lab_share.message_properties.definitions.uuid import Uuid
+from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 
-from tol_lab_share.messages.output_traction_message import OutputTractionMessage
+from tol_lab_share.messages.output_traction_message import OutputTractionMessageInterface
 
 from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME,
@@ -85,7 +85,7 @@ class Sample(MessageProperty):
             return f"{text[0]}{text[2]}"
         return text
 
-    def add_to_traction_message(self, traction_message: OutputTractionMessage) -> None:
+    def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
         super().add_to_traction_message(traction_message)
         traction_message.requests(self.position()).study_uuid = self.properties("study_uuid").value
         traction_message.requests(self.position()).sample_name = self.properties("public_name").value

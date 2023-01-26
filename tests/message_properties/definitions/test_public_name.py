@@ -1,4 +1,4 @@
-from tol_lab_share.message_properties.public_name import PublicName
+from tol_lab_share.message_properties.definitions.public_name import PublicName
 from helpers import check_validates_string
 
 

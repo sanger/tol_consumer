@@ -13,7 +13,7 @@ def test_create_labware_processor(config):
 def test_create_labware_processor_with_valid_input_can_run_process(
     config, valid_create_labware_message, traction_success_creation_response, taxonomy_record
 ):
-    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
+    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
         mocked_instance_encoder = MagicMock()
         mock_avro_encoder.return_value = mocked_instance_encoder
 
@@ -51,7 +51,7 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
     config, invalid_create_labware_message, traction_success_creation_response, taxonomy_record, error_code_checks
 ):
     with patch(error_code_checks) as error_code:
-        with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
+        with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
             mocked_instance_encoder = MagicMock()
             mock_avro_encoder.return_value = mocked_instance_encoder
             schema_registry = MagicMock()
@@ -146,7 +146,7 @@ def test_create_labware_processor_when_traction_sends_422(
     config, valid_create_labware_message, taxonomy_record, error_code_checks
 ):
     with patch(error_code_checks) as error_code:
-        with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
+        with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
             mocked_instance_encoder = MagicMock()
             mock_avro_encoder.return_value = mocked_instance_encoder
 
@@ -188,7 +188,7 @@ def test_create_labware_processor_when_traction_sends_422(
 
 
 def test_create_labware_processor_when_traction_sends_500(config, valid_create_labware_message, taxonomy_record):
-    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderJson") as mock_avro_encoder:
+    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
         mocked_instance_encoder = MagicMock()
         mock_avro_encoder.return_value = mocked_instance_encoder
 
@@ -225,3 +225,34 @@ def test_create_labware_processor_when_traction_sends_500(config, valid_create_l
             ]
         )
         publisher.publish_message.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    "error_code_checks",
+    ["tol_lab_share.processors.create_labware_processor.error_codes.ERROR_18_FEEDBACK_MESSAGE_INVALID"],
+)
+def test_create_labware_processor_when_invalid_output_feedback_triggers_error(
+    config, valid_create_labware_message, taxonomy_record, error_code_checks, traction_success_creation_response
+):
+    with patch(error_code_checks) as error_code:
+        with patch("tol_lab_share.processors.create_labware_processor.OutputFeedbackMessage") as fm:
+            with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+                mocked_instance_encoder = MagicMock()
+                mock_avro_encoder.return_value = mocked_instance_encoder
+
+                # we mock the feedback message to not be valid
+                fm_instance = MagicMock()
+                fm.return_value = fm_instance
+                fm_instance.validate.return_value = False
+
+                schema_registry = MagicMock()
+                publisher = MagicMock()
+
+                instance = CreateLabwareProcessor(schema_registry, publisher, config)
+
+                with requests_mock.Mocker() as m:
+                    m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
+                    m.post(config.TRACTION_URL, json=traction_success_creation_response, status_code=201)
+
+                    instance.process(valid_create_labware_message)
+                    error_code.trigger.assert_called()
