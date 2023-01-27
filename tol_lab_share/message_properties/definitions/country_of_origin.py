@@ -16,13 +16,7 @@ class CountryOfOrigin(MessageProperty):
         if not self._input.validate():
             return False
 
-        result = False
-        try:
-            result = COUNTRIES.index(self._input.value) >= 0
-        except AttributeError:
-            pass
-        except ValueError:
-            pass
+        result = self._input.value in COUNTRIES
         if not result:
             self.trigger_error(error_codes.ERROR_4_NOT_VALID_COUNTRY_INSDC, text=f"input_value: {self._input.value}")
         return result

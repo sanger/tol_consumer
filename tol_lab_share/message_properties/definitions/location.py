@@ -7,28 +7,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class PaddedLocationString(MessageProperty):
+class Location(MessageProperty):
     @cached_property
     def value(self):
         if self._input.value is None:
             return None
 
-        if len(self._input.value) == 2:
-            if self._input.value[1] != 0:
-                return f"{self._input.value[0]}0{self._input.value[1]}"
-        return self._input.value
+        return self.unpadded()
 
-    @property
-    def validators(self):
-        return [self.check_valid_input]
-
-    def check_valid_input(self):
-        if not self._input.validate():
-            return False
-        return True
-
-
-class Location(MessageProperty):
     @property
     def validators(self):
         return [self.check_is_location]
@@ -50,15 +36,37 @@ class Location(MessageProperty):
             return False
         if not self._input.validate():
             return False
-
-        try:
-            if (self._input.value is None) and (len(self.labware_type().valid_locations()) == 0):
-                return True
-            result = self.labware_type().valid_locations().index(self._input.value) >= 0
-        except AttributeError:
-            pass
-        except ValueError:
-            pass
+        if (self._input.value is None) and (len(self.labware_type().valid_locations()) == 0):
+            return True
+        if not self.check_is_string():
+            return False
+        result = self.padded() in self.labware_type().valid_locations()
         if not result:
             self.trigger_error(error_codes.ERROR_7_INVALID_LOCATION, text=f"input: {self._input.value}")
         return result
+
+    def unpadded(self):
+        if self._input.value is None:
+            return None
+
+        text = self._input.value
+        if len(text) == 2:
+            return text
+        if len(text) == 3:
+            if text[1] == "0":
+                return f"{text[0]}{text[2]}"
+            return text
+
+        return text
+
+    def padded(self):
+        if self._input.value is None:
+            return None
+
+        text = self._input.value
+        if len(text) == 3:
+            return text
+        if len(text) == 2:
+            return f"{text[0]}0{text[1]}"
+
+        return text

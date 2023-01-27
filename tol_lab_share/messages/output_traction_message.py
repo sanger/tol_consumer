@@ -107,6 +107,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def serializer(self):
         return RequestSerializer(self)
 
+
 class RequestSerializer:
     # "cost_code": "0000", "data_type": "basecalls"
 

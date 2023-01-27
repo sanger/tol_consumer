@@ -100,6 +100,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
         }
     }
 
+
 def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
@@ -129,8 +130,8 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "ONT_mylib",
-                            'cost_code': '0000',
-                            'data_type': 'basecalls',
+                            "cost_code": "0000",
+                            "data_type": "basecalls",
                         },
                         "sample": {
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
@@ -143,8 +144,8 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "ONT_mylib",
-                            'cost_code': '0000',
-                            'data_type': 'basecalls',
+                            "cost_code": "0000",
+                            "data_type": "basecalls",
                         },
                         "sample": {
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",

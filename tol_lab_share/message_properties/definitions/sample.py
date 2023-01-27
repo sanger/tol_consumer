@@ -6,7 +6,7 @@ from tol_lab_share.message_properties.definitions.volume import Volume
 from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
 from tol_lab_share.message_properties.definitions.donor_id import DonorId
 from tol_lab_share.message_properties.definitions.library_type import LibraryType
-from tol_lab_share.message_properties.definitions.location import Location, PaddedLocationString
+from tol_lab_share.message_properties.definitions.location import Location
 from tol_lab_share.message_properties.definitions.sanger_sample_id import SangerSampleId
 from tol_lab_share.message_properties.definitions.taxon_id import TaxonId
 from tol_lab_share.message_properties.definitions.scientific_name_from_taxon_id import ScientificNameFromTaxonId
@@ -14,7 +14,6 @@ from tol_lab_share.message_properties.definitions.uuid import Uuid
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 
-from tol_lab_share.messages.output_traction_message import OutputTractionMessageInterface
 
 from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME,
@@ -55,9 +54,7 @@ class Sample(MessageProperty):
         self.add_property(
             "library_type", LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE))
         )
-        self.add_property(
-            "location", Location(PaddedLocationString(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION)))
-        )
+        self.add_property("location", Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION)))
         self.add_property("public_name", PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME)))
         self.add_property(
             "sanger_sample_id", SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID))
@@ -70,28 +67,3 @@ class Sample(MessageProperty):
         self.add_property(
             "collection_date", DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE))
         )
-
-    def position(self):
-        if self.property_position is None:
-            return "Empty"
-        return self.property_position
-
-    def labware(self):
-        return self.property_source
-
-    def unpadded_location(self):
-        text = self.properties("location").value
-        if text and len(text) == 3 and text[1] == "0":
-            return f"{text[0]}{text[2]}"
-        return text
-
-    def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
-        super().add_to_traction_message(traction_message)
-        traction_message.requests(self.position()).study_uuid = self.properties("study_uuid").value
-        traction_message.requests(self.position()).sample_name = self.properties("public_name").value
-        traction_message.requests(self.position()).sample_uuid = self.properties("uuid").value
-        traction_message.requests(self.position()).library_type = self.properties("library_type").value
-        traction_message.requests(self.position()).species = self.properties("scientific_name").value
-        traction_message.requests(self.position()).container_barcode = self.labware().properties("barcode").value
-        traction_message.requests(self.position()).container_location = self.unpadded_location()
-        traction_message.requests(self.position()).container_type = self.labware().traction_container_type()

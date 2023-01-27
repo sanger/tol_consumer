@@ -66,7 +66,7 @@ class OutputFeedbackMessage(MessageProperty, OutputFeedbackMessageInterface):
 
     def to_json(self):
         return {
-            "sourceMessageUuid": self.source_message_uuid,
+            "sourceMessageUuid": str(self.source_message_uuid),
             "countOfTotalSamples": self.count_of_total_samples,
             "countOfValidSamples": self.count_of_valid_samples,
             "operationWasErrorFree": self.operation_was_error_free,
@@ -90,8 +90,8 @@ class OutputFeedbackMessage(MessageProperty, OutputFeedbackMessageInterface):
         encoded_message = None
         try:
             encoded_message = encoder.encode([message])
-        except BaseException:
-            self.trigger_error(error_codes.ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE)
+        except BaseException as e:
+            self.trigger_error(error_codes.ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE, text=str(e))
             return
 
         logger.info(f"Sending json: { message }")

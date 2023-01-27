@@ -10,6 +10,7 @@ def build_sample(sample_data):
     lt = LabwareType(Input("Plate12x8"))
 
     labware.add_property("labware_type", lt)
+    labware.add_property("barcode", Input("1234"))
     labware.add_property("samples", [sample])
 
     return sample

@@ -12,7 +12,6 @@ from data.examples_create_labware_messages import TEST_CREATE_LABWARE_MSG_OBJECT
 
 from unittest.mock import MagicMock
 
-
 CONFIG = get_config("tol_lab_share.config.test")
 logging.config.dictConfig(CONFIG.LOGGING)
 
@@ -138,3 +137,23 @@ def invalid_sample():
         "countryOfOrigin": 1234,
         "sampleCollectionDateUtc": datetime.now(),
     }
+
+
+def read_file(filename):
+    file = open(filename, "r")
+    contents = ""
+
+    while True:
+        line = file.readline()
+        if line == "":
+            break
+        contents += line
+
+    file.close()
+
+    return contents
+
+
+@pytest.fixture
+def feedback_schema_json():
+    return read_file("./schemas/create-labware-feedback/1-create-labware-feedback.avsc")

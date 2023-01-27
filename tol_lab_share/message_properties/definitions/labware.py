@@ -16,6 +16,8 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_BARCODE,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLES,
 )
+from tol_lab_share.messages.output_traction_message import OutputTractionMessageInterface
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -60,3 +62,16 @@ class Labware(MessageProperty):
             return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
         else:
             return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+
+    def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
+        super().add_to_traction_message(traction_message)
+        for sample_pos in range(len(self.properties("samples"))):
+            sample = self.properties("samples")[sample_pos]
+            traction_message.requests(sample_pos).study_uuid = sample.properties("study_uuid").value
+            traction_message.requests(sample_pos).sample_name = sample.properties("public_name").value
+            traction_message.requests(sample_pos).sample_uuid = sample.properties("uuid").value
+            traction_message.requests(sample_pos).library_type = sample.properties("library_type").value
+            traction_message.requests(sample_pos).species = sample.properties("scientific_name").value
+            traction_message.requests(sample_pos).container_barcode = self.properties("barcode").value
+            traction_message.requests(sample_pos).container_location = sample.properties("location").value
+            traction_message.requests(sample_pos).container_type = self.traction_container_type()

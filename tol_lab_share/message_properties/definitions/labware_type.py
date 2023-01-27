@@ -4,7 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-VALID_LABWARE_TYPE = ["Plate12x8", "Tube"]
+VALID_LABWARE_TYPES = ["Plate12x8", "Tube"]
 
 
 class LabwareType(MessageProperty):
@@ -14,13 +14,7 @@ class LabwareType(MessageProperty):
 
     def check_labware_type(self):
         logger.debug("LabwareType::check_labware_type")
-        result = False
-        try:
-            result = VALID_LABWARE_TYPE.index(self._input.value) >= 0
-        except AttributeError:
-            pass
-        except ValueError:
-            pass
+        result = self._input.value in VALID_LABWARE_TYPES
         if not result:
             self.trigger_error(error_codes.ERROR_6_LABWARE_TYPE, text=f"input: {self._input.value}")
         return result
@@ -30,13 +24,6 @@ class LabwareType(MessageProperty):
         if len(padded_number) == 1:
             padded_number = f"0{padded_number}"
         return padded_number
-
-    def _locations_for_plate12x8_row_order(self):
-        locations = []
-        for letter_ord in range(ord("A"), ord("H") + 1):
-            for number in range(12):
-                locations.append(f"{chr(letter_ord)}{self.pad_number(number+1)}")
-        return locations
 
     def _locations_for_plate12x8_column_order(self):
         locations = []

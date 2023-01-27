@@ -57,8 +57,8 @@ def test_location_check_Location_when_plate12x8():
     assert len(instance.errors) > 0
 
     instance = build_location("A1", "Plate12x8")
-    assert instance.validate() is False
-    assert len(instance.errors) > 0
+    assert instance.validate() is True
+    assert len(instance.errors) == 0
 
     instance = build_location("A01", "Plate12x8")
     assert instance.validate() is True
@@ -105,3 +105,44 @@ def test_Location_check_Location_when_tube():
     instance = build_location(None, "Tube")
     assert instance.validate() is True
     assert len(instance.errors) == 0
+
+
+def test_location_value():
+    instance = build_location(None, "Tube")
+    assert instance.value is None
+    instance = build_location("A01", "Plate12x8")
+    assert instance.value == "A1"
+
+
+def test_location_padded():
+    instance = build_location("A1", "Plate12x8")
+    assert instance.padded() == "A01"
+
+    instance = build_location("A01", "Plate12x8")
+    assert instance.padded() == "A01"
+
+    instance = build_location("A12", "Plate12x8")
+    assert instance.padded() == "A12"
+
+    instance = build_location("A233", "Plate12x8")
+    assert instance.padded() == "A233"
+
+    instance = build_location(None, "Tube")
+    assert instance.padded() is None
+
+
+def test_location_unpadded():
+    instance = build_location("A1", "Plate12x8")
+    assert instance.unpadded() == "A1"
+
+    instance = build_location("A01", "Plate12x8")
+    assert instance.unpadded() == "A1"
+
+    instance = build_location("A12", "Plate12x8")
+    assert instance.unpadded() == "A12"
+
+    instance = build_location("A233", "Plate12x8")
+    assert instance.unpadded() == "A233"
+
+    instance = build_location(None, "Tube")
+    assert instance.unpadded() is None

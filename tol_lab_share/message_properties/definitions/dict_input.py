@@ -22,7 +22,6 @@ class DictInput(MessageProperty):
 
     def check_has_key(self):
         if not self._input.validate():
-            self.trigger_error(error_codes.ERROR_11_PARENT_DICT_WRONG)
             return False
 
         if not self.check_iterable():
@@ -34,9 +33,6 @@ class DictInput(MessageProperty):
         return True
 
     def check_iterable(self):
-        if not self._input.validate():
-            return False
-
         try:
             iter(self._input.value)
             return True

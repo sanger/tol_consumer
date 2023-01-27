@@ -26,6 +26,11 @@ def test_error_code_validate():
     assert instance.validate()
 
 
+def test_error_code_can_convert_to_str():
+    instance = build_instance()
+    assert str(instance) == '(type_id="1", field="my field", origin="root" description="my description")'
+
+
 def test_error_code_json():
     instance = build_instance()
     assert instance.json() == {

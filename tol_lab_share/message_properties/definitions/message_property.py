@@ -40,8 +40,6 @@ class MessageProperty(MessagePropertyInterface):
         return key in self._properties
 
     def _add_property_instance(self, property_name: str, instance: MessagePropertyInterface) -> None:
-        if not hasattr(self, "_properties"):
-            self._properties = {}
         instance.property_name = property_name
         instance.property_source = self
         instance.property_position = None
@@ -105,10 +103,6 @@ class MessageProperty(MessagePropertyInterface):
     def value(self):
         return self._input.value
 
-    def raise_exception(self, error_code: ErrorCode) -> None:
-        self.add_error(error_code)
-        raise ExceptionMessageProperty()
-
     @property
     def origin(self):
         if self.property_source:
@@ -144,13 +138,7 @@ class MessageProperty(MessagePropertyInterface):
 
     def check_is_valid_input(self):
         logger.debug("MessageProperty::check_is_valid_input")
-        result = False
-        try:
-            result = self._input.validate()
-        except AttributeError:
-            pass
-        except KeyError:
-            pass
+        result = self._input.validate()
         if not result:
             self.trigger_error(error_codes.ERROR_9_INVALID_INPUT)
         return result
@@ -159,11 +147,7 @@ class MessageProperty(MessagePropertyInterface):
         logger.debug("MessageProperty::check_is_string")
         if not self.check_is_valid_input():
             return False
-        result = False
-        try:
-            result = isinstance(self._input.value, str)
-        except AttributeError:
-            pass
+        result = isinstance(self._input.value, str)
         if not result:
             self.trigger_error(error_codes.ERROR_2_NOT_STRING)
         return result
@@ -173,11 +157,7 @@ class MessageProperty(MessagePropertyInterface):
         if not self.check_is_valid_input():
             return False
 
-        result = False
-        try:
-            result = isinstance(self._input.value, int)
-        except AttributeError:
-            pass
+        result = isinstance(self._input.value, int)
         if not result:
             self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
         return result
@@ -190,8 +170,6 @@ class MessageProperty(MessagePropertyInterface):
         result = None
         try:
             result = int(self._input.value)
-        except TypeError:
-            pass
         except ValueError:
             pass
         if result is None:
@@ -206,8 +184,6 @@ class MessageProperty(MessagePropertyInterface):
         result = None
         try:
             result = float(self._input.value)
-        except TypeError:
-            pass
         except ValueError:
             pass
         if result is None:
@@ -219,11 +195,7 @@ class MessageProperty(MessagePropertyInterface):
         if not self.check_is_valid_input():
             return False
 
-        result = False
-        try:
-            result = isinstance(self._input.value, float)
-        except AttributeError:
-            pass
+        result = isinstance(self._input.value, float)
         if not result:
             self.trigger_error(error_codes.ERROR_5_NOT_FLOAT)
         return result
@@ -233,11 +205,7 @@ class MessageProperty(MessagePropertyInterface):
         if not self.check_is_valid_input():
             return False
 
-        result = False
-        try:
-            result = isinstance(self._input.value, datetime.datetime)
-        except AttributeError:
-            pass
+        result = isinstance(self._input.value, datetime.datetime)
         if not result:
             self.trigger_error(error_codes.ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC)
         return result
@@ -247,10 +215,6 @@ class MessageProperty(MessagePropertyInterface):
 
     def _validate_instance(self):
         return all(list([validator() for validator in self.validators]))
-
-    @property
-    def default_error_code(self):
-        return error_codes.ERROR_1_UNKNOWN
 
     @property
     def _errors_properties(self) -> List[ErrorCode]:

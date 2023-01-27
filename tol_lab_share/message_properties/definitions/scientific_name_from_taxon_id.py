@@ -31,11 +31,6 @@ class ScientificNameFromTaxonId(MessageProperty):
                     error_codes.ERROR_14_PROBLEM_ACCESSING_TAXON_ID,
                     text=f"HTTP code {r.status_code} - Problem when accessing taxon id {self._input.value}",
                 )
-                # self.raise_exception(
-                #    error_codes.ERROR_14_PROBLEM_ACCESSING_TAXON_ID.with_description(
-                #        f"HTTP code {r.status_code} - Problem when accessing taxon id {self._input.value}"
-                #    )
-                # )
 
         return CACHE_TAXON_IDS[self._input.value]
 

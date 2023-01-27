@@ -34,3 +34,6 @@ def test_dict_input_can_validate_when_invalid():
 
     input = DictInput(DictInput({"name": {"first": "James"}}, "name"), "second")
     assert not input.validate()
+
+    input = DictInput(DictInput({"name": {"first": "James"}}, "WRONG!!!"), "second")
+    assert not input.validate()
