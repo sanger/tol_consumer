@@ -30,6 +30,7 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME,
 )
+from typing import Any
 
 import logging
 
@@ -37,7 +38,9 @@ logger = logging.getLogger(__name__)
 
 
 class Sample(MessageProperty):
-    def __init__(self, input):
+    """MessageProperty that handles the parsing of a labware section for the TOL message."""
+
+    def __init__(self, input: Any):
         super().__init__(input)
 
         self.add_property("study_uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID)))
