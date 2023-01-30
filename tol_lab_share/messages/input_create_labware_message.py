@@ -17,7 +17,13 @@ logger = logging.getLogger(__name__)
 
 
 class InputCreateLabwareMessage(MessageProperty):
+    """Class that handles parsing a TOL lab share message received"""
+
     def __init__(self, m: RabbitMessage):
+        """Constructor that receives a RabbitMessage and parses it using the properties defined
+        Parameters:
+        m (RabbitMessage) message we want to parse
+        """
         super().__init__(m)
         self._message = m.message
 
@@ -30,6 +36,11 @@ class InputCreateLabwareMessage(MessageProperty):
         )
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
+        """Given a feedback message, it adds all errors from this message into it. If there are
+        any errors it changes the flag setting to indicate it.
+        Parameters:
+        feedback_message (OutputFeedbackMessageInterface) feedback message
+        """
         logger.debug("InputCreateLabware::add_to_feedback_message")
         super().add_to_feedback_message(feedback_message)
         if len(self.errors) > 0:
