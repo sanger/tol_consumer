@@ -5,7 +5,8 @@ from tol_lab_share.message_properties.definitions.barcode import Barcode
 from tol_lab_share.message_properties.definitions.sample import Sample
 from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
-from typing import List
+from tol_lab_share.message_properties.interfaces import MessagePropertyInterface
+from typing import List, Any
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
@@ -24,17 +25,20 @@ logger = logging.getLogger(__name__)
 
 
 class Labware(MessageProperty):
-    def __init__(self, input):
+    """MessageProperty that handles the parsing of a labware section for the TOL message."""
+
+    def __init__(self, input: MessageProperty):
         super().__init__(input)
 
         self.add_property("labware_type", LabwareType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE)))
         self.add_property("barcode", Barcode(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_BARCODE)))
         self.add_property("samples", self._parse_samples(input))
 
-    def _parse_samples(self, input):
+    def _parse_samples(self, input: MessageProperty) -> List[MessagePropertyInterface]:
+        """Parses the samples section and creates a sample for each position."""
         samples_dict = DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLES)
         if samples_dict.validate():
-            samples_list_dict: List[MessageProperty] = []
+            samples_list_dict: List[MessagePropertyInterface] = []
             for position in range(len(samples_dict.value)):
                 sample = samples_dict.value[position]
                 samples_list_dict.append(Sample(sample))
@@ -42,28 +46,48 @@ class Labware(MessageProperty):
             samples_list_dict = [samples_dict]
         return samples_list_dict
 
-    def labware_type(self):
+    def labware_type(self) -> Any:
+        """Returns the instance of LabwareType to is a property to this instance."""
         return self.properties("labware_type")
 
-    def count_of_total_samples(self):
+    def count_of_total_samples(self) -> int:
+        """Returns the number of total samples inside this labware"""
         return len(self._properties["samples"])
 
-    def count_of_valid_samples(self):
+    def count_of_valid_samples(self) -> int:
+        """Returns the number of samples that are valid from this labware"""
         return [sample.validate() for sample in self._properties["samples"]].count(True)
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
+        """Adds this labware information to the feedback message. It updates there the number
+        of total samples and the number of valid samples.
+        Parameters:
+        feedback_message (OutputFeedbackInterface) Instance of the feedback message where we want
+        to add the new data
+        Returns:
+        None"""
         logger.debug("Labware::add_to_feedback_message")
         super().add_to_feedback_message(feedback_message)
         feedback_message.count_of_total_samples = self.count_of_total_samples()
         feedback_message.count_of_valid_samples = self.count_of_valid_samples()
 
-    def traction_container_type(self):
+    def traction_container_type(self) -> str:
+        """It converts the labware type to a valid container type value for
+        Traction.
+        Returns:
+        str with a container type value for Traction
+        """
         if self.labware_type().value == "Tube":
             return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
         else:
             return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
 
     def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
+        """Given a traction message instance, it adds to the instance all the relevant information
+        from the labware.
+        Returns:
+        None
+        """
         super().add_to_traction_message(traction_message)
         for sample_pos in range(len(self.properties("samples"))):
             sample = self.properties("samples")[sample_pos]

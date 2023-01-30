@@ -3,12 +3,30 @@ from functools import cached_property
 from tol_lab_share import error_codes
 import logging
 from tol_lab_share.message_properties.definitions.input import Input
+from typing import List, Callable, Any, Union, Dict
 
 logger = logging.getLogger(__name__)
 
 
 class DictInput(MessageProperty):
-    def __init__(self, input, key):
+    """MessageProperty subclass to manage parsing of the access to the key of a
+    dictionary. The input can be a valid Dict or another MessageProperty that provides
+    as value a valid Dict. If the input is not a valid Dict, or if the key does not
+    exist, it will trigger an error on validation.
+    """
+
+    def __init__(self, input: Union[MessageProperty, Dict[str, Any]], key: str):
+        """Constructor that will create an instance to manage the access of the input
+        dictionary using the key provided as argument.
+
+        Parameters:
+        input (MessageProperty): The dictionary we want to access, wrapped inside another
+        MessageProperty class; normally it will be an Input or another DictInput.
+        key (str): The key we want to access inside the dictionary provided.
+
+        Returns:
+        MessageProperty: instance of MessageProperty
+        """
         super().__init__(input)
         if not isinstance(input, MessageProperty):
             self._input = Input(input)
@@ -17,10 +35,19 @@ class DictInput(MessageProperty):
         self._key = key
 
     @property
-    def validators(self):
+    def validators(self) -> List[Callable]:
+        """Checks that the instance contains a valid dictionary and key.
+        If the dictionary is not valid or if the key does not exist in it, it
+        will trigger an error.
+        """
         return [self.check_has_key]
 
-    def check_has_key(self):
+    def check_has_key(self) -> bool:
+        """Function to check that the input has a valid key. If it is not it will
+        trigger an error
+        Returns:
+        bool with the result of the check
+        """
         if not self._input.validate():
             return False
 
@@ -32,7 +59,12 @@ class DictInput(MessageProperty):
             return False
         return True
 
-    def check_iterable(self):
+    def check_iterable(self) -> bool:
+        """Function to check that the input is a valid dictionary. If it is not iterable it will
+        trigger an error
+        Returns:
+        bool with the result of the check
+        """
         try:
             iter(self._input.value)
             return True
@@ -41,5 +73,9 @@ class DictInput(MessageProperty):
             return False
 
     @cached_property
-    def value(self):
+    def value(self) -> Any:
+        """Function that will return the value of the key inside the dictionary.
+        Returns:
+        Any value stored inside the dict for that key
+        """
         return self._input.value[self._key]
