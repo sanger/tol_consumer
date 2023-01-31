@@ -7,6 +7,8 @@ from typing import Iterable
 from slack import WebClient
 from slack.errors import SlackApiError
 
+APPLICATION_NAME = "tol-lab-share"
+
 
 class SlackHandler(Handler):
     def __init__(self, token, channel_id):
@@ -68,7 +70,7 @@ class PackagePathFilter(Filter):
                 path += os.sep
             if pathname.startswith(path):
                 record.relativepath = os.path.relpath(pathname, path)
-                record.relative_path_and_lineno = f"{record.relativepath}:{record.lineno}"
+                record.relative_path_and_lineno = f"{APPLICATION_NAME}::{record.relativepath}:{record.lineno}"
 
                 break
 

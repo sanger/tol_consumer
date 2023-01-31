@@ -38,7 +38,7 @@ LOGGING: Dict[str, Any] = {
             "formatter": "verbose",
         },
         "slack": {
-            "level": "FATAL",
+            "level": "ERROR",
             "class": "tol_lab_share.utils.SlackHandler",
             "formatter": "verbose",
             "token": "",
