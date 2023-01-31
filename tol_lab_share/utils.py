@@ -24,7 +24,7 @@ class SlackHandler(Handler):
         try:
             self.client.chat_postMessage(
                 channel=self.channel_id,
-                blocks=[{"type": "section", "text": {"type": "mrkdwn", "text": sent_str}}],
+                blocks=[{"type": "section", "text": {"type": "mrkdwn", "text": f"{APPLICATION_NAME}::{sent_str}"}}],
             )
         except SlackApiError as e:
             # You will get a SlackApiError if "ok" is False
@@ -70,7 +70,7 @@ class PackagePathFilter(Filter):
                 path += os.sep
             if pathname.startswith(path):
                 record.relativepath = os.path.relpath(pathname, path)
-                record.relative_path_and_lineno = f"{APPLICATION_NAME}::{record.relativepath}:{record.lineno}"
+                record.relative_path_and_lineno = f"{record.relativepath}:{record.lineno}"
 
                 break
 
