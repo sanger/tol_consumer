@@ -94,7 +94,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                         },
                     },
                 ],
-                "source": "traction-ui.sequencescape",
+                "source": "tol-lab-share.tol",
             },
             "type": "receptions",
         }
@@ -154,7 +154,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                         },
                     },
                 ],
-                "source": "traction-ui.sequencescape",
+                "source": "tol-lab-share.tol",
             },
             "type": "receptions",
         }
@@ -208,7 +208,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                         },
                     },
                 ],
-                "source": "traction-ui.sequencescape",
+                "source": "tol-lab-share.tol",
             },
             "type": "receptions",
         }

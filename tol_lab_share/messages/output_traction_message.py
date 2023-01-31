@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Callable, Any
 from json import dumps
 from requests import post, codes
 from tol_lab_share.messages.interfaces import (
@@ -11,8 +11,10 @@ from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
+    OUTPUT_TRACTION_MESSAGE_SOURCE,
 )
 from tol_lab_share import error_codes
+from tol_lab_share.error_codes import ErrorCode
 
 
 class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
@@ -145,14 +147,14 @@ class RequestSerializer:
         """
         self.instance = instance
 
-    def is_ont_library_type(self):
+    def is_ont_library_type(self) -> bool:
         """Flag boolean method that identifies if the library type is ONT.
         Returns:
         boolean indicating if the library type is ONT or not
         """
-        return self.instance.library_type and ("ONT" in self.instance.library_type)
+        return bool(self.instance.library_type and ("ONT" in self.instance.library_type))
 
-    def request_payload(self):
+    def request_payload(self) -> Dict[str, Any]:
         """Generates the correct payload depending on the library type for the current request.
         Returns:
         Dic[str,str] with the required information to send for this request to Traction
@@ -167,7 +169,7 @@ class RequestSerializer:
         else:
             return {"library_type": self.instance.library_type, "external_study_id": self.instance.study_uuid}
 
-    def sample_payload(self):
+    def sample_payload(self) -> Dict[str, Any]:
         """Generates the correct payload for the sample defined in this request
         Returns:
         Dic[str,str] with the required sample information to send for this request to Traction
@@ -178,7 +180,7 @@ class RequestSerializer:
             "species": self.instance.species,
         }
 
-    def container_payload(self):
+    def container_payload(self) -> Dict[str, Any]:
         """Generates the correct payload for the container defined in this request depending on
         the container type (tubes or wells)
         Returns:
@@ -193,7 +195,7 @@ class RequestSerializer:
                 "position": self.instance.container_location,
             }
 
-    def payload(self):
+    def payload(self) -> Dict[str, Any]:
         """Main builder of the payload required to describe all information required for Traction:
         sample, request and container.
         Returns:
@@ -207,74 +209,123 @@ class RequestSerializer:
 
 
 class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
+    """Class that handle the generation and publishing of a message to Traction"""
+
     def __init__(self):
+        """Resets initial data"""
         super().__init__(Input(self))
         self._requests: Dict[int, OutputTractionMessageRequest] = {}
         self._sent = False
 
     @property
-    def origin(self):
+    def origin(self) -> str:
+        """Default origin identifier. This will be appended to any errors generated to know
+        where it was originated when we received"""
         return "OutputFeedbackMessage"
 
     @property
-    def validators(self):
+    def validators(self) -> List[Callable]:
+        """List of validators to check the message is correct before sending"""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
     def requests(self, position: int) -> OutputTractionMessageRequestInterface:
+        """Returns the request at position position from this message. If there is no requesrt there it
+        will create a new instance and return it.
+        Parameters:
+        position (int) position that we want to return
+        Returns:
+        OutputTractionMessageRequest with the request required
+        """
         if position not in self._requests:
             self._requests[position] = OutputTractionMessageRequest()
 
         return self._requests[position]
 
-    def request_attributes(self):
+    def request_attributes(self) -> List[Dict[str, Any]]:
+        """Returns a list with all the payloads for every request
+        Returns:
+        List[Dict[str,Any]] with all payloads for all the requests
+        """
         return [self._requests[position].serializer().payload() for position in range(len(self._requests))]
 
     @property
-    def errors(self):
+    def errors(self) -> List[ErrorCode]:
+        """List of errors defined for this message"""
         return self._errors
 
-    def check_has_requests(self):
+    def check_has_requests(self) -> bool:
+        """Returns a bool identifying if the message has requests. If not it will trigger an error and
+        return false.
+        Returns
+        bool saying if the message has requests
+        """
         if len(self._requests) > 0:
             return True
         else:
             self.trigger_error(error_codes.ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS)
+            return False
 
-    def check_no_errors(self):
+    def check_no_errors(self) -> bool:
+        """Checks that a message has no errors
+        Returns:
+        bool indicating if there is no errors
+        """
         return len(self.errors) == 0
 
-    def check_requests_have_all_content(self):
+    def check_requests_have_all_content(self) -> bool:
+        """Checks that all requests provided are valid. Triggers an error if any is not.
+        Returns:
+        bool indicating that all requests have valid content inside.
+        """
         if all([self.requests(key).validate() for key in self._requests]):
             return True
-        else:
-            self.trigger_error(error_codes.ERROR_24_TRACTION_MESSAGE_REQUESTS_HAVE_MISSING_DATA)
+        self.trigger_error(error_codes.ERROR_24_TRACTION_MESSAGE_REQUESTS_HAVE_MISSING_DATA)
+        return False
 
-    def payload(self):
+    def payload(self) -> Dict[str, Any]:
+        """Returns the valid payload to send to traction"""
         return {
             "data": {
                 "type": "receptions",
-                "attributes": {"source": "traction-ui.sequencescape", "request_attributes": self.request_attributes()},
+                "attributes": {
+                    "source": OUTPUT_TRACTION_MESSAGE_SOURCE,
+                    "request_attributes": self.request_attributes(),
+                },
             }
         }
 
-    def error_code_traction_problem(self, status_code, error_str):
-        return self.trigger_error(
+    def error_code_traction_problem(self, status_code: int, error_str: str) -> None:
+        """Triggers an error indicating that traction failed.
+        Parameters:
+        status_code (int) HTTP status code when sending to traction (422, 500, etc)
+        error_str (str) contents received by Traction endpoint on the request
+        """
+        self.trigger_error(
             error_codes.ERROR_13_TRACTION_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
         )
 
-    def send(self, url):
+    def send(self, url: str) -> bool:
+        """Sends a request to Traction. If is correct returns true, if not it will trigger an error and
+        return False
+        Parameters:
+        url (str) url where it will send the Traction request
+        Returns:
+        bool indicating if the request was successful
+        """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
         r = post(url, headers=headers, data=dumps(self.payload()), verify=False)
 
         self._sent = r.status_code == codes.created
         if not self._sent:
-            # problem = (r.text[:75] + '..') if len(r.text) > 75 else r.text
             problem = r.text
             self.error_code_traction_problem(r.status_code, problem)
 
         return self._sent
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
+        """Adds the relevant information about this Traction sent to the feedback message, indicating
+        if there has been any errors"""
         if not self._sent:
             feedback_message.operation_was_error_free = False
         if len(self._errors) > 0:
