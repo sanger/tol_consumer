@@ -21,6 +21,11 @@ LOGGING: Dict[str, Any] = {
             "format": "{asctime:<15} {name:<45}:{lineno:<3} {levelname:<7} {message}",
         },
     },
+    "filters": {
+        "package_path": {
+            "()": "tol_lab_share.utils.PackagePathFilter",
+        }
+    },
     "handlers": {
         "colored_stream": {
             "level": DEFAULT_LOGGING_LEVEL,
@@ -31,6 +36,13 @@ LOGGING: Dict[str, Any] = {
             "level": DEFAULT_LOGGING_LEVEL,
             "class": "logging.StreamHandler",
             "formatter": "verbose",
+        },
+        "slack": {
+            "level": "FATAL",
+            "class": "tol_lab_share.utils.SlackHandler",
+            "formatter": "verbose",
+            "token": "",
+            "channel_id": "",
         },
     },
     "loggers": {
