@@ -4,6 +4,7 @@ from functools import cached_property
 from tol_lab_share.helpers import get_config
 from tol_lab_share import error_codes
 from typing import Any, Dict, cast
+from typing import List, Callable
 
 CACHE_TAXON_IDS: Dict[str, str] = {}
 MAX_CACHE_SIZE = 1000
@@ -15,7 +16,7 @@ class ScientificNameFromTaxonId(MessageProperty):
     """
 
     @property
-    def validators(self):
+    def validators(self) -> List[Callable]:
         """Checks the input is a integer string"""
         return [self.check_is_integer_string]
 

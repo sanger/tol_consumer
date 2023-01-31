@@ -1,4 +1,5 @@
 from .message_property import MessageProperty
+from typing import List, Callable
 
 
 class Concentration(MessageProperty):
@@ -8,5 +9,6 @@ class Concentration(MessageProperty):
     """
 
     @property
-    def validators(self):
+    def validators(self) -> List[Callable]:
+        """Defines the list of validators"""
         return [self.check_is_float_string]

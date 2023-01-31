@@ -2,6 +2,7 @@ from .message_property import MessageProperty
 from tol_lab_share.config.insdc import COUNTRIES
 from tol_lab_share import error_codes
 import logging
+from typing import List, Callable
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +15,8 @@ class CountryOfOrigin(MessageProperty):
     """
 
     @property
-    def validators(self):
+    def validators(self) -> List[Callable]:
+        """Defines the list of validators"""
         return [self.check_is_string, self.check_is_valid_country]
 
     def check_is_valid_country(self):

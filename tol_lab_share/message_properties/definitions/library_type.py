@@ -1,4 +1,5 @@
 from .message_property import MessageProperty
+from typing import List, Callable
 
 
 class LibraryType(MessageProperty):
@@ -9,5 +10,6 @@ class LibraryType(MessageProperty):
     """
 
     @property
-    def validators(self):
+    def validators(self) -> List[Callable]:
+        """Defines the list of validators"""
         return [self.check_is_string]

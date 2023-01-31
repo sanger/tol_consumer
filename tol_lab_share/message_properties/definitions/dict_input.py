@@ -36,10 +36,7 @@ class DictInput(MessageProperty):
 
     @property
     def validators(self) -> List[Callable]:
-        """Checks that the instance contains a valid dictionary and key.
-        If the dictionary is not valid or if the key does not exist in it, it
-        will trigger an error.
-        """
+        """Defines the list of validators"""
         return [self.check_has_key]
 
     def check_has_key(self) -> bool:

@@ -1,6 +1,6 @@
 import logging
 from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface, OutputTractionMessageInterface
-from typing import List, Optional, Union, Any, Dict, cast
+from typing import List, Optional, Union, Any, Dict, cast, Callable
 from tol_lab_share.error_codes import ErrorCode
 from functools import cached_property
 
@@ -214,7 +214,8 @@ class MessageProperty(MessagePropertyInterface):
         self._errors.append(error)
 
     @property
-    def validators(self):
+    def validators(self) -> List[Callable]:
+        """Defines the list of validators"""
         return []
 
     def check_is_valid_input(self) -> bool:
