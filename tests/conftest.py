@@ -122,7 +122,7 @@ def valid_sample():
 @pytest.fixture
 def invalid_sample():
     return {
-        "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6",
+        "sampleUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f6",
         "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
         "sangerSampleId": 1234,
         "location": "A001",
@@ -140,18 +140,8 @@ def invalid_sample():
 
 
 def read_file(filename):
-    file = open(filename, "r")
-    contents = ""
-
-    while True:
-        line = file.readline()
-        if line == "":
-            break
-        contents += line
-
-    file.close()
-
-    return contents
+    with open(filename, "r") as file:
+        return file.read()
 
 
 @pytest.fixture
