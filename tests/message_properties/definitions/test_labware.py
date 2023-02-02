@@ -42,22 +42,24 @@ def test_sample_is_invalid():
 def test_count_of_total_samples(valid_sample):
     labware = {
         "labwareType": "Plate12x8",
-        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
-        "barcode": 1234,
+        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
+        "barcode": "1234",
         "samples": [],
     }
 
     instance = Labware(Input(labware))
+    assert instance.validate()
     assert instance.count_of_total_samples() == 0
 
     labware2 = {
         "labwareType": "Plate12x8",
-        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
-        "barcode": 1234,
+        "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
+        "barcode": "1234",
         "samples": [valid_sample, valid_sample],
     }
 
     instance = Labware(Input(labware2))
+    assert instance.validate()
     assert instance.count_of_total_samples() == 2
     assert instance.errors == []
 
@@ -106,6 +108,7 @@ def test_labware_add_to_traction_message_wells(valid_sample):
         "samples": [valid_sample],
     }
     instance = Labware(Input(data))
+    assert instance.validate()
 
     traction_message = OutputTractionMessage()
     instance.add_to_traction_message(traction_message)
