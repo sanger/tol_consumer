@@ -20,13 +20,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+      - name: Install snappy
+        run: |
+          sudo apt-get install -y libsnappy-dev
       - name: Install pipenv
         run: |
           pip install pipenv
@@ -44,7 +47,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -54,6 +57,9 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
+      - name: Install snappy
+        run: |
+          sudo apt-get install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
@@ -68,7 +74,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -78,6 +84,9 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
+      - name: Install snappy
+        run: |
+          sudo apt-get install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
@@ -91,7 +100,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.11.1
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -101,6 +110,9 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
+      - name: Install snappy
+        run: |
+          sudo apt-get install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system

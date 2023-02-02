@@ -17,7 +17,7 @@ def get_config(settings_module: str = "") -> ModuleType:
     """
     try:
         if not settings_module:
-            settings_module = os.environ["SETTINGS_MODULE"]
+            settings_module = os.getenv("SETTINGS_MODULE", "tol_lab_share.config.defaults")
 
         config_module = import_module(settings_module)
 
