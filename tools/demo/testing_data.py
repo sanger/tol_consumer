@@ -2,15 +2,18 @@ from datetime import datetime
 from uuid import uuid4
 
 # Pacbio_HiFi, Saphyr_v1, ONT_Ultralong
-LIBRARY_TYPE = "ONT_Ultralong"
+LIBRARY_TYPE = "Pacbio_HiFi"
+
+
+FIRST_CHAR = ord("A")
 
 
 def barcode_for_unique_id(labtype, unique_id, num_msg):
     return f"BARCODE-{labtype}-{unique_id}-{num_msg}"
 
 
-def unique_pos(letter, pos):
-    return f"{letter}-{pos}"
+def unique_pos(letter: int, pos: int) -> str:
+    return f"{letter - FIRST_CHAR}-{pos}"
 
 
 def build_create_labware_96_msg(unique_id, num_msg):
