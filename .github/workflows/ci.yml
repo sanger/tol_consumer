@@ -27,9 +27,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: Install snappy
-        run: |
-          sudo apt-get install -y libsnappy-dev
       - name: Install pipenv
         run: |
           pip install pipenv
@@ -57,9 +54,6 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
-      - name: Install snappy
-        run: |
-          sudo apt-get install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
@@ -84,9 +78,6 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
-      - name: Install snappy
-        run: |
-          sudo apt-get install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
@@ -110,14 +101,12 @@ jobs:
       - name: Install pipenv
         run: |
           pip install pipenv
-      - name: Install snappy
-        run: |
-          sudo apt-get install -y libsnappy-dev
       - name: Install dependencies
         run: |
           pipenv sync --dev --system
-      - name: Test with pytest
+      - name: Run tests and generate coverage report
         run: |
-          python -m pytest -vx
+          python -m pytest -vx --cov=. --junitxml=pytest.xml
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
