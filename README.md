@@ -51,6 +51,7 @@ Run the tests using pytest (flags are for verbose and exit early):
     python -m pytest -vx
 ```
 
+
 ## Deployment
 
 This project uses a Docker image as the unit of deployment. Update `.release-version` with

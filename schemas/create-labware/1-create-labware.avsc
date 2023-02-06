@@ -42,18 +42,18 @@
                   {
                     "name": "sampleUuid",
                     "doc": "Unique sample ID.",
-                    "type": {"name": "version4SampleUuid", "type": "fixed", "size": 36}
+                    "type": "version4MessageUuid"
                   },
                   {
                     "name": "studyUuid",
                     "doc": "Unique study ID.",
-                    "type": {"name": "version4StudyUuid", "type": "fixed", "size": 36}
+                    "type": "version4MessageUuid"
                   },
                   {
                     "name": "sangerSampleId", "type": "string"
                   },
                   {
-                    "name": "location", "type": ["string","null"],
+                    "name": "location", "type": "string",
                     "doc": "The location for the sample inside the labware, or null if location is not relevant in labware (Eg: tube)."
                   },
                   {

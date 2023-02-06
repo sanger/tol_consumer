@@ -1,5 +1,7 @@
 from typing import Any, Dict
 
+DEFAULT_LOGGING_LEVEL = "INFO"
+
 LOGGING: Dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -19,27 +21,39 @@ LOGGING: Dict[str, Any] = {
             "format": "{asctime:<15} {name:<45}:{lineno:<3} {levelname:<7} {message}",
         },
     },
+    "filters": {
+        "package_path": {
+            "()": "tol_lab_share.utils.PackagePathFilter",
+        }
+    },
     "handlers": {
         "colored_stream": {
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "class": "colorlog.StreamHandler",
             "formatter": "colored",
         },
         "console": {
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "class": "logging.StreamHandler",
             "formatter": "verbose",
+        },
+        "slack": {
+            "level": "ERROR",
+            "class": "tol_lab_share.utils.SlackHandler",
+            "formatter": "verbose",
+            "token": "",
+            "channel_id": "",
         },
     },
     "loggers": {
         "tol_lab_share": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "propagate": True,
         },
         "lab_share_lib": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": DEFAULT_LOGGING_LEVEL,
             "propagate": True,
         },
         "rabbit_messages": {

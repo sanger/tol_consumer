@@ -1,11 +1,258 @@
 from unittest.mock import MagicMock, patch
 from tol_lab_share.processors.create_labware_processor import CreateLabwareProcessor
 from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK
+import requests_mock
+import pytest
 
 
 def test_create_labware_processor(config):
-    with patch("tol_lab_share.processors.create_labware_processor.AvroEncoderBinary") as mock_avro_encoder:
+    schema_registry = MagicMock()
+    assert CreateLabwareProcessor(schema_registry, MagicMock(), config) is not None
+
+
+def test_create_labware_processor_with_valid_input_can_run_process(
+    config, valid_create_labware_message, traction_success_creation_response, taxonomy_record
+):
+    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+        mocked_instance_encoder = MagicMock()
+        mock_avro_encoder.return_value = mocked_instance_encoder
+
         schema_registry = MagicMock()
-        assert CreateLabwareProcessor(schema_registry, MagicMock(), config) is not None
+        publisher = MagicMock()
+
+        instance = CreateLabwareProcessor(schema_registry, publisher, config)
+
+        with requests_mock.Mocker() as m:
+            m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
+            m.post(config.TRACTION_URL, json=traction_success_creation_response, status_code=201)
+            assert instance.process(valid_create_labware_message) is True
 
         mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+        mocked_instance_encoder.encode.assert_called_once_with(
+            [
+                {
+                    "sourceMessageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c",
+                    "countOfTotalSamples": 2,
+                    "countOfValidSamples": 2,
+                    "operationWasErrorFree": True,
+                    "errors": [],
+                }
+            ]
+        )
+
+        publisher.publish_message.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    "error_code_checks",
+    ["tol_lab_share.processors.create_labware_processor.error_codes.ERROR_17_INPUT_MESSAGE_INVALID"],
+)
+def test_create_labware_processor_with_invalid_input_triggers_error(
+    config, invalid_create_labware_message, traction_success_creation_response, taxonomy_record, error_code_checks
+):
+    with patch(error_code_checks) as error_code:
+        with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+            mocked_instance_encoder = MagicMock()
+            mock_avro_encoder.return_value = mocked_instance_encoder
+            schema_registry = MagicMock()
+            publisher = MagicMock()
+
+            instance = CreateLabwareProcessor(schema_registry, publisher, config)
+
+            with requests_mock.Mocker() as m:
+                m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
+                m.post(config.TRACTION_URL, json=traction_success_creation_response)
+                assert instance.process(invalid_create_labware_message) is True
+                error_code.trigger.assert_called()
+
+            mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+            mocked_instance_encoder.encode.assert_called_once_with(
+                [
+                    {
+                        "sourceMessageUuid": "b01aa0ad7b19-4f94-87e9-70d74fb8783c",
+                        "countOfTotalSamples": 2,
+                        "countOfValidSamples": 0,
+                        "operationWasErrorFree": False,
+                        "errors": [
+                            {
+                                "typeId": 2,
+                                "field": "message_uuid",
+                                "origin": "plate",
+                                "description": (
+                                    'Uuid has wrong format, instance: "MessageUuid",'
+                                    " text: \"input: b'b01aa0ad7b19-4f94-87e9-70d74fb8783c'\""
+                                ),
+                            },
+                            {
+                                "typeId": 20,
+                                "field": "concentration",
+                                "origin": "sample",
+                                "description": 'The input provided is not a valid float., instance: "Concentration"',
+                            },
+                            {
+                                "typeId": 20,
+                                "field": "volume",
+                                "origin": "sample",
+                                "description": 'The input provided is not a valid float., instance: "Volume"',
+                            },
+                            {
+                                "typeId": 7,
+                                "field": "location",
+                                "origin": "sample",
+                                "description": 'Not valid location, instance: "Location", text: "input: A001"',
+                            },
+                            {
+                                "typeId": 9,
+                                "field": "scientific_name",
+                                "origin": "sample",
+                                "description": 'Not valid input, instance: "ScientificNameFromTaxonId"',
+                            },
+                            {
+                                "typeId": 20,
+                                "field": "concentration",
+                                "origin": "sample",
+                                "description": 'The input provided is not a valid float., instance: "Concentration"',
+                            },
+                            {
+                                "typeId": 20,
+                                "field": "volume",
+                                "origin": "sample",
+                                "description": 'The input provided is not a valid float., instance: "Volume"',
+                            },
+                            {
+                                "typeId": 7,
+                                "field": "location",
+                                "origin": "sample",
+                                "description": 'Not valid location, instance: "Location", text: "input: B001"',
+                            },
+                            {
+                                "typeId": 9,
+                                "field": "scientific_name",
+                                "origin": "sample",
+                                "description": 'Not valid input, instance: "ScientificNameFromTaxonId"',
+                            },
+                        ],
+                    }
+                ]
+            )
+            publisher.publish_message.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    "error_code_checks",
+    ["tol_lab_share.processors.create_labware_processor.error_codes.ERROR_16_PROBLEM_TALKING_WITH_TRACTION"],
+)
+def test_create_labware_processor_when_traction_sends_422(
+    config, valid_create_labware_message, taxonomy_record, error_code_checks
+):
+    with patch(error_code_checks) as error_code:
+        with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+            mocked_instance_encoder = MagicMock()
+            mock_avro_encoder.return_value = mocked_instance_encoder
+
+            schema_registry = MagicMock()
+            publisher = MagicMock()
+
+            instance = CreateLabwareProcessor(schema_registry, publisher, config)
+
+            with requests_mock.Mocker() as m:
+                m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
+                m.post(config.TRACTION_URL, text="This is an error", status_code=422)
+
+                assert instance.process(valid_create_labware_message) is True
+                error_code.trigger.assert_called()
+
+            mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+            mocked_instance_encoder.encode.assert_called_once_with(
+                [
+                    {
+                        "sourceMessageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c",
+                        "countOfTotalSamples": 2,
+                        "countOfValidSamples": 2,
+                        "operationWasErrorFree": False,
+                        "errors": [
+                            {
+                                "typeId": 13,
+                                "field": "dict",
+                                "origin": "root",
+                                "description": (
+                                    'Traction send request failed, instance: "OutputTractionMessage",'
+                                    ' text: "HTTP CODE: 422, MSG: This is an error"'
+                                ),
+                            }
+                        ],
+                    }
+                ]
+            )
+            publisher.publish_message.assert_called_once()
+
+
+def test_create_labware_processor_when_traction_sends_500(config, valid_create_labware_message, taxonomy_record):
+    with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+        mocked_instance_encoder = MagicMock()
+        mock_avro_encoder.return_value = mocked_instance_encoder
+
+        schema_registry = MagicMock()
+        publisher = MagicMock()
+
+        instance = CreateLabwareProcessor(schema_registry, publisher, config)
+
+        with requests_mock.Mocker() as m:
+            m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
+            m.post(config.TRACTION_URL, text="Another error", status_code=500)
+            assert instance.process(valid_create_labware_message) is True
+
+        mock_avro_encoder.assert_called_once_with(schema_registry, RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK)
+        mocked_instance_encoder.encode.assert_called_once_with(
+            [
+                {
+                    "sourceMessageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c",
+                    "countOfTotalSamples": 2,
+                    "countOfValidSamples": 2,
+                    "operationWasErrorFree": False,
+                    "errors": [
+                        {
+                            "typeId": 13,
+                            "field": "dict",
+                            "origin": "root",
+                            "description": (
+                                'Traction send request failed, instance: "OutputTractionMessage",'
+                                ' text: "HTTP CODE: 500, MSG: Another error"'
+                            ),
+                        }
+                    ],
+                }
+            ]
+        )
+        publisher.publish_message.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    "error_code_checks",
+    ["tol_lab_share.processors.create_labware_processor.error_codes.ERROR_18_FEEDBACK_MESSAGE_INVALID"],
+)
+def test_create_labware_processor_when_invalid_output_feedback_triggers_error(
+    config, valid_create_labware_message, taxonomy_record, error_code_checks, traction_success_creation_response
+):
+    with patch(error_code_checks) as error_code:
+        with patch("tol_lab_share.processors.create_labware_processor.OutputFeedbackMessage") as fm:
+            with patch("tol_lab_share.messages.output_feedback_message.AvroEncoderBinary") as mock_avro_encoder:
+                mocked_instance_encoder = MagicMock()
+                mock_avro_encoder.return_value = mocked_instance_encoder
+
+                # we mock the feedback message to not be valid
+                fm_instance = MagicMock()
+                fm.return_value = fm_instance
+                fm_instance.validate.return_value = False
+
+                schema_registry = MagicMock()
+                publisher = MagicMock()
+
+                instance = CreateLabwareProcessor(schema_registry, publisher, config)
+
+                with requests_mock.Mocker() as m:
+                    m.get(config.EBI_TAXONOMY_URL + "/10090", json=taxonomy_record)
+                    m.post(config.TRACTION_URL, json=traction_success_creation_response, status_code=201)
+
+                    instance.process(valid_create_labware_message)
+                    error_code.trigger.assert_called()
