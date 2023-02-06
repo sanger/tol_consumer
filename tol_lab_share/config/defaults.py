@@ -40,3 +40,6 @@ EBI_TAXONOMY_URL = "https://www.ebi.ac.uk/ena/taxonomy/rest/tax-id"
 
 # Options: 'json' or 'binary'
 SELECTED_ENCODER_FOR_FEEDBACK_MESSAGE = "binary"
+
+# Validate SSL certificate chain when connecting to https
+CERTIFICATES_VALIDATION_ENABLED = True

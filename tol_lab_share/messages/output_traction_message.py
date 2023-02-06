@@ -15,6 +15,7 @@ from tol_lab_share.constants import (
 )
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
+from tol_lab_share.helpers import get_config
 
 
 class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
@@ -216,6 +217,7 @@ class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
         super().__init__(Input(self))
         self._requests: Dict[int, OutputTractionMessageRequest] = {}
         self._sent = False
+        self._validate_certificates = get_config("").CERTIFICATES_VALIDATION_ENABLED
 
     @property
     def origin(self) -> str:
@@ -314,7 +316,7 @@ class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
-        r = post(url, headers=headers, data=dumps(self.payload()), verify=False)
+        r = post(url, headers=headers, data=dumps(self.payload()), verify=self._validate_certificates)
 
         self._sent = r.status_code == codes.created
         if not self._sent:
