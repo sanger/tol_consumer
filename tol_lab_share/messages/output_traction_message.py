@@ -217,7 +217,7 @@ class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
         super().__init__(Input(self))
         self._requests: Dict[int, OutputTractionMessageRequest] = {}
         self._sent = False
-        self._validate_certificates = get_config("").CERTIFICATES_VALIDATION_ENABLED
+        self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
     @property
     def origin(self) -> str:
