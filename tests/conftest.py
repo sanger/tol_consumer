@@ -115,6 +115,8 @@ def valid_sample():
         "donorId": "cichlid_pacbio8196429",
         "libraryType": "Library1",
         "countryOfOrigin": "United Kingdom",
+        "genomeSize": "14",
+        "accessionNumber": "EE1234",
         "sampleCollectionDateUtc": datetime.now(),
     }
 
@@ -135,6 +137,8 @@ def invalid_sample():
         "donorId": 1234,
         "libraryType": 1234,
         "countryOfOrigin": 1234,
+        "genomeSize": "14",
+        "accessionNumber": "EE1234",
         "sampleCollectionDateUtc": datetime.now(),
     }
 

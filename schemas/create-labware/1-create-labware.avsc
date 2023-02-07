@@ -91,7 +91,13 @@
                     "name": "sampleCollectionDateUtc",
                     "doc": "Sample Collection of the sample in UTC format.",
                     "type": { "type": "long", "logicalType": "timestamp-millis" }
-                  }
+                  },
+                  {
+                    "name": "genomeSize", "type": "string"
+                  },
+                  {
+                    "name": "accessionNumber", "type": "string"
+                  },
                 ]
               }
             }

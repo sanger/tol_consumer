@@ -13,6 +13,8 @@ from tol_lab_share.message_properties.definitions.scientific_name_from_taxon_id 
 from tol_lab_share.message_properties.definitions.uuid import Uuid
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
+from tol_lab_share.message_properties.definitions.genome_size import GenomeSize
+from tol_lab_share.message_properties.definitions.accession_number import AccessionNumber
 
 
 from tol_lab_share.constants import (
@@ -29,6 +31,8 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME,
+    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_ACCESSION_NUMBER,
+    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_GENOME_SIZE,
 )
 from typing import Any
 
@@ -67,6 +71,10 @@ class Sample(MessageProperty):
             ScientificNameFromTaxonId(TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID))),
         )
         self.add_property("uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID)))
+        self.add_property(
+            "accession_number", AccessionNumber(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_ACCESSION_NUMBER))
+        )
+        self.add_property("genome_size", GenomeSize(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_GENOME_SIZE)))
         self.add_property(
             "collection_date", DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE))
         )
