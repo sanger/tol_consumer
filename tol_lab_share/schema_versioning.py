@@ -19,4 +19,5 @@ class SchemaVersioning:
     def version(self):
         return self._version
 
+
 CREATE_LABWARE_SUPPORTING_ACCESSIONING_AND_GENOME = SchemaVersioning("create-labware", "3")
