@@ -24,13 +24,13 @@ jobs:
         run: >-
           docker build .
           --file Dockerfile
-          --tag docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          --tag tol-lab-share:black
 
       - name: Run tests against the image
         run: >-
           docker run
           --entrypoint ''
-          docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          tol-lab-share:black
           python -m black --check .
 
   flake8:
@@ -44,13 +44,13 @@ jobs:
         run: >-
           docker build .
           --file Dockerfile
-          --tag docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          --tag tol-lab-share:flake8
 
       - name: Run tests against the image
         run: >-
           docker run
           --entrypoint ''
-          docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          tol-lab-share:flake8
           flake8
   mypy:
     runs-on: ubuntu-latest
@@ -63,13 +63,13 @@ jobs:
         run: >-
           docker build .
           --file Dockerfile
-          --tag docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          --tag tol-lab-share:mypy
 
       - name: Run tests against the image
         run: >-
           docker run
           --entrypoint ''
-          docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          tol-lab-share:mypy
           python -m mypy .
   test:
     runs-on: ubuntu-latest
@@ -82,12 +82,12 @@ jobs:
         run: >-
           docker build .
           --file Dockerfile
-          --tag docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          --tag tol-lab-share:pytest
 
       - name: Run tests against the image
         run: >-
           docker run
           --entrypoint ''
-          docker.pkg.github.com/${IMAGE_NAME}:${BRANCH_NAME}
+          tol-lab-share:pytest
           python -m pytest -vx --cov=.
 
