@@ -97,7 +97,7 @@
                   },
                   {
                     "name": "accessionNumber", "type": "string"
-                  },
+                  }
                 ]
               }
             }
