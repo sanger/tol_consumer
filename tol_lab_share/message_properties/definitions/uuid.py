@@ -43,7 +43,7 @@ class Uuid(MessageProperty):
 
         try:
             str_rep = self._input.value.decode("utf-8")
-            uuid_obj = UUID(str_rep, version=4)
+            uuid_obj = UUID(str_rep)
             if str(uuid_obj) == str(str_rep):
                 return True
         except ValueError:
