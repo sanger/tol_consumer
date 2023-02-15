@@ -41,6 +41,11 @@ def test_uuid_check_is_uuid_detects_valid_uuid():
     assert instance.check_is_uuid() is True
     assert instance.validate() is True
 
+    instance = Uuid(Input(b"28c96f02-a15c-11ed-b8de-fa163e1e3ca9"))
+    assert instance.check_is_uuid() is True
+    assert instance.validate() is True
+
+
 
 def test_uuid_check_is_binary_when_not_binary():
     instance = Uuid(Input("dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
