@@ -41,6 +41,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "countryOfOrigin": "United Kingdom",
                     "genomeSize": "1",
                     "accessionNumber": "A1234",
+                    "costCode": "S1234",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
                 for letter in range(ord("A"), ord("H") + 1)
@@ -75,6 +76,7 @@ def build_create_tube_msg(unique_id, num_msg):
                     "countryOfOrigin": "United Kingdom",
                     "genomeSize": "1",
                     "accessionNumber": "A1234",
+                    "costCode": "S1234",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
             ],

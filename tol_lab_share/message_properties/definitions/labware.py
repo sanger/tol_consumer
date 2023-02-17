@@ -91,6 +91,7 @@ class Labware(MessageProperty):
         super().add_to_traction_message(traction_message)
         for sample_pos in range(len(self.properties("samples"))):
             sample = self.properties("samples")[sample_pos]
+            traction_message.requests(sample_pos).cost_code = sample.properties("cost_code").value
             traction_message.requests(sample_pos).study_uuid = sample.properties("study_uuid").value
             traction_message.requests(sample_pos).sample_name = sample.properties("public_name").value
             traction_message.requests(sample_pos).sample_uuid = sample.properties("uuid").value

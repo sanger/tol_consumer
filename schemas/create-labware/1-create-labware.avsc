@@ -93,6 +93,9 @@
                     "type": { "type": "long", "logicalType": "timestamp-millis" }
                   },
                   {
+                    "name": "costCode", "type": "string"
+                  },
+                  {
                     "name": "genomeSize", "type": "string"
                   },
                   {
