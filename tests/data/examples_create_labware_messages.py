@@ -25,6 +25,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
                 "sampleCollectionDateUtc": datetime.now(),
+                "costCode": "S1234",
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -43,6 +44,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
                 "sampleCollectionDateUtc": datetime.now(),
+                "costCode": "S1234",
             },
         ],
     },
@@ -73,6 +75,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
                 "sampleCollectionDateUtc": datetime.now(),
+                "costCode": "S1234",
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -91,6 +94,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
                 "sampleCollectionDateUtc": datetime.now(),
+                "costCode": "S1234",
             },
         ],
     },

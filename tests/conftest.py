@@ -118,6 +118,7 @@ def valid_sample():
         "genomeSize": "14",
         "accessionNumber": "EE1234",
         "sampleCollectionDateUtc": datetime.now(),
+        "costCode": "S1234",
     }
 
 
@@ -139,6 +140,7 @@ def invalid_sample():
         "countryOfOrigin": 1234,
         "genomeSize": "14",
         "accessionNumber": "EE1234",
+        "costCode": 1234,
         "sampleCollectionDateUtc": datetime.now(),
     }
 

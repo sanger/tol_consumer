@@ -33,6 +33,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         self._container_location = None
         self._container_type = None
         self._species = None
+        self._cost_code = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before
@@ -59,6 +60,16 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def species(self, value: Optional[str]) -> None:
         """Sets the species value for this request"""
         self._species = value
+
+    @property
+    def cost_code(self) -> Optional[str]:
+        """Gets the cost_code value for this request"""
+        return self._cost_code
+
+    @cost_code.setter
+    def cost_code(self, value: Optional[str]) -> None:
+        """Sets the cost_code value for this request"""
+        self._cost_code = value
 
     @property
     def container_type(self) -> Optional[str]:
@@ -163,12 +174,16 @@ class RequestSerializer:
         if self.is_ont_library_type():
             return {
                 "data_type": "basecalls",
-                "cost_code": "0000",
                 "library_type": self.instance.library_type,
                 "external_study_id": self.instance.study_uuid,
+                "cost_code": self.instance.cost_code,
             }
         else:
-            return {"library_type": self.instance.library_type, "external_study_id": self.instance.study_uuid}
+            return {
+                "library_type": self.instance.library_type,
+                "external_study_id": self.instance.study_uuid,
+                "cost_code": self.instance.cost_code,
+            }
 
     def sample_payload(self) -> Dict[str, Any]:
         """Generates the correct payload for the sample defined in this request

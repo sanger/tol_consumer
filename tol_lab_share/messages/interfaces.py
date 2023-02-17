@@ -142,6 +142,16 @@ class OutputTractionMessageRequestInterface:
     def study_uuid(self, value: Optional[str]) -> None:
         ...
 
+    @property
+    @abstractmethod
+    def cost_code(self) -> Optional[str]:
+        ...
+
+    @cost_code.setter
+    @abstractmethod
+    def cost_code(self, value: Optional[str]) -> None:
+        ...
+
 
 class OutputTractionMessageInterface(ABC):
     @abstractmethod

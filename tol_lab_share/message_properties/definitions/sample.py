@@ -15,6 +15,7 @@ from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 from tol_lab_share.message_properties.definitions.genome_size import GenomeSize
 from tol_lab_share.message_properties.definitions.accession_number import AccessionNumber
+from tol_lab_share.message_properties.definitions.cost_code import CostCode
 
 
 from tol_lab_share.constants import (
@@ -33,6 +34,7 @@ from tol_lab_share.constants import (
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_ACCESSION_NUMBER,
     INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_GENOME_SIZE,
+    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COST_CODE,
 )
 from typing import Any
 
@@ -47,6 +49,7 @@ class Sample(MessageProperty):
     def __init__(self, input: Any):
         super().__init__(input)
 
+        self.add_property("cost_code", CostCode(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COST_CODE)))
         self.add_property("study_uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID)))
         self.add_property("common_name", CommonName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME)))
         self.add_property(
