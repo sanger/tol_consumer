@@ -12,10 +12,10 @@ from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
 )
 
-from tol_lab_share.constants import (
-    INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE,
-    INPUT_CREATE_LABWARE_MESSAGE_BARCODE,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLES,
+from tol_lab_share.constants.input_create_labware_message import (
+    LABWARE_TYPE,
+    BARCODE,
+    SAMPLES,
 )
 from tol_lab_share.messages.output_traction_message import OutputTractionMessageInterface
 
@@ -30,13 +30,13 @@ class Labware(MessageProperty):
     def __init__(self, input: MessageProperty):
         super().__init__(input)
 
-        self.add_property("labware_type", LabwareType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_LABWARE_TYPE)))
-        self.add_property("barcode", Barcode(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_BARCODE)))
+        self.add_property("labware_type", LabwareType(DictInput(input, LABWARE_TYPE)))
+        self.add_property("barcode", Barcode(DictInput(input, BARCODE)))
         self.add_property("samples", self._parse_samples(input))
 
     def _parse_samples(self, input: MessageProperty) -> List[MessagePropertyInterface]:
         """Parses the samples section and creates a sample for each position."""
-        samples_dict = DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLES)
+        samples_dict = DictInput(input, SAMPLES)
         if samples_dict.validate():
             samples_list_dict: List[MessagePropertyInterface] = []
             for position in range(len(samples_dict.value)):

@@ -1,8 +1,8 @@
 from lab_share_lib.processing.rabbit_message import RabbitMessage
-from tol_lab_share.constants import (
-    INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID,
-    INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC,
-    INPUT_CREATE_LABWARE_MESSAGE_LABWARE,
+from tol_lab_share.constants.input_create_labware_message import (
+    MESSAGE_UUID,
+    CREATED_DATE_UTC,
+    LABWARE,
 )
 from tol_lab_share.message_properties.definitions.message_uuid import MessageUuid
 from tol_lab_share.message_properties.definitions.labware import Labware
@@ -27,13 +27,9 @@ class InputCreateLabwareMessage(MessageProperty):
         super().__init__(m)
         self._message = m.message
 
-        self.add_property(
-            "message_uuid", MessageUuid(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_MESSAGE_UUID))
-        )
-        self.add_property("labware", Labware(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_LABWARE)))
-        self.add_property(
-            "create_date_utc", DateUtc(DictInput(self._message, INPUT_CREATE_LABWARE_MESSAGE_CREATED_DATE_UTC))
-        )
+        self.add_property("message_uuid", MessageUuid(DictInput(self._message, MESSAGE_UUID)))
+        self.add_property("labware", Labware(DictInput(self._message, LABWARE)))
+        self.add_property("create_date_utc", DateUtc(DictInput(self._message, CREATED_DATE_UTC)))
 
     def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
         """Given a feedback message, it adds all errors from this message into it. If there are
