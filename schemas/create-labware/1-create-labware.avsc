@@ -41,23 +41,25 @@
                 "fields": [
                   {
                     "name": "sampleUuid",
-                    "doc": "Unique sample ID.",
+                    "doc": "Unique sample ID in UUID format.",
                     "type": "version4MessageUuid"
                   },
                   {
                     "name": "studyUuid",
-                    "doc": "Unique study ID.",
+                    "doc": "Unique study UUID where the sample belongs to",
                     "type": "version4MessageUuid"
                   },
                   {
-                    "name": "sangerSampleId", "type": "string"
+                    "name": "sangerSampleId", "type": "string",
+                    "doc": "Unique id to identify the sample inside Sanger lims"
                   },
                   {
                     "name": "location", "type": "string",
                     "doc": "The location for the sample inside the labware, or null if location is not relevant in labware (Eg: tube)."
                   },
                   {
-                    "name": "supplierSampleName", "type": "string"
+                    "name": "supplierSampleName", "type": "string",
+                    "doc": "Name given by the supplier of the sample"
                   },
                   {
                     "name": "volume", "type": "string",
@@ -76,16 +78,20 @@
                     "doc": "Taxonomy Identifier."
                   },
                   {
-                    "name": "commonName", "type": "string"
+                    "name": "commonName", "type": "string",
+                    "doc": "Common name for the sample"
                   },
                   {
-                    "name": "donorId", "type": "string"
+                    "name": "donorId", "type": "string",
+                    "doc": "Identifier for the donor of the sample"
                   },
                   {
-                    "name": "libraryType", "type": "string"
+                    "name": "libraryType", "type": "string",
+                    "doc": "Type of library created for sequencing"
                   },
                   {
-                    "name": "countryOfOrigin", "type": "string"
+                    "name": "countryOfOrigin", "type": "string",
+                    "doc": "Country of origin for the sample"
                   },
                   {
                     "name": "sampleCollectionDateUtc",
@@ -93,13 +99,16 @@
                     "type": { "type": "long", "logicalType": "timestamp-millis" }
                   },
                   {
-                    "name": "costCode", "type": "string"
+                    "name": "costCode", "type": "string",
+                    "doc": "Code for the project for billing purposes"
                   },
                   {
-                    "name": "genomeSize", "type": "string"
+                    "name": "genomeSize", "type": "string",
+                    "doc": "Size of genome"
                   },
                   {
-                    "name": "accessionNumber", "type": "string"
+                    "name": "accessionNumber", "type": "string",
+                    "doc": "Accession number for publication in ENA/EBI"
                   }
                 ]
               }
