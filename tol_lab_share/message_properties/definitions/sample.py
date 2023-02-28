@@ -13,22 +13,28 @@ from tol_lab_share.message_properties.definitions.scientific_name_from_taxon_id 
 from tol_lab_share.message_properties.definitions.uuid import Uuid
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
+from tol_lab_share.message_properties.definitions.genome_size import GenomeSize
+from tol_lab_share.message_properties.definitions.accession_number import AccessionNumber
+from tol_lab_share.message_properties.definitions.cost_code import CostCode
 
 
-from tol_lab_share.constants import (
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_CONCENTRATION,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COUNTRY_OF_ORIGIN,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_DONOR_ID,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE,
-    INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME,
+from tol_lab_share.constants.input_create_labware_message import (
+    SAMPLE_PUBLIC_NAME,
+    SAMPLE_COMMON_NAME,
+    SAMPLE_CONCENTRATION,
+    SAMPLE_COUNTRY_OF_ORIGIN,
+    SAMPLE_DONOR_ID,
+    SAMPLE_LIBRARY_TYPE,
+    SAMPLE_LOCATION,
+    SAMPLE_SANGER_SAMPLE_ID,
+    SAMPLE_SANGER_TAXON_ID,
+    SAMPLE_SANGER_UUID,
+    SAMPLE_STUDY_UUID,
+    SAMPLE_COLLECTION_DATE,
+    SAMPLE_VOLUME,
+    SAMPLE_ACCESSION_NUMBER,
+    SAMPLE_GENOME_SIZE,
+    SAMPLE_COST_CODE,
 )
 from typing import Any
 
@@ -43,30 +49,25 @@ class Sample(MessageProperty):
     def __init__(self, input: Any):
         super().__init__(input)
 
-        self.add_property("study_uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_STUDY_UUID)))
-        self.add_property("common_name", CommonName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COMMON_NAME)))
-        self.add_property(
-            "concentration", Concentration(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_CONCENTRATION))
-        )
-        self.add_property("volume", Volume(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_VOLUME)))
+        self.add_property("cost_code", CostCode(DictInput(input, SAMPLE_COST_CODE)))
+        self.add_property("study_uuid", Uuid(DictInput(input, SAMPLE_STUDY_UUID)))
+        self.add_property("common_name", CommonName(DictInput(input, SAMPLE_COMMON_NAME)))
+        self.add_property("concentration", Concentration(DictInput(input, SAMPLE_CONCENTRATION)))
+        self.add_property("volume", Volume(DictInput(input, SAMPLE_VOLUME)))
         self.add_property(
             "country_of_origin",
-            CountryOfOrigin(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COUNTRY_OF_ORIGIN)),
+            CountryOfOrigin(DictInput(input, SAMPLE_COUNTRY_OF_ORIGIN)),
         )
-        self.add_property("donor_id", DonorId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_DONOR_ID)))
-        self.add_property(
-            "library_type", LibraryType(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LIBRARY_TYPE))
-        )
-        self.add_property("location", Location(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_LOCATION)))
-        self.add_property("public_name", PublicName(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_PUBLIC_NAME)))
-        self.add_property(
-            "sanger_sample_id", SangerSampleId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_SAMPLE_ID))
-        )
+        self.add_property("donor_id", DonorId(DictInput(input, SAMPLE_DONOR_ID)))
+        self.add_property("library_type", LibraryType(DictInput(input, SAMPLE_LIBRARY_TYPE)))
+        self.add_property("location", Location(DictInput(input, SAMPLE_LOCATION)))
+        self.add_property("public_name", PublicName(DictInput(input, SAMPLE_PUBLIC_NAME)))
+        self.add_property("sanger_sample_id", SangerSampleId(DictInput(input, SAMPLE_SANGER_SAMPLE_ID)))
         self.add_property(
             "scientific_name",
-            ScientificNameFromTaxonId(TaxonId(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_TAXON_ID))),
+            ScientificNameFromTaxonId(TaxonId(DictInput(input, SAMPLE_SANGER_TAXON_ID))),
         )
-        self.add_property("uuid", Uuid(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_SANGER_UUID)))
-        self.add_property(
-            "collection_date", DateUtc(DictInput(input, INPUT_CREATE_LABWARE_MESSAGE_SAMPLE_COLLECTION_DATE))
-        )
+        self.add_property("uuid", Uuid(DictInput(input, SAMPLE_SANGER_UUID)))
+        self.add_property("accession_number", AccessionNumber(DictInput(input, SAMPLE_ACCESSION_NUMBER)))
+        self.add_property("genome_size", GenomeSize(DictInput(input, SAMPLE_GENOME_SIZE)))
+        self.add_property("collection_date", DateUtc(DictInput(input, SAMPLE_COLLECTION_DATE)))

@@ -17,6 +17,5 @@ forlint.sh
 htmlcov
 lefthook.yml
 LICENSE
-mypy.ini
 README.md
 tmp

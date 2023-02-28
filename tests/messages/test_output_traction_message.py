@@ -16,6 +16,7 @@ def valid_traction_message():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).cost_code = "S1234"
     return instance
 
 
@@ -55,6 +56,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).cost_code = "S1234"
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -64,6 +66,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).cost_code = "S4567"
 
     assert instance.payload() == {
         "data": {
@@ -74,6 +77,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "library",
+                            "cost_code": "S1234",
                         },
                         "sample": {
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
@@ -86,6 +90,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "library",
+                            "cost_code": "S4567",
                         },
                         "sample": {
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
@@ -111,6 +116,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).cost_code = "S1234"
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -120,6 +126,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).cost_code = "S4567"
 
     assert instance.payload() == {
         "data": {
@@ -130,7 +137,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "ONT_mylib",
-                            "cost_code": "0000",
+                            "cost_code": "S1234",
                             "data_type": "basecalls",
                         },
                         "sample": {
@@ -144,7 +151,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "ONT_mylib",
-                            "cost_code": "0000",
+                            "cost_code": "S4567",
                             "data_type": "basecalls",
                         },
                         "sample": {
@@ -170,6 +177,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).cost_code = "S1234"
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
@@ -178,6 +186,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).cost_code = "S4567"
 
     assert instance.payload() == {
         "data": {
@@ -188,6 +197,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "library",
+                            "cost_code": "S1234",
                         },
                         "sample": {
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
@@ -200,6 +210,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "library",
+                            "cost_code": "S4567",
                         },
                         "sample": {
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",

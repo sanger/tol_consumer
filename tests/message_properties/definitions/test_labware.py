@@ -121,6 +121,7 @@ def test_labware_add_to_traction_message_wells(valid_sample):
     assert traction_message.requests(0).container_barcode == "BARCODE001"
     assert traction_message.requests(0).container_location == "A1"
     assert traction_message.requests(0).container_type == "wells"
+    assert traction_message.requests(0).cost_code == "S1234"
 
 
 def test_labware_add_to_traction_message_tubes(valid_sample):
@@ -143,6 +144,7 @@ def test_labware_add_to_traction_message_tubes(valid_sample):
     assert traction_message.requests(0).container_barcode == "BARCODE001"
     assert traction_message.requests(0).container_location == "A1"
     assert traction_message.requests(0).container_type == "tubes"
+    assert traction_message.requests(0).cost_code == "S1234"
 
 
 def test_labware_add_to_traction_message_uses_unpadded_location(valid_sample):

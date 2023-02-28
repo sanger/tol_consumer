@@ -51,4 +51,5 @@ def test_sample_is_invalid(invalid_sample):
     check_presence_error(instance.errors, error_codes.ERROR_7_INVALID_LOCATION, "location")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "sanger_sample_id")
     check_presence_error(instance.errors, error_codes.ERROR_9_INVALID_INPUT, "scientific_name")
-    assert len(instance.errors) == 12
+    check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "cost_code")
+    assert len(instance.errors) == 13
