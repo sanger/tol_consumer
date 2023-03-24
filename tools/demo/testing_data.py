@@ -27,7 +27,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
             "samples": [
                 {
                     "sampleUuid": str(uuid4()).encode(),
-                    "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014".encode(),
+                    "studyUuid": "28c96f02-a15c-11ed-b8de-fa163e1e3ca9".encode(),
                     "sangerSampleId": f"sangerId-{unique_id_lab}-{unique_pos(letter, pos)}",
                     "location": f"{chr(letter) + ('0' if len(str(pos)) == 1 else '') + str(pos)}",
                     "supplierSampleName": f"SampleSupplied-{unique_id_lab}-{unique_pos(letter, pos)}",
@@ -39,6 +39,9 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "donorId": f"donor-{unique_id_lab}-{unique_pos(letter, pos)}",
                     "libraryType": LIBRARY_TYPE,
                     "countryOfOrigin": "United Kingdom",
+                    "genomeSize": "1",
+                    "accessionNumber": "A1234",
+                    "costCode": "S1234",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
                 for letter in range(ord("A"), ord("H") + 1)
@@ -59,7 +62,7 @@ def build_create_tube_msg(unique_id, num_msg):
             "samples": [
                 {
                     "sampleUuid": str(uuid4()).encode(),
-                    "studyUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e014".encode(),
+                    "studyUuid": "28c96f02-a15c-11ed-b8de-fa163e1e3ca9".encode(),
                     "sangerSampleId": f"sangerId-{unique_id_lab}",
                     "supplierSampleName": f"SampleSupplied-{unique_id_lab}",
                     "location": None,
@@ -71,6 +74,9 @@ def build_create_tube_msg(unique_id, num_msg):
                     "donorId": f"donor-{unique_id_lab}",
                     "libraryType": LIBRARY_TYPE,
                     "countryOfOrigin": "United Kingdom",
+                    "genomeSize": "1",
+                    "accessionNumber": "A1234",
+                    "costCode": "S1234",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
                 }
             ],

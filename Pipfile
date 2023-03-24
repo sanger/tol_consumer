@@ -25,6 +25,7 @@ slackclient = "~=2.9"
 lab-share-lib = {editable = false,git = 'https://github.com/sanger/lab-share-lib.git',ref = 'v0.1.6'}
 requests-mock = "*"
 types-requests = "*"
+python-snappy = "*"
 
 [requires]
 python_version = "3.11"
