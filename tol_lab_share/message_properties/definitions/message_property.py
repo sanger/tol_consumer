@@ -1,5 +1,5 @@
 import logging
-from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface, OutputTractionMessageInterface
+from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface, OutputTractionMessageInterface, TractionQcMessageInterface
 from typing import List, Optional, Union, Any, Dict, cast, Callable
 from tol_lab_share.error_codes import ErrorCode
 from functools import cached_property
@@ -198,6 +198,13 @@ class MessageProperty(MessagePropertyInterface):
         """
         for property in self._properties_instances:
             property.add_to_traction_message(traction_message)
+
+    def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
+        """Calls the method add_to_traction_qc_message for all the properties defined inside this property
+        (if there are any).
+        """
+        for property in self._properties_instances:
+            property.add_to_qc_traction_message(traction_qc_message)
 
     @property
     def errors(self) -> List[ErrorCode]:

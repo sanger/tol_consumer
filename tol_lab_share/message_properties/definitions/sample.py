@@ -16,7 +16,17 @@ from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 from tol_lab_share.message_properties.definitions.genome_size import GenomeSize
 from tol_lab_share.message_properties.definitions.accession_number import AccessionNumber
 from tol_lab_share.message_properties.definitions.cost_code import CostCode
-
+from tol_lab_share.message_properties.definitions.sheared_femto_fragment_size import ShearedFemtoFragmentSize
+from tol_lab_share.message_properties.definitions.post_spri_concentration import PostSPRIConcentration
+from tol_lab_share.message_properties.definitions.post_spri_volume import PostSPRIVolume
+from tol_lab_share.message_properties.definitions.final_nano_drop_280 import FinalNanoDrop280
+from tol_lab_share.message_properties.definitions.final_nano_drop_230 import FinalNanoDrop230
+from tol_lab_share.message_properties.definitions.final_nano_drop import FinalNanoDrop
+from tol_lab_share.message_properties.definitions.shearing_qc_comments import ShearingAndQCComments
+from tol_lab_share.message_properties.definitions.date_submitted_utc import DateSubmittedUTC
+from tol_lab_share.message_properties.definitions.priority_level import PriorityLevel
+from tol_lab_share.message_properties.definitions.date_required_by import DateRequiredBy
+from tol_lab_share.message_properties.definitions.reason_for_priority import ReasonForPriority
 
 from tol_lab_share.constants.input_create_labware_message import (
     SAMPLE_PUBLIC_NAME,
@@ -35,6 +45,17 @@ from tol_lab_share.constants.input_create_labware_message import (
     SAMPLE_ACCESSION_NUMBER,
     SAMPLE_GENOME_SIZE,
     SAMPLE_COST_CODE,
+    SHEARED_FEMTO_FRAGMENT_SIZE,
+    POST_SPRI_CONCENTRATION,
+    POST_SPRI_VOLUME,
+    FINAL_NANODROP_280,
+    FINAL_NANODROP_230,
+    FINAL_NANODROP,
+    SHEARING_QC_COMMENTS,
+    DATE_SUBMITTED_UTC,
+    PRIORITY_LEVEL,
+    DATE_REQUIRED_BY,
+    REASON_FOR_PRIORITY,
 )
 from typing import Any
 
@@ -71,3 +92,15 @@ class Sample(MessageProperty):
         self.add_property("accession_number", AccessionNumber(DictInput(input, SAMPLE_ACCESSION_NUMBER)))
         self.add_property("genome_size", GenomeSize(DictInput(input, SAMPLE_GENOME_SIZE)))
         self.add_property("collection_date", DateUtc(DictInput(input, SAMPLE_COLLECTION_DATE)))
+
+        self.add_property("sheared_femto_fragment_size", ShearedFemtoFragmentSize(DictInput(input, SHEARED_FEMTO_FRAGMENT_SIZE)))
+        self.add_property("post_spri_concentration", PostSPRIConcentration(DictInput(input, POST_SPRI_CONCENTRATION)))
+        self.add_property("post_spri_volume", PostSPRIVolume(DictInput(input, POST_SPRI_VOLUME)))
+        self.add_property("final_nano_drop_280", FinalNanoDrop280(DictInput(input, FINAL_NANODROP_280)))
+        self.add_property("final_nano_drop_230", FinalNanoDrop230(DictInput(input, FINAL_NANODROP_230)))
+        self.add_property("final_nano_drop", FinalNanoDrop(DictInput(input, FINAL_NANODROP)))
+        self.add_property("shearing_qc_comments", ShearingAndQCComments(DictInput(input, SHEARING_QC_COMMENTS)))
+        self.add_property("date_submitted_utc", DateSubmittedUTC(DictInput(input, DATE_SUBMITTED_UTC)))
+        self.add_property("priority_level", PriorityLevel(DictInput(input, PRIORITY_LEVEL)))
+        self.add_property("date_required_by", DateRequiredBy(DictInput(input, DATE_REQUIRED_BY)))
+        self.add_property("reason_for_priority", ReasonForPriority(DictInput(input, REASON_FOR_PRIORITY)))

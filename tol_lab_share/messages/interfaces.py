@@ -169,3 +169,136 @@ class OutputTractionMessageInterface(ABC):
     @abstractmethod
     def requests(self, position: int) -> OutputTractionMessageRequestInterface:
         ...
+
+
+class TractionQcMessageRequestInterface:
+    @abstractmethod
+    def validate(self) -> bool:
+        ...
+
+    @property
+    @abstractmethod
+    def sheared_femto_fragment_size(self) -> Optional[str]:
+        ...
+
+    @sheared_femto_fragment_size.setter
+    @abstractmethod
+    def sheared_femto_fragment_size(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def post_spri_concentration(self) -> Optional[str]:
+        ...
+
+    @post_spri_concentration.setter
+    @abstractmethod
+    def post_spri_concentration(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def post_spri_volume(self) -> Optional[str]:
+        ...
+
+    @post_spri_volume.setter
+    @abstractmethod
+    def post_spri_volume(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def final_nano_drop_280(self) -> Optional[str]:
+        ...
+
+    @final_nano_drop_280.setter
+    @abstractmethod
+    def final_nano_drop_280(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def final_nano_drop_230(self) -> Optional[str]:
+        ...
+
+    @final_nano_drop_230.setter
+    @abstractmethod
+    def final_nano_drop_230(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def final_nano_drop(self) -> Optional[str]:
+        ...
+
+    @final_nano_drop.setter
+    @abstractmethod
+    def final_nano_drop(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def shearing_qc_comments(self) -> Optional[str]:
+        ...
+
+    @shearing_qc_comments.setter
+    @abstractmethod
+    def shearing_qc_comments(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def date_submitted_utc(self) -> Optional[str]:
+        ...
+
+    @date_submitted_utc.setter
+    @abstractmethod
+    def date_submitted_utc(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def priority_level(self) -> Optional[str]:
+        ...
+
+    @priority_level.setter
+    @abstractmethod
+    def priority_level(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def date_required_by(self) -> Optional[str]:
+        ...
+
+    @date_required_by.setter
+    @abstractmethod
+    def date_required_by(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def reason_for_priority(self) -> Optional[str]:
+        ...
+
+    @reason_for_priority.setter
+    @abstractmethod
+    def reason_for_priority(self, value: Optional[str]) -> None:
+        ...
+
+class TractionQcMessageInterface(ABC):
+    @abstractmethod
+    def payload(self):
+        ...
+
+    @abstractmethod
+    def send(self, url):
+        ...
+
+    @abstractmethod
+    def add_error(self, error: ErrorCode) -> None:
+        ...
+
+    @abstractmethod
+    def requests(self, position: int) -> TractionQcMessageRequestInterface:
+        ...

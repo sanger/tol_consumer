@@ -18,6 +18,7 @@ from tol_lab_share.constants.input_create_labware_message import (
     SAMPLES,
 )
 from tol_lab_share.messages.output_traction_message import OutputTractionMessageInterface
+from tol_lab_share.messages.traction_qc_message import TractionQcMessageInterface
 
 import logging
 
@@ -100,3 +101,23 @@ class Labware(MessageProperty):
             traction_message.requests(sample_pos).container_barcode = self.properties("barcode").value
             traction_message.requests(sample_pos).container_location = sample.properties("location").value
             traction_message.requests(sample_pos).container_type = self.traction_container_type()
+
+    def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
+        """Given a traction qc message instance, it adds the qc data.
+        Returns: 
+        None
+        """
+        super().add_to_traction_qc_message(traction_qc_message)
+        for sample_pos in range(len(self.properties("samples"))):
+            sample = self.properties("samples")[sample_pos]
+            traction_qc_message.requests(sample_pos).sheared_femto_fragment_size = sample.properties("sheared_femto_fragment_size").value
+            traction_qc_message.requests(sample_pos).post_spri_concentration = sample.properties("post_spri_concentration").value
+            traction_qc_message.requests(sample_pos).post_spri_volume = sample.properties("post_spri_volume").value
+            traction_qc_message.requests(sample_pos).final_nano_drop_280 = sample.properties("final_nano_drop_280").value
+            traction_qc_message.requests(sample_pos).final_nano_drop_230 = sample.properties("final_nano_drop_230").value
+            traction_qc_message.requests(sample_pos).final_nano_drop = sample.properties("final_nano_drop").value
+            traction_qc_message.requests(sample_pos).shearing_qc_comments = sample.properties("shearing_qc_comments").value
+            traction_qc_message.requests(sample_pos).date_submitted_utc = sample.properties("date_submitted_utc").value
+            traction_qc_message.requests(sample_pos).priority_level = sample.properties("priority_level").value
+            traction_qc_message.requests(sample_pos).date_required_by = sample.properties("date_required_by").value
+            traction_qc_message.requests(sample_pos).reason_for_priority = sample.properties("reason_for_priority").value
