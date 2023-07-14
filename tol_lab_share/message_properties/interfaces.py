@@ -1,7 +1,12 @@
 from abc import ABC, abstractmethod
 from functools import cached_property
-from typing import Optional, Any
-from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface, OutputTractionMessageInterface
+from typing import Any, Optional
+
+from tol_lab_share.messages.interfaces import (
+    OutputFeedbackMessageInterface,
+    OutputTractionMessageInterface,
+    TractionQcMessageInterface,
+)
 
 
 class MessagePropertyInterface(ABC):
@@ -25,6 +30,10 @@ class MessagePropertyInterface(ABC):
 
     @abstractmethod
     def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
+        ...
+
+    @abstractmethod
+    def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
         ...
 
     @property

@@ -24,6 +24,7 @@ SAMPLE_VOLUME = "volume"
 SAMPLE_ACCESSION_NUMBER = "accessionNumber"
 SAMPLE_GENOME_SIZE = "genomeSize"
 SAMPLE_COST_CODE = "costCode"
+SUPPLIER_SAMPLE_NAME = "supplierSampleName"
 
 SHEARED_FEMTO_FRAGMENT_SIZE = "shearedFemtoFragmentSize"
 POST_SPRI_CONCENTRATION = "postSPRIConcentration"

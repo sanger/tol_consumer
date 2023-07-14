@@ -1,8 +1,8 @@
-from tol_lab_share.message_properties.definitions.sample import Sample
-from tol_lab_share.message_properties.definitions.labware_type import LabwareType
-from tol_lab_share.message_properties.definitions.labware import Labware
-from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share import error_codes
+from tol_lab_share.message_properties.definitions.input import Input
+from tol_lab_share.message_properties.definitions.labware import Labware
+from tol_lab_share.message_properties.definitions.labware_type import LabwareType
+from tol_lab_share.message_properties.definitions.sample import Sample
 
 
 def build_sample(sample_data):
@@ -52,4 +52,6 @@ def test_sample_is_invalid(invalid_sample):
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "sanger_sample_id")
     check_presence_error(instance.errors, error_codes.ERROR_9_INVALID_INPUT, "scientific_name")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "cost_code")
-    assert len(instance.errors) == 13
+    check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_280")
+    check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_230")
+    assert len(instance.errors) == 15

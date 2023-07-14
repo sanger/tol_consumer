@@ -1,6 +1,6 @@
-import logging
 import copy
-from typing import Dict, Any, Optional
+import logging
+from typing import Any, Dict, Optional
 
 LEVEL_FATAL = "level_fatal"
 LEVEL_ERROR = "leverl_error"

@@ -1,28 +1,30 @@
-from typing import Dict, Optional, List, Callable, Any
+import logging
 from json import dumps
-from requests import post, codes
+from typing import Any, Callable, Dict, List, Optional
 
-from tol_lab_share.messages.interfaces import (
-    TractionQcMessageInterface,
-    TractionQcMessageRequestInterface,
-    OutputFeedbackMessageInterface,
-)
-from tol_lab_share.message_properties.definitions.message_property import MessageProperty
-from tol_lab_share.message_properties.definitions.input import Input
-from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_SOURCE
+from requests import codes, post
+
 from tol_lab_share import error_codes
+from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_SOURCE
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
-import logging
+from tol_lab_share.message_properties.definitions.input import Input
+from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.messages.interfaces import (
+    OutputFeedbackMessageInterface,
+    TractionQcMessageInterface,
+    TractionQcMessageRequestInterface,
+)
 
 logger = logging.getLogger(__name__)
+
 
 class TractionQcMessageRequest(TractionQcMessageRequestInterface):
     """Class that holds the information for a traction Qc message request"""
 
     def __init__(self):
         """Constructor to initialize the info for the request"""
-        self._sample_uuid = None
+        self._supplier_sample_name = None
         self._container_barcode = None
         self._sheared_femto_fragment_size = None
         self._post_spri_concentration = None
@@ -40,7 +42,7 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
         """Checks that we have all required information and that it is valid before
         marking this request as valid."""
         return (
-            (self._sample_uuid is not None)
+            (self._supplier_sample_name is not None)
             and (self._container_barcode is not None)
             and (self._sheared_femto_fragment_size is not None)
             and (self._post_spri_concentration is not None)
@@ -66,14 +68,14 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
         self._container_barcode = value
 
     @property
-    def sample_uuid(self) -> Optional[str]:
-        """Gets the sample uuid for this request."""
-        return self._sample_uuid
+    def supplier_sample_name(self) -> Optional[str]:
+        """Gets the supplier sample name for this request."""
+        return self._supplier_sample_name
 
-    @sample_uuid.setter
-    def sample_uuid(self, value: Optional[str]) -> None:
-        """Sets the sample uuid for this request."""
-        self._sample_uuid = value
+    @supplier_sample_name.setter
+    def supplier_sample_name(self, value: Optional[str]) -> None:
+        """Sets the supplier sample name for this request."""
+        self._supplier_sample_name = value
 
     @property
     def sheared_femto_fragment_size(self) -> Optional[str]:
@@ -132,11 +134,11 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
         self._shearing_qc_comments = value
 
     @property
-    def date_submitted_utc(self) -> Optional[str]:
+    def date_submitted_utc(self) -> Optional[float]:
         return self._date_submitted_utc
 
     @date_submitted_utc.setter
-    def date_submitted_utc(self, value: Optional[str]) -> None:
+    def date_submitted_utc(self, value: Optional[float]) -> None:
         self._date_submitted_utc = value
 
     @property
@@ -170,6 +172,7 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
         """
         return QcRequestSerializer(self)
 
+
 class QcRequestSerializer:
     """Class to manage the serialization to JSON of the request received as argument in the constructor."""
 
@@ -179,25 +182,11 @@ class QcRequestSerializer:
         instance (TractionQcMessageRequest) request that we want to serialize
         """
         self.instance = instance
-    
-    def sample_payload(self) -> Dict[str, Any]:
-        """Generates the payload for the sample data defined in this request.
+
+    def payload(self) -> Dict[str, Any]:
+        """Constructs the payload with qc data.
         Returns:
-        Dic[str,str] with the required sample information to send for this request to Traction
-        """
-        return {
-            "sample_external_id": self.instance.sample_uuid,
-            "labware_barcode": self.instance.container_barcode,
-            "date_submitted": self.instance.date_submitted_utc,
-            "priority_level": self.instance.priority_level,
-            "date_required_by": self.instance.date_required_by,
-            "reason_for_priority": self.instance.reason_for_priority
-        }
-    
-    def qc_data_payload(self) -> Dict[str, Any]:
-        """Generates the payload for the qc data defined in this request.
-        Returns:
-        Dic[str,str] with the required qc data information to send for this request to Traction
+        Dic[str,str] with all the required payload information for Traction
         """
         return {
             "sheared_femto_fragment_size": self.instance.sheared_femto_fragment_size,
@@ -206,17 +195,13 @@ class QcRequestSerializer:
             "final_nano_drop_280": self.instance.final_nano_drop_280,
             "final_nano_drop_230": self.instance.final_nano_drop_230,
             "final_nano_drop": self.instance.final_nano_drop,
-            "shearing_qc_comments": self.instance.shearing_qc_comments
-        }
-
-    def payload(self) -> Dict[str, Any]:
-        """Constructs the payload with sample and qc_data information.
-        Returns:
-        Dic[str,str] with all the required payload information for Traction
-        """
-        return {
-            "sample": self.sample_payload(),
-            "qc_data": self.qc_data_payload(),
+            "shearing_qc_comments": self.instance.shearing_qc_comments,
+            "sample_external_id": self.instance.supplier_sample_name,
+            "labware_barcode": self.instance.container_barcode,
+            "date_submitted": self.instance.date_submitted_utc,
+            "priority_level": self.instance.priority_level,
+            "date_required_by": self.instance.date_required_by,
+            "reason_for_priority": self.instance.reason_for_priority,
         }
 
 
@@ -235,7 +220,7 @@ class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
         """Default origin identifier. This will be appended to any errors generated to know
         where it was originated when we received"""
         return "TractionQcMessage"
-    
+
     @property
     def validators(self) -> List[Callable]:
         """List of validators to check the message is correct before sending"""
@@ -255,9 +240,9 @@ class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
         return self._requests[position]
 
     def request_attributes(self) -> List[Dict[str, Any]]:
-        """Returns a list with all the payloads for every request
+        """Returns a list with all the qc data payload for every request
         Returns:
-        List[Dict[str,Any]] with all payloads for all the requests
+        List[Dict[str,Any]] with all payload for all the requests
         """
         return [self._requests[position].serializer().payload() for position in range(len(self._requests))]
 
@@ -299,10 +284,10 @@ class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
         """Returns the valid payload to send to traction"""
         return {
             "data": {
-                "type": "qc_results",
+                "type": "qc_receptions",
                 "attributes": {
                     "source": OUTPUT_TRACTION_MESSAGE_SOURCE,
-                    "request_attributes": self.request_attributes(),
+                    "qc_results_list": self.request_attributes(),
                 },
             }
         }
@@ -327,7 +312,7 @@ class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
-        r = post(url, headers=headers, data=dumps(self.payload()), verify=self._validate_certificates)
+        r = post(url, headers=headers, data=dumps(self.payload(), default=str), verify=self._validate_certificates)
 
         self._sent = r.status_code == codes.created
         if not self._sent:
@@ -344,9 +329,3 @@ class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
         if len(self._errors) > 0:
             for error_code in self._errors:
                 feedback_message.add_error(error_code)
-
-    
-
-
-
-

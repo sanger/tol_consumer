@@ -1,17 +1,15 @@
 import logging
-
-from lab_share_lib.processing.rabbit_message import RabbitMessage
-
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
-from tol_lab_share.messages.output_traction_message import OutputTractionMessage
-from tol_lab_share.messages.traction_qc_message import TractionQcMessage
 from typing import Any
 
-from tol_lab_share import error_codes
+from lab_share_lib.processing.rabbit_message import RabbitMessage
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 
+from tol_lab_share import error_codes
+from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.output_traction_message import OutputTractionMessage
+from tol_lab_share.messages.traction_qc_message import TractionQcMessage
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +68,7 @@ class CreateLabwareProcessor:
                     text=f":{output_traction_message.errors}", instance=self
                 )
             else:
-                send_qc_data_to_traction(output_feedback_message)
+                self.send_qc_data_to_traction(input, output_feedback_message)
         else:
             error_codes.ERROR_17_INPUT_MESSAGE_INVALID.trigger(text=f":{input.errors}", instance=self)
 
@@ -87,9 +85,10 @@ class CreateLabwareProcessor:
 
         return True
 
-    def send_qc_data_to_traction(self, feedback_message: OutputFeedbackMessage) -> None:
-        """Send qc data to traction, if there is any error, add to feedback message 
-        """
+    def send_qc_data_to_traction(
+        self, input: InputCreateLabwareMessage, feedback_message: OutputFeedbackMessage
+    ) -> bool:
+        """Send qc data to traction, if there is any error, add to feedback message"""
         traction_qc_message = TractionQcMessage()
         input.add_to_traction_qc_message(traction_qc_message)
         logger.info("Attempting to send qc message to traction")
@@ -100,3 +99,5 @@ class CreateLabwareProcessor:
             error_codes.ERROR_28_PROBLEM_TALKING_TO_TRACTION.trigger(
                 text=f":{traction_qc_message.errors}", instance=self
             )
+            return False
+        return True

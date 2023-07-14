@@ -178,6 +178,26 @@ class TractionQcMessageRequestInterface:
 
     @property
     @abstractmethod
+    def container_barcode(self) -> Optional[str]:
+        ...
+
+    @container_barcode.setter
+    @abstractmethod
+    def container_barcode(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def supplier_sample_name(self) -> Optional[str]:
+        ...
+
+    @supplier_sample_name.setter
+    @abstractmethod
+    def supplier_sample_name(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
     def sheared_femto_fragment_size(self) -> Optional[str]:
         ...
 
@@ -248,12 +268,12 @@ class TractionQcMessageRequestInterface:
 
     @property
     @abstractmethod
-    def date_submitted_utc(self) -> Optional[str]:
+    def date_submitted_utc(self) -> Optional[float]:
         ...
 
     @date_submitted_utc.setter
     @abstractmethod
-    def date_submitted_utc(self, value: Optional[str]) -> None:
+    def date_submitted_utc(self, value: Optional[float]) -> None:
         ...
 
     @property
@@ -285,6 +305,7 @@ class TractionQcMessageRequestInterface:
     @abstractmethod
     def reason_for_priority(self, value: Optional[str]) -> None:
         ...
+
 
 class TractionQcMessageInterface(ABC):
     @abstractmethod

@@ -15,7 +15,7 @@ Dockerfile file, for example, if you run the command from inside this folder it 
 ```
 SETTINGS_MODULE=tol_lab_share.config.defaults
 LOCALHOST=host.docker.internal
-REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 REDPANDA_URL=...
 REDPANDA_API_KEY=...
 RABBITMQ_HOST=...
@@ -28,7 +28,7 @@ An example .env file for local development:
 ```
 SETTINGS_MODULE=tol_lab_share.config.defaults
 LOCALHOST=host.docker.internal
-REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 REDPANDA_URL=http://host.docker.internal:8081
 REDPANDA_API_KEY=redpanda-test
 RABBITMQ_HOST=host.docker.internal
