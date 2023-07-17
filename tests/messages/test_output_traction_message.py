@@ -1,5 +1,4 @@
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
@@ -17,15 +16,6 @@ def valid_traction_message():
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
     instance.requests(0).cost_code = "S1234"
-    return instance
-
-
-def valid_feedback_message():
-    instance = OutputFeedbackMessage()
-    instance.count_of_total_samples = 0
-    instance.count_of_valid_samples = 0
-    instance.source_message_uuid = b"b01aa0ad-7b19-4f94-87e9-70d74fb8783c"
-    instance.operation_was_error_free = True
     return instance
 
 
@@ -235,19 +225,21 @@ def test_output_traction_message_can_detect_errors_on_sent(config):
     assert len(vt.errors) > 0
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_not_sent():
+def test_output_traction_message_can_add_to_feedback_message_when_not_sent(valid_feedback_message):
     vt = valid_traction_message()
     assert vt.validate()
-    feedback = valid_feedback_message()
+    feedback = valid_feedback_message
     vt.add_to_feedback_message(feedback)
     assert len(feedback.errors) == 0
     # When message not sent
     assert not feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_sent(config, traction_success_creation_response):
+def test_output_traction_message_can_add_to_feedback_message_when_sent(
+    config, traction_success_creation_response, valid_feedback_message
+):
     vt = valid_traction_message()
-    feedback = valid_feedback_message()
+    feedback = valid_feedback_message
     # When message sent
     with requests_mock.Mocker() as m:
         m.post(config.TRACTION_URL, json=traction_success_creation_response, status_code=201)
@@ -257,12 +249,12 @@ def test_output_traction_message_can_add_to_feedback_message_when_sent(config, t
     assert feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_errors():
+def test_output_traction_message_can_add_to_feedback_message_when_errors(valid_feedback_message):
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
     assert not instance.validate()
-    feedback = valid_feedback_message()
+    feedback = valid_feedback_message
     instance.add_to_feedback_message(feedback)
     assert len(feedback.errors) > 0
     assert not feedback.operation_was_error_free

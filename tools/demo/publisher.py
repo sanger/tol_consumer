@@ -1,12 +1,13 @@
-import os
 import argparse
-from lab_share_lib.rabbit.schema_registry import SchemaRegistry
-from lab_share_lib.rabbit.basic_publisher import BasicPublisher
-from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
-from lab_share_lib.types import RabbitServerDetails
-from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
+import os
 from uuid import uuid4
-from testing_data import build_create_labware_96_msg, build_update_labware_msg, build_create_tube_msg
+
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
+from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary, AvroEncoderJson
+from lab_share_lib.rabbit.basic_publisher import BasicPublisher
+from lab_share_lib.rabbit.schema_registry import SchemaRegistry
+from lab_share_lib.types import RabbitServerDetails
+from testing_data import build_create_labware_96_msg, build_create_tube_msg, build_update_labware_msg
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost")
 REDPANDA_API_KEY = os.getenv("REDPANDA_API_KEY", "test")

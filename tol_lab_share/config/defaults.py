@@ -1,8 +1,8 @@
 # flake8: noqa
 import os
 
-from tol_lab_share.config.processors import *
 from tol_lab_share.config.logging import *
+from tol_lab_share.config.processors import *
 
 # If we're running in a container, then instead of localhost
 # we want host.docker.internal, you can specify this in the
@@ -34,7 +34,8 @@ REDPANDA_API_KEY = ""
 RABBITMQ_PUBLISH_RETRY_DELAY = 5
 RABBITMQ_PUBLISH_RETRIES = 36  # 3 minutes of retries
 
-TRACTION_URL = f"https://{os.environ.get('LOCALHOST', '127.0.0.1')}:3000/v1/receptions"
+TRACTION_URL = f"http://{os.environ.get('LOCALHOST', '127.0.0.1')}:3100/v1/receptions"
+TRACTION_QC_URL = f"http://{os.environ.get('LOCALHOST', '127.0.0.1')}:3100/v1/qc_receptions"
 
 EBI_TAXONOMY_URL = "https://www.ebi.ac.uk/ena/taxonomy/rest/tax-id"
 
