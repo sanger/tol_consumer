@@ -2,7 +2,6 @@ import logging
 from typing import Any
 
 from tol_lab_share.constants.input_create_labware_message import (
-    DATE_REQUIRED_BY,
     DATE_SUBMITTED_UTC,
     FINAL_NANODROP,
     FINAL_NANODROP_230,
@@ -10,7 +9,6 @@ from tol_lab_share.constants.input_create_labware_message import (
     POST_SPRI_CONCENTRATION,
     POST_SPRI_VOLUME,
     PRIORITY_LEVEL,
-    REASON_FOR_PRIORITY,
     SAMPLE_ACCESSION_NUMBER,
     SAMPLE_COLLECTION_DATE,
     SAMPLE_COMMON_NAME,
@@ -36,7 +34,6 @@ from tol_lab_share.message_properties.definitions.common_name import CommonName
 from tol_lab_share.message_properties.definitions.concentration import Concentration
 from tol_lab_share.message_properties.definitions.cost_code import CostCode
 from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
-from tol_lab_share.message_properties.definitions.date_required_by import DateRequiredBy
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.donor_id import DonorId
@@ -50,7 +47,6 @@ from tol_lab_share.message_properties.definitions.post_spri_concentration import
 from tol_lab_share.message_properties.definitions.post_spri_volume import PostSPRIVolume
 from tol_lab_share.message_properties.definitions.priority_level import PriorityLevel
 from tol_lab_share.message_properties.definitions.public_name import PublicName
-from tol_lab_share.message_properties.definitions.reason_for_priority import ReasonForPriority
 from tol_lab_share.message_properties.definitions.sanger_sample_id import SangerSampleId
 from tol_lab_share.message_properties.definitions.scientific_name_from_taxon_id import ScientificNameFromTaxonId
 from tol_lab_share.message_properties.definitions.sheared_femto_fragment_size import ShearedFemtoFragmentSize
@@ -106,5 +102,4 @@ class Sample(MessageProperty):
         self.add_property("shearing_qc_comments", ShearingAndQCComments(DictInput(input, SHEARING_QC_COMMENTS)))
         self.add_property("date_submitted_utc", DateUtc(DictInput(input, DATE_SUBMITTED_UTC)))
         self.add_property("priority_level", PriorityLevel(DictInput(input, PRIORITY_LEVEL)))
-        self.add_property("date_required_by", DateRequiredBy(DictInput(input, DATE_REQUIRED_BY)))
-        self.add_property("reason_for_priority", ReasonForPriority(DictInput(input, REASON_FOR_PRIORITY)))
+

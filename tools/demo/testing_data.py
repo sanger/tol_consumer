@@ -52,8 +52,6 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "shearingAndQCComments": "Comments",
                     "dateSubmittedUTC": datetime.now().timestamp() * 1000,
                     "priorityLevel": "Medium",
-                    "dateRequiredBy": "Long Read",
-                    "reasonForPriority": "Reason goes here",
                 }
                 for letter in range(ord("A"), ord("H") + 1)
                 for pos in range(1, 13)
@@ -98,8 +96,6 @@ def build_create_tube_msg(unique_id, num_msg):
                     "shearingAndQCComments": "Comments",
                     "dateSubmittedUTC": datetime.now().timestamp() * 1000,
                     "priorityLevel": "Medium",
-                    "dateRequiredBy": "Long Read",
-                    "reasonForPriority": "Reason goes here",
                 }
             ],
         },

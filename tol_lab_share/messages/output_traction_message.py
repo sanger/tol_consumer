@@ -34,6 +34,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         self._container_type = None
         self._species = None
         self._cost_code = None
+        self._priority_level = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before
@@ -140,6 +141,14 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def study_uuid(self, value: Optional[str]) -> None:
         """Sets the study uuid for this request."""
         self._study_uuid = value
+    
+    @property
+    def priority_level(self) -> Optional[str]:
+        return self._priority_level
+
+    @priority_level.setter
+    def priority_level(self, value: Optional[str]) -> None:
+        self._priority_level = value
 
     def serializer(self):
         """Returns a serializer instance to handle the generation of the message for this request.
@@ -194,6 +203,7 @@ class RequestSerializer:
             "name": self.instance.sample_name,
             "external_id": self.instance.sample_uuid,
             "species": self.instance.species,
+            "priority_level": self.instance.priority_level,
         }
 
     def container_payload(self) -> Dict[str, Any]:

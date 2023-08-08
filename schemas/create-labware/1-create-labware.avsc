@@ -146,14 +146,6 @@
                   {
                     "name": "priorityLevel", "type": "string",
                     "doc": "Priority level (if High or Medium)"
-                  },
-                  {
-                    "name": "dateRequiredBy", "type": "string",
-                    "doc": "Date data required by"
-                  },
-                  {
-                    "name": "reasonForPriority", "type": "string",
-                    "doc": "Reason for priority"
                   }
                 ]
               }

@@ -187,6 +187,4 @@ def test_add_to_traction_qc_message(valid_sample):
     assert traction_qc_message.requests(0).final_nano_drop_230 == "200"
     assert traction_qc_message.requests(0).final_nano_drop == "150"
     assert traction_qc_message.requests(0).shearing_qc_comments == ""
-    assert traction_qc_message.requests(0).priority_level == "Medium"
-    assert traction_qc_message.requests(0).date_required_by == "Long Read"
-    assert traction_qc_message.requests(0).reason_for_priority == ""
+

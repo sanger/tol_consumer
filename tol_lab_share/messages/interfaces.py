@@ -152,6 +152,16 @@ class OutputTractionMessageRequestInterface:
     def cost_code(self, value: Optional[str]) -> None:
         ...
 
+    @property
+    @abstractmethod
+    def priority_level(self) -> Optional[str]:
+        ...
+
+    @priority_level.setter
+    @abstractmethod
+    def priority_level(self, value: Optional[str]) -> None:
+        ...
+
 
 class OutputTractionMessageInterface(ABC):
     @abstractmethod
@@ -274,36 +284,6 @@ class TractionQcMessageRequestInterface:
     @date_submitted_utc.setter
     @abstractmethod
     def date_submitted_utc(self, value: Optional[float]) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def priority_level(self) -> Optional[str]:
-        ...
-
-    @priority_level.setter
-    @abstractmethod
-    def priority_level(self, value: Optional[str]) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def date_required_by(self) -> Optional[str]:
-        ...
-
-    @date_required_by.setter
-    @abstractmethod
-    def date_required_by(self, value: Optional[str]) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def reason_for_priority(self) -> Optional[str]:
-        ...
-
-    @reason_for_priority.setter
-    @abstractmethod
-    def reason_for_priority(self, value: Optional[str]) -> None:
         ...
 
 

@@ -123,11 +123,6 @@ class Labware(MessageProperty):
                 "shearing_qc_comments"
             ).value
             traction_qc_message.requests(sample_pos).date_submitted_utc = sample.properties("date_submitted_utc").value
-            traction_qc_message.requests(sample_pos).priority_level = sample.properties("priority_level").value
-            traction_qc_message.requests(sample_pos).date_required_by = sample.properties("date_required_by").value
-            traction_qc_message.requests(sample_pos).reason_for_priority = sample.properties(
-                "reason_for_priority"
-            ).value
             traction_qc_message.requests(sample_pos).container_barcode = self.properties("barcode").value
             traction_qc_message.requests(sample_pos).supplier_sample_name = sample.properties(
                 "supplier_sample_name"
