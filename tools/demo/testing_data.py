@@ -31,7 +31,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "sangerSampleId": f"sangerId-{unique_id_lab}-{unique_pos(letter, pos)}",
                     "location": f"{chr(letter) + ('0' if len(str(pos)) == 1 else '') + str(pos)}",
                     "supplierSampleName": f"SampleSupplied-{unique_id_lab}-{unique_pos(letter, pos)}",
-                    "volume": "5",
+                    "volume": None,
                     "concentration": "5",
                     "publicName": f"SamplePublicName-{unique_id_lab}-{unique_pos(letter, pos)}",
                     "taxonId": "10090",
