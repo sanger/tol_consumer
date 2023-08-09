@@ -141,7 +141,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def study_uuid(self, value: Optional[str]) -> None:
         """Sets the study uuid for this request."""
         self._study_uuid = value
-    
+
     @property
     def priority_level(self) -> Optional[str]:
         return self._priority_level

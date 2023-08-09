@@ -102,4 +102,3 @@ class Sample(MessageProperty):
         self.add_property("shearing_qc_comments", ShearingAndQCComments(DictInput(input, SHEARING_QC_COMMENTS)))
         self.add_property("date_submitted_utc", DateUtc(DictInput(input, DATE_SUBMITTED_UTC)))
         self.add_property("priority_level", PriorityLevel(DictInput(input, PRIORITY_LEVEL)))
-

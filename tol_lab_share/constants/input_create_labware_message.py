@@ -35,4 +35,3 @@ FINAL_NANODROP = "finalNanoDrop"
 SHEARING_QC_COMMENTS = "shearingAndQCComments"
 DATE_SUBMITTED_UTC = "dateSubmittedUTC"
 PRIORITY_LEVEL = "priorityLevel"
-
