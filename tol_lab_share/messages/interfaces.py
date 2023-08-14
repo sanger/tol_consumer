@@ -64,6 +64,56 @@ class OutputTractionMessageRequestInterface:
 
     @property
     @abstractmethod
+    def supplier_name(self) -> Optional[str]:
+        ...
+
+    @supplier_name.setter
+    @abstractmethod
+    def supplier_name(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def accession_number(self) -> Optional[str]:
+        ...
+
+    @accession_number.setter
+    @abstractmethod
+    def accession_number(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def country_of_origin(self) -> Optional[str]:
+        ...
+
+    @country_of_origin.setter
+    @abstractmethod
+    def country_of_origin(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def donor_id(self) -> Optional[str]:
+        ...
+
+    @donor_id.setter
+    @abstractmethod
+    def donor_id(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def sanger_sample_id(self) -> Optional[str]:
+        ...
+
+    @sanger_sample_id.setter
+    @abstractmethod
+    def sanger_sample_id(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
     def species(self) -> Optional[str]:
         ...
 

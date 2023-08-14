@@ -53,6 +53,66 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         )
 
     @property
+    def sanger_sample_id(self) -> Optional[str]:
+        """Gets the sanger_sample_id value for this request"""
+        return self._sanger_sample_id
+
+    @sanger_sample_id.setter
+    def sanger_sample_id(self, value: Optional[str]) -> None:
+        """Sets the sanger_sample_id value for this request"""
+        self._sanger_sample_id = value
+
+    @property
+    def supplier_name(self) -> Optional[str]:
+        """Gets the supplier_name value for this request"""
+        return self._supplier_name
+
+    @supplier_name.setter
+    def supplier_name(self, value: Optional[str]) -> None:
+        """Sets the supplier_name value for this request"""
+        self._supplier_name = value
+
+    @property
+    def taxon_id(self) -> Optional[str]:
+        """Gets the taxon_id value for this request"""
+        return self._taxon_id
+
+    @taxon_id.setter
+    def taxon_id(self, value: Optional[str]) -> None:
+        """Sets the taxon_id value for this request"""
+        self._taxon_id = value
+
+    @property
+    def donor_id(self) -> Optional[str]:
+        """Gets the donor_id value for this request"""
+        return self._donor_id
+
+    @donor_id.setter
+    def donor_id(self, value: Optional[str]) -> None:
+        """Sets the donor_id value for this request"""
+        self._donor_id = value
+
+    @property
+    def country_of_origin(self) -> Optional[str]:
+        """Gets the country_of_origin value for this request"""
+        return self._country_of_origin
+
+    @country_of_origin.setter
+    def country_of_origin(self, value: Optional[str]) -> None:
+        """Sets the country_of_origin value for this request"""
+        self._country_of_origin = value
+
+    @property
+    def accession_number(self) -> Optional[str]:
+        """Gets the accession_number value for this request"""
+        return self._accession_number
+
+    @accession_number.setter
+    def accession_number(self, value: Optional[str]) -> None:
+        """Sets the accession_number value for this request"""
+        self._accession_number = value
+
+    @property
     def species(self) -> Optional[str]:
         """Gets the species value for this request"""
         return self._species
