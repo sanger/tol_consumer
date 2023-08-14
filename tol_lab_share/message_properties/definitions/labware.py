@@ -96,6 +96,7 @@ class Labware(MessageProperty):
             traction_message.requests(sample_pos).container_barcode = self.properties("barcode").value
             traction_message.requests(sample_pos).container_location = sample.properties("location").value
             traction_message.requests(sample_pos).container_type = self.traction_container_type()
+            traction_message.requests(sample_pos).priority_level = sample.properties("priority_level").value
 
     def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
         """Given a traction qc message instance, it adds the qc data.
