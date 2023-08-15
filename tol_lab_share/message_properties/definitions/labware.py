@@ -97,11 +97,13 @@ class Labware(MessageProperty):
             traction_message.requests(sample_pos).container_location = sample.properties("location").value
             traction_message.requests(sample_pos).container_type = self.traction_container_type()
             traction_message.requests(sample_pos).priority_level = sample.properties("priority_level").value
+            traction_message.requests(sample_pos).taxon_id = sample.properties("taxon_id").value
             traction_message.requests(sample_pos).sanger_sample_id = sample.properties("sanger_sample_id").value
             traction_message.requests(sample_pos).donor_id = sample.properties("donor_id").value
             traction_message.requests(sample_pos).country_of_origin = sample.properties("country_of_origin").value
             traction_message.requests(sample_pos).accession_number = sample.properties("accession_number").value
             traction_message.requests(sample_pos).supplier_name = sample.properties("supplier_sample_name").value
+            traction_message.requests(sample_pos).date_of_sample_collection = sample.properties("collection_date").value
 
     def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
         """Given a traction qc message instance, it adds the qc data.

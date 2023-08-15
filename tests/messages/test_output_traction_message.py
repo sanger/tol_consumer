@@ -1,4 +1,5 @@
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
+from datetime import datetime
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
@@ -37,6 +38,7 @@ def test_output_traction_message_can_validate():
 
 
 def test_output_traction_message_can_generate_payload_for_plates():
+    my_date = datetime.now()
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -54,6 +56,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(0).donor_id = "donor1"
     instance.requests(0).country_of_origin = "United Kingdom"
     instance.requests(0).accession_number = "AN1234"
+    instance.requests(0).date_of_sample_collection = my_date
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -71,6 +74,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(1).donor_id = "donor2"
     instance.requests(1).country_of_origin = "United Kingdom"
     instance.requests(1).accession_number = "AN1235"
+    instance.requests(1).date_of_sample_collection = my_date
 
     assert instance.payload() == {
         "data": {
@@ -94,6 +98,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "donor_id": "donor1",
                             "country_of_origin": "United Kingdom",
                             "accession_number": "AN1234",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                     {
@@ -114,6 +119,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "donor_id": "donor2",
                             "country_of_origin": "United Kingdom",
                             "accession_number": "AN1235",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                 ],
@@ -125,6 +131,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
 
 
 def test_output_traction_message_can_generate_payload_for_ont_library_types():
+    my_date = datetime.now()
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -142,6 +149,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(0).donor_id = "donor1"
     instance.requests(0).country_of_origin = "United Kingdom"
     instance.requests(0).accession_number = "AN1234"
+    instance.requests(0).date_of_sample_collection = my_date
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -159,6 +167,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(1).donor_id = "donor2"
     instance.requests(1).country_of_origin = "United Kingdom"
     instance.requests(1).accession_number = "AN1235"
+    instance.requests(1).date_of_sample_collection = my_date
 
     assert instance.payload() == {
         "data": {
@@ -183,6 +192,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "donor_id": "donor1",
                             "country_of_origin": "United Kingdom",
                             "accession_number": "AN1234",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                     {
@@ -204,6 +214,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "donor_id": "donor2",
                             "country_of_origin": "United Kingdom",
                             "accession_number": "AN1235",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                 ],
@@ -215,6 +226,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
 
 
 def test_output_traction_message_can_generate_payload_for_tubes():
+    my_date = datetime.now()
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
@@ -231,6 +243,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(0).donor_id = "donor1"
     instance.requests(0).country_of_origin = "United Kingdom"
     instance.requests(0).accession_number = "AN1234"
+    instance.requests(0).date_of_sample_collection = my_date
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
@@ -247,6 +260,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(1).donor_id = "donor2"
     instance.requests(1).country_of_origin = "United Kingdom"
     instance.requests(1).accession_number = "AN1235"
+    instance.requests(1).date_of_sample_collection = my_date
 
     assert instance.payload() == {
         "data": {
@@ -270,6 +284,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "donor_id": "donor1",
                             "country_of_origin": "United Kingdom",
                             "accession_number": "AN1234",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                     {
@@ -290,6 +305,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "donor_id": "donor2",
                             "country_of_origin": "United Kingdom",
                             "accession_number": "AN1235",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                 ],

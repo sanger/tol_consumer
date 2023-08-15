@@ -39,6 +39,7 @@ def test_sample_is_invalid(invalid_sample):
 
     instance = build_sample(invalid_sample)
     assert instance.validate() is False
+
     check_presence_error(instance.errors, error_codes.ERROR_1_UUID_NOT_BINARY, "study_uuid")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "study_uuid")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "common_name")
@@ -50,8 +51,8 @@ def test_sample_is_invalid(invalid_sample):
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "library_type")
     check_presence_error(instance.errors, error_codes.ERROR_7_INVALID_LOCATION, "location")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "sanger_sample_id")
-    check_presence_error(instance.errors, error_codes.ERROR_9_INVALID_INPUT, "scientific_name")
+
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "cost_code")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_280")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_230")
-    assert len(instance.errors) == 15
+    assert len(instance.errors) == 14

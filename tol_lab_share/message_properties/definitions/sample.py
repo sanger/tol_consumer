@@ -28,6 +28,7 @@ from tol_lab_share.constants.input_create_labware_message import (
     SHEARED_FEMTO_FRAGMENT_SIZE,
     SHEARING_QC_COMMENTS,
     SUPPLIER_SAMPLE_NAME,
+    SAMPLE_TAXON_ID,
 )
 from tol_lab_share.message_properties.definitions.accession_number import AccessionNumber
 from tol_lab_share.message_properties.definitions.common_name import CommonName
@@ -77,6 +78,7 @@ class Sample(MessageProperty):
             CountryOfOrigin(DictInput(input, SAMPLE_COUNTRY_OF_ORIGIN)),
         )
         self.add_property("donor_id", DonorId(DictInput(input, SAMPLE_DONOR_ID)))
+        self.add_property("taxon_id", TaxonId(DictInput(input, SAMPLE_TAXON_ID)))
         self.add_property("library_type", LibraryType(DictInput(input, SAMPLE_LIBRARY_TYPE)))
         self.add_property("location", Location(DictInput(input, SAMPLE_LOCATION)))
         self.add_property("public_name", PublicName(DictInput(input, SAMPLE_PUBLIC_NAME)))

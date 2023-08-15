@@ -1,5 +1,6 @@
 from typing import Dict, Optional, List, Callable, Any
 from json import dumps
+from datetime import datetime
 from requests import post, codes
 from tol_lab_share.messages.interfaces import (
     OutputTractionMessageInterface,
@@ -41,6 +42,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         self._donor_id = None
         self._country_of_origin = None
         self._accession_number = None
+        self._date_of_sample_collection = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before
@@ -67,6 +69,16 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def sanger_sample_id(self, value: Optional[str]) -> None:
         """Sets the sanger_sample_id value for this request"""
         self._sanger_sample_id = value
+
+    @property
+    def date_of_sample_collection(self) -> Optional[datetime]:
+        """Gets the date_of_sample_collection value for this request"""
+        return self._date_of_sample_collection
+
+    @date_of_sample_collection.setter
+    def date_of_sample_collection(self, value: Optional[datetime]) -> None:
+        """Sets the date_of_sample_collection value for this request"""
+        self._date_of_sample_collection = value
 
     @property
     def supplier_name(self) -> Optional[str]:
@@ -265,6 +277,9 @@ class RequestSerializer:
         Returns:
         Dic[str,str] with the required sample information to send for this request to Traction
         """
+        collection_date = None
+        if self.instance.date_of_sample_collection is not None:
+            collection_date = self.instance.date_of_sample_collection.strftime("%Y-%m-%d")
         return {
             "name": self.instance.sample_name,
             "external_id": self.instance.sample_uuid,
@@ -276,6 +291,7 @@ class RequestSerializer:
             "donor_id": self.instance.donor_id,
             "country_of_origin": self.instance.country_of_origin,
             "accession_number": self.instance.accession_number,
+            "date_of_sample_collection": collection_date,
         }
 
     def container_payload(self) -> Dict[str, Any]:

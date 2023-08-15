@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional
+from datetime import datetime
 from tol_lab_share.error_codes import ErrorCode
 
 
@@ -70,6 +71,16 @@ class OutputTractionMessageRequestInterface:
     @supplier_name.setter
     @abstractmethod
     def supplier_name(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def date_of_sample_collection(self) -> Optional[datetime]:
+        ...
+
+    @date_of_sample_collection.setter
+    @abstractmethod
+    def date_of_sample_collection(self, value: Optional[datetime]) -> None:
         ...
 
     @property
