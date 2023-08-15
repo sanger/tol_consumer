@@ -34,9 +34,6 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
         self._final_nano_drop = None
         self._shearing_qc_comments = None
         self._date_submitted_utc = None
-        self._priority_level = None
-        self._date_required_by = None
-        self._reason_for_priority = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before
@@ -52,9 +49,6 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
             and (self._final_nano_drop is not None)
             and (self._shearing_qc_comments is not None)
             and (self._date_submitted_utc is not None)
-            and (self._priority_level is not None)
-            and (self._date_required_by is not None)
-            and (self._reason_for_priority is not None)
         )
 
     @property
@@ -141,30 +135,6 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
     def date_submitted_utc(self, value: Optional[float]) -> None:
         self._date_submitted_utc = value
 
-    @property
-    def priority_level(self) -> Optional[str]:
-        return self._priority_level
-
-    @priority_level.setter
-    def priority_level(self, value: Optional[str]) -> None:
-        self._priority_level = value
-
-    @property
-    def date_required_by(self) -> Optional[str]:
-        return self._date_required_by
-
-    @date_required_by.setter
-    def date_required_by(self, value: Optional[str]) -> None:
-        self._date_required_by = value
-
-    @property
-    def reason_for_priority(self) -> Optional[str]:
-        return self._reason_for_priority
-
-    @reason_for_priority.setter
-    def reason_for_priority(self, value: Optional[str]) -> None:
-        self._reason_for_priority = value
-
     def serializer(self):
         """Returns a serializer instance to handle the generation of the message for this request.
         Returns:
@@ -199,9 +169,6 @@ class QcRequestSerializer:
             "sample_external_id": self.instance.supplier_sample_name,
             "labware_barcode": self.instance.container_barcode,
             "date_submitted": self.instance.date_submitted_utc,
-            "priority_level": self.instance.priority_level,
-            "date_required_by": self.instance.date_required_by,
-            "reason_for_priority": self.instance.reason_for_priority,
         }
 
 

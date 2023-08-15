@@ -120,12 +120,6 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 "description": 'Not valid location, instance: "Location", text: "input: A001"',
                             },
                             {
-                                "typeId": 9,
-                                "field": "scientific_name",
-                                "origin": "sample",
-                                "description": 'Not valid input, instance: "ScientificNameFromTaxonId"',
-                            },
-                            {
                                 "typeId": 2,
                                 "field": "final_nano_drop",
                                 "origin": "sample",
@@ -148,12 +142,6 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 "field": "location",
                                 "origin": "sample",
                                 "description": 'Not valid location, instance: "Location", text: "input: B001"',
-                            },
-                            {
-                                "typeId": 9,
-                                "field": "scientific_name",
-                                "origin": "sample",
-                                "description": 'Not valid input, instance: "ScientificNameFromTaxonId"',
                             },
                             {
                                 "typeId": 2,

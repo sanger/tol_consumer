@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional
+from datetime import datetime
 from tol_lab_share.error_codes import ErrorCode
 
 
@@ -60,6 +61,76 @@ class OutputFeedbackMessageInterface(ABC):
 class OutputTractionMessageRequestInterface:
     @abstractmethod
     def validate(self) -> bool:
+        ...
+
+    @property
+    @abstractmethod
+    def supplier_name(self) -> Optional[str]:
+        ...
+
+    @supplier_name.setter
+    @abstractmethod
+    def supplier_name(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def date_of_sample_collection(self) -> Optional[datetime]:
+        ...
+
+    @date_of_sample_collection.setter
+    @abstractmethod
+    def date_of_sample_collection(self, value: Optional[datetime]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def taxon_id(self) -> Optional[str]:
+        ...
+
+    @taxon_id.setter
+    @abstractmethod
+    def taxon_id(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def accession_number(self) -> Optional[str]:
+        ...
+
+    @accession_number.setter
+    @abstractmethod
+    def accession_number(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def country_of_origin(self) -> Optional[str]:
+        ...
+
+    @country_of_origin.setter
+    @abstractmethod
+    def country_of_origin(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def donor_id(self) -> Optional[str]:
+        ...
+
+    @donor_id.setter
+    @abstractmethod
+    def donor_id(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def sanger_sample_id(self) -> Optional[str]:
+        ...
+
+    @sanger_sample_id.setter
+    @abstractmethod
+    def sanger_sample_id(self, value: Optional[str]) -> None:
         ...
 
     @property
@@ -150,6 +221,16 @@ class OutputTractionMessageRequestInterface:
     @cost_code.setter
     @abstractmethod
     def cost_code(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
+    def priority_level(self) -> Optional[str]:
+        ...
+
+    @priority_level.setter
+    @abstractmethod
+    def priority_level(self, value: Optional[str]) -> None:
         ...
 
 
@@ -274,36 +355,6 @@ class TractionQcMessageRequestInterface:
     @date_submitted_utc.setter
     @abstractmethod
     def date_submitted_utc(self, value: Optional[float]) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def priority_level(self) -> Optional[str]:
-        ...
-
-    @priority_level.setter
-    @abstractmethod
-    def priority_level(self, value: Optional[str]) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def date_required_by(self) -> Optional[str]:
-        ...
-
-    @date_required_by.setter
-    @abstractmethod
-    def date_required_by(self, value: Optional[str]) -> None:
-        ...
-
-    @property
-    @abstractmethod
-    def reason_for_priority(self) -> Optional[str]:
-        ...
-
-    @reason_for_priority.setter
-    @abstractmethod
-    def reason_for_priority(self, value: Optional[str]) -> None:
         ...
 
 

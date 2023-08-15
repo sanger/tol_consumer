@@ -32,9 +32,6 @@ class TestTractionQcMessage:
         traction_qc_message.requests(0).final_nano_drop = "200"
         traction_qc_message.requests(0).shearing_qc_comments = "Comments"
         traction_qc_message.requests(0).date_submitted_utc = datetime.now().timestamp() * 1000
-        traction_qc_message.requests(0).priority_level = "Medium"
-        traction_qc_message.requests(0).date_required_by = "Long Read"
-        traction_qc_message.requests(0).reason_for_priority = "Reason goes here"
 
         traction_qc_message.requests(1).supplier_sample_name = "supplier_sample_name_DDD2"
         traction_qc_message.requests(1).container_barcode = "FD20706501"
@@ -46,9 +43,6 @@ class TestTractionQcMessage:
         traction_qc_message.requests(1).final_nano_drop = "100"
         traction_qc_message.requests(1).shearing_qc_comments = "Some comments"
         traction_qc_message.requests(1).date_submitted_utc = datetime.now().timestamp() * 1000
-        traction_qc_message.requests(1).priority_level = "High"
-        traction_qc_message.requests(1).date_required_by = "Long Read"
-        traction_qc_message.requests(1).reason_for_priority = "Reason goes here"
 
         return traction_qc_message
 
@@ -56,9 +50,6 @@ class TestTractionQcMessage:
     def invalid_traction_qc_message(self):
         traction_qc_message = TractionQcMessage()
         traction_qc_message.requests(0).sheared_femto_fragment_size = "5"
-        traction_qc_message.requests(0).priority_level = "Medium"
-        traction_qc_message.requests(0).date_required_by = "Long Read"
-        traction_qc_message.requests(0).reason_for_priority = "Reason goes here"
 
         return traction_qc_message
 
@@ -86,11 +77,8 @@ class TestTractionQcMessage:
                             "post_spri_volume": "20",
                             "sheared_femto_fragment_size": "5",
                             "shearing_qc_comments": "Comments",
-                            "date_required_by": "Long Read",
                             "date_submitted": datetime.now().timestamp() * 1000,
                             "labware_barcode": "FD20706500",
-                            "priority_level": "Medium",
-                            "reason_for_priority": "Reason goes here",
                             "sample_external_id": "supplier_sample_name_DDD",
                         },
                         {
@@ -101,11 +89,8 @@ class TestTractionQcMessage:
                             "post_spri_volume": "30",
                             "sheared_femto_fragment_size": "9",
                             "shearing_qc_comments": "Some comments",
-                            "date_required_by": "Long Read",
                             "date_submitted": datetime.now().timestamp() * 1000,
                             "labware_barcode": "FD20706501",
-                            "priority_level": "High",
-                            "reason_for_priority": "Reason goes here",
                             "sample_external_id": "supplier_sample_name_DDD2",
                         },
                     ],

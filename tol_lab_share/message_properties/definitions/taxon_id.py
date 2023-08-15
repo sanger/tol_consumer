@@ -12,4 +12,4 @@ class TaxonId(MessageProperty):
     @property
     def validators(self) -> List[Callable]:
         """Defines the list of validators"""
-        return [self.check_is_integer_string]
+        return [self.check_is_string]

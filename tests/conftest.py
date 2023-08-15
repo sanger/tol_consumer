@@ -149,8 +149,6 @@ def valid_sample():
         "shearingAndQCComments": "",
         "dateSubmittedUTC": datetime.now(),
         "priorityLevel": "Medium",
-        "dateRequiredBy": "Long Read",
-        "reasonForPriority": "",
     }
 
 
@@ -183,8 +181,6 @@ def invalid_sample():
         "shearingAndQCComments": "",
         "dateSubmittedUTC": datetime.now(),
         "priorityLevel": "Medium",
-        "dateRequiredBy": "Long Read",
-        "reasonForPriority": "",
     }
 
 

@@ -1,5 +1,6 @@
 from typing import Dict, Optional, List, Callable, Any
 from json import dumps
+from datetime import datetime
 from requests import post, codes
 from tol_lab_share.messages.interfaces import (
     OutputTractionMessageInterface,
@@ -34,6 +35,14 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         self._container_type = None
         self._species = None
         self._cost_code = None
+        self._priority_level = None
+        self._sanger_sample_id = None
+        self._supplier_name = None
+        self._taxon_id = None
+        self._donor_id = None
+        self._country_of_origin = None
+        self._accession_number = None
+        self._date_of_sample_collection = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before
@@ -50,6 +59,76 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
             )
             and (self._species is not None)
         )
+
+    @property
+    def sanger_sample_id(self) -> Optional[str]:
+        """Gets the sanger_sample_id value for this request"""
+        return self._sanger_sample_id
+
+    @sanger_sample_id.setter
+    def sanger_sample_id(self, value: Optional[str]) -> None:
+        """Sets the sanger_sample_id value for this request"""
+        self._sanger_sample_id = value
+
+    @property
+    def date_of_sample_collection(self) -> Optional[datetime]:
+        """Gets the date_of_sample_collection value for this request"""
+        return self._date_of_sample_collection
+
+    @date_of_sample_collection.setter
+    def date_of_sample_collection(self, value: Optional[datetime]) -> None:
+        """Sets the date_of_sample_collection value for this request"""
+        self._date_of_sample_collection = value
+
+    @property
+    def supplier_name(self) -> Optional[str]:
+        """Gets the supplier_name value for this request"""
+        return self._supplier_name
+
+    @supplier_name.setter
+    def supplier_name(self, value: Optional[str]) -> None:
+        """Sets the supplier_name value for this request"""
+        self._supplier_name = value
+
+    @property
+    def taxon_id(self) -> Optional[str]:
+        """Gets the taxon_id value for this request"""
+        return self._taxon_id
+
+    @taxon_id.setter
+    def taxon_id(self, value: Optional[str]) -> None:
+        """Sets the taxon_id value for this request"""
+        self._taxon_id = value
+
+    @property
+    def donor_id(self) -> Optional[str]:
+        """Gets the donor_id value for this request"""
+        return self._donor_id
+
+    @donor_id.setter
+    def donor_id(self, value: Optional[str]) -> None:
+        """Sets the donor_id value for this request"""
+        self._donor_id = value
+
+    @property
+    def country_of_origin(self) -> Optional[str]:
+        """Gets the country_of_origin value for this request"""
+        return self._country_of_origin
+
+    @country_of_origin.setter
+    def country_of_origin(self, value: Optional[str]) -> None:
+        """Sets the country_of_origin value for this request"""
+        self._country_of_origin = value
+
+    @property
+    def accession_number(self) -> Optional[str]:
+        """Gets the accession_number value for this request"""
+        return self._accession_number
+
+    @accession_number.setter
+    def accession_number(self, value: Optional[str]) -> None:
+        """Sets the accession_number value for this request"""
+        self._accession_number = value
 
     @property
     def species(self) -> Optional[str]:
@@ -141,6 +220,14 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         """Sets the study uuid for this request."""
         self._study_uuid = value
 
+    @property
+    def priority_level(self) -> Optional[str]:
+        return self._priority_level
+
+    @priority_level.setter
+    def priority_level(self, value: Optional[str]) -> None:
+        self._priority_level = value
+
     def serializer(self):
         """Returns a serializer instance to handle the generation of the message for this request.
         Returns:
@@ -190,10 +277,21 @@ class RequestSerializer:
         Returns:
         Dic[str,str] with the required sample information to send for this request to Traction
         """
+        collection_date = None
+        if self.instance.date_of_sample_collection is not None:
+            collection_date = self.instance.date_of_sample_collection.strftime("%Y-%m-%d")
         return {
             "name": self.instance.sample_name,
             "external_id": self.instance.sample_uuid,
             "species": self.instance.species,
+            "priority_level": self.instance.priority_level,
+            "sanger_sample_id": self.instance.sanger_sample_id,
+            "supplier_name": self.instance.supplier_name,
+            "taxon_id": self.instance.taxon_id,
+            "donor_id": self.instance.donor_id,
+            "country_of_origin": self.instance.country_of_origin,
+            "accession_number": self.instance.accession_number,
+            "date_of_sample_collection": collection_date,
         }
 
     def container_payload(self) -> Dict[str, Any]:

@@ -96,6 +96,14 @@ class Labware(MessageProperty):
             traction_message.requests(sample_pos).container_barcode = self.properties("barcode").value
             traction_message.requests(sample_pos).container_location = sample.properties("location").value
             traction_message.requests(sample_pos).container_type = self.traction_container_type()
+            traction_message.requests(sample_pos).priority_level = sample.properties("priority_level").value
+            traction_message.requests(sample_pos).taxon_id = sample.properties("taxon_id").value
+            traction_message.requests(sample_pos).sanger_sample_id = sample.properties("sanger_sample_id").value
+            traction_message.requests(sample_pos).donor_id = sample.properties("donor_id").value
+            traction_message.requests(sample_pos).country_of_origin = sample.properties("country_of_origin").value
+            traction_message.requests(sample_pos).accession_number = sample.properties("accession_number").value
+            traction_message.requests(sample_pos).supplier_name = sample.properties("supplier_sample_name").value
+            traction_message.requests(sample_pos).date_of_sample_collection = sample.properties("collection_date").value
 
     def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
         """Given a traction qc message instance, it adds the qc data.
@@ -123,11 +131,6 @@ class Labware(MessageProperty):
                 "shearing_qc_comments"
             ).value
             traction_qc_message.requests(sample_pos).date_submitted_utc = sample.properties("date_submitted_utc").value
-            traction_qc_message.requests(sample_pos).priority_level = sample.properties("priority_level").value
-            traction_qc_message.requests(sample_pos).date_required_by = sample.properties("date_required_by").value
-            traction_qc_message.requests(sample_pos).reason_for_priority = sample.properties(
-                "reason_for_priority"
-            ).value
             traction_qc_message.requests(sample_pos).container_barcode = self.properties("barcode").value
             traction_qc_message.requests(sample_pos).supplier_sample_name = sample.properties(
                 "supplier_sample_name"
