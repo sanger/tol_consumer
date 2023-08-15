@@ -35,6 +35,12 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         self._species = None
         self._cost_code = None
         self._priority_level = None
+        self._sanger_sample_id = None
+        self._supplier_name = None
+        self._taxon_id = None
+        self._donor_id = None
+        self._country_of_origin = None
+        self._accession_number = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before
@@ -264,6 +270,12 @@ class RequestSerializer:
             "external_id": self.instance.sample_uuid,
             "species": self.instance.species,
             "priority_level": self.instance.priority_level,
+            "sanger_sample_id": self.instance.sanger_sample_id,
+            "supplier_name": self.instance.supplier_name,
+            "taxon_id": self.instance.taxon_id,
+            "donor_id": self.instance.donor_id,
+            "country_of_origin": self.instance.country_of_origin,
+            "accession_number": self.instance.accession_number,
         }
 
     def container_payload(self) -> Dict[str, Any]:

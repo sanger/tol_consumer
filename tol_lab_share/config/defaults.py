@@ -27,15 +27,15 @@ RABBITMQ_FEEDBACK_EXCHANGE = "psd.tol"
 ###
 # RedPanda details
 ###
-REDPANDA_BASE_URI = f"http://{os.environ.get('LOCALHOST', '127.0.0.1')}:8081"
-REDPANDA_API_KEY = ""
+REDPANDA_BASE_URI = f"http://redpanda.uat.tol.psd.sanger.ac.uk"
+REDPANDA_API_KEY = "redpanda-psd"
 
 
 RABBITMQ_PUBLISH_RETRY_DELAY = 5
 RABBITMQ_PUBLISH_RETRIES = 36  # 3 minutes of retries
 
-TRACTION_URL = f"http://{os.environ.get('LOCALHOST', '127.0.0.1')}:3100/v1/receptions"
-TRACTION_QC_URL = f"http://{os.environ.get('LOCALHOST', '127.0.0.1')}:3100/v1/qc_receptions"
+TRACTION_URL = f"http://uat.traction.psd.sanger.ac.uk/v1/receptions"
+TRACTION_QC_URL = f"http://uat.traction.psd.sanger.ac.uk/v1/qc_receptions"
 
 EBI_TAXONOMY_URL = "https://www.ebi.ac.uk/ena/taxonomy/rest/tax-id"
 

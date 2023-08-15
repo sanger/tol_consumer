@@ -74,6 +74,16 @@ class OutputTractionMessageRequestInterface:
 
     @property
     @abstractmethod
+    def taxon_id(self) -> Optional[str]:
+        ...
+
+    @taxon_id.setter
+    @abstractmethod
+    def taxon_id(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
     def accession_number(self) -> Optional[str]:
         ...
 

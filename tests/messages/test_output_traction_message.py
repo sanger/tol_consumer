@@ -48,6 +48,12 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(0).species = "test species"
     instance.requests(0).cost_code = "S1234"
     instance.requests(0).priority_level = None
+    instance.requests(0).sanger_sample_id = "sample1"
+    instance.requests(0).supplier_name = "supplier1"
+    instance.requests(0).taxon_id = "9606"
+    instance.requests(0).donor_id = "donor1"
+    instance.requests(0).country_of_origin = "United Kingdom"
+    instance.requests(0).accession_number = "AN1234"
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -59,6 +65,12 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(1).species = "test species"
     instance.requests(1).cost_code = "S4567"
     instance.requests(1).priority_level = None
+    instance.requests(1).sanger_sample_id = "sample2"
+    instance.requests(1).supplier_name = "supplier2"
+    instance.requests(1).taxon_id = "9606"
+    instance.requests(1).donor_id = "donor2"
+    instance.requests(1).country_of_origin = "United Kingdom"
+    instance.requests(1).accession_number = "AN1235"
 
     assert instance.payload() == {
         "data": {
@@ -76,6 +88,12 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "name": "test1",
                             "species": "test " "species",
                             "priority_level": None,
+                            "sanger_sample_id": "sample1",
+                            "supplier_name": "supplier1",
+                            "taxon_id": "9606",
+                            "donor_id": "donor1",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1234",
                         },
                     },
                     {
@@ -90,6 +108,12 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "name": "test1",
                             "species": "test " "species",
                             "priority_level": None,
+                            "sanger_sample_id": "sample2",
+                            "supplier_name": "supplier2",
+                            "taxon_id": "9606",
+                            "donor_id": "donor2",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1235",
                         },
                     },
                 ],
@@ -112,6 +136,12 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(0).species = "test species"
     instance.requests(0).cost_code = "S1234"
     instance.requests(0).priority_level = "Medium"
+    instance.requests(0).sanger_sample_id = "sample1"
+    instance.requests(0).supplier_name = "supplier1"
+    instance.requests(0).taxon_id = "9606"
+    instance.requests(0).donor_id = "donor1"
+    instance.requests(0).country_of_origin = "United Kingdom"
+    instance.requests(0).accession_number = "AN1234"
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -123,6 +153,12 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(1).species = "test species"
     instance.requests(1).cost_code = "S4567"
     instance.requests(1).priority_level = None
+    instance.requests(1).sanger_sample_id = "sample2"
+    instance.requests(1).supplier_name = "supplier2"
+    instance.requests(1).taxon_id = "9606"
+    instance.requests(1).donor_id = "donor2"
+    instance.requests(1).country_of_origin = "United Kingdom"
+    instance.requests(1).accession_number = "AN1235"
 
     assert instance.payload() == {
         "data": {
@@ -141,6 +177,12 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "name": "test1",
                             "species": "test " "species",
                             "priority_level": "Medium",
+                            "sanger_sample_id": "sample1",
+                            "supplier_name": "supplier1",
+                            "taxon_id": "9606",
+                            "donor_id": "donor1",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1234",
                         },
                     },
                     {
@@ -156,6 +198,12 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "name": "test1",
                             "species": "test " "species",
                             "priority_level": None,
+                            "sanger_sample_id": "sample2",
+                            "supplier_name": "supplier2",
+                            "taxon_id": "9606",
+                            "donor_id": "donor2",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1235",
                         },
                     },
                 ],
@@ -177,6 +225,12 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(0).species = "test species"
     instance.requests(0).cost_code = "S1234"
     instance.requests(0).priority_level = "High"
+    instance.requests(0).sanger_sample_id = "sample1"
+    instance.requests(0).supplier_name = "supplier1"
+    instance.requests(0).taxon_id = "9606"
+    instance.requests(0).donor_id = "donor1"
+    instance.requests(0).country_of_origin = "United Kingdom"
+    instance.requests(0).accession_number = "AN1234"
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
@@ -187,6 +241,12 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(1).species = "test species"
     instance.requests(1).cost_code = "S4567"
     instance.requests(1).priority_level = "Low"
+    instance.requests(1).sanger_sample_id = "sample2"
+    instance.requests(1).supplier_name = "supplier2"
+    instance.requests(1).taxon_id = "9606"
+    instance.requests(1).donor_id = "donor2"
+    instance.requests(1).country_of_origin = "United Kingdom"
+    instance.requests(1).accession_number = "AN1235"
 
     assert instance.payload() == {
         "data": {
@@ -204,6 +264,12 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "name": "test1",
                             "species": "test " "species",
                             "priority_level": "High",
+                            "sanger_sample_id": "sample1",
+                            "supplier_name": "supplier1",
+                            "taxon_id": "9606",
+                            "donor_id": "donor1",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1234",
                         },
                     },
                     {
@@ -218,6 +284,12 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "name": "test1",
                             "species": "test " "species",
                             "priority_level": "Low",
+                            "sanger_sample_id": "sample2",
+                            "supplier_name": "supplier2",
+                            "taxon_id": "9606",
+                            "donor_id": "donor2",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1235",
                         },
                     },
                 ],
