@@ -112,7 +112,7 @@
                   },
                   {
                     "name": "shearedFemtoFragmentSize", "type": "string",
-                    "doc": "Sheared Femto Fragment Size"
+                    "doc": "Sheared Femto Fragment Size (bp)"
                   },
                   {
                     "name": "postSPRIConcentration", "type": "string",
