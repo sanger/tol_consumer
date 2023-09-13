@@ -55,4 +55,4 @@ def test_sample_is_invalid(invalid_sample):
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "cost_code")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_280")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_230")
-    assert len(instance.errors) == 14
+    assert len(instance.errors) == 15

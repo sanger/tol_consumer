@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class CountryOfOrigin(MessageProperty):
     """MessageProperty subclass to manage parsing of a valid country of origin provided by another
-    MessageProperty. The concentration has to be a country string from the list provided in
+    MessageProperty. The country has to be a country string from the list provided in
     tol_lab_share.config.insdc.
     Eg: 'Australia'
     """
@@ -25,10 +25,16 @@ class CountryOfOrigin(MessageProperty):
         If that is not the case, it will trigger an error (not valid country insdc).
         """
         logger.debug("CountryOfOrigin::check_is_valid_country")
+        result = False
         if not self._input.validate():
-            return False
+            return result
 
-        result = self._input.value in COUNTRIES
+        if self.check_is_string():
+            for country in COUNTRIES:
+                if self._input.value.lower() == country.lower():
+                    result = True
+                    self._input.value = country
+
         if not result:
             self.trigger_error(error_codes.ERROR_4_NOT_VALID_COUNTRY_INSDC, text=f"input_value: {self._input.value}")
         return result

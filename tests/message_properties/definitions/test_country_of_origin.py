@@ -23,6 +23,6 @@ def test_CountryOfOrigin_check_CountryOfOrigin_is_valid():
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = CountryOfOrigin(Input("United Kingdom"))
+    instance = CountryOfOrigin(Input("UNITED KINGDOM"))
     assert instance.validate() is True
     assert len(instance.errors) == 0
