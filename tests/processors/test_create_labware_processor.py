@@ -102,18 +102,6 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 ),
                             },
                             {
-                                "typeId": 20,
-                                "field": "concentration",
-                                "origin": "sample",
-                                "description": 'The input provided is not a valid float., instance: "Concentration"',
-                            },
-                            {
-                                "typeId": 20,
-                                "field": "volume",
-                                "origin": "sample",
-                                "description": 'The input provided is not a valid float., instance: "Volume"',
-                            },
-                            {
                                 "typeId": 7,
                                 "field": "location",
                                 "origin": "sample",
@@ -124,18 +112,6 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 "field": "final_nano_drop",
                                 "origin": "sample",
                                 "description": 'Not string, instance: "FinalNanoDrop"',
-                            },
-                            {
-                                "typeId": 20,
-                                "field": "concentration",
-                                "origin": "sample",
-                                "description": 'The input provided is not a valid float., instance: "Concentration"',
-                            },
-                            {
-                                "typeId": 20,
-                                "field": "volume",
-                                "origin": "sample",
-                                "description": 'The input provided is not a valid float., instance: "Volume"',
                             },
                             {
                                 "typeId": 7,

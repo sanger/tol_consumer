@@ -11,4 +11,4 @@ class Concentration(MessageProperty):
     @property
     def validators(self) -> List[Callable]:
         """Defines the list of validators"""
-        return [self.check_is_float_string]
+        return [self.check_is_string]
