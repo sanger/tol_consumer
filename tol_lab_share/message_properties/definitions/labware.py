@@ -89,7 +89,8 @@ class Labware(MessageProperty):
             sample = self.properties("samples")[sample_pos]
             traction_message.requests(sample_pos).cost_code = sample.properties("cost_code").value
             traction_message.requests(sample_pos).study_uuid = sample.properties("study_uuid").value
-            traction_message.requests(sample_pos).sample_name = sample.properties("public_name").value
+            traction_message.requests(sample_pos).sample_name = sample.properties("sanger_sample_id").value
+            traction_message.requests(sample_pos).public_name = sample.properties("public_name").value
             traction_message.requests(sample_pos).sample_uuid = sample.properties("uuid").value
             traction_message.requests(sample_pos).library_type = sample.properties("library_type").value
             traction_message.requests(sample_pos).species = sample.properties("scientific_name").value

@@ -195,6 +195,16 @@ class OutputTractionMessageRequestInterface:
 
     @property
     @abstractmethod
+    def public_name(self) -> Optional[str]:
+        ...
+
+    @public_name.setter
+    @abstractmethod
+    def public_name(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    @abstractmethod
     def library_type(self) -> Optional[str]:
         ...
 
