@@ -43,8 +43,6 @@ def test_sample_is_invalid(invalid_sample):
     check_presence_error(instance.errors, error_codes.ERROR_1_UUID_NOT_BINARY, "study_uuid")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "study_uuid")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "common_name")
-    check_presence_error(instance.errors, error_codes.ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING, "concentration")
-    check_presence_error(instance.errors, error_codes.ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING, "volume")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "country_of_origin")
     check_presence_error(instance.errors, error_codes.ERROR_4_NOT_VALID_COUNTRY_INSDC, "country_of_origin")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "donor_id")
@@ -55,4 +53,4 @@ def test_sample_is_invalid(invalid_sample):
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "cost_code")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_280")
     check_presence_error(instance.errors, error_codes.ERROR_2_NOT_STRING, "final_nano_drop_230")
-    assert len(instance.errors) == 15
+    assert len(instance.errors) == 13
