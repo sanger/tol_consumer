@@ -37,6 +37,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         self._cost_code = None
         self._priority_level = None
         self._sanger_sample_id = None
+        self._public_name = None
         self._supplier_name = None
         self._taxon_id = None
         self._donor_id = None
@@ -69,6 +70,16 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     def sanger_sample_id(self, value: Optional[str]) -> None:
         """Sets the sanger_sample_id value for this request"""
         self._sanger_sample_id = value
+
+    @property
+    def public_name(self) -> Optional[str]:
+        """Gets the public_name value for this request"""
+        return self._public_name
+
+    @public_name.setter
+    def public_name(self, value: Optional[str]) -> None:
+        """Sets the public_name value for this request"""
+        self._public_name = value
 
     @property
     def date_of_sample_collection(self) -> Optional[datetime]:

@@ -115,7 +115,9 @@ def test_labware_add_to_traction_message_wells(valid_sample):
     instance.add_to_traction_message(traction_message)
 
     assert traction_message.requests(0).study_uuid == "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
-    assert traction_message.requests(0).sample_name == "SamplePublicName1"
+    assert traction_message.requests(0).sample_name == "cichlid_pacbio8196429"
+    assert traction_message.requests(0).public_name == "SamplePublicName1"
+    assert traction_message.requests(0).sanger_sample_id == "cichlid_pacbio8196429"
     assert traction_message.requests(0).sample_uuid == "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6"
     assert traction_message.requests(0).library_type == "Library1"
     assert traction_message.requests(0).species == "Mus musculus"
@@ -138,7 +140,9 @@ def test_labware_add_to_traction_message_tubes(valid_sample):
     instance.add_to_traction_message(traction_message)
 
     assert traction_message.requests(0).study_uuid == "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
-    assert traction_message.requests(0).sample_name == "SamplePublicName1"
+    assert traction_message.requests(0).sample_name == "cichlid_pacbio8196429"
+    assert traction_message.requests(0).sanger_sample_id == "cichlid_pacbio8196429"
+    assert traction_message.requests(0).public_name == "SamplePublicName1"
     assert traction_message.requests(0).sample_uuid == "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6"
     assert traction_message.requests(0).library_type == "Library1"
     assert traction_message.requests(0).species == "Mus musculus"
