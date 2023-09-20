@@ -48,6 +48,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).public_name = "Public1"
     instance.requests(0).cost_code = "S1234"
     instance.requests(0).priority_level = None
     instance.requests(0).sanger_sample_id = "sample1"
@@ -66,6 +67,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).public_name = "Public2"
     instance.requests(1).cost_code = "S4567"
     instance.requests(1).priority_level = None
     instance.requests(1).sanger_sample_id = "sample2"
@@ -93,6 +95,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "species": "test " "species",
                             "priority_level": None,
                             "sanger_sample_id": "sample1",
+                            "public_name": "Public1",
                             "supplier_name": "supplier1",
                             "taxon_id": "9606",
                             "donor_id": "donor1",
@@ -114,6 +117,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "species": "test " "species",
                             "priority_level": None,
                             "sanger_sample_id": "sample2",
+                            "public_name": "Public2",
                             "supplier_name": "supplier2",
                             "taxon_id": "9606",
                             "donor_id": "donor2",
@@ -141,6 +145,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).public_name = "Public1"
     instance.requests(0).cost_code = "S1234"
     instance.requests(0).priority_level = "Medium"
     instance.requests(0).sanger_sample_id = "sample1"
@@ -159,6 +164,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).public_name = "Public2"
     instance.requests(1).cost_code = "S4567"
     instance.requests(1).priority_level = None
     instance.requests(1).sanger_sample_id = "sample2"
@@ -187,6 +193,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "species": "test " "species",
                             "priority_level": "Medium",
                             "sanger_sample_id": "sample1",
+                            "public_name": "Public1",
                             "supplier_name": "supplier1",
                             "taxon_id": "9606",
                             "donor_id": "donor1",
@@ -209,6 +216,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "species": "test " "species",
                             "priority_level": None,
                             "sanger_sample_id": "sample2",
+                            "public_name": "Public2",
                             "supplier_name": "supplier2",
                             "taxon_id": "9606",
                             "donor_id": "donor2",
@@ -235,6 +243,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).public_name = "Public1"
     instance.requests(0).cost_code = "S1234"
     instance.requests(0).priority_level = "High"
     instance.requests(0).sanger_sample_id = "sample1"
@@ -252,6 +261,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).public_name = "Public2"
     instance.requests(1).cost_code = "S4567"
     instance.requests(1).priority_level = "Low"
     instance.requests(1).sanger_sample_id = "sample2"
@@ -279,6 +289,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "species": "test " "species",
                             "priority_level": "High",
                             "sanger_sample_id": "sample1",
+                            "public_name": "Public1",
                             "supplier_name": "supplier1",
                             "taxon_id": "9606",
                             "donor_id": "donor1",
@@ -300,6 +311,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "species": "test " "species",
                             "priority_level": "Low",
                             "sanger_sample_id": "sample2",
+                            "public_name": "Public2",
                             "supplier_name": "supplier2",
                             "taxon_id": "9606",
                             "donor_id": "donor2",
