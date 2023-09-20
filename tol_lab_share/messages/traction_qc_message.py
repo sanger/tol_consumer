@@ -158,7 +158,7 @@ class QcRequestSerializer:
         Returns:
         Dic[str,str] with all the required payload information for Traction
         """
-        return {
+        obj = {
             "sheared_femto_fragment_size": self.instance.sheared_femto_fragment_size,
             "post_spri_concentration": self.instance.post_spri_concentration,
             "post_spri_volume": self.instance.post_spri_volume,
@@ -170,6 +170,10 @@ class QcRequestSerializer:
             "labware_barcode": self.instance.container_barcode,
             "date_submitted": self.instance.date_submitted_utc,
         }
+        return self.clear_empty_value_keys(obj)
+
+    def clear_empty_value_keys(self, obj: Dict[str, Any]) -> Dict[str, Any]:
+        return {k: v for k, v in obj.items() if v}
 
 
 class TractionQcMessage(MessageProperty, TractionQcMessageInterface):

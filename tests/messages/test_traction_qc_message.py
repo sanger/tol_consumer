@@ -4,7 +4,7 @@ from datetime import datetime
 import pytest
 import requests_mock
 
-from tol_lab_share.messages.traction_qc_message import TractionQcMessage
+from tol_lab_share.messages.traction_qc_message import TractionQcMessage, QcRequestSerializer, TractionQcMessageRequest
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class TestTractionQcMessage:
         traction_qc_message.requests(1).final_nano_drop_280 = "180"
         traction_qc_message.requests(1).final_nano_drop_230 = "130"
         traction_qc_message.requests(1).final_nano_drop = "100"
-        traction_qc_message.requests(1).shearing_qc_comments = "Some comments"
+        traction_qc_message.requests(1).shearing_qc_comments = ""
         traction_qc_message.requests(1).date_submitted_utc = datetime.now().timestamp() * 1000
 
         return traction_qc_message
@@ -88,7 +88,6 @@ class TestTractionQcMessage:
                             "post_spri_concentration": "10",
                             "post_spri_volume": "30",
                             "sheared_femto_fragment_size": "9",
-                            "shearing_qc_comments": "Some comments",
                             "date_submitted": datetime.now().timestamp() * 1000,
                             "labware_barcode": "FD20706501",
                             "sample_external_id": "supplier_sample_name_DDD2",
@@ -119,3 +118,15 @@ class TestTractionQcMessage:
         invalid_traction_qc_message.add_to_feedback_message(feedback)
         assert len(feedback.errors) > 0
         assert not feedback.operation_was_error_free
+
+    def test_qc_request_serializer_request_with_empty_strings(self):
+        request = TractionQcMessageRequest()
+        serial = QcRequestSerializer(request)
+        request.final_nano_drop_280 = "1234"
+        request.container_barcode = ""
+        assert serial.payload() == {"final_nano_drop_280": "1234"}
+
+    def test_qc_request_serializer_clear_empty_value_keys(self):
+        request = TractionQcMessageRequest()
+        serial = QcRequestSerializer(request)
+        assert serial.clear_empty_value_keys({"asdf": "1234", "bcde": ""}) == {"asdf": "1234"}
