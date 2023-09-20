@@ -298,6 +298,7 @@ class RequestSerializer:
             "priority_level": self.instance.priority_level,
             "sanger_sample_id": self.instance.sanger_sample_id,
             "supplier_name": self.instance.supplier_name,
+            "public_name": self.instance.public_name,
             "taxon_id": self.instance.taxon_id,
             "donor_id": self.instance.donor_id,
             "country_of_origin": self.instance.country_of_origin,
