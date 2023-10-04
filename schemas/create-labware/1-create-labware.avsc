@@ -109,6 +109,43 @@
                   {
                     "name": "accessionNumber", "type": "string",
                     "doc": "Accession number for publication in ENA/EBI"
+                  },
+                  {
+                    "name": "shearedFemtoFragmentSize", "type": "string",
+                    "doc": "Sheared Femto Fragment Size (bp)"
+                  },
+                  {
+                    "name": "postSPRIConcentration", "type": "string",
+                    "doc": "Post SPRI Concentration (ng/ul)"
+                  },
+                  {
+                    "name": "postSPRIVolume", "type": "string",
+                    "doc": "Post SPRI Volume (ul)"
+                  },
+                  {
+                    "name": "finalNanoDrop280", "type": "string",
+                    "doc": "Final NanoDrop 260/280"
+                  },
+                  {
+                    "name": "finalNanoDrop230", "type": "string",
+                    "doc": "Final NanoDrop 260/230"
+                  },
+                  {
+                    "name": "finalNanoDrop", "type": "string",
+                    "doc": "Final NanoDrop ng/ul"
+                  },
+                  {
+                    "name": "shearingAndQCComments", "type": "string",
+                    "doc": "Shearing & QC comments"
+                  },
+                  {
+                    "name": "dateSubmittedUTC",
+                    "doc": "Date submitted in UTC format.",
+                    "type": { "type": "long", "logicalType": "timestamp-millis" }
+                  },
+                  {
+                    "name": "priorityLevel", "type": "string",
+                    "doc": "Priority level (if High or Medium)"
                   }
                 ]
               }

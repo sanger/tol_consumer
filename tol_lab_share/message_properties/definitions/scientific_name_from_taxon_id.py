@@ -17,8 +17,8 @@ class ScientificNameFromTaxonId(MessageProperty):
 
     @property
     def validators(self) -> List[Callable]:
-        """Checks the input is a integer string"""
-        return [self.check_is_integer_string]
+        """Checks the input is a string"""
+        return [self.check_is_string]
 
     @cached_property
     def taxonomy_url(self) -> str:

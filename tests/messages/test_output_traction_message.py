@@ -1,5 +1,5 @@
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from datetime import datetime
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
     OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
@@ -17,15 +17,6 @@ def valid_traction_message():
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
     instance.requests(0).cost_code = "S1234"
-    return instance
-
-
-def valid_feedback_message():
-    instance = OutputFeedbackMessage()
-    instance.count_of_total_samples = 0
-    instance.count_of_valid_samples = 0
-    instance.source_message_uuid = b"b01aa0ad-7b19-4f94-87e9-70d74fb8783c"
-    instance.operation_was_error_free = True
     return instance
 
 
@@ -47,6 +38,7 @@ def test_output_traction_message_can_validate():
 
 
 def test_output_traction_message_can_generate_payload_for_plates():
+    my_date = datetime.now()
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -56,7 +48,16 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).public_name = "Public1"
     instance.requests(0).cost_code = "S1234"
+    instance.requests(0).priority_level = None
+    instance.requests(0).sanger_sample_id = "sample1"
+    instance.requests(0).supplier_name = "supplier1"
+    instance.requests(0).taxon_id = "9606"
+    instance.requests(0).donor_id = "donor1"
+    instance.requests(0).country_of_origin = "United Kingdom"
+    instance.requests(0).accession_number = "AN1234"
+    instance.requests(0).date_of_sample_collection = my_date
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -66,7 +67,16 @@ def test_output_traction_message_can_generate_payload_for_plates():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).public_name = "Public2"
     instance.requests(1).cost_code = "S4567"
+    instance.requests(1).priority_level = None
+    instance.requests(1).sanger_sample_id = "sample2"
+    instance.requests(1).supplier_name = "supplier2"
+    instance.requests(1).taxon_id = "9606"
+    instance.requests(1).donor_id = "donor2"
+    instance.requests(1).country_of_origin = "United Kingdom"
+    instance.requests(1).accession_number = "AN1235"
+    instance.requests(1).date_of_sample_collection = my_date
 
     assert instance.payload() == {
         "data": {
@@ -83,6 +93,15 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
                             "name": "test1",
                             "species": "test " "species",
+                            "priority_level": None,
+                            "sanger_sample_id": "sample1",
+                            "public_name": "Public1",
+                            "supplier_name": "supplier1",
+                            "taxon_id": "9606",
+                            "donor_id": "donor1",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1234",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                     {
@@ -96,6 +115,15 @@ def test_output_traction_message_can_generate_payload_for_plates():
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
                             "name": "test1",
                             "species": "test " "species",
+                            "priority_level": None,
+                            "sanger_sample_id": "sample2",
+                            "public_name": "Public2",
+                            "supplier_name": "supplier2",
+                            "taxon_id": "9606",
+                            "donor_id": "donor2",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1235",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                 ],
@@ -107,6 +135,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
 
 
 def test_output_traction_message_can_generate_payload_for_ont_library_types():
+    my_date = datetime.now()
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -116,7 +145,16 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).public_name = "Public1"
     instance.requests(0).cost_code = "S1234"
+    instance.requests(0).priority_level = "Medium"
+    instance.requests(0).sanger_sample_id = "sample1"
+    instance.requests(0).supplier_name = "supplier1"
+    instance.requests(0).taxon_id = "9606"
+    instance.requests(0).donor_id = "donor1"
+    instance.requests(0).country_of_origin = "United Kingdom"
+    instance.requests(0).accession_number = "AN1234"
+    instance.requests(0).date_of_sample_collection = my_date
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
@@ -126,7 +164,16 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).public_name = "Public2"
     instance.requests(1).cost_code = "S4567"
+    instance.requests(1).priority_level = None
+    instance.requests(1).sanger_sample_id = "sample2"
+    instance.requests(1).supplier_name = "supplier2"
+    instance.requests(1).taxon_id = "9606"
+    instance.requests(1).donor_id = "donor2"
+    instance.requests(1).country_of_origin = "United Kingdom"
+    instance.requests(1).accession_number = "AN1235"
+    instance.requests(1).date_of_sample_collection = my_date
 
     assert instance.payload() == {
         "data": {
@@ -144,6 +191,15 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
                             "name": "test1",
                             "species": "test " "species",
+                            "priority_level": "Medium",
+                            "sanger_sample_id": "sample1",
+                            "public_name": "Public1",
+                            "supplier_name": "supplier1",
+                            "taxon_id": "9606",
+                            "donor_id": "donor1",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1234",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                     {
@@ -158,6 +214,15 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
                             "name": "test1",
                             "species": "test " "species",
+                            "priority_level": None,
+                            "sanger_sample_id": "sample2",
+                            "public_name": "Public2",
+                            "supplier_name": "supplier2",
+                            "taxon_id": "9606",
+                            "donor_id": "donor2",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1235",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                 ],
@@ -169,6 +234,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
 
 
 def test_output_traction_message_can_generate_payload_for_tubes():
+    my_date = datetime.now()
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
@@ -177,7 +243,16 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(0).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(0).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(0).species = "test species"
+    instance.requests(0).public_name = "Public1"
     instance.requests(0).cost_code = "S1234"
+    instance.requests(0).priority_level = "High"
+    instance.requests(0).sanger_sample_id = "sample1"
+    instance.requests(0).supplier_name = "supplier1"
+    instance.requests(0).taxon_id = "9606"
+    instance.requests(0).donor_id = "donor1"
+    instance.requests(0).country_of_origin = "United Kingdom"
+    instance.requests(0).accession_number = "AN1234"
+    instance.requests(0).date_of_sample_collection = my_date
 
     instance.requests(1).container_barcode = "1"
     instance.requests(1).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
@@ -186,7 +261,16 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     instance.requests(1).study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
     instance.requests(1).sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
     instance.requests(1).species = "test species"
+    instance.requests(1).public_name = "Public2"
     instance.requests(1).cost_code = "S4567"
+    instance.requests(1).priority_level = "Low"
+    instance.requests(1).sanger_sample_id = "sample2"
+    instance.requests(1).supplier_name = "supplier2"
+    instance.requests(1).taxon_id = "9606"
+    instance.requests(1).donor_id = "donor2"
+    instance.requests(1).country_of_origin = "United Kingdom"
+    instance.requests(1).accession_number = "AN1235"
+    instance.requests(1).date_of_sample_collection = my_date
 
     assert instance.payload() == {
         "data": {
@@ -203,6 +287,15 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
                             "name": "test1",
                             "species": "test " "species",
+                            "priority_level": "High",
+                            "sanger_sample_id": "sample1",
+                            "public_name": "Public1",
+                            "supplier_name": "supplier1",
+                            "taxon_id": "9606",
+                            "donor_id": "donor1",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1234",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                     {
@@ -216,6 +309,15 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                             "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
                             "name": "test1",
                             "species": "test " "species",
+                            "priority_level": "Low",
+                            "sanger_sample_id": "sample2",
+                            "public_name": "Public2",
+                            "supplier_name": "supplier2",
+                            "taxon_id": "9606",
+                            "donor_id": "donor2",
+                            "country_of_origin": "United Kingdom",
+                            "accession_number": "AN1235",
+                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
                         },
                     },
                 ],
@@ -235,19 +337,21 @@ def test_output_traction_message_can_detect_errors_on_sent(config):
     assert len(vt.errors) > 0
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_not_sent():
+def test_output_traction_message_can_add_to_feedback_message_when_not_sent(valid_feedback_message):
     vt = valid_traction_message()
     assert vt.validate()
-    feedback = valid_feedback_message()
+    feedback = valid_feedback_message
     vt.add_to_feedback_message(feedback)
     assert len(feedback.errors) == 0
     # When message not sent
     assert not feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_sent(config, traction_success_creation_response):
+def test_output_traction_message_can_add_to_feedback_message_when_sent(
+    config, traction_success_creation_response, valid_feedback_message
+):
     vt = valid_traction_message()
-    feedback = valid_feedback_message()
+    feedback = valid_feedback_message
     # When message sent
     with requests_mock.Mocker() as m:
         m.post(config.TRACTION_URL, json=traction_success_creation_response, status_code=201)
@@ -257,12 +361,12 @@ def test_output_traction_message_can_add_to_feedback_message_when_sent(config, t
     assert feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_errors():
+def test_output_traction_message_can_add_to_feedback_message_when_errors(valid_feedback_message):
     instance = OutputTractionMessage()
     instance.requests(0).container_barcode = "1"
     instance.requests(0).container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
     assert not instance.validate()
-    feedback = valid_feedback_message()
+    feedback = valid_feedback_message
     instance.add_to_feedback_message(feedback)
     assert len(feedback.errors) > 0
     assert not feedback.operation_was_error_free

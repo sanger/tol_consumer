@@ -1,6 +1,6 @@
-import logging
 import copy
-from typing import Dict, Any, Optional
+import logging
+from typing import Any, Dict, Optional
 
 LEVEL_FATAL = "level_fatal"
 LEVEL_ERROR = "leverl_error"
@@ -200,4 +200,14 @@ ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS = ErrorCode(
 )
 ERROR_24_TRACTION_MESSAGE_REQUESTS_HAVE_MISSING_DATA = ErrorCode(
     24, "parsing", "input", "The message to traction is missing relevant fields info."
+)
+ERROR_25_TRACTION_QC_MESSAGE_HAS_NO_REQUESTS = ErrorCode(
+    25, "parsing", "input", "The qc message to traction has no requests."
+)
+ERROR_26_TRACTION_QC_MESSAGE_REQUESTS_HAVE_MISSING_DATA = ErrorCode(
+    26, "parsing", "input", "The qc message to traction is missing relevant fields info."
+)
+ERROR_27_TRACTION_QC_REQUEST_FAILED = ErrorCode(27, "request", "dict", "Traction qc send request failed")
+ERROR_28_PROBLEM_TALKING_TO_TRACTION = ErrorCode(
+    28, "root", "traction", "There was a problem while sending qc message to traction"
 )

@@ -2,11 +2,11 @@ from .message_property import MessageProperty
 from typing import List, Callable
 
 
-class TaxonId(MessageProperty):
-    """MessageProperty subclass to manage parsing of a valid taxon id string provided by another
+class FinalNanoDrop(MessageProperty):
+    """MessageProperty subclass to manage parsing of a valid Final NanoDrop string provided by another
     MessageProperty.
-    The taxon id has to be a string.
-    Eg: '9606'
+    The Final NanoDrop has to be a string.
+    Eg: '100'
     """
 
     @property

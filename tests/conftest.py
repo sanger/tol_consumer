@@ -1,16 +1,15 @@
-import pytest
 import logging
 import logging.config
-from tol_lab_share.helpers import get_config
-from lab_share_lib.processing.rabbit_message import RabbitMessage
-from lab_share_lib.constants import (
-    RABBITMQ_HEADER_KEY_SUBJECT,
-    RABBITMQ_HEADER_KEY_VERSION,
-)
 from datetime import datetime
-from data.examples_create_labware_messages import TEST_CREATE_LABWARE_MSG_OBJECT, TEST_INVALID_CREATE_LABWARE_MSG_OBJECT
-
 from unittest.mock import MagicMock
+
+import pytest
+from data.examples_create_labware_messages import TEST_CREATE_LABWARE_MSG_OBJECT, TEST_INVALID_CREATE_LABWARE_MSG_OBJECT
+from lab_share_lib.constants import RABBITMQ_HEADER_KEY_SUBJECT, RABBITMQ_HEADER_KEY_VERSION
+from lab_share_lib.processing.rabbit_message import RabbitMessage
+
+from tol_lab_share.helpers import get_config
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 CONFIG = get_config("tol_lab_share.config.test")
 logging.config.dictConfig(CONFIG.LOGGING)
@@ -78,6 +77,28 @@ def traction_success_creation_response():
     }
 
 
+@pytest.fixture()
+def traction_qc_success_response():
+    return {
+        "data": {
+            "id": "10",
+            "type": "qc_receptions",
+            "links": {"self": "http://localhost:3000/v1/qc_receptions/10"},
+            "attributes": {"source": "tol-lab-share.tol"},
+        }
+    }
+
+
+@pytest.fixture()
+def valid_feedback_message():
+    instance = OutputFeedbackMessage()
+    instance.count_of_total_samples = 0
+    instance.count_of_valid_samples = 0
+    instance.source_message_uuid = b"b01aa0ad-7b19-4f94-87e9-70d74fb8783c"
+    instance.operation_was_error_free = True
+    return instance
+
+
 @pytest.fixture
 def taxonomy_record():
     return {
@@ -119,6 +140,15 @@ def valid_sample():
         "accessionNumber": "EE1234",
         "sampleCollectionDateUtc": datetime.now(),
         "costCode": "S1234",
+        "shearedFemtoFragmentSize": "8",
+        "postSPRIConcentration": "9",
+        "postSPRIVolume": "10",
+        "finalNanoDrop280": "200",
+        "finalNanoDrop230": "200",
+        "finalNanoDrop": "150",
+        "shearingAndQCComments": "",
+        "dateSubmittedUTC": datetime.now(),
+        "priorityLevel": "Medium",
     }
 
 
@@ -142,6 +172,15 @@ def invalid_sample():
         "accessionNumber": "EE1234",
         "costCode": 1234,
         "sampleCollectionDateUtc": datetime.now(),
+        "shearedFemtoFragmentSize": "8",
+        "postSPRIConcentration": "9",
+        "postSPRIVolume": "10",
+        "finalNanoDrop280": 200,
+        "finalNanoDrop230": 200,
+        "finalNanoDrop": "150",
+        "shearingAndQCComments": "",
+        "dateSubmittedUTC": datetime.now(),
+        "priorityLevel": "Medium",
     }
 
 

@@ -2,11 +2,11 @@ from .message_property import MessageProperty
 from typing import List, Callable
 
 
-class TaxonId(MessageProperty):
-    """MessageProperty subclass to manage parsing of a valid taxon id string provided by another
+class PostSPRIVolume(MessageProperty):
+    """MessageProperty subclass to manage parsing of a valid Post SPRI Volume (ul) string provided by another
     MessageProperty.
-    The taxon id has to be a string.
-    Eg: '9606'
+    The Post SPRI Volume (ul) has to be a string.
+    Eg: '20'
     """
 
     @property

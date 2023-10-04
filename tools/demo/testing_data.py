@@ -43,6 +43,15 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "accessionNumber": "A1234",
                     "costCode": "S1234",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                    "shearedFemtoFragmentSize": "5",
+                    "postSPRIConcentration": "10",
+                    "postSPRIVolume": "20",
+                    "finalNanoDrop280": "5",
+                    "finalNanoDrop230": "6",
+                    "finalNanoDrop": "7",
+                    "shearingAndQCComments": "Comments",
+                    "dateSubmittedUTC": datetime.now().timestamp() * 1000,
+                    "priorityLevel": "Medium",
                 }
                 for letter in range(ord("A"), ord("H") + 1)
                 for pos in range(1, 13)
@@ -78,6 +87,15 @@ def build_create_tube_msg(unique_id, num_msg):
                     "accessionNumber": "A1234",
                     "costCode": "S1234",
                     "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                    "shearedFemtoFragmentSize": "5",
+                    "postSPRIConcentration": "10",
+                    "postSPRIVolume": "20",
+                    "finalNanoDrop280": "5",
+                    "finalNanoDrop230": "6",
+                    "finalNanoDrop": "7",
+                    "shearingAndQCComments": "Comments",
+                    "dateSubmittedUTC": datetime.now().timestamp() * 1000,
+                    "priorityLevel": "Medium",
                 }
             ],
         },

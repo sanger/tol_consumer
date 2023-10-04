@@ -2,11 +2,11 @@ from .message_property import MessageProperty
 from typing import List, Callable
 
 
-class TaxonId(MessageProperty):
-    """MessageProperty subclass to manage parsing of a valid taxon id string provided by another
+class SupplierSampleName(MessageProperty):
+    """MessageProperty subclass to manage parsing of a valid supplier sample name string provided by another
     MessageProperty.
-    The taxon id has to be a string.
-    Eg: '9606'
+    The supplier sample name has to be a string.
+    Eg: 'sample_name'
     """
 
     @property
