@@ -58,3 +58,31 @@ This project uses a Docker image as the unit of deployment. Update `.release-ver
 major/minor/patch. On merging a pull request into *develop* or *master*, a release will be created
 along with the Docker image associated to that release.
 
+## Snappy
+
+```
+If when you install the dependencies and you see the following error:
+
+[pipenv.exceptions.InstallError]:       src/snappy/snappymodule.cc:33:10: fatal error: 'snappy-c.h' file not found
+[pipenv.exceptions.InstallError]:       #include <snappy-c.h>
+[pipenv.exceptions.InstallError]:                ^~~~~~~~~~~~
+[pipenv.exceptions.InstallError]:       1 error generated.
+[pipenv.exceptions.InstallError]:       error: command '/usr/bin/clang' failed with exit code 1
+[pipenv.exceptions.InstallError]:       [end of output]
+[pipenv.exceptions.InstallError]:
+[pipenv.exceptions.InstallError]:   note: This error originates from a subprocess, and is likely not a problem with pip.
+[pipenv.exceptions.InstallError]:   ERROR: Failed building wheel for python-snappy
+[pipenv.exceptions.InstallError]: ERROR: Could not build wheels for python-snappy, which is required to install pyproject.toml-based projects
+ERROR: Couldn't install package: {}
+ Package installation failed...
+```
+
+You need to install snappy and set the path:
+
+```
+brew install snappy
+```
+
+```
+pip install --global-option=build_ext --global-option='-I/opt/homebrew/include' --global-option='-L/opt/homebrew/lib' python-snappy
+```
