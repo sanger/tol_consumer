@@ -2,7 +2,6 @@
 
 Rabbitmq consumer for TOL data input
 
-
 ## Getting Started
 
 The following tools are required for development:
@@ -16,23 +15,22 @@ defined in the `Pipfile`:
     brew install pyenv
     pyenv install <python_version>
 ```
-        
+
 Use pipenv to install the required python packages for the application and development:
 
 ```bash
      pipenv install --dev
 ```
 
-
 ### Setting up with Docker
 
 If you want to setup a local development environment with Docker please check
 the instructions in [SETUP_DOCKER.md](SETUP_DOCKER.md)
 
-
 ## Running
 
 1. Enter the python virtual environment using:
+
 ```bash
     pipenv shell
 ```
@@ -51,7 +49,6 @@ Run the tests using pytest (flags are for verbose and exit early):
     python -m pytest -vx
 ```
 
-
 ## Deployment
 
 This project uses a Docker image as the unit of deployment. Update `.release-version` with
@@ -60,7 +57,7 @@ along with the Docker image associated to that release.
 
 ## Snappy
 
-```
+```stdout
 If when you install the dependencies and you see the following error:
 
 [pipenv.exceptions.InstallError]:       src/snappy/snappymodule.cc:33:10: fatal error: 'snappy-c.h' file not found
@@ -79,10 +76,14 @@ ERROR: Couldn't install package: {}
 
 You need to install snappy and set the path:
 
-```
+```bash
 brew install snappy
 ```
 
-```
-pip install --global-option=build_ext --global-option='-I/opt/homebrew/include' --global-option='-L/opt/homebrew/lib' python-snappy
+Ensure the `include` and `lib` directories of `homebrew` are set in environment variables.
+You might want to add these to your `~/.zshrc` file:
+
+```bash
+export CPPFLAGS="-I$(brew --prefix)/include"
+export LDFLAGS="-L$(brew --prefix)/lib"
 ```
