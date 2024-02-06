@@ -133,6 +133,4 @@ class Labware(MessageProperty):
             ).value
             traction_qc_message.requests(sample_pos).date_submitted_utc = sample.properties("date_submitted_utc").value
             traction_qc_message.requests(sample_pos).container_barcode = self.properties("barcode").value
-            traction_qc_message.requests(sample_pos).sanger_sample_id = sample.properties(
-                "sanger_sample_id"
-            ).value
+            traction_qc_message.requests(sample_pos).sanger_sample_id = sample.properties("sanger_sample_id").value
