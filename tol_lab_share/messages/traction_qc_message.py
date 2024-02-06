@@ -198,12 +198,14 @@ class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
     def requests(self, position: int) -> TractionQcMessageRequestInterface:
-        """Returns the request at position position from this message. If there is no requesrt there it
+        """Returns the request at position position from this message. If there is no request there it
         will create a new instance and return it.
-        Parameters:
-        position (int) position that we want to return
+
+        Args:
+            position (int) position that we want to return.
+
         Returns:
-        OutputTractionMessageRequest with the request required
+            TractionQcMessageRequest at the specified position.
         """
         if position not in self._requests:
             self._requests[position] = TractionQcMessageRequest()
