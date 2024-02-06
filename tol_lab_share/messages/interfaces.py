@@ -279,12 +279,12 @@ class TractionQcMessageRequestInterface:
 
     @property
     @abstractmethod
-    def supplier_sample_name(self) -> Optional[str]:
+    def sanger_sample_id(self) -> Optional[str]:
         ...
 
-    @supplier_sample_name.setter
+    @sanger_sample_id.setter
     @abstractmethod
-    def supplier_sample_name(self, value: Optional[str]) -> None:
+    def sanger_sample_id(self, value: Optional[str]) -> None:
         ...
 
     @property

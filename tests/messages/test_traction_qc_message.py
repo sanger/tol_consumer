@@ -22,7 +22,7 @@ class TestTractionQcMessage:
     @pytest.fixture()
     def valid_traction_qc_message(self):
         traction_qc_message = TractionQcMessage()
-        traction_qc_message.requests(0).supplier_sample_name = "supplier_sample_name_DDD"
+        traction_qc_message.requests(0).sanger_sample_id = "sanger_sample_id_DDD"
         traction_qc_message.requests(0).container_barcode = "FD20706500"
         traction_qc_message.requests(0).sheared_femto_fragment_size = "5"
         traction_qc_message.requests(0).post_spri_concentration = "10"
@@ -33,7 +33,7 @@ class TestTractionQcMessage:
         traction_qc_message.requests(0).shearing_qc_comments = "Comments"
         traction_qc_message.requests(0).date_submitted_utc = datetime.now().timestamp() * 1000
 
-        traction_qc_message.requests(1).supplier_sample_name = "supplier_sample_name_DDD2"
+        traction_qc_message.requests(1).sanger_sample_id = "sanger_sample_id_DDD2"
         traction_qc_message.requests(1).container_barcode = "FD20706501"
         traction_qc_message.requests(1).sheared_femto_fragment_size = "9"
         traction_qc_message.requests(1).post_spri_concentration = "10"
@@ -79,7 +79,7 @@ class TestTractionQcMessage:
                             "shearing_qc_comments": "Comments",
                             "date_submitted": datetime.now().timestamp() * 1000,
                             "labware_barcode": "FD20706500",
-                            "sample_external_id": "supplier_sample_name_DDD",
+                            "sample_external_id": "sanger_sample_id_DDD",
                         },
                         {
                             "final_nano_drop": "100",
@@ -90,7 +90,7 @@ class TestTractionQcMessage:
                             "sheared_femto_fragment_size": "9",
                             "date_submitted": datetime.now().timestamp() * 1000,
                             "labware_barcode": "FD20706501",
-                            "sample_external_id": "supplier_sample_name_DDD2",
+                            "sample_external_id": "sanger_sample_id_DDD2",
                         },
                     ],
                     "source": "tol-lab-share.tol",
