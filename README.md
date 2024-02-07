@@ -2,7 +2,6 @@
 
 Rabbitmq consumer for TOL data input
 
-
 ## Getting Started
 
 The following tools are required for development:
@@ -13,44 +12,42 @@ Use pyenv or something similar to install the version of python
 defined in the `Pipfile`:
 
 ```bash
-    brew install pyenv
-    pyenv install <python_version>
+brew install pyenv
+pyenv install <python_version>
 ```
-        
+
 Use pipenv to install the required python packages for the application and development:
 
 ```bash
-     pipenv install --dev
+pipenv install --dev
 ```
-
 
 ### Setting up with Docker
 
 If you want to setup a local development environment with Docker please check
 the instructions in [SETUP_DOCKER.md](SETUP_DOCKER.md)
 
-
 ## Running
 
 1. Enter the python virtual environment using:
-```bash
+
+    ```bash
     pipenv shell
-```
+    ```
 
 1. Run the app using:
 
-```bash
+    ```bash
     python main.py
-```
+    ```
 
 ## Testing
 
 Run the tests using pytest (flags are for verbose and exit early):
 
 ```bash
-    python -m pytest -vx
+python -m pytest -vx
 ```
-
 
 ## Deployment
 
@@ -60,9 +57,9 @@ along with the Docker image associated to that release.
 
 ## Snappy
 
-```
 If when you install the dependencies and you see the following error:
 
+```stdout
 [pipenv.exceptions.InstallError]:       src/snappy/snappymodule.cc:33:10: fatal error: 'snappy-c.h' file not found
 [pipenv.exceptions.InstallError]:       #include <snappy-c.h>
 [pipenv.exceptions.InstallError]:                ^~~~~~~~~~~~
@@ -77,12 +74,16 @@ ERROR: Couldn't install package: {}
  Package installation failed...
 ```
 
-You need to install snappy and set the path:
+You need to install snappy:
 
-```
+```bash
 brew install snappy
 ```
 
-```
-pip install --global-option=build_ext --global-option='-I/opt/homebrew/include' --global-option='-L/opt/homebrew/lib' python-snappy
+Ensure the `include` and `lib` directories of `homebrew` are set in environment variables.
+You might want to add these to your `~/.zshrc` file:
+
+```bash
+export CPPFLAGS="-I$(brew --prefix)/include"
+export LDFLAGS="-L$(brew --prefix)/lib"
 ```

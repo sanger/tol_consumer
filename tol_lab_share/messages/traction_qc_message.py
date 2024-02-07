@@ -24,7 +24,7 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
 
     def __init__(self):
         """Constructor to initialize the info for the request"""
-        self._supplier_sample_name = None
+        self._sanger_sample_id = None
         self._container_barcode = None
         self._sheared_femto_fragment_size = None
         self._post_spri_concentration = None
@@ -39,7 +39,7 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
         """Checks that we have all required information and that it is valid before
         marking this request as valid."""
         return (
-            (self._supplier_sample_name is not None)
+            (self._sanger_sample_id is not None)
             and (self._container_barcode is not None)
             and (self._sheared_femto_fragment_size is not None)
             and (self._post_spri_concentration is not None)
@@ -62,14 +62,14 @@ class TractionQcMessageRequest(TractionQcMessageRequestInterface):
         self._container_barcode = value
 
     @property
-    def supplier_sample_name(self) -> Optional[str]:
-        """Gets the supplier sample name for this request."""
-        return self._supplier_sample_name
+    def sanger_sample_id(self) -> Optional[str]:
+        """Gets the Sanger sample id for this request."""
+        return self._sanger_sample_id
 
-    @supplier_sample_name.setter
-    def supplier_sample_name(self, value: Optional[str]) -> None:
-        """Sets the supplier sample name for this request."""
-        self._supplier_sample_name = value
+    @sanger_sample_id.setter
+    def sanger_sample_id(self, value: Optional[str]) -> None:
+        """Sets the Sanger sample id for this request."""
+        self._sanger_sample_id = value
 
     @property
     def sheared_femto_fragment_size(self) -> Optional[str]:
@@ -166,7 +166,7 @@ class QcRequestSerializer:
             "final_nano_drop_230": self.instance.final_nano_drop_230,
             "final_nano_drop": self.instance.final_nano_drop,
             "shearing_qc_comments": self.instance.shearing_qc_comments,
-            "sample_external_id": self.instance.supplier_sample_name,
+            "sample_external_id": self.instance.sanger_sample_id,
             "labware_barcode": self.instance.container_barcode,
             "date_submitted": self.instance.date_submitted_utc,
         }
@@ -198,12 +198,14 @@ class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
     def requests(self, position: int) -> TractionQcMessageRequestInterface:
-        """Returns the request at position position from this message. If there is no requesrt there it
+        """Returns the request at position position from this message. If there is no request there it
         will create a new instance and return it.
-        Parameters:
-        position (int) position that we want to return
+
+        Args:
+            position (int) position that we want to return.
+
         Returns:
-        OutputTractionMessageRequest with the request required
+            TractionQcMessageRequest at the specified position.
         """
         if position not in self._requests:
             self._requests[position] = TractionQcMessageRequest()
