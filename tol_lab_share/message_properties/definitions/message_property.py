@@ -29,10 +29,10 @@ class MessageProperty:
         self._input = input
         self._errors: List[ErrorCode] = []
         self._properties: Dict[str, Any] = {}
-        self.property_name = None
-        self.property_source = None
-        self.property_position = None
-        self.property_type = PROPERTY_TYPE_PROPERTY
+        self.property_name: str | None = None
+        self.property_source: MessageProperty | None = None
+        self.property_position: int | None = None
+        self.property_type: str = PROPERTY_TYPE_PROPERTY
 
     def validate(self) -> bool:
         return self._validation_status
@@ -109,48 +109,6 @@ class MessageProperty:
             self._add_property_list(property_name, input)
         else:
             self._add_property_instance(property_name, input)
-
-    @property
-    def property_name(self) -> Optional[str]:
-        """Returns the property name for this property"""
-        return self._property_name
-
-    @property_name.setter
-    def property_name(self, value: str) -> None:
-        """Sets the property name for this property"""
-        self._property_name = value
-
-    @property
-    def property_source(self) -> Any:
-        """Returns the property source for this property (the property that is the container of
-        this property"""
-        return self._property_source
-
-    @property_source.setter
-    def property_source(self, value: MessageProperty) -> None:
-        """Sets the property source for this property"""
-        self._property_source = value
-
-    @property
-    def property_position(self) -> Optional[int]:
-        """Returns the property position for this property that is the place in the list where this
-        property is defined if it was defined as part of a list of properties"""
-        return self._property_position
-
-    @property_position.setter
-    def property_position(self, value: int) -> None:
-        """Sets the property position for this property"""
-        self._property_position = value
-
-    @property
-    def property_type(self) -> Optional[str]:
-        """Returns the property type for this property. The type can be Property or List"""
-        return self._property_type
-
-    @property_type.setter
-    def property_type(self, value: str) -> None:
-        """Sets the property type for this property."""
-        self._property_type = value
 
     @cached_property
     def value(self) -> Any:
