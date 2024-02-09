@@ -1,4 +1,4 @@
-from typing import Dict, Optional, List, Callable, Any
+from typing import Optional, Callable, Any
 from json import dumps
 from datetime import datetime
 from requests import post, codes
@@ -265,7 +265,7 @@ class RequestSerializer:
         """
         return bool(self.instance.library_type and ("ONT" in self.instance.library_type))
 
-    def request_payload(self) -> Dict[str, Any]:
+    def request_payload(self) -> dict[str, Any]:
         """Generates the correct payload depending on the library type for the current request.
         Returns:
         Dic[str,str] with the required information to send for this request to Traction
@@ -284,7 +284,7 @@ class RequestSerializer:
                 "cost_code": self.instance.cost_code,
             }
 
-    def sample_payload(self) -> Dict[str, Any]:
+    def sample_payload(self) -> dict[str, Any]:
         """Generates the correct payload for the sample defined in this request
         Returns:
         Dic[str,str] with the required sample information to send for this request to Traction
@@ -307,7 +307,7 @@ class RequestSerializer:
             "date_of_sample_collection": collection_date,
         }
 
-    def container_payload(self) -> Dict[str, Any]:
+    def container_payload(self) -> dict[str, Any]:
         """Generates the correct payload for the container defined in this request depending on
         the container type (tubes or wells)
         Returns:
@@ -322,7 +322,7 @@ class RequestSerializer:
                 "position": self.instance.container_location,
             }
 
-    def payload(self) -> Dict[str, Any]:
+    def payload(self) -> dict[str, Any]:
         """Main builder of the payload required to describe all information required for Traction:
         sample, request and container.
         Returns:
@@ -336,12 +336,12 @@ class RequestSerializer:
 
 
 class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
-    """Class that handle the generation and publishing of a message to Traction"""
+    """Class that handles the generation and publishing of a message to Traction."""
 
     def __init__(self):
-        """Resets initial data"""
+        """Reset initial data."""
         super().__init__(Input(self))
-        self._requests: Dict[int, OutputTractionMessageRequest] = {}
+        self._requests: list[OutputTractionMessageRequest] = []
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
@@ -352,32 +352,28 @@ class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
         return "OutputFeedbackMessage"
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """List of validators to check the message is correct before sending"""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
-    def requests(self, position: int) -> OutputTractionMessageRequestInterface:
-        """Returns the request at position position from this message. If there is no requesrt there it
-        will create a new instance and return it.
-        Parameters:
-        position (int) position that we want to return
+    def create_request(self) -> OutputTractionMessageRequestInterface:
+        """Creates a new request and returns it. It will be appended to the list of requests.
+
         Returns:
-        OutputTractionMessageRequest with the request required
+            OutputTractionMessageRequestInterface: The newly created request.
         """
-        if position not in self._requests:
-            self._requests[position] = OutputTractionMessageRequest()
+        self._requests.append(OutputTractionMessageRequest())
+        return self._requests[-1]
 
-        return self._requests[position]
-
-    def request_attributes(self) -> List[Dict[str, Any]]:
+    def request_attributes(self) -> list[dict[str, Any]]:
         """Returns a list with all the payloads for every request
         Returns:
         List[Dict[str,Any]] with all payloads for all the requests
         """
-        return [self._requests[position].serializer().payload() for position in range(len(self._requests))]
+        return [request.serializer().payload() for request in self._requests]
 
     @property
-    def errors(self) -> List[ErrorCode]:
+    def errors(self) -> list[ErrorCode]:
         """List of errors defined for this message"""
         return self._errors
 
@@ -405,12 +401,13 @@ class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
         Returns:
         bool indicating that all requests have valid content inside.
         """
-        if all([self.requests(key).validate() for key in self._requests]):
+        if all([request.validate() for request in self._requests]):
             return True
+
         self.trigger_error(error_codes.ERROR_24_TRACTION_MESSAGE_REQUESTS_HAVE_MISSING_DATA)
         return False
 
-    def payload(self) -> Dict[str, Any]:
+    def payload(self) -> dict[str, Any]:
         """Returns the valid payload to send to traction"""
         return {
             "data": {

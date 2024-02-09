@@ -87,24 +87,25 @@ class Labware(MessageProperty):
         super().add_to_traction_message(traction_message)
         for sample_pos in range(len(self.properties("samples"))):
             sample = self.properties("samples")[sample_pos]
-            traction_message.requests(sample_pos).cost_code = sample.properties("cost_code").value
-            traction_message.requests(sample_pos).study_uuid = sample.properties("study_uuid").value
-            traction_message.requests(sample_pos).sample_name = sample.properties("sanger_sample_id").value
-            traction_message.requests(sample_pos).public_name = sample.properties("public_name").value
-            traction_message.requests(sample_pos).sample_uuid = sample.properties("uuid").value
-            traction_message.requests(sample_pos).library_type = sample.properties("library_type").value
-            traction_message.requests(sample_pos).species = sample.properties("scientific_name").value
-            traction_message.requests(sample_pos).container_barcode = self.properties("barcode").value
-            traction_message.requests(sample_pos).container_location = sample.properties("location").value
-            traction_message.requests(sample_pos).container_type = self.traction_container_type()
-            traction_message.requests(sample_pos).priority_level = sample.properties("priority_level").value
-            traction_message.requests(sample_pos).taxon_id = sample.properties("taxon_id").value
-            traction_message.requests(sample_pos).sanger_sample_id = sample.properties("sanger_sample_id").value
-            traction_message.requests(sample_pos).donor_id = sample.properties("donor_id").value
-            traction_message.requests(sample_pos).country_of_origin = sample.properties("country_of_origin").value
-            traction_message.requests(sample_pos).accession_number = sample.properties("accession_number").value
-            traction_message.requests(sample_pos).supplier_name = sample.properties("supplier_sample_name").value
-            traction_message.requests(sample_pos).date_of_sample_collection = sample.properties("collection_date").value
+            request = traction_message.create_request()
+            request.cost_code = sample.properties("cost_code").value
+            request.study_uuid = sample.properties("study_uuid").value
+            request.sample_name = sample.properties("sanger_sample_id").value
+            request.public_name = sample.properties("public_name").value
+            request.sample_uuid = sample.properties("uuid").value
+            request.library_type = sample.properties("library_type").value
+            request.species = sample.properties("scientific_name").value
+            request.container_barcode = self.properties("barcode").value
+            request.container_location = sample.properties("location").value
+            request.container_type = self.traction_container_type()
+            request.priority_level = sample.properties("priority_level").value
+            request.taxon_id = sample.properties("taxon_id").value
+            request.sanger_sample_id = sample.properties("sanger_sample_id").value
+            request.donor_id = sample.properties("donor_id").value
+            request.country_of_origin = sample.properties("country_of_origin").value
+            request.accession_number = sample.properties("accession_number").value
+            request.supplier_name = sample.properties("supplier_sample_name").value
+            request.date_of_sample_collection = sample.properties("collection_date").value
 
     def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
         """Given a traction qc message instance, it adds the qc data.

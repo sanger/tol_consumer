@@ -258,7 +258,7 @@ class OutputTractionMessageInterface(ABC):
         ...
 
     @abstractmethod
-    def requests(self, position: int) -> OutputTractionMessageRequestInterface:
+    def create_request(self) -> OutputTractionMessageRequestInterface:
         ...
 
 
