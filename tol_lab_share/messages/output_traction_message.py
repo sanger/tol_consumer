@@ -25,7 +25,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
     """
 
     def __init__(self):
-        """Constructor that initializes all info for a single request"""
+        """Constructor that initializes all info for a single request."""
         self._library_type = None
         self._study_uuid = None
         self._sample_name = None
@@ -46,8 +46,7 @@ class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
         self._date_of_sample_collection = None
 
     def validate(self) -> bool:
-        """Checks that we have all required information and that it is valid before
-        marking this request as valid."""
+        """Checks that we have all required information and that it is valid before marking this request as valid."""
         return (
             (self._library_type is not None)
             and (self._study_uuid is not None)
@@ -251,16 +250,18 @@ class RequestSerializer:
     """Class to manage the serialization to JSON of the request received as argument in the constructor."""
 
     def __init__(self, instance: OutputTractionMessageRequest):
-        """Constructor that sets initiali state of the instance.
-        Parameters:
-        instance (OutputTractionMessageRequest) request that we want to serialize
+        """Constructor that sets the initial state of the instance.
+
+        Args:
+            instance (OutputTractionMessageRequest): The request that we want to serialize.
         """
         self.instance = instance
 
     def is_ont_library_type(self) -> bool:
         """Flag boolean method that identifies if the library type is ONT.
+
         Returns:
-        boolean indicating if the library type is ONT or not
+            bool: True if the library type is ONT; otherwise false.
         """
         return bool(self.instance.library_type and ("ONT" in self.instance.library_type))
 
