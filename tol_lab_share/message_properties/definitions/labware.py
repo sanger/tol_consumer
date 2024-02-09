@@ -10,7 +10,7 @@ from tol_lab_share.message_properties.definitions.barcode import Barcode
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.sample import Sample
-from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
 from tol_lab_share.messages.traction_qc_message import TractionQcMessage
 
@@ -54,19 +54,6 @@ class Labware(MessageProperty):
         """Returns the number of samples that are valid from this labware"""
         return [sample.validate() for sample in self._properties["samples"]].count(True)
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
-        """Adds this labware information to the feedback message. It updates there the number
-        of total samples and the number of valid samples.
-        Parameters:
-        feedback_message (OutputFeedbackInterface) Instance of the feedback message where we want
-        to add the new data
-        Returns:
-        None"""
-        logger.debug("Labware::add_to_feedback_message")
-        super().add_to_feedback_message(feedback_message)
-        feedback_message.count_of_total_samples = self.count_of_total_samples()
-        feedback_message.count_of_valid_samples = self.count_of_valid_samples()
-
     def traction_container_type(self) -> str:
         """It converts the labware type to a valid container type value for
         Traction.
@@ -80,15 +67,28 @@ class Labware(MessageProperty):
 
     @singledispatchmethod
     def add_to_message_property(self, message_property: MessageProperty) -> None:
-        raise NotImplementedError(f"No registered method for message property type '{type(message_property)}'.")
+        super().add_to_message_property(message_property)
+
+    @add_to_message_property.register
+    def _(self, feedback_message: OutputFeedbackMessage) -> None:
+        """Adds the labware information to an OutputFeedbackMessage.
+        This includes the number of total samples and the number of valid samples.
+
+        Args:
+            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage instance to add the data to.
+        """
+        logger.debug("Labware::add_to_message_property")
+        super().add_to_message_property(feedback_message)
+
+        feedback_message.count_of_total_samples = self.count_of_total_samples()
+        feedback_message.count_of_valid_samples = self.count_of_valid_samples()
 
     @add_to_message_property.register
     def _(self, message: OutputTractionMessage) -> None:
-        """Given a traction message instance, it adds to the instance all the relevant information
-        from the labware.
+        """Adds the labware information to an OutputTractionMessage.
 
-        Returns:
-            None
+        Args:
+            message (OutputTractionMessage): The OutputTractionMessage instance to add the data to.
         """
         super().add_to_message_property(message)
 
@@ -116,10 +116,10 @@ class Labware(MessageProperty):
 
     @add_to_message_property.register
     def _(self, message: TractionQcMessage) -> None:
-        """Given a traction qc message instance, it adds the qc data.
+        """Adds the QC data for this labware to a TractionQcMessage.
 
-        Returns:
-            None
+        Args:
+            message (TractionQcMessage): The TractionsQcMessage instance to add the data to.
         """
         super().add_to_message_property(message)
 

@@ -1,7 +1,10 @@
+from functools import singledispatchmethod
+from tol_lab_share.message_properties.definitions.message_property import MessageProperty
 from tol_lab_share.message_properties.definitions.uuid import Uuid
-from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 
 import logging
+
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
@@ -11,11 +14,17 @@ class MessageUuid(Uuid):
     Uuid.
     """
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
+    @singledispatchmethod
+    def add_to_message_property(self, message_property: MessageProperty) -> None:
+        super().add_to_message_property(message_property)
+
+    @add_to_message_property.register
+    def _(self, feedback_message: OutputFeedbackMessage) -> None:
         """Adds the source message uuid to the feedback message passed as parameter
+
         Parameters:
-        feedback_message (OutputFeedbacMessageInterface) message where we want to add the info
+            feedback_message (OutputFeedbacMessage) message where we want to add the info
         """
-        logger.debug("MessageUuid::add_to_feedback_message")
-        super().add_to_feedback_message(feedback_message)
+        logger.debug("MessageUuid::add_to_message_property")
+        super().add_to_message_property(feedback_message)
         feedback_message.source_message_uuid = self.value

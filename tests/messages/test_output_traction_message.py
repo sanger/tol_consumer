@@ -351,19 +351,19 @@ def test_output_traction_message_can_detect_errors_on_sent(config):
     assert len(vt.errors) > 0
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_not_sent(valid_feedback_message):
+def test_output_traction_message_can_add_to_message_property_when_not_sent(valid_feedback_message):
     vt = valid_traction_message()
 
     assert vt.validate()
 
     feedback = valid_feedback_message
-    vt.add_to_feedback_message(feedback)
+    vt.add_to_message_property(feedback)
 
     assert len(feedback.errors) == 0
     assert not feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_sent(
+def test_output_traction_message_can_add_to_message_property_when_sent(
     config, traction_success_creation_response, valid_feedback_message
 ):
     vt = valid_traction_message()
@@ -373,13 +373,13 @@ def test_output_traction_message_can_add_to_feedback_message_when_sent(
         m.post(config.TRACTION_URL, json=traction_success_creation_response, status_code=201)
         vt.send(config.TRACTION_URL)
 
-    vt.add_to_feedback_message(feedback)
+    vt.add_to_message_property(feedback)
 
     assert len(feedback.errors) == 0
     assert feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_feedback_message_when_errors(valid_feedback_message):
+def test_output_traction_message_can_add_to_message_property_when_errors(valid_feedback_message):
     instance = OutputTractionMessage()
 
     request = instance.create_request()
@@ -389,7 +389,7 @@ def test_output_traction_message_can_add_to_feedback_message_when_errors(valid_f
     assert not instance.validate()
 
     feedback = valid_feedback_message
-    instance.add_to_feedback_message(feedback)
+    instance.add_to_message_property(feedback)
 
     assert len(feedback.errors) > 0
     assert not feedback.operation_was_error_free

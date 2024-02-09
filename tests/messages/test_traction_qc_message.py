@@ -101,21 +101,21 @@ class TestTractionQcMessage:
 
         assert payload == expected_payload
 
-    def test_can_add_to_feedback_message_on_success(
+    def test_can_add_to_message_property_on_success(
         self, config, valid_traction_qc_message, valid_feedback_message, traction_qc_success_response
     ):
         feedback = valid_feedback_message
         with requests_mock.Mocker() as m:
             m.post(config.TRACTION_QC_URL, json=traction_qc_success_response, status_code=201)
             valid_traction_qc_message.send(config.TRACTION_QC_URL)
-        valid_traction_qc_message.add_to_feedback_message(feedback)
+        valid_traction_qc_message.add_to_message_property(feedback)
         assert len(feedback.errors) == 0
         assert feedback.operation_was_error_free
 
-    def test_can_add_to_feedback_message_when_errors(self, invalid_traction_qc_message, valid_feedback_message):
+    def test_can_add_to_message_property_when_errors(self, invalid_traction_qc_message, valid_feedback_message):
         assert not invalid_traction_qc_message.validate()
         feedback = valid_feedback_message
-        invalid_traction_qc_message.add_to_feedback_message(feedback)
+        invalid_traction_qc_message.add_to_message_property(feedback)
         assert len(feedback.errors) > 0
         assert not feedback.operation_was_error_free
 

@@ -54,14 +54,14 @@ class CreateLabwareProcessor:
         input = InputCreateLabwareMessage(message)
         validation = input.validate()
 
-        input.add_to_feedback_message(output_feedback_message)
+        input.add_to_message_property(output_feedback_message)
 
         if validation:
             output_traction_message = OutputTractionMessage()
             input.add_to_message_property(output_traction_message)
             logger.info("Attempting to send to traction")
             output_traction_message.send(url=self._config.TRACTION_URL)
-            output_traction_message.add_to_feedback_message(output_feedback_message)
+            output_traction_message.add_to_message_property(output_feedback_message)
 
             if len(output_traction_message.errors) > 0:
                 error_codes.ERROR_16_PROBLEM_TALKING_WITH_TRACTION.trigger(
@@ -93,7 +93,7 @@ class CreateLabwareProcessor:
         input.add_to_message_property(traction_qc_message)
         logger.info("Attempting to send qc message to traction")
         traction_qc_message.send(url=self._config.TRACTION_QC_URL)
-        traction_qc_message.add_to_feedback_message(feedback_message)
+        traction_qc_message.add_to_message_property(feedback_message)
 
         if len(traction_qc_message.errors) > 0:
             error_codes.ERROR_28_PROBLEM_TALKING_TO_TRACTION.trigger(

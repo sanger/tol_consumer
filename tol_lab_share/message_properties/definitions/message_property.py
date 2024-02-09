@@ -7,7 +7,6 @@ from typing import Any, Callable, Dict, List, Optional, Union, cast
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
-from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 
 logger = logging.getLogger(__name__)
 
@@ -181,14 +180,6 @@ class MessageProperty:
         None
         """
         self.add_error(error_code.trigger(instance=self, origin=self.origin, field=self.field, text=text))
-
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
-        """Calls the method add_to_feedback_message in all the properties defined inside this property
-        (if there are any).
-        """
-        logger.debug("MessageProperty::add_to_feedback_message")
-        for property in self._properties_instances:
-            property.add_to_feedback_message(feedback_message)
 
     @singledispatchmethod
     def add_to_message_property(self, message_property: MessageProperty) -> None:

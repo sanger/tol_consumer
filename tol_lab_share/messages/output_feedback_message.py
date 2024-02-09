@@ -7,7 +7,6 @@ from tol_lab_share.constants import (
 )
 from tol_lab_share import error_codes
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
-from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 import logging
 from tol_lab_share.helpers import get_config
 from tol_lab_share.message_properties.definitions.input import Input
@@ -19,7 +18,7 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 logger = logging.getLogger(__name__)
 
 
-class OutputFeedbackMessage(MessageProperty, OutputFeedbackMessageInterface):
+class OutputFeedbackMessage(MessageProperty):
     """Class that handles the feedback message parsing for TOL lab share"""
 
     def __init__(self):

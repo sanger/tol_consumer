@@ -1,11 +1,8 @@
+from functools import singledispatchmethod
 from typing import Optional, Callable, Any
 from json import dumps
 from datetime import datetime
 from requests import post, codes
-from tol_lab_share.messages.interfaces import (
-    OutputFeedbackMessageInterface,
-    OutputTractionMessageRequestInterface,
-)
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
 from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.constants import (
@@ -16,9 +13,10 @@ from tol_lab_share.constants import (
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 
-class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
+class OutputTractionMessageRequest:
     """Class that manages the information of a single Traction request instance
     as part of the Traction message
     """
@@ -346,8 +344,9 @@ class OutputTractionMessage(MessageProperty):
 
     @property
     def origin(self) -> str:
-        """Default origin identifier. This will be appended to any errors generated to know
-        where it was originated when we received"""
+        """Default origin identifier. This will be appended to any errors generated to know where it was originated
+        when we received it.
+        """
         return "OutputFeedbackMessage"
 
     @property
@@ -355,7 +354,7 @@ class OutputTractionMessage(MessageProperty):
         """List of validators to check the message is correct before sending"""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
-    def create_request(self) -> OutputTractionMessageRequestInterface:
+    def create_request(self) -> OutputTractionMessageRequest:
         """Creates a new request and returns it. It will be appended to the list of requests.
 
         Returns:
@@ -366,8 +365,9 @@ class OutputTractionMessage(MessageProperty):
 
     def request_attributes(self) -> list[dict[str, Any]]:
         """Returns a list with all the payloads for every request
+
         Returns:
-        List[Dict[str,Any]] with all payloads for all the requests
+            List[Dict[str,Any]] with all payloads for all the requests
         """
         return [request.serializer().payload() for request in self._requests]
 
@@ -379,8 +379,9 @@ class OutputTractionMessage(MessageProperty):
     def check_has_requests(self) -> bool:
         """Returns a bool identifying if the message has requests. If not it will trigger an error and
         return false.
+
         Returns
-        bool saying if the message has requests
+            bool saying if the message has requests
         """
         if len(self._requests) > 0:
             return True
@@ -390,15 +391,17 @@ class OutputTractionMessage(MessageProperty):
 
     def check_no_errors(self) -> bool:
         """Checks that a message has no errors
+
         Returns:
-        bool indicating if there is no errors
+            bool indicating if there is no errors
         """
         return len(self.errors) == 0
 
     def check_requests_have_all_content(self) -> bool:
         """Checks that all requests provided are valid. Triggers an error if any is not.
+
         Returns:
-        bool indicating that all requests have valid content inside.
+            bool indicating that all requests have valid content inside.
         """
         if all([request.validate() for request in self._requests]):
             return True
@@ -420,9 +423,10 @@ class OutputTractionMessage(MessageProperty):
 
     def error_code_traction_problem(self, status_code: int, error_str: str) -> None:
         """Triggers an error indicating that traction failed.
-        Parameters:
-        status_code (int) HTTP status code when sending to traction (422, 500, etc)
-        error_str (str) contents received by Traction endpoint on the request
+
+        Args:
+            status_code (int) HTTP status code when sending to traction (422, 500, etc)
+            error_str (str) contents received by Traction endpoint on the request
         """
         self.trigger_error(
             error_codes.ERROR_13_TRACTION_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
@@ -431,10 +435,12 @@ class OutputTractionMessage(MessageProperty):
     def send(self, url: str) -> bool:
         """Sends a request to Traction. If is correct returns true, if not it will trigger an error and
         return False
-        Parameters:
-        url (str) url where it will send the Traction request
+
+        Args:
+            url (str) url where it will send the Traction request
+
         Returns:
-        bool indicating if the request was successful
+            bool indicating if the request was successful
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
@@ -447,9 +453,18 @@ class OutputTractionMessage(MessageProperty):
 
         return self._sent
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
-        """Adds the relevant information about this Traction sent to the feedback message, indicating
-        if there has been any errors"""
+    @singledispatchmethod
+    def add_to_message_property(self, message_property: MessageProperty) -> None:
+        super().add_to_message_property(message_property)
+
+    @add_to_message_property.register
+    def _(self, feedback_message: OutputFeedbackMessage) -> None:
+        """Adds error information to the an OutputFeedbackMessage.
+        Also sets the operation_was_error_free to False if the message has not been sent.
+
+        Args:
+            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage to add errors to.
+        """
         if not self._sent:
             feedback_message.operation_was_error_free = False
         if len(self._errors) > 0:

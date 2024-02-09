@@ -1,3 +1,4 @@
+from functools import singledispatchmethod
 import logging
 from json import dumps
 from typing import Any, Callable, Dict, List, Optional
@@ -10,15 +11,12 @@ from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
 from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
-from tol_lab_share.messages.interfaces import (
-    OutputFeedbackMessageInterface,
-    TractionQcMessageRequestInterface,
-)
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
 
-class TractionQcMessageRequest(TractionQcMessageRequestInterface):
+class TractionQcMessageRequest:
     """Class that holds the information for a traction Qc message request"""
 
     def __init__(self):
@@ -196,7 +194,7 @@ class TractionQcMessage(MessageProperty):
         """List of validators to check the message is correct before sending"""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
-    def requests(self, position: int) -> TractionQcMessageRequestInterface:
+    def requests(self, position: int) -> TractionQcMessageRequest:
         """Returns the request at position position from this message. If there is no request there it
         will create a new instance and return it.
 
@@ -293,9 +291,18 @@ class TractionQcMessage(MessageProperty):
 
         return self._sent
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
-        """Adds the relevant information about this Traction sent to the feedback message, indicating
-        if there has been any errors"""
+    @singledispatchmethod
+    def add_to_message_property(self, message_property: MessageProperty) -> None:
+        super().add_to_message_property(message_property)
+
+    @add_to_message_property.register
+    def _(self, feedback_message: OutputFeedbackMessage) -> None:
+        """Adds errors about this TractionQcMessage to an OutputFeedbackMessage.
+        Also sets the operation_was_error_free to False if the message was not sent.
+
+        Args:
+            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage to add the errors to.
+        """
         if not self._sent:
             feedback_message.operation_was_error_free = False
         if len(self._errors) > 0:
