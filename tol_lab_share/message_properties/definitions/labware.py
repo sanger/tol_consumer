@@ -1,10 +1,7 @@
 import logging
 from typing import Any, List
 
-from tol_lab_share.constants import (
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
-)
+from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES
 from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES
 from tol_lab_share.message_properties.definitions.barcode import Barcode
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
@@ -54,16 +51,16 @@ class Labware(MessageProperty):
         """Returns the number of samples that are valid from this labware"""
         return [sample.validate() for sample in self._properties["samples"]].count(True)
 
-    def traction_container_type(self) -> str:
-        """It converts the labware type to a valid container type value for
-        Traction.
+    def traction_container_type(self) -> OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES:
+        """It converts the labware type to a valid container type value for Traction.
+
         Returns:
-        str with a container type value for Traction
+            str with a container type value for Traction
         """
         if self.labware_type().value == "Tube":
-            return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
+            return "tubes"
         else:
-            return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+            return "wells"
 
     @singledispatchmethod
     def add_to_message_property(self, message_property: MessageProperty) -> None:

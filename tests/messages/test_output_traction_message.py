@@ -1,9 +1,5 @@
 from tol_lab_share.messages.output_traction_message import OutputTractionMessage
 from datetime import datetime
-from tol_lab_share.constants import (
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
-)
 import requests_mock
 
 
@@ -11,7 +7,7 @@ def valid_traction_message():
     instance = OutputTractionMessage()
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+    request.container_type = "wells"
     request.library_type = "library"
     request.sample_name = "test1"
     request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
@@ -46,7 +42,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
 
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+    request.container_type = "wells"
     request.container_location = "A1"
     request.library_type = "library"
     request.sample_name = "test1"
@@ -66,7 +62,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
 
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+    request.container_type = "wells"
     request.container_location = "B1"
     request.library_type = "library"
     request.sample_name = "test1"
@@ -146,7 +142,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
 
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+    request.container_type = "wells"
     request.container_location = "A1"
     request.library_type = "ONT_mylib"
     request.sample_name = "test1"
@@ -166,7 +162,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
 
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
+    request.container_type = "wells"
     request.container_location = "B1"
     request.library_type = "ONT_mylib"
     request.sample_name = "test1"
@@ -248,7 +244,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
 
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
+    request.container_type = "tubes"
     request.library_type = "library"
     request.sample_name = "test1"
     request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
@@ -267,7 +263,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
 
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
+    request.container_type = "tubes"
     request.library_type = "library"
     request.sample_name = "test1"
     request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
@@ -384,7 +380,7 @@ def test_output_traction_message_can_add_to_message_property_when_errors(valid_f
 
     request = instance.create_request()
     request.container_barcode = "1"
-    request.container_type = OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES
+    request.container_type = "tubes"
 
     assert not instance.validate()
 

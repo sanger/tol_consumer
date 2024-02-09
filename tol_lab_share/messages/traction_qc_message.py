@@ -1,7 +1,7 @@
 from functools import singledispatchmethod
 import logging
 from json import dumps
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List
 
 from requests import codes, post
 
@@ -17,120 +17,36 @@ logger = logging.getLogger(__name__)
 
 
 class TractionQcMessageRequest:
-    """Class that holds the information for a traction Qc message request"""
+    """Class that holds the information for a traction Qc message request."""
 
     def __init__(self):
-        """Constructor to initialize the info for the request"""
-        self._sanger_sample_id = None
-        self._container_barcode = None
-        self._sheared_femto_fragment_size = None
-        self._post_spri_concentration = None
-        self._post_spri_volume = None
-        self._final_nano_drop_280 = None
-        self._final_nano_drop_230 = None
-        self._final_nano_drop = None
-        self._shearing_qc_comments = None
-        self._date_submitted_utc = None
+        """Constructor to initialize the info for the request."""
+        self.container_barcode: str | None = None
+        self.date_submitted_utc: float | None = None
+        self.final_nano_drop: str | None = None
+        self.final_nano_drop_230: str | None = None
+        self.final_nano_drop_280: str | None = None
+        self.post_spri_concentration: str | None = None
+        self.post_spri_volume: str | None = None
+        self.sanger_sample_id: str | None = None
+        self.sheared_femto_fragment_size: str | None = None
+        self.shearing_qc_comments: str | None = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before
         marking this request as valid."""
         return (
-            (self._sanger_sample_id is not None)
-            and (self._container_barcode is not None)
-            and (self._sheared_femto_fragment_size is not None)
-            and (self._post_spri_concentration is not None)
-            and (self._post_spri_volume is not None)
-            and (self._final_nano_drop_280 is not None)
-            and (self._final_nano_drop_230 is not None)
-            and (self._final_nano_drop is not None)
-            and (self._shearing_qc_comments is not None)
-            and (self._date_submitted_utc is not None)
+            (self.sanger_sample_id is not None)
+            and (self.container_barcode is not None)
+            and (self.sheared_femto_fragment_size is not None)
+            and (self.post_spri_concentration is not None)
+            and (self.post_spri_volume is not None)
+            and (self.final_nano_drop_280 is not None)
+            and (self.final_nano_drop_230 is not None)
+            and (self.final_nano_drop is not None)
+            and (self.shearing_qc_comments is not None)
+            and (self.date_submitted_utc is not None)
         )
-
-    @property
-    def container_barcode(self) -> Optional[str]:
-        """Gets the container barcode for this request."""
-        return self._container_barcode
-
-    @container_barcode.setter
-    def container_barcode(self, value: Optional[str]) -> None:
-        """Sets the container barcode for this request."""
-        self._container_barcode = value
-
-    @property
-    def sanger_sample_id(self) -> Optional[str]:
-        """Gets the Sanger sample id for this request."""
-        return self._sanger_sample_id
-
-    @sanger_sample_id.setter
-    def sanger_sample_id(self, value: Optional[str]) -> None:
-        """Sets the Sanger sample id for this request."""
-        self._sanger_sample_id = value
-
-    @property
-    def sheared_femto_fragment_size(self) -> Optional[str]:
-        return self._sheared_femto_fragment_size
-
-    @sheared_femto_fragment_size.setter
-    def sheared_femto_fragment_size(self, value: Optional[str]) -> None:
-        self._sheared_femto_fragment_size = value
-
-    @property
-    def post_spri_concentration(self) -> Optional[str]:
-        return self._post_spri_concentration
-
-    @post_spri_concentration.setter
-    def post_spri_concentration(self, value: Optional[str]) -> None:
-        self._post_spri_concentration = value
-
-    @property
-    def post_spri_volume(self) -> Optional[str]:
-        return self._post_spri_volume
-
-    @post_spri_volume.setter
-    def post_spri_volume(self, value: Optional[str]) -> None:
-        self._post_spri_volume = value
-
-    @property
-    def final_nano_drop_280(self) -> Optional[str]:
-        return self._final_nano_drop_280
-
-    @final_nano_drop_280.setter
-    def final_nano_drop_280(self, value: Optional[str]) -> None:
-        self._final_nano_drop_280 = value
-
-    @property
-    def final_nano_drop_230(self) -> Optional[str]:
-        return self._final_nano_drop_230
-
-    @final_nano_drop_230.setter
-    def final_nano_drop_230(self, value: Optional[str]) -> None:
-        self._final_nano_drop_230 = value
-
-    @property
-    def final_nano_drop(self) -> Optional[str]:
-        return self._final_nano_drop
-
-    @final_nano_drop.setter
-    def final_nano_drop(self, value: Optional[str]) -> None:
-        self._final_nano_drop = value
-
-    @property
-    def shearing_qc_comments(self) -> Optional[str]:
-        return self._shearing_qc_comments
-
-    @shearing_qc_comments.setter
-    def shearing_qc_comments(self, value: Optional[str]) -> None:
-        self._shearing_qc_comments = value
-
-    @property
-    def date_submitted_utc(self) -> Optional[float]:
-        return self._date_submitted_utc
-
-    @date_submitted_utc.setter
-    def date_submitted_utc(self, value: Optional[float]) -> None:
-        self._date_submitted_utc = value
 
     def serializer(self):
         """Returns a serializer instance to handle the generation of the message for this request.

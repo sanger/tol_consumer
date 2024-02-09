@@ -1,13 +1,12 @@
 from functools import singledispatchmethod
-from typing import Optional, Callable, Any
+from typing import Callable, Any
 from json import dumps
 from datetime import datetime
 from requests import post, codes
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
 from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.constants import (
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
+    OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES,
     OUTPUT_TRACTION_MESSAGE_SOURCE,
 )
 from tol_lab_share import error_codes
@@ -23,217 +22,36 @@ class OutputTractionMessageRequest:
 
     def __init__(self):
         """Constructor that initializes all info for a single request."""
-        self._library_type = None
-        self._study_uuid = None
-        self._sample_name = None
-        self._sample_uuid = None
-        self._container_barcode = None
-        self._container_location = None
-        self._container_type = None
-        self._species = None
-        self._cost_code = None
-        self._priority_level = None
-        self._sanger_sample_id = None
-        self._public_name = None
-        self._supplier_name = None
-        self._taxon_id = None
-        self._donor_id = None
-        self._country_of_origin = None
-        self._accession_number = None
-        self._date_of_sample_collection = None
+        self.accession_number: str | None = None
+        self.container_barcode: str | None = None
+        self.container_location: str | None = None
+        self.container_type: OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES | None = None
+        self.cost_code: str | None = None
+        self.country_of_origin: str | None = None
+        self.date_of_sample_collection: datetime | None = None
+        self.donor_id: str | None = None
+        self.library_type: str | None = None
+        self.priority_level: str | None = None
+        self.public_name: str | None = None
+        self.sample_name: str | None = None
+        self.sample_uuid: str | None = None
+        self.sanger_sample_id: str | None = None
+        self.species: str | None = None
+        self.study_uuid: str | None = None
+        self.supplier_name: str | None = None
+        self.taxon_id: str | None = None
 
     def validate(self) -> bool:
         """Checks that we have all required information and that it is valid before marking this request as valid."""
         return (
-            (self._library_type is not None)
-            and (self._study_uuid is not None)
-            and (self._sample_name is not None)
-            and (self._container_barcode is not None)
-            and (self._species is not None)
-            and (
-                (self._container_type == OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS)
-                or (self._container_type == OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES)
-            )
-            and (self._species is not None)
+            (self.library_type is not None)
+            and (self.study_uuid is not None)
+            and (self.sample_name is not None)
+            and (self.container_barcode is not None)
+            and (self.species is not None)
+            and (self.container_type is not None)
+            and (self.species is not None)
         )
-
-    @property
-    def sanger_sample_id(self) -> Optional[str]:
-        """Gets the sanger_sample_id value for this request"""
-        return self._sanger_sample_id
-
-    @sanger_sample_id.setter
-    def sanger_sample_id(self, value: Optional[str]) -> None:
-        """Sets the sanger_sample_id value for this request"""
-        self._sanger_sample_id = value
-
-    @property
-    def public_name(self) -> Optional[str]:
-        """Gets the public_name value for this request"""
-        return self._public_name
-
-    @public_name.setter
-    def public_name(self, value: Optional[str]) -> None:
-        """Sets the public_name value for this request"""
-        self._public_name = value
-
-    @property
-    def date_of_sample_collection(self) -> Optional[datetime]:
-        """Gets the date_of_sample_collection value for this request"""
-        return self._date_of_sample_collection
-
-    @date_of_sample_collection.setter
-    def date_of_sample_collection(self, value: Optional[datetime]) -> None:
-        """Sets the date_of_sample_collection value for this request"""
-        self._date_of_sample_collection = value
-
-    @property
-    def supplier_name(self) -> Optional[str]:
-        """Gets the supplier_name value for this request"""
-        return self._supplier_name
-
-    @supplier_name.setter
-    def supplier_name(self, value: Optional[str]) -> None:
-        """Sets the supplier_name value for this request"""
-        self._supplier_name = value
-
-    @property
-    def taxon_id(self) -> Optional[str]:
-        """Gets the taxon_id value for this request"""
-        return self._taxon_id
-
-    @taxon_id.setter
-    def taxon_id(self, value: Optional[str]) -> None:
-        """Sets the taxon_id value for this request"""
-        self._taxon_id = value
-
-    @property
-    def donor_id(self) -> Optional[str]:
-        """Gets the donor_id value for this request"""
-        return self._donor_id
-
-    @donor_id.setter
-    def donor_id(self, value: Optional[str]) -> None:
-        """Sets the donor_id value for this request"""
-        self._donor_id = value
-
-    @property
-    def country_of_origin(self) -> Optional[str]:
-        """Gets the country_of_origin value for this request"""
-        return self._country_of_origin
-
-    @country_of_origin.setter
-    def country_of_origin(self, value: Optional[str]) -> None:
-        """Sets the country_of_origin value for this request"""
-        self._country_of_origin = value
-
-    @property
-    def accession_number(self) -> Optional[str]:
-        """Gets the accession_number value for this request"""
-        return self._accession_number
-
-    @accession_number.setter
-    def accession_number(self, value: Optional[str]) -> None:
-        """Sets the accession_number value for this request"""
-        self._accession_number = value
-
-    @property
-    def species(self) -> Optional[str]:
-        """Gets the species value for this request"""
-        return self._species
-
-    @species.setter
-    def species(self, value: Optional[str]) -> None:
-        """Sets the species value for this request"""
-        self._species = value
-
-    @property
-    def cost_code(self) -> Optional[str]:
-        """Gets the cost_code value for this request"""
-        return self._cost_code
-
-    @cost_code.setter
-    def cost_code(self, value: Optional[str]) -> None:
-        """Sets the cost_code value for this request"""
-        self._cost_code = value
-
-    @property
-    def container_type(self) -> Optional[str]:
-        """Gets the container type value for this request. ('wells' or 'tubes')"""
-        return self._container_type
-
-    @container_type.setter
-    def container_type(self, value: Optional[str]) -> None:
-        """Sets the container type value for this request. ('wells' or 'tubes')"""
-        self._container_type = value
-
-    @property
-    def container_location(self) -> Optional[str]:
-        """Gets the container location for this request. Eg: 'A01'"""
-        return self._container_location
-
-    @container_location.setter
-    def container_location(self, value: Optional[str]) -> None:
-        """Sets the container location for this request. Eg: 'A01'"""
-        self._container_location = value
-
-    @property
-    def container_barcode(self) -> Optional[str]:
-        """Gets the container barcode for this request."""
-        return self._container_barcode
-
-    @container_barcode.setter
-    def container_barcode(self, value: Optional[str]) -> None:
-        """Sets the container barcode for this request."""
-        self._container_barcode = value
-
-    @property
-    def sample_uuid(self) -> Optional[str]:
-        """Gets the sample uuid for this request."""
-        return self._sample_uuid
-
-    @sample_uuid.setter
-    def sample_uuid(self, value: Optional[str]) -> None:
-        """Sets the sample uuid for this request."""
-        self._sample_uuid = value
-
-    @property
-    def sample_name(self) -> Optional[str]:
-        """Gets the sample name for this request."""
-        return self._sample_name
-
-    @sample_name.setter
-    def sample_name(self, value: Optional[str]) -> None:
-        """Sets the sample name for this request."""
-        self._sample_name = value
-
-    @property
-    def library_type(self) -> Optional[str]:
-        """Gets the library type for this request."""
-        return self._library_type
-
-    @library_type.setter
-    def library_type(self, value: Optional[str]) -> None:
-        """Sets the library type for this request."""
-        self._library_type = value
-
-    @property
-    def study_uuid(self) -> Optional[str]:
-        """Gets the study uuid for this request."""
-        return self._study_uuid
-
-    @study_uuid.setter
-    def study_uuid(self, value: Optional[str]) -> None:
-        """Sets the study uuid for this request."""
-        self._study_uuid = value
-
-    @property
-    def priority_level(self) -> Optional[str]:
-        return self._priority_level
-
-    @priority_level.setter
-    def priority_level(self, value: Optional[str]) -> None:
-        self._priority_level = value
 
     def serializer(self):
         """Returns a serializer instance to handle the generation of the message for this request.

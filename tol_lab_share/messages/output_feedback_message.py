@@ -1,4 +1,3 @@
-from typing import Optional
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
 from tol_lab_share.constants import (
@@ -25,10 +24,10 @@ class OutputFeedbackMessage(MessageProperty):
         """Constructor that resets the state of a feedback message"""
         super().__init__(Input(self))
 
-        self._source_message_uuid: Optional[bytes] = None
-        self._count_of_total_samples: Optional[int] = None
-        self._count_of_valid_samples: Optional[int] = None
-        self._operation_was_error_free: Optional[bool] = True
+        self.source_message_uuid: bytes | None = None
+        self.count_of_total_samples: int | None = None
+        self.count_of_valid_samples: int | None = None
+        self.operation_was_error_free: bool = True
 
     @property
     def validators(self):
@@ -39,46 +38,6 @@ class OutputFeedbackMessage(MessageProperty):
     def origin(self):
         """ "Name of the origin for this property, set as a constant value."""
         return "OutputFeedbackMessage"
-
-    @property
-    def source_message_uuid(self) -> Optional[bytes]:
-        """Returns the uuid of the source message"""
-        return self._source_message_uuid
-
-    @source_message_uuid.setter
-    def source_message_uuid(self, value: bytes) -> None:
-        """Sets the uuid of the source message"""
-        self._source_message_uuid = value
-
-    @property
-    def count_of_total_samples(self) -> Optional[int]:
-        """Returns the count of total samples"""
-        return self._count_of_total_samples
-
-    @count_of_total_samples.setter
-    def count_of_total_samples(self, value: int) -> None:
-        """Sets the count of total samples"""
-        self._count_of_total_samples = value
-
-    @property
-    def count_of_valid_samples(self) -> Optional[int]:
-        """Returns the count of valid samples"""
-        return self._count_of_valid_samples
-
-    @count_of_valid_samples.setter
-    def count_of_valid_samples(self, value: int) -> None:
-        """Sets the count of valid samples"""
-        self._count_of_valid_samples = value
-
-    @property
-    def operation_was_error_free(self) -> Optional[bool]:
-        """Returns the flag indicating if the operation was error free"""
-        return self._operation_was_error_free
-
-    @operation_was_error_free.setter
-    def operation_was_error_free(self, value: bool) -> None:
-        """Sets the flag indicating if the operation was error free"""
-        self._operation_was_error_free = value
 
     def to_json(self) -> Dict[str, Any]:
         """Returns a Dict with the JSON-like representation of the message."""
