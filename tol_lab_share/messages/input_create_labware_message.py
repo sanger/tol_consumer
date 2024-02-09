@@ -9,7 +9,7 @@ from tol_lab_share.message_properties.definitions.message_uuid import MessageUui
 from tol_lab_share.message_properties.definitions.labware import Labware
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
-from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.message_properties.definitions.dict_input import dictInput
 
 import logging
 
@@ -30,9 +30,9 @@ class InputCreateLabwareMessage(MessageProperty):
         super().__init__(m)
         self._message = m.message
 
-        self.add_property("message_uuid", MessageUuid(DictInput(self._message, MESSAGE_UUID)))
-        self.add_property("labware", Labware(DictInput(self._message, LABWARE)))
-        self.add_property("create_date_utc", DateUtc(DictInput(self._message, CREATED_DATE_UTC)))
+        self.add_property("message_uuid", MessageUuid(dictInput(self._message, MESSAGE_UUID)))
+        self.add_property("labware", Labware(dictInput(self._message, LABWARE)))
+        self.add_property("create_date_utc", DateUtc(dictInput(self._message, CREATED_DATE_UTC)))
 
     @singledispatchmethod
     def add_to_message_property(self, message_property: MessageProperty) -> None:

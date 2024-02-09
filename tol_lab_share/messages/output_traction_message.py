@@ -169,7 +169,7 @@ class OutputTractionMessage(MessageProperty):
 
     @property
     def validators(self) -> list[Callable]:
-        """List of validators to check the message is correct before sending"""
+        """list of validators to check the message is correct before sending"""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
     def create_request(self) -> OutputTractionMessageRequest:
@@ -185,13 +185,13 @@ class OutputTractionMessage(MessageProperty):
         """Returns a list with all the payloads for every request
 
         Returns:
-            List[Dict[str,Any]] with all payloads for all the requests
+            list[dict[str,Any]] with all payloads for all the requests
         """
         return [request.serializer().payload() for request in self._requests]
 
     @property
     def errors(self) -> list[ErrorCode]:
-        """List of errors defined for this message"""
+        """list of errors defined for this message"""
         return self._errors
 
     def check_has_requests(self) -> bool:

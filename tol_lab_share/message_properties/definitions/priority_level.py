@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable
 
 from .message_property import MessageProperty
 
@@ -12,6 +12,6 @@ class PriorityLevel(MessageProperty):
     """
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return [self.check_is_string]

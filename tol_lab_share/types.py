@@ -1,11 +1,11 @@
 from types import ModuleType
-from typing import Dict, Any, Literal
+from typing import Any, Literal
 
 
 class Config(ModuleType):
     """ModuleType class for the app config."""
 
-    LOGGING: Dict[str, Any]
+    LOGGING: dict[str, Any]
 
     # RabbitMQ
     RABBITMQ_HOST: str
@@ -24,7 +24,7 @@ class Config(ModuleType):
     REDPANDA_BASE_URI: str
     REDPANDA_API_KEY: str
 
-    PROCESSORS: Dict[str, str]
+    PROCESSORS: dict[str, str]
 
     CERTIFICATES_VALIDATION_ENABLED: bool
     TRACTION_URL: str

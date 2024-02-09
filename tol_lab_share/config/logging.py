@@ -1,8 +1,8 @@
-from typing import Any, Dict
+from typing import Any
 
 DEFAULT_LOGGING_LEVEL = "INFO"
 
-LOGGING: Dict[str, Any] = {
+LOGGING: dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {

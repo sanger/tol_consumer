@@ -3,7 +3,7 @@ import datetime
 import logging
 from functools import cached_property, singledispatchmethod
 from itertools import chain
-from typing import Any, Callable, Dict, List, Optional, Union, cast
+from typing import Any, Callable, Optional, Union, cast
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
@@ -27,8 +27,8 @@ class MessageProperty:
         input (MessagePropertyInterface) An instance of message property that we will use as base
         """
         self._input = input
-        self._errors: List[ErrorCode] = []
-        self._properties: Dict[str, Any] = {}
+        self._errors: list[ErrorCode] = []
+        self._properties: dict[str, Any] = {}
         self.property_name: str | None = None
         self.property_source: MessageProperty | None = None
         self.property_position: int | None = None
@@ -78,12 +78,12 @@ class MessageProperty:
         """
         return f"{property_name}[{pos}]"
 
-    def _add_property_list(self, property_name: str, input: List[MessageProperty]) -> None:
+    def _add_property_list(self, property_name: str, input: list[MessageProperty]) -> None:
         """Given a property name and a list of message properties, it stores this list of MessageProperty
         as the value of the property and includes the position in each of them.
         Parameters:
         property_name (str) name of the property
-        input (List[MessagePropertyInterface]) list of message properties
+        input (list[MessagePropertyInterface]) list of message properties
         Returns:
         None
         """
@@ -96,11 +96,11 @@ class MessageProperty:
             instance.property_type = PROPERTY_TYPE_ARRAY
             self._properties[property_name].append(instance)
 
-    def add_property(self, property_name: str, input: Union[MessageProperty, List[MessageProperty]]) -> None:
+    def add_property(self, property_name: str, input: Union[MessageProperty, list[MessageProperty]]) -> None:
         """Given an property name and an input it adds the input as the value of the property
         Parameters:
         property_name (str) name of the property
-        input (MessagePropertyInterface |  List[MessagePropertyInterface]) property or list of
+        input (MessagePropertyInterface |  list[MessagePropertyInterface]) property or list of
         properties that we want to add for the name provided
         Returns:
         None
@@ -150,7 +150,7 @@ class MessageProperty:
             property.add_to_message_property(message_property)
 
     @property
-    def errors(self) -> List[ErrorCode]:
+    def errors(self) -> list[ErrorCode]:
         """Returns an aggregation of all errors from the current instance and all errors from
         the properties it contains.
         """
@@ -164,7 +164,7 @@ class MessageProperty:
         self._errors.append(error)
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return []
 
@@ -292,11 +292,11 @@ class MessageProperty:
         return all(list([validator() for validator in self.validators]))
 
     @property
-    def _errors_properties(self) -> List[ErrorCode]:
+    def _errors_properties(self) -> list[ErrorCode]:
         """Returns a list that contains all the errors for the properties inside this
         instance.
         Returns:
-        List[ErrorCode] with all the errors from the properties
+        list[ErrorCode] with all the errors from the properties
         """
         error_list = []
         for property in self._properties_instances:
@@ -306,11 +306,11 @@ class MessageProperty:
         return error_list
 
     @cached_property
-    def _properties_instances(self) -> List[MessageProperty]:
+    def _properties_instances(self) -> list[MessageProperty]:
         """Returns a list that contains all the properties inside this
         instance.
         Returns:
-        List[MessagePropertyInterface] with all the properties
+        list[MessagePropertyInterface] with all the properties
         """
         prop_list = []
         for property in list(self._properties.values()):

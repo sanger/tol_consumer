@@ -2,7 +2,7 @@ from .message_property import MessageProperty
 from tol_lab_share import error_codes
 from functools import cached_property
 from typing import Any
-from typing import List, Callable
+from typing import Callable
 
 import logging
 
@@ -27,7 +27,7 @@ class Location(MessageProperty):
         return self.unpadded()
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return [self.check_is_location]
 

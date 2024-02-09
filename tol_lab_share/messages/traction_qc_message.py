@@ -1,7 +1,7 @@
 from functools import singledispatchmethod
 import logging
 from json import dumps
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable
 
 from requests import codes, post
 
@@ -66,7 +66,7 @@ class QcRequestSerializer:
         """
         self.instance = instance
 
-    def payload(self) -> Dict[str, Any]:
+    def payload(self) -> dict[str, Any]:
         """Constructs the payload with qc data.
         Returns:
         Dic[str,str] with all the required payload information for Traction
@@ -85,7 +85,7 @@ class QcRequestSerializer:
         }
         return self.clear_empty_value_keys(obj)
 
-    def clear_empty_value_keys(self, obj: Dict[str, Any]) -> Dict[str, Any]:
+    def clear_empty_value_keys(self, obj: dict[str, Any]) -> dict[str, Any]:
         return {k: v for k, v in obj.items() if v}
 
 
@@ -95,7 +95,7 @@ class TractionQcMessage(MessageProperty):
     def __init__(self):
         """Resets initial data"""
         super().__init__(Input(self))
-        self._requests: Dict[int, TractionQcMessageRequest] = {}
+        self._requests: dict[int, TractionQcMessageRequest] = {}
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
@@ -106,8 +106,8 @@ class TractionQcMessage(MessageProperty):
         return "TractionQcMessage"
 
     @property
-    def validators(self) -> List[Callable]:
-        """List of validators to check the message is correct before sending"""
+    def validators(self) -> list[Callable]:
+        """list of validators to check the message is correct before sending"""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
     def requests(self, position: int) -> TractionQcMessageRequest:
@@ -125,16 +125,16 @@ class TractionQcMessage(MessageProperty):
 
         return self._requests[position]
 
-    def request_attributes(self) -> List[Dict[str, Any]]:
+    def request_attributes(self) -> list[dict[str, Any]]:
         """Returns a list with all the qc data payload for every request
         Returns:
-        List[Dict[str,Any]] with all payload for all the requests
+        list[dict[str,Any]] with all payload for all the requests
         """
         return [self._requests[position].serializer().payload() for position in range(len(self._requests))]
 
     @property
-    def errors(self) -> List[ErrorCode]:
-        """List of errors defined for this message"""
+    def errors(self) -> list[ErrorCode]:
+        """list of errors defined for this message"""
         return self._errors
 
     def check_has_requests(self) -> bool:
@@ -166,7 +166,7 @@ class TractionQcMessage(MessageProperty):
         self.trigger_error(error_codes.ERROR_26_TRACTION_QC_MESSAGE_REQUESTS_HAVE_MISSING_DATA)
         return False
 
-    def payload(self) -> Dict[str, Any]:
+    def payload(self) -> dict[str, Any]:
         """Returns the valid payload to send to traction"""
         return {
             "data": {

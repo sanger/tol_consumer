@@ -9,7 +9,7 @@ from tol_lab_share.message_properties.definitions.message_property import Messag
 import logging
 from tol_lab_share.helpers import get_config
 from tol_lab_share.message_properties.definitions.input import Input
-from typing import Dict, Any
+from typing import Any
 
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
@@ -31,7 +31,7 @@ class OutputFeedbackMessage(MessageProperty):
 
     @property
     def validators(self):
-        """List of validators to apply to the message"""
+        """list of validators to apply to the message"""
         return [self.check_defined_keys, self.check_errors_correct]
 
     @property
@@ -39,8 +39,8 @@ class OutputFeedbackMessage(MessageProperty):
         """ "Name of the origin for this property, set as a constant value."""
         return "OutputFeedbackMessage"
 
-    def to_json(self) -> Dict[str, Any]:
-        """Returns a Dict with the JSON-like representation of the message."""
+    def to_json(self) -> dict[str, Any]:
+        """Returns a dict with the JSON-like representation of the message."""
         return {
             "sourceMessageUuid": str(self.source_message_uuid),
             "countOfTotalSamples": self.count_of_total_samples,
@@ -49,7 +49,7 @@ class OutputFeedbackMessage(MessageProperty):
             "errors": [error.json() for error in self.errors],
         }
 
-    def encoder_config_for(self, encoder_type_selection: str) -> Dict[str, Any]:
+    def encoder_config_for(self, encoder_type_selection: str) -> dict[str, Any]:
         """Returns a config object with the encoder class and encoder type depending of the encoder selected."""
         if encoder_type_selection == "json":
             return {"encoder_class": AvroEncoderJson, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON}

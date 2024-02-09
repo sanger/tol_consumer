@@ -3,25 +3,25 @@ from functools import cached_property
 from tol_lab_share import error_codes
 import logging
 from tol_lab_share.message_properties.definitions.input import Input
-from typing import List, Callable, Any, Union, Dict
+from typing import Callable, Any, Union
 
 logger = logging.getLogger(__name__)
 
 
-class DictInput(MessageProperty):
+class dictInput(MessageProperty):
     """MessageProperty subclass to manage parsing of the access to the key of a
-    dictionary. The input can be a valid Dict or another MessageProperty that provides
-    as value a valid Dict. If the input is not a valid Dict, or if the key does not
+    dictionary. The input can be a valid dict or another MessageProperty that provides
+    as value a valid dict. If the input is not a valid dict, or if the key does not
     exist, it will trigger an error on validation.
     """
 
-    def __init__(self, input: Union[MessageProperty, Dict[str, Any]], key: str):
+    def __init__(self, input: Union[MessageProperty, dict[str, Any]], key: str):
         """Constructor that will create an instance to manage the access of the input
         dictionary using the key provided as argument.
 
         Parameters:
         input (MessageProperty): The dictionary we want to access, wrapped inside another
-        MessageProperty class; normally it will be an Input or another DictInput.
+        MessageProperty class; normally it will be an Input or another dictInput.
         key (str): The key we want to access inside the dictionary provided.
 
         Returns:
@@ -35,7 +35,7 @@ class DictInput(MessageProperty):
         self._key = key
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return [self.check_has_key]
 
