@@ -58,7 +58,7 @@ class CreateLabwareProcessor:
 
         if validation:
             output_traction_message = OutputTractionMessage()
-            input.add_to_traction_message(output_traction_message)
+            input.add_to_message_property(output_traction_message)
             logger.info("Attempting to send to traction")
             output_traction_message.send(url=self._config.TRACTION_URL)
             output_traction_message.add_to_feedback_message(output_feedback_message)
@@ -90,7 +90,7 @@ class CreateLabwareProcessor:
     ) -> bool:
         """Send qc data to traction, if there is any error, add to feedback message"""
         traction_qc_message = TractionQcMessage()
-        input.add_to_traction_qc_message(traction_qc_message)
+        input.add_to_message_property(traction_qc_message)
         logger.info("Attempting to send qc message to traction")
         traction_qc_message.send(url=self._config.TRACTION_QC_URL)
         traction_qc_message.add_to_feedback_message(feedback_message)

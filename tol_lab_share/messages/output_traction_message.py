@@ -3,7 +3,6 @@ from json import dumps
 from datetime import datetime
 from requests import post, codes
 from tol_lab_share.messages.interfaces import (
-    OutputTractionMessageInterface,
     OutputFeedbackMessageInterface,
     OutputTractionMessageRequestInterface,
 )
@@ -335,7 +334,7 @@ class RequestSerializer:
         }
 
 
-class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
+class OutputTractionMessage(MessageProperty):
     """Class that handles the generation and publishing of a message to Traction."""
 
     def __init__(self):

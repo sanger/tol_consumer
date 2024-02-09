@@ -244,24 +244,6 @@ class OutputTractionMessageRequestInterface:
         ...
 
 
-class OutputTractionMessageInterface(ABC):
-    @abstractmethod
-    def payload(self):
-        ...
-
-    @abstractmethod
-    def send(self, url):
-        ...
-
-    @abstractmethod
-    def add_error(self, error: ErrorCode) -> None:
-        ...
-
-    @abstractmethod
-    def create_request(self) -> OutputTractionMessageRequestInterface:
-        ...
-
-
 class TractionQcMessageRequestInterface:
     @abstractmethod
     def validate(self) -> bool:
@@ -365,22 +347,4 @@ class TractionQcMessageRequestInterface:
     @date_submitted_utc.setter
     @abstractmethod
     def date_submitted_utc(self, value: Optional[float]) -> None:
-        ...
-
-
-class TractionQcMessageInterface(ABC):
-    @abstractmethod
-    def payload(self):
-        ...
-
-    @abstractmethod
-    def send(self, url):
-        ...
-
-    @abstractmethod
-    def add_error(self, error: ErrorCode) -> None:
-        ...
-
-    @abstractmethod
-    def requests(self, position: int) -> TractionQcMessageRequestInterface:
         ...

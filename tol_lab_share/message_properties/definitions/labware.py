@@ -10,12 +10,12 @@ from tol_lab_share.message_properties.definitions.barcode import Barcode
 from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.sample import Sample
-from tol_lab_share.message_properties.interfaces import MessagePropertyInterface
 from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
-from tol_lab_share.messages.output_traction_message import OutputTractionMessageInterface
-from tol_lab_share.messages.traction_qc_message import TractionQcMessageInterface
+from tol_lab_share.messages.output_traction_message import OutputTractionMessage
+from tol_lab_share.messages.traction_qc_message import TractionQcMessage
 
 from .message_property import MessageProperty
+from functools import singledispatchmethod
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +30,11 @@ class Labware(MessageProperty):
         self.add_property("barcode", Barcode(DictInput(input, BARCODE)))
         self.add_property("samples", self._parse_samples(input))
 
-    def _parse_samples(self, input: MessageProperty) -> List[MessagePropertyInterface]:
+    def _parse_samples(self, input: MessageProperty) -> List[MessageProperty]:
         """Parses the samples section and creates a sample for each position."""
         samples_dict = DictInput(input, SAMPLES)
         if samples_dict.validate():
-            samples_list_dict: List[MessagePropertyInterface] = []
+            samples_list_dict: List[MessageProperty] = []
             for position in range(len(samples_dict.value)):
                 sample = samples_dict.value[position]
                 samples_list_dict.append(Sample(sample))
@@ -78,16 +78,23 @@ class Labware(MessageProperty):
         else:
             return OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS
 
-    def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
+    @singledispatchmethod
+    def add_to_message_property(self, message_property: MessageProperty) -> None:
+        raise NotImplementedError(f"No registered method for message property type '{type(message_property)}'.")
+
+    @add_to_message_property.register
+    def _(self, message: OutputTractionMessage) -> None:
         """Given a traction message instance, it adds to the instance all the relevant information
         from the labware.
+
         Returns:
-        None
+            None
         """
-        super().add_to_traction_message(traction_message)
+        super().add_to_message_property(message)
+
         for sample_pos in range(len(self.properties("samples"))):
             sample = self.properties("samples")[sample_pos]
-            request = traction_message.create_request()
+            request = message.create_request()
             request.cost_code = sample.properties("cost_code").value
             request.study_uuid = sample.properties("study_uuid").value
             request.sample_name = sample.properties("sanger_sample_id").value
@@ -107,31 +114,26 @@ class Labware(MessageProperty):
             request.supplier_name = sample.properties("supplier_sample_name").value
             request.date_of_sample_collection = sample.properties("collection_date").value
 
-    def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
+    @add_to_message_property.register
+    def _(self, message: TractionQcMessage) -> None:
         """Given a traction qc message instance, it adds the qc data.
+
         Returns:
-        None
+            None
         """
-        super().add_to_traction_qc_message(traction_qc_message)
+        super().add_to_message_property(message)
+
         for sample_pos in range(len(self.properties("samples"))):
             sample = self.properties("samples")[sample_pos]
-            traction_qc_message.requests(sample_pos).sheared_femto_fragment_size = sample.properties(
+            message.requests(sample_pos).sheared_femto_fragment_size = sample.properties(
                 "sheared_femto_fragment_size"
             ).value
-            traction_qc_message.requests(sample_pos).post_spri_concentration = sample.properties(
-                "post_spri_concentration"
-            ).value
-            traction_qc_message.requests(sample_pos).post_spri_volume = sample.properties("post_spri_volume").value
-            traction_qc_message.requests(sample_pos).final_nano_drop_280 = sample.properties(
-                "final_nano_drop_280"
-            ).value
-            traction_qc_message.requests(sample_pos).final_nano_drop_230 = sample.properties(
-                "final_nano_drop_230"
-            ).value
-            traction_qc_message.requests(sample_pos).final_nano_drop = sample.properties("final_nano_drop").value
-            traction_qc_message.requests(sample_pos).shearing_qc_comments = sample.properties(
-                "shearing_qc_comments"
-            ).value
-            traction_qc_message.requests(sample_pos).date_submitted_utc = sample.properties("date_submitted_utc").value
-            traction_qc_message.requests(sample_pos).container_barcode = self.properties("barcode").value
-            traction_qc_message.requests(sample_pos).sanger_sample_id = sample.properties("sanger_sample_id").value
+            message.requests(sample_pos).post_spri_concentration = sample.properties("post_spri_concentration").value
+            message.requests(sample_pos).post_spri_volume = sample.properties("post_spri_volume").value
+            message.requests(sample_pos).final_nano_drop_280 = sample.properties("final_nano_drop_280").value
+            message.requests(sample_pos).final_nano_drop_230 = sample.properties("final_nano_drop_230").value
+            message.requests(sample_pos).final_nano_drop = sample.properties("final_nano_drop").value
+            message.requests(sample_pos).shearing_qc_comments = sample.properties("shearing_qc_comments").value
+            message.requests(sample_pos).date_submitted_utc = sample.properties("date_submitted_utc").value
+            message.requests(sample_pos).container_barcode = self.properties("barcode").value
+            message.requests(sample_pos).sanger_sample_id = sample.properties("sanger_sample_id").value

@@ -1,17 +1,13 @@
+from __future__ import annotations
 import datetime
 import logging
-from functools import cached_property
+from functools import cached_property, singledispatchmethod
 from itertools import chain
 from typing import Any, Callable, Dict, List, Optional, Union, cast
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
-from tol_lab_share.message_properties.interfaces import MessagePropertyInterface
-from tol_lab_share.messages.interfaces import (
-    OutputFeedbackMessageInterface,
-    OutputTractionMessageInterface,
-    TractionQcMessageInterface,
-)
+from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +15,7 @@ PROPERTY_TYPE_PROPERTY = "Property"
 PROPERTY_TYPE_ARRAY = "Array"
 
 
-class MessageProperty(MessagePropertyInterface):
+class MessageProperty:
     """Base class for MessageProperty that provides the core functionality of
     running validations, managing properties, triggering errors and some common
     validation checks.
@@ -59,7 +55,7 @@ class MessageProperty(MessagePropertyInterface):
         """Returns a boolean indicating if the property exists for the key provided"""
         return key in self._properties
 
-    def _add_property_instance(self, property_name: str, instance: MessagePropertyInterface) -> None:
+    def _add_property_instance(self, property_name: str, instance: MessageProperty) -> None:
         """Given a property name and an instance of MessageProperty, it configures this instance as
         the value for the property.
         Parameters:
@@ -83,7 +79,7 @@ class MessageProperty(MessagePropertyInterface):
         """
         return f"{property_name}[{pos}]"
 
-    def _add_property_list(self, property_name: str, input: List[MessagePropertyInterface]) -> None:
+    def _add_property_list(self, property_name: str, input: List[MessageProperty]) -> None:
         """Given a property name and a list of message properties, it stores this list of MessageProperty
         as the value of the property and includes the position in each of them.
         Parameters:
@@ -101,9 +97,7 @@ class MessageProperty(MessagePropertyInterface):
             instance.property_type = PROPERTY_TYPE_ARRAY
             self._properties[property_name].append(instance)
 
-    def add_property(
-        self, property_name: str, input: Union[MessagePropertyInterface, List[MessagePropertyInterface]]
-    ) -> None:
+    def add_property(self, property_name: str, input: Union[MessageProperty, List[MessageProperty]]) -> None:
         """Given an property name and an input it adds the input as the value of the property
         Parameters:
         property_name (str) name of the property
@@ -134,7 +128,7 @@ class MessageProperty(MessagePropertyInterface):
         return self._property_source
 
     @property_source.setter
-    def property_source(self, value: MessagePropertyInterface) -> None:
+    def property_source(self, value: MessageProperty) -> None:
         """Sets the property source for this property"""
         self._property_source = value
 
@@ -196,19 +190,15 @@ class MessageProperty(MessagePropertyInterface):
         for property in self._properties_instances:
             property.add_to_feedback_message(feedback_message)
 
-    def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
-        """Calls the method add_to_traction_message in all the properties defined inside this property
-        (if there are any).
-        """
-        for property in self._properties_instances:
-            property.add_to_traction_message(traction_message)
+    @singledispatchmethod
+    def add_to_message_property(self, message_property: MessageProperty) -> None:
+        """Adds the information from child properties of this property to the message provided.
 
-    def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
-        """Calls the method add_to_traction_qc_message for all the properties defined inside this property
-        (if there are any).
+        Args:
+            message_property (MessageProperty): The message property to add the information to.
         """
         for property in self._properties_instances:
-            property.add_to_traction_qc_message(traction_qc_message)
+            property.add_to_message_property(message_property)
 
     @property
     def errors(self) -> List[ErrorCode]:
@@ -367,7 +357,7 @@ class MessageProperty(MessagePropertyInterface):
         return error_list
 
     @cached_property
-    def _properties_instances(self) -> List[MessagePropertyInterface]:
+    def _properties_instances(self) -> List[MessageProperty]:
         """Returns a list that contains all the properties inside this
         instance.
         Returns:

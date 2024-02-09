@@ -12,7 +12,6 @@ from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
 from tol_lab_share.messages.interfaces import (
     OutputFeedbackMessageInterface,
-    TractionQcMessageInterface,
     TractionQcMessageRequestInterface,
 )
 
@@ -176,7 +175,7 @@ class QcRequestSerializer:
         return {k: v for k, v in obj.items() if v}
 
 
-class TractionQcMessage(MessageProperty, TractionQcMessageInterface):
+class TractionQcMessage(MessageProperty):
     """Class that handle the generation and publishing of a QC message to Traction"""
 
     def __init__(self):
