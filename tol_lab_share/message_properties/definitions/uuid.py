@@ -2,7 +2,7 @@ from .message_property import MessageProperty
 from uuid import UUID
 from tol_lab_share import error_codes
 
-from typing import Optional, Any
+from typing import Any
 from functools import cached_property
 import logging
 from typing import Callable
@@ -54,6 +54,6 @@ class Uuid(MessageProperty):
         return False
 
     @cached_property
-    def value(self) -> Optional[Any]:
+    def value(self) -> Any:
         """Returns the string representation of the uuid"""
         return self._input.value.decode("utf-8")

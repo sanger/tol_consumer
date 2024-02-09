@@ -3,7 +3,7 @@ import datetime
 import logging
 from functools import cached_property, singledispatchmethod
 from itertools import chain
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Callable, Union, cast
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
@@ -128,7 +128,7 @@ class MessageProperty:
         """Alias to property name"""
         return self.property_name
 
-    def trigger_error(self, error_code: ErrorCode, text: Optional[str] = None) -> None:
+    def trigger_error(self, error_code: ErrorCode, text: str | None = None) -> None:
         """Given an error instance, it performs the action associated with it and after that it adds
         the error to the list of errors defined for the current property.
         Parameters:
