@@ -3,7 +3,7 @@ from functools import cached_property
 from tol_lab_share import error_codes
 import logging
 from tol_lab_share.message_properties.definitions.input import Input
-from typing import Callable, Any, Union
+from typing import Callable, Any
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ class dictInput(MessageProperty):
     exist, it will trigger an error on validation.
     """
 
-    def __init__(self, input: Union[MessageProperty, dict[str, Any]], key: str):
+    def __init__(self, input: MessageProperty | dict[str, Any], key: str):
         """Constructor that will create an instance to manage the access of the input
         dictionary using the key provided as argument.
 

@@ -3,7 +3,7 @@ import datetime
 import logging
 from functools import cached_property, singledispatchmethod
 from itertools import chain
-from typing import Any, Callable, Union, cast
+from typing import Any, Callable, cast
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
@@ -96,7 +96,7 @@ class MessageProperty:
             instance.property_type = PROPERTY_TYPE_ARRAY
             self._properties[property_name].append(instance)
 
-    def add_property(self, property_name: str, input: Union[MessageProperty, list[MessageProperty]]) -> None:
+    def add_property(self, property_name: str, input: MessageProperty | list[MessageProperty]) -> None:
         """Given an property name and an input it adds the input as the value of the property
         Parameters:
         property_name (str) name of the property
