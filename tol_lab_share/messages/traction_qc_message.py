@@ -1,3 +1,4 @@
+from __future__ import annotations
 from functools import singledispatchmethod
 import logging
 from json import dumps
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class TractionQcMessageRequest:
-    """Class that holds the information for a traction Qc message request."""
+    """Class that holds the information for a Traction QC message request."""
 
     def __init__(self):
         """Constructor to initialize the info for the request."""
@@ -33,8 +34,11 @@ class TractionQcMessageRequest:
         self.shearing_qc_comments: str | None = None
 
     def validate(self) -> bool:
-        """Checks that we have all required information and that it is valid before
-        marking this request as valid."""
+        """Validate that the request has all the required information.
+
+        Returns:
+            bool: True if the request is valid; otherwise False.
+        """
         return (
             (self.sanger_sample_id is not None)
             and (self.container_barcode is not None)
@@ -48,10 +52,11 @@ class TractionQcMessageRequest:
             and (self.date_submitted_utc is not None)
         )
 
-    def serializer(self):
-        """Returns a serializer instance to handle the generation of the message for this request.
+    def serializer(self) -> QcRequestSerializer:
+        """A serializer instance to handle the generation of the payload for this request.
+
         Returns:
-        RequestSerializer instance for this request
+            RequestSerializer: The serializer for this request.
         """
         return QcRequestSerializer(self)
 
@@ -61,15 +66,17 @@ class QcRequestSerializer:
 
     def __init__(self, instance: TractionQcMessageRequest):
         """Constructor that sets initial state of the instance.
-        Parameters:
-        instance (TractionQcMessageRequest) request that we want to serialize
+
+        Args:
+            instance (TractionQcMessageRequest): The request to serialize.
         """
         self.instance = instance
 
     def payload(self) -> dict[str, Any]:
-        """Constructs the payload with qc data.
+        """Prepare a payload for the TractionQcMessageRequest.
+
         Returns:
-        Dic[str,str] with all the required payload information for Traction
+            dict[str, Any]: The payload for the request.  No entries for empty values will be included.
         """
         obj = {
             "sheared_femto_fragment_size": self.instance.sheared_femto_fragment_size,
@@ -102,12 +109,13 @@ class TractionQcMessage(MessageProperty):
     @property
     def origin(self) -> str:
         """Default origin identifier. This will be appended to any errors generated to know
-        where it was originated when we received"""
+        where it was originated when we received
+        """
         return "TractionQcMessage"
 
     @property
     def validators(self) -> list[Callable]:
-        """list of validators to check the message is correct before sending"""
+        """A list of validators to check the message is correct before sending."""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
     def create_request(self) -> TractionQcMessageRequest:
@@ -120,22 +128,23 @@ class TractionQcMessage(MessageProperty):
         return self._requests[-1]
 
     def request_attributes(self) -> list[dict[str, Any]]:
-        """Returns a list with all the qc data payload for every request
+        """Prepare a payload for all the QC data of every request.
+
         Returns:
-        list[dict[str,Any]] with all payload for all the requests
+            list[dict[str,Any]]: The payload for all the requests.
         """
-        return [self._requests[position].serializer().payload() for position in range(len(self._requests))]
+        return [request.serializer().payload() for request in self._requests]
 
     @property
     def errors(self) -> list[ErrorCode]:
-        """list of errors defined for this message"""
+        """The list of errors defined for this message"""
         return self._errors
 
     def check_has_requests(self) -> bool:
-        """Returns a bool identifying if the message has requests. If not it will trigger an error and
-        return false.
+        """Check whether the message has requests. If not an error will be triggered.
+
         Returns
-        bool saying if the message has requests
+            bool: True if the message has requests; otherwise False.
         """
         if self._requests:
             return True
@@ -144,16 +153,18 @@ class TractionQcMessage(MessageProperty):
         return False
 
     def check_no_errors(self) -> bool:
-        """Checks that a message has no errors
+        """Checks that a message has no errors.
+
         Returns:
-        bool indicating if there is no errors
+            bool: True if there are no errors; otherwise False.
         """
         return not self.errors
 
     def check_requests_have_all_content(self) -> bool:
         """Checks that all requests provided are valid. Triggers an error if any is not.
+
         Returns:
-        bool indicating that all requests have valid content inside.
+            bool: True if all requests validate; otherwise False.
         """
         if all([request.validate() for request in self._requests]):
             return True
@@ -162,7 +173,11 @@ class TractionQcMessage(MessageProperty):
         return False
 
     def payload(self) -> dict[str, Any]:
-        """Returns the valid payload to send to traction"""
+        """Prepare a valid payload to send to traction.
+
+        Returns:
+            dict[str, Any]: The payload.
+        """
         return {
             "data": {
                 "type": "qc_receptions",
@@ -175,9 +190,10 @@ class TractionQcMessage(MessageProperty):
 
     def error_code_traction_problem(self, status_code: int, error_str: str) -> None:
         """Triggers an error indicating that traction failed.
-        Parameters:
-        status_code (int) HTTP status code when sending to traction (422, 500, etc)
-        error_str (str) contents received by Traction endpoint on the request
+
+        Args:
+            status_code (int): HTTP status code when sending to traction (422, 500, etc)
+            error_str (str): contents received by Traction endpoint on the request
         """
         self.trigger_error(
             error_codes.ERROR_27_TRACTION_QC_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
@@ -186,10 +202,12 @@ class TractionQcMessage(MessageProperty):
     def send(self, url: str) -> bool:
         """Sends a request to Traction. If is correct returns true, if not it will trigger an error and
         return False
-        Parameters:
-        url (str) url where it will send the Traction qc request
+
+        Args:
+            url (str): url where it will send the Traction qc request
+
         Returns:
-        bool indicating if the request was successful
+            bool indicating if the request was successful
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 

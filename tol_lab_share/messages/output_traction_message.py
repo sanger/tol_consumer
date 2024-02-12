@@ -1,3 +1,4 @@
+from __future__ import annotations
 from functools import singledispatchmethod
 from typing import Callable, Any
 from json import dumps
@@ -16,9 +17,7 @@ from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 
 class OutputTractionMessageRequest:
-    """Class that manages the information of a single Traction request instance
-    as part of the Traction message
-    """
+    """Class that manages the information of a single Traction request instance as part of the Traction message."""
 
     def __init__(self):
         """Constructor that initializes all info for a single request."""
@@ -42,7 +41,11 @@ class OutputTractionMessageRequest:
         self.taxon_id: str | None = None
 
     def validate(self) -> bool:
-        """Checks that we have all required information and that it is valid before marking this request as valid."""
+        """Validate the information in this request.
+
+        Returns:
+            bool: True if the request is valid; otherwise False.
+        """
         return (
             (self.library_type is not None)
             and (self.study_uuid is not None)
@@ -53,10 +56,11 @@ class OutputTractionMessageRequest:
             and (self.species is not None)
         )
 
-    def serializer(self):
+    def serializer(self) -> RequestSerializer:
         """Returns a serializer instance to handle the generation of the message for this request.
+
         Returns:
-        RequestSerializer instance for this request
+            RequestSerializer: instance for this request
         """
         return RequestSerializer(self)
 
@@ -81,9 +85,10 @@ class RequestSerializer:
         return bool(self.instance.library_type and ("ONT" in self.instance.library_type))
 
     def request_payload(self) -> dict[str, Any]:
-        """Generates the correct payload depending on the library type for the current request.
+        """Generate the payload for the request in this message.
+
         Returns:
-        Dic[str,str] with the required information to send for this request to Traction
+            dict[str, Any] A dictionary containing the Traction payload for the request.
         """
         if self.is_ont_library_type():
             return {
@@ -100,13 +105,15 @@ class RequestSerializer:
             }
 
     def sample_payload(self) -> dict[str, Any]:
-        """Generates the correct payload for the sample defined in this request
+        """Generate the payload for the sample in this request.
+
         Returns:
-        Dic[str,str] with the required sample information to send for this request to Traction
+            dict[str, Any]: A dictionary containing the Traction payload for the sample.
         """
         collection_date = None
         if self.instance.date_of_sample_collection is not None:
             collection_date = self.instance.date_of_sample_collection.strftime("%Y-%m-%d")
+
         return {
             "name": self.instance.sample_name,
             "external_id": self.instance.sample_uuid,
@@ -123,10 +130,11 @@ class RequestSerializer:
         }
 
     def container_payload(self) -> dict[str, Any]:
-        """Generates the correct payload for the container defined in this request depending on
-        the container type (tubes or wells)
+        """Generate the payload for the container in this request.
+        The contents of the payload varies depending on the container type (tubes or wells).
+
         Returns:
-        Dic[str,str] with the required container information to send for this request to Traction
+            dict[str, Any]: A dictionary containing the Traction payload for the container.
         """
         if self.instance.container_type == "tubes":
             return {"type": self.instance.container_type, "barcode": self.instance.container_barcode}
@@ -138,10 +146,10 @@ class RequestSerializer:
             }
 
     def payload(self) -> dict[str, Any]:
-        """Main builder of the payload required to describe all information required for Traction:
-        sample, request and container.
+        """Generate a payload with the information required by Traction.
+
         Returns:
-        Dic[str,str] with all the required payload information for Traction
+            dict[str, Any]: A dictionary containing the overall payload.
         """
         return {
             "request": self.request_payload(),
@@ -162,14 +170,21 @@ class OutputTractionMessage(MessageProperty):
 
     @property
     def origin(self) -> str:
-        """Default origin identifier. This will be appended to any errors generated to know where it was originated
-        when we received it.
+        """The origin identifier for this message type.
+        This will be appended to any errors generated via the `trigger_error` method.
+
+        Returns:
+            str: The origin identifier.
         """
         return "OutputFeedbackMessage"
 
     @property
     def validators(self) -> list[Callable]:
-        """list of validators to check the message is correct before sending"""
+        """A list of validators to check the message is correct.
+
+        Returns:
+            list[Callable]: The list of methods to call for complete validation of this message.
+        """
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
     def create_request(self) -> OutputTractionMessageRequest:
@@ -182,24 +197,24 @@ class OutputTractionMessage(MessageProperty):
         return self._requests[-1]
 
     def request_attributes(self) -> list[dict[str, Any]]:
-        """Returns a list with all the payloads for every request
+        """Prepare a payload for all the requests.
 
         Returns:
-            list[dict[str,Any]] with all payloads for all the requests
+            list[dict[str, Any]]: The payload for all the requests.
         """
         return [request.serializer().payload() for request in self._requests]
 
     @property
     def errors(self) -> list[ErrorCode]:
-        """list of errors defined for this message"""
+        """A list of errors defined for this message."""
         return self._errors
 
     def check_has_requests(self) -> bool:
-        """Returns a bool identifying if the message has requests. If not it will trigger an error and
-        return false.
+        """Check that this message has associated requests.
+        Even if there are no requests, this will not trigger an error.
 
-        Returns
-            bool saying if the message has requests
+        Returns:
+            bool: True if there are registered requests; otherwise False.
         """
         if self._requests:
             return True
@@ -208,18 +223,19 @@ class OutputTractionMessage(MessageProperty):
         return False
 
     def check_no_errors(self) -> bool:
-        """Checks that a message has no errors
+        """Check that the message has no errors.
 
         Returns:
-            bool indicating if there is no errors
+            bool: True if there are no errors registered; otherwise False.
         """
         return not self.errors
 
     def check_requests_have_all_content(self) -> bool:
-        """Checks that all requests provided are valid. Triggers an error if any is not.
+        """Checks that all requests provided have valid content.
+        Triggers an error if any is not.
 
         Returns:
-            bool indicating that all requests have valid content inside.
+            bool: True if all requests validate successfully; otherwise False.
         """
         if all([request.validate() for request in self._requests]):
             return True
@@ -228,7 +244,11 @@ class OutputTractionMessage(MessageProperty):
         return False
 
     def payload(self) -> dict[str, Any]:
-        """Returns the valid payload to send to traction"""
+        """Generates the payload to send to Traction.
+
+        Returns:
+            dict[str, Any]: The payload dictionary.
+        """
         return {
             "data": {
                 "type": "receptions",
@@ -240,25 +260,25 @@ class OutputTractionMessage(MessageProperty):
         }
 
     def error_code_traction_problem(self, status_code: int, error_str: str) -> None:
-        """Triggers an error indicating that traction failed.
+        """Triggers an error indicating that Traction failed.
 
         Args:
-            status_code (int) HTTP status code when sending to traction (422, 500, etc)
-            error_str (str) contents received by Traction endpoint on the request
+            status_code (int): HTTP status code when sending to Traction (422, 500, etc)
+            error_str (str): Error message received from the Traction endpoint.
         """
         self.trigger_error(
             error_codes.ERROR_13_TRACTION_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
         )
 
     def send(self, url: str) -> bool:
-        """Sends a request to Traction. If is correct returns true, if not it will trigger an error and
-        return False
+        """Sends a Traction API request to the provided URL.
+        If the send fails, an error code will be recorded.
 
         Args:
-            url (str) url where it will send the Traction request
+            url (str): The URL to submit the Traction request to.
 
         Returns:
-            bool indicating if the request was successful
+            bool: True if the request was sent successfully; otherwise False.
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
