@@ -88,20 +88,20 @@ def test_output_traction_message_can_generate_payload_for_plates():
                 "plates_attributes": [
                     {
                         "barcode": "1",
-                        "type": "wells",
+                        "type": "plates",
                         "wells_attributes": [
                             {
                                 "position": "A1",
                                 "request": {
                                     "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
-                                    "library_type": "ONT_mylib",
+                                    "library_type": "library",
                                     "cost_code": "S1234",
                                 },
                                 "sample": {
                                     "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
                                     "name": "test1",
                                     "species": "test " "species",
-                                    "priority_level": "Medium",
+                                    "priority_level": None,
                                     "sanger_sample_id": "sample1",
                                     "public_name": "Public1",
                                     "supplier_name": "supplier1",
@@ -116,7 +116,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
                                 "position": "B1",
                                 "request": {
                                     "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
-                                    "library_type": "ONT_mylib",
+                                    "library_type": "library",
                                     "cost_code": "S4567",
                                 },
                                 "sample": {
@@ -195,7 +195,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
                 "plates_attributes": [
                     {
                         "barcode": "1",
-                        "type": "wells",
+                        "type": "plates",
                         "wells_attributes": [
                             {
                                 "position": "A1",

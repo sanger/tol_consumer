@@ -1,4 +1,5 @@
 from functools import singledispatchmethod
+import itertools
 from typing import Callable, Any
 from json import dumps
 from datetime import datetime
@@ -125,6 +126,21 @@ class PlateSerializer(Serializer):
         """
         self._requests = plate_requests
 
+    def well_attributes_payload(self) -> list[dict[str, Any]]:
+        """Generate the well attributes payload for each of the plate's requests.
+
+        Returns:
+            list[dict[str, Any]]: A list containing the well attributes for all the request.
+        """
+        return [
+            {
+                "position": request.container_location,
+                "request": self.request_payload(request),
+                "sample": self.sample_payload(request),
+            }
+            for request in self._requests
+        ]
+
     def payload(self) -> dict[str, Any]:
         """Generate a payload with the information required by Traction.
 
@@ -132,8 +148,9 @@ class PlateSerializer(Serializer):
             dict[str, Any]: A dictionary containing the overall payload.
         """
         return {
-            "request": self.request_payload(self._requests[0]),
-            "sample": self.sample_payload(self._requests[0]),
+            "barcode": self._requests[0].container_barcode,
+            "type": "plates",
+            "wells_attributes": self.well_attributes_payload(),
         }
 
 class TubeSerializer(Serializer):
@@ -155,7 +172,7 @@ class TubeSerializer(Serializer):
         """
         return {
             "barcode": self._request.container_barcode,
-            "type": self._request.container_type,
+            "type": "tubes",
             "request": self.request_payload(self._request),
             "sample": self.sample_payload(self._request),
         }
@@ -205,7 +222,12 @@ class OutputTractionMessage(MessageProperty):
         Returns:
             list[dict[str, Any]]: A list containing the payload for all the plates.
         """
-        return [PlateSerializer([request]).payload() for request in self._requests if request.container_type == "wells"]
+        # Group well requests by plate barcode
+        well_requests = [request for request in self._requests if request.container_type == "wells"]
+        well_requests.sort(key=lambda request: request.container_barcode)
+        plate_requests = itertools.groupby(well_requests, lambda request: request.container_barcode)
+
+        return [PlateSerializer(list(requests)).payload() for _, requests in plate_requests]
 
     def tubes_attributes(self) -> list[dict[str, Any]]:
         """Prepare a payload for all the requests related to tubes.
