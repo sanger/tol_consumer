@@ -182,12 +182,12 @@ def test_add_to_traction_qc_message(valid_sample):
     traction_qc_message = TractionQcMessage()
     instance.add_to_message_property(traction_qc_message)
 
-    assert traction_qc_message.requests(0).sanger_sample_id == "cichlid_pacbio8196429"
-    assert traction_qc_message.requests(0).container_barcode == "BARCODE001"
-    assert traction_qc_message.requests(0).sheared_femto_fragment_size == "8"
-    assert traction_qc_message.requests(0).post_spri_concentration == "9"
-    assert traction_qc_message.requests(0).post_spri_volume == "10"
-    assert traction_qc_message.requests(0).final_nano_drop_280 == "200"
-    assert traction_qc_message.requests(0).final_nano_drop_230 == "200"
-    assert traction_qc_message.requests(0).final_nano_drop == "150"
-    assert traction_qc_message.requests(0).shearing_qc_comments == ""
+    assert traction_qc_message._requests[0].sanger_sample_id == "cichlid_pacbio8196429"
+    assert traction_qc_message._requests[0].container_barcode == "BARCODE001"
+    assert traction_qc_message._requests[0].sheared_femto_fragment_size == "8"
+    assert traction_qc_message._requests[0].post_spri_concentration == "9"
+    assert traction_qc_message._requests[0].post_spri_volume == "10"
+    assert traction_qc_message._requests[0].final_nano_drop_280 == "200"
+    assert traction_qc_message._requests[0].final_nano_drop_230 == "200"
+    assert traction_qc_message._requests[0].final_nano_drop == "150"
+    assert traction_qc_message._requests[0].shearing_qc_comments == ""

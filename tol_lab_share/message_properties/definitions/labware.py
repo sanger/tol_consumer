@@ -89,8 +89,7 @@ class Labware(MessageProperty):
         """
         super().add_to_message_property(message)
 
-        for sample_pos in range(len(self.properties("samples"))):
-            sample = self.properties("samples")[sample_pos]
+        for sample in self.properties("samples"):
             request = message.create_request()
             request.cost_code = sample.properties("cost_code").value
             request.study_uuid = sample.properties("study_uuid").value
@@ -120,17 +119,17 @@ class Labware(MessageProperty):
         """
         super().add_to_message_property(message)
 
-        for sample_pos in range(len(self.properties("samples"))):
-            sample = self.properties("samples")[sample_pos]
-            message.requests(sample_pos).sheared_femto_fragment_size = sample.properties(
+        for sample in self.properties("samples"):
+            request = message.create_request()
+            request.sheared_femto_fragment_size = sample.properties(
                 "sheared_femto_fragment_size"
             ).value
-            message.requests(sample_pos).post_spri_concentration = sample.properties("post_spri_concentration").value
-            message.requests(sample_pos).post_spri_volume = sample.properties("post_spri_volume").value
-            message.requests(sample_pos).final_nano_drop_280 = sample.properties("final_nano_drop_280").value
-            message.requests(sample_pos).final_nano_drop_230 = sample.properties("final_nano_drop_230").value
-            message.requests(sample_pos).final_nano_drop = sample.properties("final_nano_drop").value
-            message.requests(sample_pos).shearing_qc_comments = sample.properties("shearing_qc_comments").value
-            message.requests(sample_pos).date_submitted_utc = sample.properties("date_submitted_utc").value
-            message.requests(sample_pos).container_barcode = self.properties("barcode").value
-            message.requests(sample_pos).sanger_sample_id = sample.properties("sanger_sample_id").value
+            request.post_spri_concentration = sample.properties("post_spri_concentration").value
+            request.post_spri_volume = sample.properties("post_spri_volume").value
+            request.final_nano_drop_280 = sample.properties("final_nano_drop_280").value
+            request.final_nano_drop_230 = sample.properties("final_nano_drop_230").value
+            request.final_nano_drop = sample.properties("final_nano_drop").value
+            request.shearing_qc_comments = sample.properties("shearing_qc_comments").value
+            request.date_submitted_utc = sample.properties("date_submitted_utc").value
+            request.container_barcode = self.properties("barcode").value
+            request.sanger_sample_id = sample.properties("sanger_sample_id").value

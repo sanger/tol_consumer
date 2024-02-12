@@ -176,7 +176,7 @@ class OutputTractionMessage(MessageProperty):
         """Creates a new request and returns it. It will be appended to the list of requests.
 
         Returns:
-            OutputTractionMessageRequestInterface: The newly created request.
+            OutputTractionMessageRequest: The newly created request.
         """
         self._requests.append(OutputTractionMessageRequest())
         return self._requests[-1]
@@ -201,11 +201,11 @@ class OutputTractionMessage(MessageProperty):
         Returns
             bool saying if the message has requests
         """
-        if len(self._requests) > 0:
+        if self._requests:
             return True
-        else:
-            self.trigger_error(error_codes.ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS)
-            return False
+
+        self.trigger_error(error_codes.ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS)
+        return False
 
     def check_no_errors(self) -> bool:
         """Checks that a message has no errors
@@ -213,7 +213,7 @@ class OutputTractionMessage(MessageProperty):
         Returns:
             bool indicating if there is no errors
         """
-        return len(self.errors) == 0
+        return not self.errors
 
     def check_requests_have_all_content(self) -> bool:
         """Checks that all requests provided are valid. Triggers an error if any is not.

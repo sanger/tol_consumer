@@ -95,7 +95,7 @@ class TractionQcMessage(MessageProperty):
     def __init__(self):
         """Resets initial data"""
         super().__init__(Input(self))
-        self._requests: dict[int, TractionQcMessageRequest] = {}
+        self._requests: list[TractionQcMessageRequest] = []
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
@@ -110,20 +110,14 @@ class TractionQcMessage(MessageProperty):
         """list of validators to check the message is correct before sending"""
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
-    def requests(self, position: int) -> TractionQcMessageRequest:
-        """Returns the request at position position from this message. If there is no request there it
-        will create a new instance and return it.
-
-        Args:
-            position (int) position that we want to return.
+    def create_request(self) -> TractionQcMessageRequest:
+        """Creates a new request and returns it. It will be appended to the list of requests.
 
         Returns:
-            TractionQcMessageRequest at the specified position.
+            TractionQcMessageRequest: The newly created request.
         """
-        if position not in self._requests:
-            self._requests[position] = TractionQcMessageRequest()
-
-        return self._requests[position]
+        self._requests.append(TractionQcMessageRequest())
+        return self._requests[-1]
 
     def request_attributes(self) -> list[dict[str, Any]]:
         """Returns a list with all the qc data payload for every request
@@ -143,26 +137,27 @@ class TractionQcMessage(MessageProperty):
         Returns
         bool saying if the message has requests
         """
-        if len(self._requests) > 0:
+        if self._requests:
             return True
-        else:
-            self.trigger_error(error_codes.ERROR_25_TRACTION_QC_MESSAGE_HAS_NO_REQUESTS)
-            return False
+
+        self.trigger_error(error_codes.ERROR_25_TRACTION_QC_MESSAGE_HAS_NO_REQUESTS)
+        return False
 
     def check_no_errors(self) -> bool:
         """Checks that a message has no errors
         Returns:
         bool indicating if there is no errors
         """
-        return len(self.errors) == 0
+        return not self.errors
 
     def check_requests_have_all_content(self) -> bool:
         """Checks that all requests provided are valid. Triggers an error if any is not.
         Returns:
         bool indicating that all requests have valid content inside.
         """
-        if all([self.requests(key).validate() for key in self._requests]):
+        if all([request.validate() for request in self._requests]):
             return True
+
         self.trigger_error(error_codes.ERROR_26_TRACTION_QC_MESSAGE_REQUESTS_HAVE_MISSING_DATA)
         return False
 

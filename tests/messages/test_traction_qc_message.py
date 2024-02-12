@@ -22,34 +22,38 @@ class TestTractionQcMessage:
     @pytest.fixture()
     def valid_traction_qc_message(self):
         traction_qc_message = TractionQcMessage()
-        traction_qc_message.requests(0).sanger_sample_id = "sanger_sample_id_DDD"
-        traction_qc_message.requests(0).container_barcode = "FD20706500"
-        traction_qc_message.requests(0).sheared_femto_fragment_size = "5"
-        traction_qc_message.requests(0).post_spri_concentration = "10"
-        traction_qc_message.requests(0).post_spri_volume = "20"
-        traction_qc_message.requests(0).final_nano_drop_280 = "280"
-        traction_qc_message.requests(0).final_nano_drop_230 = "230"
-        traction_qc_message.requests(0).final_nano_drop = "200"
-        traction_qc_message.requests(0).shearing_qc_comments = "Comments"
-        traction_qc_message.requests(0).date_submitted_utc = datetime.now().timestamp() * 1000
 
-        traction_qc_message.requests(1).sanger_sample_id = "sanger_sample_id_DDD2"
-        traction_qc_message.requests(1).container_barcode = "FD20706501"
-        traction_qc_message.requests(1).sheared_femto_fragment_size = "9"
-        traction_qc_message.requests(1).post_spri_concentration = "10"
-        traction_qc_message.requests(1).post_spri_volume = "30"
-        traction_qc_message.requests(1).final_nano_drop_280 = "180"
-        traction_qc_message.requests(1).final_nano_drop_230 = "130"
-        traction_qc_message.requests(1).final_nano_drop = "100"
-        traction_qc_message.requests(1).shearing_qc_comments = ""
-        traction_qc_message.requests(1).date_submitted_utc = datetime.now().timestamp() * 1000
+        request = traction_qc_message.create_request()
+        request.sanger_sample_id = "sanger_sample_id_DDD"
+        request.container_barcode = "FD20706500"
+        request.sheared_femto_fragment_size = "5"
+        request.post_spri_concentration = "10"
+        request.post_spri_volume = "20"
+        request.final_nano_drop_280 = "280"
+        request.final_nano_drop_230 = "230"
+        request.final_nano_drop = "200"
+        request.shearing_qc_comments = "Comments"
+        request.date_submitted_utc = datetime.now().timestamp() * 1000
+
+        request = traction_qc_message.create_request()
+        request.sanger_sample_id = "sanger_sample_id_DDD2"
+        request.container_barcode = "FD20706501"
+        request.sheared_femto_fragment_size = "9"
+        request.post_spri_concentration = "10"
+        request.post_spri_volume = "30"
+        request.final_nano_drop_280 = "180"
+        request.final_nano_drop_230 = "130"
+        request.final_nano_drop = "100"
+        request.shearing_qc_comments = ""
+        request.date_submitted_utc = datetime.now().timestamp() * 1000
 
         return traction_qc_message
 
     @pytest.fixture()
     def invalid_traction_qc_message(self):
         traction_qc_message = TractionQcMessage()
-        traction_qc_message.requests(0).sheared_femto_fragment_size = "5"
+        request = traction_qc_message.create_request()
+        request.sheared_femto_fragment_size = "5"
 
         return traction_qc_message
 
