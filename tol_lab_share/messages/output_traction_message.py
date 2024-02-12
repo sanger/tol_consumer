@@ -59,6 +59,7 @@ class OutputTractionMessageRequest:
 
 class Serializer:
     """Class to manage the serialization to JSON of the request received as argument in the constructor."""
+
     @staticmethod
     def request_payload(request: OutputTractionMessageRequest) -> dict[str, Any]:
         """Generate the request payload for the given request.
@@ -153,6 +154,7 @@ class PlateSerializer(Serializer):
             "wells_attributes": self.well_attributes_payload(),
         }
 
+
 class TubeSerializer(Serializer):
     """Class to manage the serialization of plate requests."""
 
@@ -224,7 +226,7 @@ class OutputTractionMessage(MessageProperty):
         """
         # Group well requests by plate barcode
         well_requests = [request for request in self._requests if request.container_type == "wells"]
-        well_requests.sort(key=lambda request: request.container_barcode)
+        well_requests.sort(key=lambda request: request.container_barcode or "")
         plate_requests = itertools.groupby(well_requests, lambda request: request.container_barcode)
 
         return [PlateSerializer(list(requests)).payload() for _, requests in plate_requests]
