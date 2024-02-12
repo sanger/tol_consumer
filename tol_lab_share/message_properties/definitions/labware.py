@@ -121,9 +121,7 @@ class Labware(MessageProperty):
 
         for sample in self.properties("samples"):
             request = message.create_request()
-            request.sheared_femto_fragment_size = sample.properties(
-                "sheared_femto_fragment_size"
-            ).value
+            request.sheared_femto_fragment_size = sample.properties("sheared_femto_fragment_size").value
             request.post_spri_concentration = sample.properties("post_spri_concentration").value
             request.post_spri_volume = sample.properties("post_spri_volume").value
             request.final_nano_drop_280 = sample.properties("final_nano_drop_280").value
