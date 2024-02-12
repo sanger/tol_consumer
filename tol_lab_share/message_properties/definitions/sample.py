@@ -36,7 +36,7 @@ from tol_lab_share.message_properties.definitions.concentration import Concentra
 from tol_lab_share.message_properties.definitions.cost_code import CostCode
 from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
-from tol_lab_share.message_properties.definitions.dict_input import dictInput
+from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.donor_id import DonorId
 from tol_lab_share.message_properties.definitions.final_nano_drop import FinalNanoDrop
 from tol_lab_share.message_properties.definitions.final_nano_drop_230 import FinalNanoDrop230
@@ -68,39 +68,39 @@ class Sample(MessageProperty):
     def __init__(self, input: Any):
         super().__init__(input)
 
-        self.add_property("cost_code", CostCode(dictInput(input, SAMPLE_COST_CODE)))
-        self.add_property("study_uuid", Uuid(dictInput(input, SAMPLE_STUDY_UUID)))
-        self.add_property("common_name", CommonName(dictInput(input, SAMPLE_COMMON_NAME)))
-        self.add_property("concentration", Concentration(dictInput(input, SAMPLE_CONCENTRATION)))
-        self.add_property("volume", Volume(dictInput(input, SAMPLE_VOLUME)))
+        self.add_property("cost_code", CostCode(DictInput(input, SAMPLE_COST_CODE)))
+        self.add_property("study_uuid", Uuid(DictInput(input, SAMPLE_STUDY_UUID)))
+        self.add_property("common_name", CommonName(DictInput(input, SAMPLE_COMMON_NAME)))
+        self.add_property("concentration", Concentration(DictInput(input, SAMPLE_CONCENTRATION)))
+        self.add_property("volume", Volume(DictInput(input, SAMPLE_VOLUME)))
         self.add_property(
             "country_of_origin",
-            CountryOfOrigin(dictInput(input, SAMPLE_COUNTRY_OF_ORIGIN)),
+            CountryOfOrigin(DictInput(input, SAMPLE_COUNTRY_OF_ORIGIN)),
         )
-        self.add_property("donor_id", DonorId(dictInput(input, SAMPLE_DONOR_ID)))
-        self.add_property("taxon_id", TaxonId(dictInput(input, SAMPLE_TAXON_ID)))
-        self.add_property("library_type", LibraryType(dictInput(input, SAMPLE_LIBRARY_TYPE)))
-        self.add_property("location", Location(dictInput(input, SAMPLE_LOCATION)))
-        self.add_property("public_name", PublicName(dictInput(input, SAMPLE_PUBLIC_NAME)))
-        self.add_property("sanger_sample_id", SangerSampleId(dictInput(input, SAMPLE_SANGER_SAMPLE_ID)))
+        self.add_property("donor_id", DonorId(DictInput(input, SAMPLE_DONOR_ID)))
+        self.add_property("taxon_id", TaxonId(DictInput(input, SAMPLE_TAXON_ID)))
+        self.add_property("library_type", LibraryType(DictInput(input, SAMPLE_LIBRARY_TYPE)))
+        self.add_property("location", Location(DictInput(input, SAMPLE_LOCATION)))
+        self.add_property("public_name", PublicName(DictInput(input, SAMPLE_PUBLIC_NAME)))
+        self.add_property("sanger_sample_id", SangerSampleId(DictInput(input, SAMPLE_SANGER_SAMPLE_ID)))
         self.add_property(
             "scientific_name",
-            ScientificNameFromTaxonId(TaxonId(dictInput(input, SAMPLE_SANGER_TAXON_ID))),
+            ScientificNameFromTaxonId(TaxonId(DictInput(input, SAMPLE_SANGER_TAXON_ID))),
         )
-        self.add_property("uuid", Uuid(dictInput(input, SAMPLE_SANGER_UUID)))
-        self.add_property("accession_number", AccessionNumber(dictInput(input, SAMPLE_ACCESSION_NUMBER)))
-        self.add_property("genome_size", GenomeSize(dictInput(input, SAMPLE_GENOME_SIZE)))
-        self.add_property("collection_date", DateUtc(dictInput(input, SAMPLE_COLLECTION_DATE)))
-        self.add_property("supplier_sample_name", SupplierSampleName(dictInput(input, SUPPLIER_SAMPLE_NAME)))
+        self.add_property("uuid", Uuid(DictInput(input, SAMPLE_SANGER_UUID)))
+        self.add_property("accession_number", AccessionNumber(DictInput(input, SAMPLE_ACCESSION_NUMBER)))
+        self.add_property("genome_size", GenomeSize(DictInput(input, SAMPLE_GENOME_SIZE)))
+        self.add_property("collection_date", DateUtc(DictInput(input, SAMPLE_COLLECTION_DATE)))
+        self.add_property("supplier_sample_name", SupplierSampleName(DictInput(input, SUPPLIER_SAMPLE_NAME)))
 
         self.add_property(
-            "sheared_femto_fragment_size", ShearedFemtoFragmentSize(dictInput(input, SHEARED_FEMTO_FRAGMENT_SIZE))
+            "sheared_femto_fragment_size", ShearedFemtoFragmentSize(DictInput(input, SHEARED_FEMTO_FRAGMENT_SIZE))
         )
-        self.add_property("post_spri_concentration", PostSPRIConcentration(dictInput(input, POST_SPRI_CONCENTRATION)))
-        self.add_property("post_spri_volume", PostSPRIVolume(dictInput(input, POST_SPRI_VOLUME)))
-        self.add_property("final_nano_drop_280", FinalNanoDrop280(dictInput(input, FINAL_NANODROP_280)))
-        self.add_property("final_nano_drop_230", FinalNanoDrop230(dictInput(input, FINAL_NANODROP_230)))
-        self.add_property("final_nano_drop", FinalNanoDrop(dictInput(input, FINAL_NANODROP)))
-        self.add_property("shearing_qc_comments", ShearingAndQCComments(dictInput(input, SHEARING_QC_COMMENTS)))
-        self.add_property("date_submitted_utc", DateUtc(dictInput(input, DATE_SUBMITTED_UTC)))
-        self.add_property("priority_level", PriorityLevel(dictInput(input, PRIORITY_LEVEL)))
+        self.add_property("post_spri_concentration", PostSPRIConcentration(DictInput(input, POST_SPRI_CONCENTRATION)))
+        self.add_property("post_spri_volume", PostSPRIVolume(DictInput(input, POST_SPRI_VOLUME)))
+        self.add_property("final_nano_drop_280", FinalNanoDrop280(DictInput(input, FINAL_NANODROP_280)))
+        self.add_property("final_nano_drop_230", FinalNanoDrop230(DictInput(input, FINAL_NANODROP_230)))
+        self.add_property("final_nano_drop", FinalNanoDrop(DictInput(input, FINAL_NANODROP)))
+        self.add_property("shearing_qc_comments", ShearingAndQCComments(DictInput(input, SHEARING_QC_COMMENTS)))
+        self.add_property("date_submitted_utc", DateUtc(DictInput(input, DATE_SUBMITTED_UTC)))
+        self.add_property("priority_level", PriorityLevel(DictInput(input, PRIORITY_LEVEL)))

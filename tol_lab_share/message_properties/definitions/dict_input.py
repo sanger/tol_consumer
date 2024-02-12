@@ -8,7 +8,7 @@ from typing import Callable, Any
 logger = logging.getLogger(__name__)
 
 
-class dictInput(MessageProperty):
+class DictInput(MessageProperty):
     """MessageProperty subclass to manage parsing of the access to the key of a
     dictionary. The input can be a valid dict or another MessageProperty that provides
     as value a valid dict. If the input is not a valid dict, or if the key does not
@@ -21,7 +21,7 @@ class dictInput(MessageProperty):
 
         Parameters:
         input (MessageProperty): The dictionary we want to access, wrapped inside another
-        MessageProperty class; normally it will be an Input or another dictInput.
+        MessageProperty class; normally it will be an Input or another DictInput.
         key (str): The key we want to access inside the dictionary provided.
 
         Returns:

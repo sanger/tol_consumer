@@ -4,7 +4,7 @@ from typing import Any
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES
 from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES
 from tol_lab_share.message_properties.definitions.barcode import Barcode
-from tol_lab_share.message_properties.definitions.dict_input import dictInput
+from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.sample import Sample
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
@@ -23,13 +23,13 @@ class Labware(MessageProperty):
     def __init__(self, input: MessageProperty):
         super().__init__(input)
 
-        self.add_property("labware_type", LabwareType(dictInput(input, LABWARE_TYPE)))
-        self.add_property("barcode", Barcode(dictInput(input, BARCODE)))
+        self.add_property("labware_type", LabwareType(DictInput(input, LABWARE_TYPE)))
+        self.add_property("barcode", Barcode(DictInput(input, BARCODE)))
         self.add_property("samples", self._parse_samples(input))
 
     def _parse_samples(self, input: MessageProperty) -> list[MessageProperty]:
         """Parses the samples section and creates a sample for each position."""
-        samples_dict = dictInput(input, SAMPLES)
+        samples_dict = DictInput(input, SAMPLES)
         if samples_dict.validate():
             samples_list_dict: list[MessageProperty] = []
             for position in range(len(samples_dict.value)):

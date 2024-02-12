@@ -1,7 +1,7 @@
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
 from unittest import mock
 from tol_lab_share.message_properties.definitions.input import Input
-from tol_lab_share.message_properties.definitions.dict_input import dictInput
+from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share import error_codes
 import pytest
 from datetime import datetime
@@ -64,7 +64,7 @@ def test_message_property_check_is_integer():
     assert instance.check_is_integer() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(dictInput({"test": 1234}, "wrong!!"))
+    instance = MessageProperty(DictInput({"test": 1234}, "wrong!!"))
     assert instance.check_is_integer() is False
     assert len(instance.errors) > 0
 
@@ -116,7 +116,7 @@ def test_message_property_check_is_float():
     assert instance.check_is_float() is True
     assert len(instance.errors) == 0
 
-    instance = MessageProperty(dictInput({"test": 1234}, "wrong!!"))
+    instance = MessageProperty(DictInput({"test": 1234}, "wrong!!"))
     assert instance.check_is_float() is False
     assert len(instance.errors) > 0
 
