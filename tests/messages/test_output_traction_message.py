@@ -82,56 +82,63 @@ def test_output_traction_message_can_generate_payload_for_plates():
 
     assert instance.payload() == {
         "data": {
+            "type": "receptions",
             "attributes": {
-                "request_attributes": [
+                "source": "tol-lab-share.tol",
+                "plates_attributes": [
                     {
-                        "container": {"barcode": "1", "position": "A1", "type": "wells"},
-                        "request": {
-                            "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
-                            "library_type": "library",
-                            "cost_code": "S1234",
-                        },
-                        "sample": {
-                            "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
-                            "name": "test1",
-                            "species": "test " "species",
-                            "priority_level": None,
-                            "sanger_sample_id": "sample1",
-                            "public_name": "Public1",
-                            "supplier_name": "supplier1",
-                            "taxon_id": "9606",
-                            "donor_id": "donor1",
-                            "country_of_origin": "United Kingdom",
-                            "accession_number": "AN1234",
-                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
-                        },
-                    },
-                    {
-                        "container": {"barcode": "1", "position": "B1", "type": "wells"},
-                        "request": {
-                            "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
-                            "library_type": "library",
-                            "cost_code": "S4567",
-                        },
-                        "sample": {
-                            "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
-                            "name": "test1",
-                            "species": "test " "species",
-                            "priority_level": None,
-                            "sanger_sample_id": "sample2",
-                            "public_name": "Public2",
-                            "supplier_name": "supplier2",
-                            "taxon_id": "9606",
-                            "donor_id": "donor2",
-                            "country_of_origin": "United Kingdom",
-                            "accession_number": "AN1235",
-                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
-                        },
+                        "barcode": "1",
+                        "type": "wells",
+                        "wells_attributes": [
+                            {
+                                "position": "A1",
+                                "request": {
+                                    "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                                    "library_type": "ONT_mylib",
+                                    "cost_code": "S1234",
+                                },
+                                "sample": {
+                                    "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                                    "name": "test1",
+                                    "species": "test " "species",
+                                    "priority_level": "Medium",
+                                    "sanger_sample_id": "sample1",
+                                    "public_name": "Public1",
+                                    "supplier_name": "supplier1",
+                                    "taxon_id": "9606",
+                                    "donor_id": "donor1",
+                                    "country_of_origin": "United Kingdom",
+                                    "accession_number": "AN1234",
+                                    "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
+                                },
+                            },
+                            {
+                                "position": "B1",
+                                "request": {
+                                    "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                                    "library_type": "ONT_mylib",
+                                    "cost_code": "S4567",
+                                },
+                                "sample": {
+                                    "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                                    "name": "test1",
+                                    "species": "test " "species",
+                                    "priority_level": None,
+                                    "sanger_sample_id": "sample2",
+                                    "public_name": "Public2",
+                                    "supplier_name": "supplier2",
+                                    "taxon_id": "9606",
+                                    "donor_id": "donor2",
+                                    "country_of_origin": "United Kingdom",
+                                    "accession_number": "AN1235",
+                                    "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
+                                },
+                            },
+                        ],
                     },
                 ],
-                "source": "tol-lab-share.tol",
+                "tubes_attributes": [],
             },
-            "type": "receptions",
         }
     }
 
@@ -182,58 +189,65 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
 
     assert instance.payload() == {
         "data": {
+            "type": "receptions",
             "attributes": {
-                "request_attributes": [
+                "source": "tol-lab-share.tol",
+                "plates_attributes": [
                     {
-                        "container": {"barcode": "1", "position": "A1", "type": "wells"},
-                        "request": {
-                            "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
-                            "library_type": "ONT_mylib",
-                            "cost_code": "S1234",
-                            "data_type": "basecalls",
-                        },
-                        "sample": {
-                            "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
-                            "name": "test1",
-                            "species": "test " "species",
-                            "priority_level": "Medium",
-                            "sanger_sample_id": "sample1",
-                            "public_name": "Public1",
-                            "supplier_name": "supplier1",
-                            "taxon_id": "9606",
-                            "donor_id": "donor1",
-                            "country_of_origin": "United Kingdom",
-                            "accession_number": "AN1234",
-                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
-                        },
-                    },
-                    {
-                        "container": {"barcode": "1", "position": "B1", "type": "wells"},
-                        "request": {
-                            "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
-                            "library_type": "ONT_mylib",
-                            "cost_code": "S4567",
-                            "data_type": "basecalls",
-                        },
-                        "sample": {
-                            "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
-                            "name": "test1",
-                            "species": "test " "species",
-                            "priority_level": None,
-                            "sanger_sample_id": "sample2",
-                            "public_name": "Public2",
-                            "supplier_name": "supplier2",
-                            "taxon_id": "9606",
-                            "donor_id": "donor2",
-                            "country_of_origin": "United Kingdom",
-                            "accession_number": "AN1235",
-                            "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
-                        },
+                        "barcode": "1",
+                        "type": "wells",
+                        "wells_attributes": [
+                            {
+                                "position": "A1",
+                                "request": {
+                                    "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                                    "library_type": "ONT_mylib",
+                                    "cost_code": "S1234",
+                                    "data_type": "basecalls",
+                                },
+                                "sample": {
+                                    "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                                    "name": "test1",
+                                    "species": "test " "species",
+                                    "priority_level": "Medium",
+                                    "sanger_sample_id": "sample1",
+                                    "public_name": "Public1",
+                                    "supplier_name": "supplier1",
+                                    "taxon_id": "9606",
+                                    "donor_id": "donor1",
+                                    "country_of_origin": "United Kingdom",
+                                    "accession_number": "AN1234",
+                                    "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
+                                },
+                            },
+                            {
+                                "position": "B1",
+                                "request": {
+                                    "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                                    "library_type": "ONT_mylib",
+                                    "cost_code": "S4567",
+                                    "data_type": "basecalls",
+                                },
+                                "sample": {
+                                    "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                                    "name": "test1",
+                                    "species": "test " "species",
+                                    "priority_level": None,
+                                    "sanger_sample_id": "sample2",
+                                    "public_name": "Public2",
+                                    "supplier_name": "supplier2",
+                                    "taxon_id": "9606",
+                                    "donor_id": "donor2",
+                                    "country_of_origin": "United Kingdom",
+                                    "accession_number": "AN1235",
+                                    "date_of_sample_collection": my_date.strftime("%Y-%m-%d"),
+                                },
+                            },
+                        ],
                     },
                 ],
-                "source": "tol-lab-share.tol",
+                "tubes_attributes": [],
             },
-            "type": "receptions",
         }
     }
 
@@ -282,10 +296,14 @@ def test_output_traction_message_can_generate_payload_for_tubes():
 
     assert instance.payload() == {
         "data": {
+            "type": "receptions",
             "attributes": {
-                "request_attributes": [
+                "source": "tol-lab-share.tol",
+                "plates_attributes": [],
+                "tubes_attributes": [
                     {
-                        "container": {"barcode": "1", "type": "tubes"},
+                        "barcode": "1",
+                        "type": "tubes",
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "library",
@@ -307,7 +325,8 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                         },
                     },
                     {
-                        "container": {"barcode": "1", "type": "tubes"},
+                        "barcode": "1",
+                        "type": "tubes",
                         "request": {
                             "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
                             "library_type": "library",
@@ -329,9 +348,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
                         },
                     },
                 ],
-                "source": "tol-lab-share.tol",
             },
-            "type": "receptions",
         }
     }
 
