@@ -58,7 +58,7 @@ class OutputTractionMessageRequest:
 
 
 class Serializer:
-    """Class to manage the serialization to JSON of the request received as argument in the constructor."""
+    """Class to manage the serialization of requests."""
 
     @staticmethod
     def request_payload(request: OutputTractionMessageRequest) -> dict[str, Any]:
@@ -156,7 +156,7 @@ class PlateSerializer(Serializer):
 
 
 class TubeSerializer(Serializer):
-    """Class to manage the serialization of plate requests."""
+    """Class to manage the serialization of tube requests."""
 
     def __init__(self, tube_request: OutputTractionMessageRequest):
         """Constructor.
