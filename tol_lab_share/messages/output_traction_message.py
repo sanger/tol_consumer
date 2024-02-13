@@ -71,20 +71,16 @@ class Serializer:
         Returns:
             dict[str, Any]: A dictionary containing the Traction "request" payload for the request.
         """
-        is_ont = request.library_type and ("ONT" in request.library_type)
-        if is_ont:
-            return {
-                "data_type": "basecalls",
-                "library_type": request.library_type,
-                "external_study_id": request.study_uuid,
-                "cost_code": request.cost_code,
-            }
-        else:
-            return {
-                "library_type": request.library_type,
-                "external_study_id": request.study_uuid,
-                "cost_code": request.cost_code,
-            }
+        request_payload = {
+            "library_type": request.library_type,
+            "external_study_id": request.study_uuid,
+            "cost_code": request.cost_code,
+        }
+
+        if request.library_type and ("ONT" in request.library_type):
+            request_payload["data_type"] = "basecalls"
+
+        return request_payload
 
     @staticmethod
     def sample_payload(request: OutputTractionMessageRequest) -> dict[str, Any]:
