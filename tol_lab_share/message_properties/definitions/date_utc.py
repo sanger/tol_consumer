@@ -1,6 +1,6 @@
 from .message_property import MessageProperty
 import logging
-from typing import List, Callable
+from typing import Callable
 from functools import cached_property
 from typing import Any
 
@@ -13,7 +13,7 @@ class DateUtc(MessageProperty):
     """
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return [self.check_is_date_utc]
 

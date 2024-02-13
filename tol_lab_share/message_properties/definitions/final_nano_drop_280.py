@@ -1,5 +1,5 @@
 from .message_property import MessageProperty
-from typing import List, Callable
+from typing import Callable
 
 
 class FinalNanoDrop280(MessageProperty):
@@ -10,6 +10,6 @@ class FinalNanoDrop280(MessageProperty):
     """
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return [self.check_is_string]

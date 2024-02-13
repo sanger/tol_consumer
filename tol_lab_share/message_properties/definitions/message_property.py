@@ -1,17 +1,12 @@
+from __future__ import annotations
 import datetime
 import logging
-from functools import cached_property
+from functools import cached_property, singledispatchmethod
 from itertools import chain
-from typing import Any, Callable, Dict, List, Optional, Union, cast
+from typing import Any, Callable, cast
 
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
-from tol_lab_share.message_properties.interfaces import MessagePropertyInterface
-from tol_lab_share.messages.interfaces import (
-    OutputFeedbackMessageInterface,
-    OutputTractionMessageInterface,
-    TractionQcMessageInterface,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +14,7 @@ PROPERTY_TYPE_PROPERTY = "Property"
 PROPERTY_TYPE_ARRAY = "Array"
 
 
-class MessageProperty(MessagePropertyInterface):
+class MessageProperty:
     """Base class for MessageProperty that provides the core functionality of
     running validations, managing properties, triggering errors and some common
     validation checks.
@@ -32,12 +27,12 @@ class MessageProperty(MessagePropertyInterface):
         input (MessagePropertyInterface) An instance of message property that we will use as base
         """
         self._input = input
-        self._errors: List[ErrorCode] = []
-        self._properties: Dict[str, Any] = {}
-        self.property_name = None
-        self.property_source = None
-        self.property_position = None
-        self.property_type = PROPERTY_TYPE_PROPERTY
+        self._errors: list[ErrorCode] = []
+        self._properties: dict[str, Any] = {}
+        self.property_name: str | None = None
+        self.property_source: MessageProperty | None = None
+        self.property_position: int | None = None
+        self.property_type: str = PROPERTY_TYPE_PROPERTY
 
     def validate(self) -> bool:
         return self._validation_status
@@ -59,7 +54,7 @@ class MessageProperty(MessagePropertyInterface):
         """Returns a boolean indicating if the property exists for the key provided"""
         return key in self._properties
 
-    def _add_property_instance(self, property_name: str, instance: MessagePropertyInterface) -> None:
+    def _add_property_instance(self, property_name: str, instance: MessageProperty) -> None:
         """Given a property name and an instance of MessageProperty, it configures this instance as
         the value for the property.
         Parameters:
@@ -83,12 +78,12 @@ class MessageProperty(MessagePropertyInterface):
         """
         return f"{property_name}[{pos}]"
 
-    def _add_property_list(self, property_name: str, input: List[MessagePropertyInterface]) -> None:
+    def _add_property_list(self, property_name: str, input: list[MessageProperty]) -> None:
         """Given a property name and a list of message properties, it stores this list of MessageProperty
         as the value of the property and includes the position in each of them.
         Parameters:
         property_name (str) name of the property
-        input (List[MessagePropertyInterface]) list of message properties
+        input (list[MessagePropertyInterface]) list of message properties
         Returns:
         None
         """
@@ -101,13 +96,11 @@ class MessageProperty(MessagePropertyInterface):
             instance.property_type = PROPERTY_TYPE_ARRAY
             self._properties[property_name].append(instance)
 
-    def add_property(
-        self, property_name: str, input: Union[MessagePropertyInterface, List[MessagePropertyInterface]]
-    ) -> None:
+    def add_property(self, property_name: str, input: MessageProperty | list[MessageProperty]) -> None:
         """Given an property name and an input it adds the input as the value of the property
         Parameters:
         property_name (str) name of the property
-        input (MessagePropertyInterface |  List[MessagePropertyInterface]) property or list of
+        input (MessagePropertyInterface |  list[MessagePropertyInterface]) property or list of
         properties that we want to add for the name provided
         Returns:
         None
@@ -116,48 +109,6 @@ class MessageProperty(MessagePropertyInterface):
             self._add_property_list(property_name, input)
         else:
             self._add_property_instance(property_name, input)
-
-    @property
-    def property_name(self) -> Optional[str]:
-        """Returns the property name for this property"""
-        return self._property_name
-
-    @property_name.setter
-    def property_name(self, value: str) -> None:
-        """Sets the property name for this property"""
-        self._property_name = value
-
-    @property
-    def property_source(self) -> Any:
-        """Returns the property source for this property (the property that is the container of
-        this property"""
-        return self._property_source
-
-    @property_source.setter
-    def property_source(self, value: MessagePropertyInterface) -> None:
-        """Sets the property source for this property"""
-        self._property_source = value
-
-    @property
-    def property_position(self) -> Optional[int]:
-        """Returns the property position for this property that is the place in the list where this
-        property is defined if it was defined as part of a list of properties"""
-        return self._property_position
-
-    @property_position.setter
-    def property_position(self, value: int) -> None:
-        """Sets the property position for this property"""
-        self._property_position = value
-
-    @property
-    def property_type(self) -> Optional[str]:
-        """Returns the property type for this property. The type can be Property or List"""
-        return self._property_type
-
-    @property_type.setter
-    def property_type(self, value: str) -> None:
-        """Sets the property type for this property."""
-        self._property_type = value
 
     @cached_property
     def value(self) -> Any:
@@ -177,7 +128,7 @@ class MessageProperty(MessagePropertyInterface):
         """Alias to property name"""
         return self.property_name
 
-    def trigger_error(self, error_code: ErrorCode, text: Optional[str] = None) -> None:
+    def trigger_error(self, error_code: ErrorCode, text: str | None = None) -> None:
         """Given an error instance, it performs the action associated with it and after that it adds
         the error to the list of errors defined for the current property.
         Parameters:
@@ -188,30 +139,18 @@ class MessageProperty(MessagePropertyInterface):
         """
         self.add_error(error_code.trigger(instance=self, origin=self.origin, field=self.field, text=text))
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
-        """Calls the method add_to_feedback_message in all the properties defined inside this property
-        (if there are any).
-        """
-        logger.debug("MessageProperty::add_to_feedback_message")
-        for property in self._properties_instances:
-            property.add_to_feedback_message(feedback_message)
+    @singledispatchmethod
+    def add_to_message_property(self, message_property: MessageProperty) -> None:
+        """Adds the information from child properties of this property to the message provided.
 
-    def add_to_traction_message(self, traction_message: OutputTractionMessageInterface) -> None:
-        """Calls the method add_to_traction_message in all the properties defined inside this property
-        (if there are any).
+        Args:
+            message_property (MessageProperty): The message property to add the information to.
         """
         for property in self._properties_instances:
-            property.add_to_traction_message(traction_message)
-
-    def add_to_traction_qc_message(self, traction_qc_message: TractionQcMessageInterface) -> None:
-        """Calls the method add_to_traction_qc_message for all the properties defined inside this property
-        (if there are any).
-        """
-        for property in self._properties_instances:
-            property.add_to_traction_qc_message(traction_qc_message)
+            property.add_to_message_property(message_property)
 
     @property
-    def errors(self) -> List[ErrorCode]:
+    def errors(self) -> list[ErrorCode]:
         """Returns an aggregation of all errors from the current instance and all errors from
         the properties it contains.
         """
@@ -225,7 +164,7 @@ class MessageProperty(MessagePropertyInterface):
         self._errors.append(error)
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return []
 
@@ -353,11 +292,11 @@ class MessageProperty(MessagePropertyInterface):
         return all(list([validator() for validator in self.validators]))
 
     @property
-    def _errors_properties(self) -> List[ErrorCode]:
+    def _errors_properties(self) -> list[ErrorCode]:
         """Returns a list that contains all the errors for the properties inside this
         instance.
         Returns:
-        List[ErrorCode] with all the errors from the properties
+        list[ErrorCode] with all the errors from the properties
         """
         error_list = []
         for property in self._properties_instances:
@@ -367,11 +306,11 @@ class MessageProperty(MessagePropertyInterface):
         return error_list
 
     @cached_property
-    def _properties_instances(self) -> List[MessagePropertyInterface]:
+    def _properties_instances(self) -> list[MessageProperty]:
         """Returns a list that contains all the properties inside this
         instance.
         Returns:
-        List[MessagePropertyInterface] with all the properties
+        list[MessagePropertyInterface] with all the properties
         """
         prop_list = []
         for property in list(self._properties.values()):

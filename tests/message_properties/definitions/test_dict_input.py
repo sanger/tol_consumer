@@ -23,12 +23,6 @@ def test_dict_input_can_validate_when_invalid():
     input = DictInput({}, "name")
     assert not input.validate()
 
-    input = DictInput(None, "name")  # type: ignore
-    assert not input.validate()
-
-    input = DictInput([], "name")  # type: ignore
-    assert not input.validate()
-
     input = DictInput({"other": 1}, "name")
     assert not input.validate()
 

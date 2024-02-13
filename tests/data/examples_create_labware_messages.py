@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
-TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
+TEST_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
     "messageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c".encode(),
     "messageCreateDateUtc": datetime.now(),
     "labware": {
@@ -69,7 +69,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
 }
 
 
-TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
+TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
     "messageUuid": "b01aa0ad7b19-4f94-87e9-70d74fb8783c".encode(),
     "messageCreateDateUtc": datetime.now(),
     "labware": {
