@@ -1,4 +1,3 @@
-from __future__ import annotations
 from functools import singledispatchmethod
 import logging
 from json import dumps
@@ -51,14 +50,6 @@ class TractionQcMessageRequest:
             and (self.shearing_qc_comments is not None)
             and (self.date_submitted_utc is not None)
         )
-
-    def serializer(self) -> QcRequestSerializer:
-        """A serializer instance to handle the generation of the payload for this request.
-
-        Returns:
-            RequestSerializer: The serializer for this request.
-        """
-        return QcRequestSerializer(self)
 
 
 class QcRequestSerializer:
@@ -133,7 +124,7 @@ class TractionQcMessage(MessageProperty):
         Returns:
             list[dict[str,Any]]: The payload for all the requests.
         """
-        return [request.serializer().payload() for request in self._requests]
+        return [QcRequestSerializer(request).payload() for request in self._requests]
 
     @property
     def errors(self) -> list[ErrorCode]:
