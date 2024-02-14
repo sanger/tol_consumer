@@ -86,8 +86,6 @@ You might want to add these to your `~/.zshrc` file:
 ```bash
 export CPPFLAGS="-I$(brew --prefix)/include"
 export LDFLAGS="-L$(brew --prefix)/lib"
-
-
 ```
 
 ![TOL Labware Production Flow - Architecture](https://github.com/sanger/tol-lab-share/assets/519327/5356846a-6d9b-4b8d-8ffb-af26d0776222)
