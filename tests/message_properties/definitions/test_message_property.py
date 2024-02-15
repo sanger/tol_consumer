@@ -134,7 +134,7 @@ def test_message_property_check_is_date_utc():
     instance = MessageProperty(Input(None))
     assert instance.check_is_date_utc() is False
 
-    instance = MessageProperty(Input(datetime.now()))
+    instance = MessageProperty(Input(datetime.utcnow()))
     assert instance.check_is_date_utc() is True
 
     instance = MessageProperty(Input({}))

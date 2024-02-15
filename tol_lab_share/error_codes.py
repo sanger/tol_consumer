@@ -1,6 +1,6 @@
 import copy
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
 
 LEVEL_FATAL = "level_fatal"
 LEVEL_ERROR = "leverl_error"
@@ -75,7 +75,7 @@ class ErrorCode:
             return "sample"
         return "root"
 
-    def json(self) -> Dict[str, Any]:
+    def json(self) -> dict[str, Any]:
         """Returns a JSON-like representation of the ErrorCode"""
         return {
             "typeId": self.type_id,
@@ -84,7 +84,7 @@ class ErrorCode:
             "description": self.description,
         }
 
-    def message_for_trigger(self, text: Optional[str] = None, instance: Any = None) -> str:
+    def message_for_trigger(self, text: str | None = None, instance: Any = None) -> str:
         """Generates a user-friendly message to attach to the error triggered
         Parameters:
         text (str) user friendly description of the error
@@ -102,10 +102,10 @@ class ErrorCode:
 
     def trigger(
         self,
-        text: Optional[str] = None,
+        text: str | None = None,
         instance: Any = None,
-        origin: Optional[str] = None,
-        field: Optional[str] = None,
+        origin: str | None = None,
+        field: str | None = None,
     ) -> Any:
         """Triggers the action defined for this message.
         By default, if will log all messages to the level of criticality defined in the
@@ -158,7 +158,7 @@ ERROR_8_INVALID_LABWARE_TYPE_FOR_LOCATION = ErrorCode(
 ERROR_9_INVALID_INPUT = ErrorCode(9, "plate", "input", "Not valid input")
 ERROR_10_DICT_WRONG_KEY = ErrorCode(10, "plate", "dict", "Not valid key")
 ERROR_11_PARENT_DICT_WRONG = ErrorCode(11, "plate", "dict", "Parent dict is wrong")
-ERROR_12_DICT_NOT_ITERABLE = ErrorCode(12, "plate", "dict", "Dict is not iterable")
+ERROR_12_DICT_NOT_ITERABLE = ErrorCode(12, "plate", "dict", "dict is not iterable")
 ERROR_13_TRACTION_REQUEST_FAILED = ErrorCode(13, "plate", "dict", "Traction send request failed")
 ERROR_14_PROBLEM_ACCESSING_TAXON_ID = ErrorCode(
     14, "plate", "taxon_id", "Problem when accessing the taxon id service", level=LEVEL_FATAL, handler=HANDLER_RAISE

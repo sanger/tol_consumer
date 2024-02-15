@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
-TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
+TEST_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
     "messageUuid": "b01aa0ad-7b19-4f94-87e9-70d74fb8783c".encode(),
-    "messageCreateDateUtc": datetime.now(),
+    "messageCreateDateUtc": datetime.utcnow(),
     "labware": {
         "labwareType": "Plate12x8",
         "barcode": "BARCODE001",
@@ -24,7 +24,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "countryOfOrigin": "United Kingdom",
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
-                "sampleCollectionDateUtc": datetime.now(),
+                "sampleCollectionDateUtc": datetime.utcnow(),
                 "costCode": "S1234",
                 "shearedFemtoFragmentSize": "5",
                 "postSPRIConcentration": "10",
@@ -33,7 +33,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "finalNanoDrop230": "6",
                 "finalNanoDrop": "7",
                 "shearingAndQCComments": "Comments",
-                "dateSubmittedUTC": datetime.now(),
+                "dateSubmittedUTC": datetime.utcnow(),
                 "priorityLevel": "Medium",
             },
             {
@@ -52,7 +52,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "countryOfOrigin": "United Kingdom",
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
-                "sampleCollectionDateUtc": datetime.now(),
+                "sampleCollectionDateUtc": datetime.utcnow(),
                 "costCode": "S1234",
                 "shearedFemtoFragmentSize": "5",
                 "postSPRIConcentration": "10",
@@ -61,7 +61,7 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "finalNanoDrop230": "6",
                 "finalNanoDrop": "7",
                 "shearingAndQCComments": "Comments",
-                "dateSubmittedUTC": datetime.now(),
+                "dateSubmittedUTC": datetime.utcnow(),
                 "priorityLevel": "Medium",
             },
         ],
@@ -69,9 +69,9 @@ TEST_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
 }
 
 
-TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
+TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
     "messageUuid": "b01aa0ad7b19-4f94-87e9-70d74fb8783c".encode(),
-    "messageCreateDateUtc": datetime.now(),
+    "messageCreateDateUtc": datetime.utcnow(),
     "labware": {
         "labwareType": "Plate12x8",
         "barcode": "BARCODE001",
@@ -92,7 +92,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "countryOfOrigin": "United Kingdom",
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
-                "sampleCollectionDateUtc": datetime.now(),
+                "sampleCollectionDateUtc": datetime.utcnow(),
                 "costCode": "S1234",
                 "shearedFemtoFragmentSize": "5",
                 "postSPRIConcentration": "10",
@@ -101,7 +101,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "finalNanoDrop230": "6",
                 "finalNanoDrop": 7,
                 "shearingAndQCComments": "Comments",
-                "dateSubmittedUTC": datetime.now(),
+                "dateSubmittedUTC": datetime.utcnow(),
                 "priorityLevel": "Medium",
             },
             {
@@ -120,7 +120,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "countryOfOrigin": "United Kingdom",
                 "genomeSize": "14",
                 "accessionNumber": "EE3383",
-                "sampleCollectionDateUtc": datetime.now(),
+                "sampleCollectionDateUtc": datetime.utcnow(),
                 "costCode": "S1234",
                 "shearedFemtoFragmentSize": "5",
                 "postSPRIConcentration": "10",
@@ -129,7 +129,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: Dict[str, Any] = {
                 "finalNanoDrop230": "6",
                 "finalNanoDrop": "7",
                 "shearingAndQCComments": "Comments",
-                "dateSubmittedUTC": datetime.now(),
+                "dateSubmittedUTC": datetime.utcnow(),
                 "priorityLevel": "Medium",
             },
         ],

@@ -1,443 +1,316 @@
-from typing import Dict, Optional, List, Callable, Any
+from functools import singledispatchmethod
+import itertools
+from typing import Callable, Any
 from json import dumps
 from datetime import datetime
 from requests import post, codes
-from tol_lab_share.messages.interfaces import (
-    OutputTractionMessageInterface,
-    OutputFeedbackMessageInterface,
-    OutputTractionMessageRequestInterface,
-)
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
 from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.constants import (
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS,
-    OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES,
+    OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES,
     OUTPUT_TRACTION_MESSAGE_SOURCE,
 )
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
+from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 
-class OutputTractionMessageRequest(OutputTractionMessageRequestInterface):
-    """Class that manages the information of a single Traction request instance
-    as part of the Traction message
-    """
+class OutputTractionMessageRequest:
+    """Class that manages the information of a single Traction request instance as part of the Traction message."""
 
     def __init__(self):
-        """Constructor that initializes all info for a single request"""
-        self._library_type = None
-        self._study_uuid = None
-        self._sample_name = None
-        self._sample_uuid = None
-        self._container_barcode = None
-        self._container_location = None
-        self._container_type = None
-        self._species = None
-        self._cost_code = None
-        self._priority_level = None
-        self._sanger_sample_id = None
-        self._public_name = None
-        self._supplier_name = None
-        self._taxon_id = None
-        self._donor_id = None
-        self._country_of_origin = None
-        self._accession_number = None
-        self._date_of_sample_collection = None
+        """Constructor that initializes all info for a single request."""
+        self.accession_number: str | None = None
+        self.container_barcode: str | None = None
+        self.container_location: str | None = None
+        self.container_type: OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES | None = None
+        self.cost_code: str | None = None
+        self.country_of_origin: str | None = None
+        self.date_of_sample_collection: datetime | None = None
+        self.donor_id: str | None = None
+        self.library_type: str | None = None
+        self.priority_level: str | None = None
+        self.public_name: str | None = None
+        self.sample_name: str | None = None
+        self.sample_uuid: str | None = None
+        self.sanger_sample_id: str | None = None
+        self.species: str | None = None
+        self.study_uuid: str | None = None
+        self.supplier_name: str | None = None
+        self.taxon_id: str | None = None
 
     def validate(self) -> bool:
-        """Checks that we have all required information and that it is valid before
-        marking this request as valid."""
+        """Validate the information in this request.
+
+        Returns:
+            bool: True if the request is valid; otherwise False.
+        """
         return (
-            (self._library_type is not None)
-            and (self._study_uuid is not None)
-            and (self._sample_name is not None)
-            and (self._container_barcode is not None)
-            and (self._species is not None)
-            and (
-                (self._container_type == OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_WELLS)
-                or (self._container_type == OUTPUT_TRACTION_MESSAGE_CREATE_REQUEST_CONTAINER_TYPE_TUBES)
-            )
-            and (self._species is not None)
+            (self.library_type is not None)
+            and (self.study_uuid is not None)
+            and (self.sample_name is not None)
+            and (self.container_barcode is not None)
+            and (self.species is not None)
+            and (self.container_type is not None)
+            and (self.species is not None)
         )
 
-    @property
-    def sanger_sample_id(self) -> Optional[str]:
-        """Gets the sanger_sample_id value for this request"""
-        return self._sanger_sample_id
 
-    @sanger_sample_id.setter
-    def sanger_sample_id(self, value: Optional[str]) -> None:
-        """Sets the sanger_sample_id value for this request"""
-        self._sanger_sample_id = value
+class Serializer:
+    """Class to manage the serialization of requests."""
 
-    @property
-    def public_name(self) -> Optional[str]:
-        """Gets the public_name value for this request"""
-        return self._public_name
+    @staticmethod
+    def request_payload(request: OutputTractionMessageRequest) -> dict[str, Any]:
+        """Generate the request payload for the given request.
+        The payload varies depending on whether the library type is ONT or not.
 
-    @public_name.setter
-    def public_name(self, value: Optional[str]) -> None:
-        """Sets the public_name value for this request"""
-        self._public_name = value
+        Args:
+            request (OutputTractionMessageRequest): The request to generate the payload for.
 
-    @property
-    def date_of_sample_collection(self) -> Optional[datetime]:
-        """Gets the date_of_sample_collection value for this request"""
-        return self._date_of_sample_collection
-
-    @date_of_sample_collection.setter
-    def date_of_sample_collection(self, value: Optional[datetime]) -> None:
-        """Sets the date_of_sample_collection value for this request"""
-        self._date_of_sample_collection = value
-
-    @property
-    def supplier_name(self) -> Optional[str]:
-        """Gets the supplier_name value for this request"""
-        return self._supplier_name
-
-    @supplier_name.setter
-    def supplier_name(self, value: Optional[str]) -> None:
-        """Sets the supplier_name value for this request"""
-        self._supplier_name = value
-
-    @property
-    def taxon_id(self) -> Optional[str]:
-        """Gets the taxon_id value for this request"""
-        return self._taxon_id
-
-    @taxon_id.setter
-    def taxon_id(self, value: Optional[str]) -> None:
-        """Sets the taxon_id value for this request"""
-        self._taxon_id = value
-
-    @property
-    def donor_id(self) -> Optional[str]:
-        """Gets the donor_id value for this request"""
-        return self._donor_id
-
-    @donor_id.setter
-    def donor_id(self, value: Optional[str]) -> None:
-        """Sets the donor_id value for this request"""
-        self._donor_id = value
-
-    @property
-    def country_of_origin(self) -> Optional[str]:
-        """Gets the country_of_origin value for this request"""
-        return self._country_of_origin
-
-    @country_of_origin.setter
-    def country_of_origin(self, value: Optional[str]) -> None:
-        """Sets the country_of_origin value for this request"""
-        self._country_of_origin = value
-
-    @property
-    def accession_number(self) -> Optional[str]:
-        """Gets the accession_number value for this request"""
-        return self._accession_number
-
-    @accession_number.setter
-    def accession_number(self, value: Optional[str]) -> None:
-        """Sets the accession_number value for this request"""
-        self._accession_number = value
-
-    @property
-    def species(self) -> Optional[str]:
-        """Gets the species value for this request"""
-        return self._species
-
-    @species.setter
-    def species(self, value: Optional[str]) -> None:
-        """Sets the species value for this request"""
-        self._species = value
-
-    @property
-    def cost_code(self) -> Optional[str]:
-        """Gets the cost_code value for this request"""
-        return self._cost_code
-
-    @cost_code.setter
-    def cost_code(self, value: Optional[str]) -> None:
-        """Sets the cost_code value for this request"""
-        self._cost_code = value
-
-    @property
-    def container_type(self) -> Optional[str]:
-        """Gets the container type value for this request. ('wells' or 'tubes')"""
-        return self._container_type
-
-    @container_type.setter
-    def container_type(self, value: Optional[str]) -> None:
-        """Sets the container type value for this request. ('wells' or 'tubes')"""
-        self._container_type = value
-
-    @property
-    def container_location(self) -> Optional[str]:
-        """Gets the container location for this request. Eg: 'A01'"""
-        return self._container_location
-
-    @container_location.setter
-    def container_location(self, value: Optional[str]) -> None:
-        """Sets the container location for this request. Eg: 'A01'"""
-        self._container_location = value
-
-    @property
-    def container_barcode(self) -> Optional[str]:
-        """Gets the container barcode for this request."""
-        return self._container_barcode
-
-    @container_barcode.setter
-    def container_barcode(self, value: Optional[str]) -> None:
-        """Sets the container barcode for this request."""
-        self._container_barcode = value
-
-    @property
-    def sample_uuid(self) -> Optional[str]:
-        """Gets the sample uuid for this request."""
-        return self._sample_uuid
-
-    @sample_uuid.setter
-    def sample_uuid(self, value: Optional[str]) -> None:
-        """Sets the sample uuid for this request."""
-        self._sample_uuid = value
-
-    @property
-    def sample_name(self) -> Optional[str]:
-        """Gets the sample name for this request."""
-        return self._sample_name
-
-    @sample_name.setter
-    def sample_name(self, value: Optional[str]) -> None:
-        """Sets the sample name for this request."""
-        self._sample_name = value
-
-    @property
-    def library_type(self) -> Optional[str]:
-        """Gets the library type for this request."""
-        return self._library_type
-
-    @library_type.setter
-    def library_type(self, value: Optional[str]) -> None:
-        """Sets the library type for this request."""
-        self._library_type = value
-
-    @property
-    def study_uuid(self) -> Optional[str]:
-        """Gets the study uuid for this request."""
-        return self._study_uuid
-
-    @study_uuid.setter
-    def study_uuid(self, value: Optional[str]) -> None:
-        """Sets the study uuid for this request."""
-        self._study_uuid = value
-
-    @property
-    def priority_level(self) -> Optional[str]:
-        return self._priority_level
-
-    @priority_level.setter
-    def priority_level(self, value: Optional[str]) -> None:
-        self._priority_level = value
-
-    def serializer(self):
-        """Returns a serializer instance to handle the generation of the message for this request.
         Returns:
-        RequestSerializer instance for this request
+            dict[str, Any]: A dictionary containing the Traction "request" payload for the request.
         """
-        return RequestSerializer(self)
+        request_payload = {
+            "library_type": request.library_type,
+            "external_study_id": request.study_uuid,
+            "cost_code": request.cost_code,
+        }
 
+        if request.library_type and ("ONT" in request.library_type):
+            request_payload["data_type"] = "basecalls"
 
-class RequestSerializer:
-    """Class to manage the serialization to JSON of the request received as argument in the constructor."""
+        return request_payload
 
-    def __init__(self, instance: OutputTractionMessageRequest):
-        """Constructor that sets initiali state of the instance.
-        Parameters:
-        instance (OutputTractionMessageRequest) request that we want to serialize
-        """
-        self.instance = instance
+    @staticmethod
+    def sample_payload(request: OutputTractionMessageRequest) -> dict[str, Any]:
+        """Generate the sample payload for the given request.
 
-    def is_ont_library_type(self) -> bool:
-        """Flag boolean method that identifies if the library type is ONT.
+        Args:
+            request (OutputTractionMessageRequest): The request to generate the payload for.
+
         Returns:
-        boolean indicating if the library type is ONT or not
-        """
-        return bool(self.instance.library_type and ("ONT" in self.instance.library_type))
-
-    def request_payload(self) -> Dict[str, Any]:
-        """Generates the correct payload depending on the library type for the current request.
-        Returns:
-        Dic[str,str] with the required information to send for this request to Traction
-        """
-        if self.is_ont_library_type():
-            return {
-                "data_type": "basecalls",
-                "library_type": self.instance.library_type,
-                "external_study_id": self.instance.study_uuid,
-                "cost_code": self.instance.cost_code,
-            }
-        else:
-            return {
-                "library_type": self.instance.library_type,
-                "external_study_id": self.instance.study_uuid,
-                "cost_code": self.instance.cost_code,
-            }
-
-    def sample_payload(self) -> Dict[str, Any]:
-        """Generates the correct payload for the sample defined in this request
-        Returns:
-        Dic[str,str] with the required sample information to send for this request to Traction
+            dict[str, Any]: A dictionary containing the Traction "sample" payload for the request.
         """
         collection_date = None
-        if self.instance.date_of_sample_collection is not None:
-            collection_date = self.instance.date_of_sample_collection.strftime("%Y-%m-%d")
+        if request.date_of_sample_collection is not None:
+            collection_date = request.date_of_sample_collection.strftime("%Y-%m-%d")
+
         return {
-            "name": self.instance.sample_name,
-            "external_id": self.instance.sample_uuid,
-            "species": self.instance.species,
-            "priority_level": self.instance.priority_level,
-            "sanger_sample_id": self.instance.sanger_sample_id,
-            "supplier_name": self.instance.supplier_name,
-            "public_name": self.instance.public_name,
-            "taxon_id": self.instance.taxon_id,
-            "donor_id": self.instance.donor_id,
-            "country_of_origin": self.instance.country_of_origin,
-            "accession_number": self.instance.accession_number,
+            "name": request.sample_name,
+            "external_id": request.sample_uuid,
+            "species": request.species,
+            "priority_level": request.priority_level,
+            "sanger_sample_id": request.sanger_sample_id,
+            "supplier_name": request.supplier_name,
+            "public_name": request.public_name,
+            "taxon_id": request.taxon_id,
+            "donor_id": request.donor_id,
+            "country_of_origin": request.country_of_origin,
+            "accession_number": request.accession_number,
             "date_of_sample_collection": collection_date,
         }
 
-    def container_payload(self) -> Dict[str, Any]:
-        """Generates the correct payload for the container defined in this request depending on
-        the container type (tubes or wells)
-        Returns:
-        Dic[str,str] with the required container information to send for this request to Traction
-        """
-        if self.instance.container_type == "tubes":
-            return {"type": self.instance.container_type, "barcode": self.instance.container_barcode}
-        else:
-            return {
-                "type": self.instance.container_type,
-                "barcode": self.instance.container_barcode,
-                "position": self.instance.container_location,
-            }
 
-    def payload(self) -> Dict[str, Any]:
-        """Main builder of the payload required to describe all information required for Traction:
-        sample, request and container.
+class PlateSerializer(Serializer):
+    """Class to manage the serialization of plate requests."""
+
+    def __init__(self, plate_requests: list[OutputTractionMessageRequest]):
+        """Constructor.
+
+        Args:
+            plate_requests (list[OutputTractionMessageRequest]): The list of requests to serialize for a single plate.
+        """
+        self._requests = plate_requests
+
+    def well_attributes_payload(self) -> list[dict[str, Any]]:
+        """Generate the well attributes payload for each of the plate's requests.
+
         Returns:
-        Dic[str,str] with all the required payload information for Traction
+            list[dict[str, Any]]: A list containing the well attributes for all the request.
+        """
+        return [
+            {
+                "position": request.container_location,
+                "request": self.request_payload(request),
+                "sample": self.sample_payload(request),
+            }
+            for request in self._requests
+        ]
+
+    def payload(self) -> dict[str, Any]:
+        """Generate a payload with the information required by Traction.
+
+        Returns:
+            dict[str, Any]: A dictionary containing the overall payload.
         """
         return {
-            "request": self.request_payload(),
-            "sample": self.sample_payload(),
-            "container": self.container_payload(),
+            "barcode": self._requests[0].container_barcode,
+            "type": "plates",
+            "wells_attributes": self.well_attributes_payload(),
         }
 
 
-class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
-    """Class that handle the generation and publishing of a message to Traction"""
+class TubeSerializer(Serializer):
+    """Class to manage the serialization of tube requests."""
+
+    def __init__(self, tube_request: OutputTractionMessageRequest):
+        """Constructor.
+
+        Args:
+            tube_request (OutputTractionMessageRequest): The request to serialize for a single tube.
+        """
+        self._request = tube_request
+
+    def payload(self) -> dict[str, Any]:
+        """Generate a payload with the information required by Traction.
+
+        Returns:
+            dict[str, Any]: A dictionary containing the overall payload.
+        """
+        return {
+            "barcode": self._request.container_barcode,
+            "type": "tubes",
+            "request": self.request_payload(self._request),
+            "sample": self.sample_payload(self._request),
+        }
+
+
+class OutputTractionMessage(MessageProperty):
+    """Class that handles the generation and publishing of a message to Traction."""
 
     def __init__(self):
-        """Resets initial data"""
+        """Reset initial data."""
         super().__init__(Input(self))
-        self._requests: Dict[int, OutputTractionMessageRequest] = {}
+        self._requests: list[OutputTractionMessageRequest] = []
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
     @property
     def origin(self) -> str:
-        """Default origin identifier. This will be appended to any errors generated to know
-        where it was originated when we received"""
+        """The origin identifier for this message type.
+        This will be appended to any errors generated via the `trigger_error` method.
+
+        Returns:
+            str: The origin identifier.
+        """
         return "OutputFeedbackMessage"
 
     @property
-    def validators(self) -> List[Callable]:
-        """List of validators to check the message is correct before sending"""
+    def validators(self) -> list[Callable]:
+        """A list of validators to check the message is correct.
+
+        Returns:
+            list[Callable]: The list of methods to call for complete validation of this message.
+        """
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
-    def requests(self, position: int) -> OutputTractionMessageRequestInterface:
-        """Returns the request at position position from this message. If there is no requesrt there it
-        will create a new instance and return it.
-        Parameters:
-        position (int) position that we want to return
-        Returns:
-        OutputTractionMessageRequest with the request required
-        """
-        if position not in self._requests:
-            self._requests[position] = OutputTractionMessageRequest()
+    def create_request(self) -> OutputTractionMessageRequest:
+        """Creates a new request and returns it. It will be appended to the list of requests.
 
-        return self._requests[position]
-
-    def request_attributes(self) -> List[Dict[str, Any]]:
-        """Returns a list with all the payloads for every request
         Returns:
-        List[Dict[str,Any]] with all payloads for all the requests
+            OutputTractionMessageRequest: The newly created request.
         """
-        return [self._requests[position].serializer().payload() for position in range(len(self._requests))]
+        self._requests.append(OutputTractionMessageRequest())
+        return self._requests[-1]
+
+    def plates_attributes(self) -> list[dict[str, Any]]:
+        """Prepare a payload for all the request related to plates.
+
+        Returns:
+            list[dict[str, Any]]: A list containing the payload for all the plates.
+        """
+        # Group well requests by plate barcode
+        well_requests = [request for request in self._requests if request.container_type == "wells"]
+        well_requests.sort(key=lambda request: request.container_barcode or "")
+        plate_requests = itertools.groupby(well_requests, lambda request: request.container_barcode)
+
+        return [PlateSerializer(list(requests)).payload() for _, requests in plate_requests]
+
+    def tubes_attributes(self) -> list[dict[str, Any]]:
+        """Prepare a payload for all the requests related to tubes.
+
+        Returns:
+            list[dict[str, Any]]: A list containing the payload for all the tubes.
+        """
+        return [TubeSerializer(request).payload() for request in self._requests if request.container_type == "tubes"]
 
     @property
-    def errors(self) -> List[ErrorCode]:
-        """List of errors defined for this message"""
+    def errors(self) -> list[ErrorCode]:
+        """A list of errors defined for this message."""
         return self._errors
 
     def check_has_requests(self) -> bool:
-        """Returns a bool identifying if the message has requests. If not it will trigger an error and
-        return false.
-        Returns
-        bool saying if the message has requests
+        """Check that this message has associated requests.
+        Even if there are no requests, this will not trigger an error.
+
+        Returns:
+            bool: True if there are registered requests; otherwise False.
         """
-        if len(self._requests) > 0:
+        if self._requests:
             return True
-        else:
-            self.trigger_error(error_codes.ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS)
-            return False
+
+        self.trigger_error(error_codes.ERROR_23_TRACTION_MESSAGE_HAS_NO_REQUESTS)
+        return False
 
     def check_no_errors(self) -> bool:
-        """Checks that a message has no errors
+        """Check that the message has no errors.
+
         Returns:
-        bool indicating if there is no errors
+            bool: True if there are no errors registered; otherwise False.
         """
-        return len(self.errors) == 0
+        return not self.errors
 
     def check_requests_have_all_content(self) -> bool:
-        """Checks that all requests provided are valid. Triggers an error if any is not.
+        """Checks that all requests provided have valid content.
+        Triggers an error if any is not.
+
         Returns:
-        bool indicating that all requests have valid content inside.
+            bool: True if all requests validate successfully; otherwise False.
         """
-        if all([self.requests(key).validate() for key in self._requests]):
+        if all([request.validate() for request in self._requests]):
             return True
+
         self.trigger_error(error_codes.ERROR_24_TRACTION_MESSAGE_REQUESTS_HAVE_MISSING_DATA)
         return False
 
-    def payload(self) -> Dict[str, Any]:
-        """Returns the valid payload to send to traction"""
+    def payload(self) -> dict[str, Any]:
+        """Generates the payload to send to Traction.
+
+        Returns:
+            dict[str, Any]: The payload dictionary.
+        """
         return {
             "data": {
                 "type": "receptions",
                 "attributes": {
                     "source": OUTPUT_TRACTION_MESSAGE_SOURCE,
-                    "request_attributes": self.request_attributes(),
+                    "plates_attributes": self.plates_attributes(),
+                    "tubes_attributes": self.tubes_attributes(),
                 },
             }
         }
 
     def error_code_traction_problem(self, status_code: int, error_str: str) -> None:
-        """Triggers an error indicating that traction failed.
-        Parameters:
-        status_code (int) HTTP status code when sending to traction (422, 500, etc)
-        error_str (str) contents received by Traction endpoint on the request
+        """Triggers an error indicating that Traction failed.
+
+        Args:
+            status_code (int): HTTP status code when sending to Traction (422, 500, etc)
+            error_str (str): Error message received from the Traction endpoint.
         """
         self.trigger_error(
             error_codes.ERROR_13_TRACTION_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
         )
 
     def send(self, url: str) -> bool:
-        """Sends a request to Traction. If is correct returns true, if not it will trigger an error and
-        return False
-        Parameters:
-        url (str) url where it will send the Traction request
+        """Sends a Traction API request to the provided URL.
+        If the send fails, an error code will be recorded.
+
+        Args:
+            url (str): The URL to submit the Traction request to.
+
         Returns:
-        bool indicating if the request was successful
+            bool: True if the request was sent successfully; otherwise False.
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
@@ -450,9 +323,18 @@ class OutputTractionMessage(MessageProperty, OutputTractionMessageInterface):
 
         return self._sent
 
-    def add_to_feedback_message(self, feedback_message: OutputFeedbackMessageInterface) -> None:
-        """Adds the relevant information about this Traction sent to the feedback message, indicating
-        if there has been any errors"""
+    @singledispatchmethod
+    def add_to_message_property(self, message_property: MessageProperty) -> None:
+        super().add_to_message_property(message_property)
+
+    @add_to_message_property.register
+    def _(self, feedback_message: OutputFeedbackMessage) -> None:
+        """Adds error information to the an OutputFeedbackMessage.
+        Also sets the operation_was_error_free to False if the message has not been sent.
+
+        Args:
+            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage to add errors to.
+        """
         if not self._sent:
             feedback_message.operation_was_error_free = False
         if len(self._errors) > 0:

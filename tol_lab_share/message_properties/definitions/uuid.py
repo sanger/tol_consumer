@@ -2,10 +2,10 @@ from .message_property import MessageProperty
 from uuid import UUID
 from tol_lab_share import error_codes
 
-from typing import Optional, Any
+from typing import Any
 from functools import cached_property
 import logging
-from typing import List, Callable
+from typing import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ class Uuid(MessageProperty):
     The uuid has to be binary defined in version UUID v4 and encoded using utf-8."""
 
     @property
-    def validators(self) -> List[Callable]:
+    def validators(self) -> list[Callable]:
         """Defines the list of validators"""
         return [self.check_is_binary, self.check_is_uuid]
 
@@ -54,6 +54,6 @@ class Uuid(MessageProperty):
         return False
 
     @cached_property
-    def value(self) -> Optional[Any]:
+    def value(self) -> Any:
         """Returns the string representation of the uuid"""
         return self._input.value.decode("utf-8")

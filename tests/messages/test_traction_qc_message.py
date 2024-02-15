@@ -9,47 +9,42 @@ from tol_lab_share.messages.traction_qc_message import TractionQcMessage, QcRequ
 logger = logging.getLogger(__name__)
 
 
-class FreezeDate(datetime):
-    @classmethod
-    def now(cls):
-        return cls(2023, 7, 11, 12, 29, 11, 564246)
-
-
-datetime = FreezeDate  # type: ignore
-
-
 class TestTractionQcMessage:
     @pytest.fixture()
-    def valid_traction_qc_message(self):
+    def valid_traction_qc_message(self, freezer):
         traction_qc_message = TractionQcMessage()
-        traction_qc_message.requests(0).supplier_sample_name = "supplier_sample_name_DDD"
-        traction_qc_message.requests(0).container_barcode = "FD20706500"
-        traction_qc_message.requests(0).sheared_femto_fragment_size = "5"
-        traction_qc_message.requests(0).post_spri_concentration = "10"
-        traction_qc_message.requests(0).post_spri_volume = "20"
-        traction_qc_message.requests(0).final_nano_drop_280 = "280"
-        traction_qc_message.requests(0).final_nano_drop_230 = "230"
-        traction_qc_message.requests(0).final_nano_drop = "200"
-        traction_qc_message.requests(0).shearing_qc_comments = "Comments"
-        traction_qc_message.requests(0).date_submitted_utc = datetime.now().timestamp() * 1000
 
-        traction_qc_message.requests(1).supplier_sample_name = "supplier_sample_name_DDD2"
-        traction_qc_message.requests(1).container_barcode = "FD20706501"
-        traction_qc_message.requests(1).sheared_femto_fragment_size = "9"
-        traction_qc_message.requests(1).post_spri_concentration = "10"
-        traction_qc_message.requests(1).post_spri_volume = "30"
-        traction_qc_message.requests(1).final_nano_drop_280 = "180"
-        traction_qc_message.requests(1).final_nano_drop_230 = "130"
-        traction_qc_message.requests(1).final_nano_drop = "100"
-        traction_qc_message.requests(1).shearing_qc_comments = ""
-        traction_qc_message.requests(1).date_submitted_utc = datetime.now().timestamp() * 1000
+        request = traction_qc_message.create_request()
+        request.sanger_sample_id = "sanger_sample_id_DDD"
+        request.container_barcode = "FD20706500"
+        request.sheared_femto_fragment_size = "5"
+        request.post_spri_concentration = "10"
+        request.post_spri_volume = "20"
+        request.final_nano_drop_280 = "280"
+        request.final_nano_drop_230 = "230"
+        request.final_nano_drop = "200"
+        request.shearing_qc_comments = "Comments"
+        request.date_submitted_utc = datetime.utcnow().timestamp() * 1000
+
+        request = traction_qc_message.create_request()
+        request.sanger_sample_id = "sanger_sample_id_DDD2"
+        request.container_barcode = "FD20706501"
+        request.sheared_femto_fragment_size = "9"
+        request.post_spri_concentration = "10"
+        request.post_spri_volume = "30"
+        request.final_nano_drop_280 = "180"
+        request.final_nano_drop_230 = "130"
+        request.final_nano_drop = "100"
+        request.shearing_qc_comments = ""
+        request.date_submitted_utc = datetime.utcnow().timestamp() * 1000
 
         return traction_qc_message
 
     @pytest.fixture()
     def invalid_traction_qc_message(self):
         traction_qc_message = TractionQcMessage()
-        traction_qc_message.requests(0).sheared_femto_fragment_size = "5"
+        request = traction_qc_message.create_request()
+        request.sheared_femto_fragment_size = "5"
 
         return traction_qc_message
 
@@ -62,7 +57,7 @@ class TestTractionQcMessage:
         assert not invalid_traction_qc_message.validate()
         assert valid_traction_qc_message.validate()
 
-    def test_can_generate_correct_payload(self, valid_traction_qc_message):
+    def test_can_generate_correct_payload(self, valid_traction_qc_message, freezer):
         payload = valid_traction_qc_message.payload()
 
         expected_payload = {
@@ -77,9 +72,9 @@ class TestTractionQcMessage:
                             "post_spri_volume": "20",
                             "sheared_femto_fragment_size": "5",
                             "shearing_qc_comments": "Comments",
-                            "date_submitted": datetime.now().timestamp() * 1000,
+                            "date_submitted": datetime.utcnow().timestamp() * 1000,
                             "labware_barcode": "FD20706500",
-                            "sample_external_id": "supplier_sample_name_DDD",
+                            "sample_external_id": "sanger_sample_id_DDD",
                         },
                         {
                             "final_nano_drop": "100",
@@ -88,9 +83,9 @@ class TestTractionQcMessage:
                             "post_spri_concentration": "10",
                             "post_spri_volume": "30",
                             "sheared_femto_fragment_size": "9",
-                            "date_submitted": datetime.now().timestamp() * 1000,
+                            "date_submitted": datetime.utcnow().timestamp() * 1000,
                             "labware_barcode": "FD20706501",
-                            "sample_external_id": "supplier_sample_name_DDD2",
+                            "sample_external_id": "sanger_sample_id_DDD2",
                         },
                     ],
                     "source": "tol-lab-share.tol",
@@ -101,21 +96,21 @@ class TestTractionQcMessage:
 
         assert payload == expected_payload
 
-    def test_can_add_to_feedback_message_on_success(
+    def test_can_add_to_message_property_on_success(
         self, config, valid_traction_qc_message, valid_feedback_message, traction_qc_success_response
     ):
         feedback = valid_feedback_message
         with requests_mock.Mocker() as m:
             m.post(config.TRACTION_QC_URL, json=traction_qc_success_response, status_code=201)
             valid_traction_qc_message.send(config.TRACTION_QC_URL)
-        valid_traction_qc_message.add_to_feedback_message(feedback)
+        valid_traction_qc_message.add_to_message_property(feedback)
         assert len(feedback.errors) == 0
         assert feedback.operation_was_error_free
 
-    def test_can_add_to_feedback_message_when_errors(self, invalid_traction_qc_message, valid_feedback_message):
+    def test_can_add_to_message_property_when_errors(self, invalid_traction_qc_message, valid_feedback_message):
         assert not invalid_traction_qc_message.validate()
         feedback = valid_feedback_message
-        invalid_traction_qc_message.add_to_feedback_message(feedback)
+        invalid_traction_qc_message.add_to_message_property(feedback)
         assert len(feedback.errors) > 0
         assert not feedback.operation_was_error_free
 

@@ -1,4 +1,3 @@
-from typing import Optional
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
 from tol_lab_share.constants import (
@@ -7,11 +6,10 @@ from tol_lab_share.constants import (
 )
 from tol_lab_share import error_codes
 from tol_lab_share.message_properties.definitions.message_property import MessageProperty
-from tol_lab_share.messages.interfaces import OutputFeedbackMessageInterface
 import logging
 from tol_lab_share.helpers import get_config
 from tol_lab_share.message_properties.definitions.input import Input
-from typing import Dict, Any
+from typing import Any
 
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
@@ -19,21 +17,21 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 logger = logging.getLogger(__name__)
 
 
-class OutputFeedbackMessage(MessageProperty, OutputFeedbackMessageInterface):
+class OutputFeedbackMessage(MessageProperty):
     """Class that handles the feedback message parsing for TOL lab share"""
 
     def __init__(self):
         """Constructor that resets the state of a feedback message"""
         super().__init__(Input(self))
 
-        self._source_message_uuid: Optional[bytes] = None
-        self._count_of_total_samples: Optional[int] = None
-        self._count_of_valid_samples: Optional[int] = None
-        self._operation_was_error_free: Optional[bool] = True
+        self.source_message_uuid: bytes | None = None
+        self.count_of_total_samples: int | None = None
+        self.count_of_valid_samples: int | None = None
+        self.operation_was_error_free: bool = True
 
     @property
     def validators(self):
-        """List of validators to apply to the message"""
+        """list of validators to apply to the message"""
         return [self.check_defined_keys, self.check_errors_correct]
 
     @property
@@ -41,48 +39,8 @@ class OutputFeedbackMessage(MessageProperty, OutputFeedbackMessageInterface):
         """ "Name of the origin for this property, set as a constant value."""
         return "OutputFeedbackMessage"
 
-    @property
-    def source_message_uuid(self) -> Optional[bytes]:
-        """Returns the uuid of the source message"""
-        return self._source_message_uuid
-
-    @source_message_uuid.setter
-    def source_message_uuid(self, value: bytes) -> None:
-        """Sets the uuid of the source message"""
-        self._source_message_uuid = value
-
-    @property
-    def count_of_total_samples(self) -> Optional[int]:
-        """Returns the count of total samples"""
-        return self._count_of_total_samples
-
-    @count_of_total_samples.setter
-    def count_of_total_samples(self, value: int) -> None:
-        """Sets the count of total samples"""
-        self._count_of_total_samples = value
-
-    @property
-    def count_of_valid_samples(self) -> Optional[int]:
-        """Returns the count of valid samples"""
-        return self._count_of_valid_samples
-
-    @count_of_valid_samples.setter
-    def count_of_valid_samples(self, value: int) -> None:
-        """Sets the count of valid samples"""
-        self._count_of_valid_samples = value
-
-    @property
-    def operation_was_error_free(self) -> Optional[bool]:
-        """Returns the flag indicating if the operation was error free"""
-        return self._operation_was_error_free
-
-    @operation_was_error_free.setter
-    def operation_was_error_free(self, value: bool) -> None:
-        """Sets the flag indicating if the operation was error free"""
-        self._operation_was_error_free = value
-
-    def to_json(self) -> Dict[str, Any]:
-        """Returns a Dict with the JSON-like representation of the message."""
+    def to_json(self) -> dict[str, Any]:
+        """Returns a dict with the JSON-like representation of the message."""
         return {
             "sourceMessageUuid": str(self.source_message_uuid),
             "countOfTotalSamples": self.count_of_total_samples,
@@ -91,7 +49,7 @@ class OutputFeedbackMessage(MessageProperty, OutputFeedbackMessageInterface):
             "errors": [error.json() for error in self.errors],
         }
 
-    def encoder_config_for(self, encoder_type_selection: str) -> Dict[str, Any]:
+    def encoder_config_for(self, encoder_type_selection: str) -> dict[str, Any]:
         """Returns a config object with the encoder class and encoder type depending of the encoder selected."""
         if encoder_type_selection == "json":
             return {"encoder_class": AvroEncoderJson, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON}
