@@ -37,7 +37,7 @@ def test_output_traction_message_can_validate():
 
 
 def test_output_traction_message_can_generate_payload_for_plates():
-    my_date = datetime.now()
+    my_date = datetime.utcnow()
     instance = OutputTractionMessage()
 
     request = instance.create_request()
@@ -144,7 +144,7 @@ def test_output_traction_message_can_generate_payload_for_plates():
 
 
 def test_output_traction_message_can_generate_payload_for_multiple_plates():
-    my_date = datetime.now()
+    my_date = datetime.utcnow()
     instance = OutputTractionMessage()
 
     # Mix the order of the requests to ensure the grouping for plates works.
@@ -348,7 +348,7 @@ def test_output_traction_message_can_generate_payload_for_multiple_plates():
 
 
 def test_output_traction_message_can_generate_payload_for_ont_library_types():
-    my_date = datetime.now()
+    my_date = datetime.utcnow()
     instance = OutputTractionMessage()
 
     request = instance.create_request()
@@ -457,7 +457,7 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
 
 
 def test_output_traction_message_can_generate_payload_for_tubes():
-    my_date = datetime.now()
+    my_date = datetime.utcnow()
     instance = OutputTractionMessage()
 
     request = instance.create_request()
@@ -558,7 +558,7 @@ def test_output_traction_message_can_generate_payload_for_tubes():
 
 
 def test_output_traction_message_can_generate_payload_for_mix_of_plate_and_tubes():
-    my_date = datetime.now()
+    my_date = datetime.utcnow()
     instance = OutputTractionMessage()
 
     request = instance.create_request()

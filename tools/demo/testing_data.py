@@ -20,7 +20,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
     unique_id_lab = f"TOLTESTING-PLATE-{unique_id}-{num_msg}"
     return {
         "messageUuid": str(uuid4()).encode(),
-        "messageCreateDateUtc": datetime.now().timestamp() * 1000,
+        "messageCreateDateUtc": datetime.utcnow().timestamp() * 1000,
         "labware": {
             "labwareType": "Plate12x8",
             "barcode": barcode_for_unique_id("PLATE", unique_id, num_msg),
@@ -42,7 +42,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "genomeSize": "1",
                     "accessionNumber": "A1234",
                     "costCode": "S1234",
-                    "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                    "sampleCollectionDateUtc": datetime.utcnow().timestamp() * 1000,
                     "shearedFemtoFragmentSize": "5",
                     "postSPRIConcentration": "10",
                     "postSPRIVolume": "20",
@@ -50,7 +50,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "finalNanoDrop230": "6",
                     "finalNanoDrop": "7",
                     "shearingAndQCComments": "Comments",
-                    "dateSubmittedUTC": datetime.now().timestamp() * 1000,
+                    "dateSubmittedUTC": datetime.utcnow().timestamp() * 1000,
                     "priorityLevel": "Medium",
                 }
                 for letter in range(ord("A"), ord("H") + 1)
@@ -64,7 +64,7 @@ def build_create_tube_msg(unique_id, num_msg):
     unique_id_lab = f"TOLTESTING-TUBE-{unique_id}-{num_msg}"
     return {
         "messageUuid": str(uuid4()).encode(),
-        "messageCreateDateUtc": datetime.now().timestamp() * 1000,
+        "messageCreateDateUtc": datetime.utcnow().timestamp() * 1000,
         "labware": {
             "labwareType": "Tube",
             "barcode": barcode_for_unique_id("TUBE", unique_id, num_msg),
@@ -86,7 +86,7 @@ def build_create_tube_msg(unique_id, num_msg):
                     "genomeSize": "1",
                     "accessionNumber": "A1234",
                     "costCode": "S1234",
-                    "sampleCollectionDateUtc": datetime.now().timestamp() * 1000,
+                    "sampleCollectionDateUtc": datetime.utcnow().timestamp() * 1000,
                     "shearedFemtoFragmentSize": "5",
                     "postSPRIConcentration": "10",
                     "postSPRIVolume": "20",
@@ -94,7 +94,7 @@ def build_create_tube_msg(unique_id, num_msg):
                     "finalNanoDrop230": "6",
                     "finalNanoDrop": "7",
                     "shearingAndQCComments": "Comments",
-                    "dateSubmittedUTC": datetime.now().timestamp() * 1000,
+                    "dateSubmittedUTC": datetime.utcnow().timestamp() * 1000,
                     "priorityLevel": "Medium",
                 }
             ],
@@ -105,7 +105,7 @@ def build_create_tube_msg(unique_id, num_msg):
 def build_update_labware_msg(sample_msg):
     return {
         "messageUuid": str(uuid4()).encode(),
-        "messageCreateDateUtc": datetime.now().timestamp() * 1000,
+        "messageCreateDateUtc": datetime.utcnow().timestamp() * 1000,
         "sampleUpdates": [
             {
                 "sampleUuid": sample_msg["labware"]["samples"][3]["sampleUuid"],
