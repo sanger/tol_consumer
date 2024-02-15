@@ -9,18 +9,9 @@ from tol_lab_share.messages.traction_qc_message import TractionQcMessage, QcRequ
 logger = logging.getLogger(__name__)
 
 
-class FreezeDate(datetime):
-    @classmethod
-    def now(cls):
-        return cls(2023, 7, 11, 12, 29, 11, 564246)
-
-
-datetime = FreezeDate  # type: ignore
-
-
 class TestTractionQcMessage:
     @pytest.fixture()
-    def valid_traction_qc_message(self):
+    def valid_traction_qc_message(self, freezer):
         traction_qc_message = TractionQcMessage()
 
         request = traction_qc_message.create_request()
@@ -33,7 +24,7 @@ class TestTractionQcMessage:
         request.final_nano_drop_230 = "230"
         request.final_nano_drop = "200"
         request.shearing_qc_comments = "Comments"
-        request.date_submitted_utc = datetime.now().timestamp() * 1000
+        request.date_submitted_utc = datetime.utcnow().timestamp() * 1000
 
         request = traction_qc_message.create_request()
         request.sanger_sample_id = "sanger_sample_id_DDD2"
@@ -45,7 +36,7 @@ class TestTractionQcMessage:
         request.final_nano_drop_230 = "130"
         request.final_nano_drop = "100"
         request.shearing_qc_comments = ""
-        request.date_submitted_utc = datetime.now().timestamp() * 1000
+        request.date_submitted_utc = datetime.utcnow().timestamp() * 1000
 
         return traction_qc_message
 
@@ -66,7 +57,7 @@ class TestTractionQcMessage:
         assert not invalid_traction_qc_message.validate()
         assert valid_traction_qc_message.validate()
 
-    def test_can_generate_correct_payload(self, valid_traction_qc_message):
+    def test_can_generate_correct_payload(self, valid_traction_qc_message, freezer):
         payload = valid_traction_qc_message.payload()
 
         expected_payload = {
@@ -81,7 +72,7 @@ class TestTractionQcMessage:
                             "post_spri_volume": "20",
                             "sheared_femto_fragment_size": "5",
                             "shearing_qc_comments": "Comments",
-                            "date_submitted": datetime.now().timestamp() * 1000,
+                            "date_submitted": datetime.utcnow().timestamp() * 1000,
                             "labware_barcode": "FD20706500",
                             "sample_external_id": "sanger_sample_id_DDD",
                         },
@@ -92,7 +83,7 @@ class TestTractionQcMessage:
                             "post_spri_concentration": "10",
                             "post_spri_volume": "30",
                             "sheared_femto_fragment_size": "9",
-                            "date_submitted": datetime.now().timestamp() * 1000,
+                            "date_submitted": datetime.utcnow().timestamp() * 1000,
                             "labware_barcode": "FD20706501",
                             "sample_external_id": "sanger_sample_id_DDD2",
                         },

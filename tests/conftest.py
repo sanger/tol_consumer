@@ -138,7 +138,7 @@ def valid_sample():
         "countryOfOrigin": "United Kingdom",
         "genomeSize": "14",
         "accessionNumber": "EE1234",
-        "sampleCollectionDateUtc": datetime.now(),
+        "sampleCollectionDateUtc": datetime.utcnow(),
         "costCode": "S1234",
         "shearedFemtoFragmentSize": "8",
         "postSPRIConcentration": "9",
@@ -147,7 +147,7 @@ def valid_sample():
         "finalNanoDrop230": "200",
         "finalNanoDrop": "150",
         "shearingAndQCComments": "",
-        "dateSubmittedUTC": datetime.now(),
+        "dateSubmittedUTC": datetime.utcnow(),
         "priorityLevel": "Medium",
     }
 
@@ -171,7 +171,7 @@ def invalid_sample():
         "genomeSize": "14",
         "accessionNumber": "EE1234",
         "costCode": 1234,
-        "sampleCollectionDateUtc": datetime.now(),
+        "sampleCollectionDateUtc": datetime.utcnow(),
         "shearedFemtoFragmentSize": "8",
         "postSPRIConcentration": "9",
         "postSPRIVolume": "10",
@@ -179,7 +179,7 @@ def invalid_sample():
         "finalNanoDrop230": 200,
         "finalNanoDrop": "150",
         "shearingAndQCComments": "",
-        "dateSubmittedUTC": datetime.now(),
+        "dateSubmittedUTC": datetime.utcnow(),
         "priorityLevel": "Medium",
     }
 
