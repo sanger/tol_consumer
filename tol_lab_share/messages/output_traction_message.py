@@ -29,6 +29,7 @@ class OutputTractionMessageRequest:
         self.country_of_origin: str | None = None
         self.date_of_sample_collection: datetime | None = None
         self.donor_id: str | None = None
+        self.genome_size: str | None = None
         self.library_type: str | None = None
         self.priority_level: str | None = None
         self.public_name: str | None = None
@@ -72,9 +73,10 @@ class Serializer:
             dict[str, Any]: A dictionary containing the Traction "request" payload for the request.
         """
         request_payload = {
-            "library_type": request.library_type,
-            "external_study_id": request.study_uuid,
             "cost_code": request.cost_code,
+            "estimate_of_gb_required": request.genome_size,
+            "external_study_id": request.study_uuid,
+            "library_type": request.library_type,
         }
 
         if request.library_type and ("ONT" in request.library_type):
@@ -97,18 +99,18 @@ class Serializer:
             collection_date = request.date_of_sample_collection.strftime("%Y-%m-%d")
 
         return {
-            "name": request.sample_name,
-            "external_id": request.sample_uuid,
-            "species": request.species,
-            "priority_level": request.priority_level,
-            "sanger_sample_id": request.sanger_sample_id,
-            "supplier_name": request.supplier_name,
-            "public_name": request.public_name,
-            "taxon_id": request.taxon_id,
-            "donor_id": request.donor_id,
-            "country_of_origin": request.country_of_origin,
             "accession_number": request.accession_number,
+            "country_of_origin": request.country_of_origin,
             "date_of_sample_collection": collection_date,
+            "donor_id": request.donor_id,
+            "external_id": request.sample_uuid,
+            "name": request.sample_name,
+            "priority_level": request.priority_level,
+            "public_name": request.public_name,
+            "sanger_sample_id": request.sanger_sample_id,
+            "species": request.species,
+            "supplier_name": request.supplier_name,
+            "taxon_id": request.taxon_id,
         }
 
 

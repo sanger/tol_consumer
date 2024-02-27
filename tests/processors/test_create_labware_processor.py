@@ -102,16 +102,16 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 ),
                             },
                             {
-                                "typeId": 7,
-                                "field": "location",
-                                "origin": "sample",
-                                "description": 'Not valid location, instance: "Location", text: "input: A001"',
-                            },
-                            {
                                 "typeId": 2,
                                 "field": "final_nano_drop",
                                 "origin": "sample",
                                 "description": 'Not string, instance: "FinalNanoDrop"',
+                            },
+                            {
+                                "typeId": 7,
+                                "field": "location",
+                                "origin": "sample",
+                                "description": 'Not valid location, instance: "Location", text: "input: A001"',
                             },
                             {
                                 "typeId": 7,

@@ -91,24 +91,25 @@ class Labware(MessageProperty):
 
         for sample in self.properties("samples"):
             request = message.create_request()
-            request.cost_code = sample.properties("cost_code").value
-            request.study_uuid = sample.properties("study_uuid").value
-            request.sample_name = sample.properties("sanger_sample_id").value
-            request.public_name = sample.properties("public_name").value
-            request.sample_uuid = sample.properties("uuid").value
-            request.library_type = sample.properties("library_type").value
-            request.species = sample.properties("scientific_name").value
+            request.accession_number = sample.properties("accession_number").value
             request.container_barcode = self.properties("barcode").value
             request.container_location = sample.properties("location").value
             request.container_type = self.traction_container_type()
-            request.priority_level = sample.properties("priority_level").value
-            request.taxon_id = sample.properties("taxon_id").value
-            request.sanger_sample_id = sample.properties("sanger_sample_id").value
-            request.donor_id = sample.properties("donor_id").value
+            request.cost_code = sample.properties("cost_code").value
             request.country_of_origin = sample.properties("country_of_origin").value
-            request.accession_number = sample.properties("accession_number").value
-            request.supplier_name = sample.properties("supplier_sample_name").value
             request.date_of_sample_collection = sample.properties("collection_date").value
+            request.donor_id = sample.properties("donor_id").value
+            request.genome_size = sample.properties("genome_size").value
+            request.library_type = sample.properties("library_type").value
+            request.priority_level = sample.properties("priority_level").value
+            request.public_name = sample.properties("public_name").value
+            request.sample_name = sample.properties("sanger_sample_id").value
+            request.sample_uuid = sample.properties("uuid").value
+            request.sanger_sample_id = sample.properties("sanger_sample_id").value
+            request.species = sample.properties("scientific_name").value
+            request.study_uuid = sample.properties("study_uuid").value
+            request.supplier_name = sample.properties("supplier_sample_name").value
+            request.taxon_id = sample.properties("taxon_id").value
 
     @add_to_message_property.register
     def _(self, message: TractionQcMessage) -> None:
