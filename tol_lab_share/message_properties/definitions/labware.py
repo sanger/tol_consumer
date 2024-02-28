@@ -8,8 +8,7 @@ from tol_lab_share.message_properties.definitions.dict_input import DictInput
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.sample import Sample
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.traction.output_traction_message import OutputTractionMessage
-from tol_lab_share.traction.traction_qc_message import TractionQcMessage
+from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
 
 from .message_property import MessageProperty
 from functools import singledispatchmethod
@@ -81,11 +80,11 @@ class Labware(MessageProperty):
         feedback_message.count_of_valid_samples = self.count_of_valid_samples()
 
     @add_to_message_property.register
-    def _(self, message: OutputTractionMessage) -> None:
+    def _(self, message: TractionReceptionMessage) -> None:
         """Adds the labware information to an OutputTractionMessage.
 
         Args:
-            message (OutputTractionMessage): The OutputTractionMessage instance to add the data to.
+            message (TractionReceptionMessage): The TractionReceptionMessage instance to add the data to.
         """
         super().add_to_message_property(message)
 

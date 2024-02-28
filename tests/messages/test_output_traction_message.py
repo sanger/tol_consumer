@@ -1,10 +1,10 @@
-from tol_lab_share.traction.output_traction_message import OutputTractionMessage
+from tol_lab_share.messages.traction import TractionReceptionMessage
 from datetime import datetime
 import requests_mock
 
 
 def valid_traction_message():
-    instance = OutputTractionMessage()
+    instance = TractionReceptionMessage()
     request = instance.create_request()
     request.container_barcode = "1"
     request.container_type = "wells"
@@ -18,15 +18,15 @@ def valid_traction_message():
     return instance
 
 
-def test_output_traction_message_can_initialize():
-    assert OutputTractionMessage() is not None
+def test_traction_reception_message_can_initialize():
+    assert TractionReceptionMessage() is not None
 
 
-def test_output_traction_message_can_validate():
-    instance = OutputTractionMessage()
+def test_traction_reception_message_can_validate():
+    instance = TractionReceptionMessage()
     assert not instance.validate()
 
-    instance = OutputTractionMessage()
+    instance = TractionReceptionMessage()
     request = instance.create_request()
     request.container_barcode = "1"
     request.container_type = "wells"
@@ -36,9 +36,9 @@ def test_output_traction_message_can_validate():
     assert valid_traction_message().validate()
 
 
-def test_output_traction_message_can_generate_payload_for_plates():
+def test_traction_reception_message_can_generate_payload_for_plates():
     my_date = datetime.utcnow()
-    instance = OutputTractionMessage()
+    instance = TractionReceptionMessage()
 
     request = instance.create_request()
     request.accession_number = "AN1234"
@@ -147,9 +147,9 @@ def test_output_traction_message_can_generate_payload_for_plates():
     }
 
 
-def test_output_traction_message_can_generate_payload_for_multiple_plates():
+def test_traction_reception_message_can_generate_payload_for_multiple_plates():
     my_date = datetime.utcnow()
-    instance = OutputTractionMessage()
+    instance = TractionReceptionMessage()
 
     # Mix the order of the requests to ensure the grouping for plates works.
     # Well order is still maintained since the payload keeps the order of the requests.
@@ -359,9 +359,9 @@ def test_output_traction_message_can_generate_payload_for_multiple_plates():
     }
 
 
-def test_output_traction_message_can_generate_payload_for_ont_library_types():
+def test_traction_reception_message_can_generate_payload_for_ont_library_types():
     my_date = datetime.utcnow()
-    instance = OutputTractionMessage()
+    instance = TractionReceptionMessage()
 
     request = instance.create_request()
     request.accession_number = "AN1234"
@@ -472,9 +472,9 @@ def test_output_traction_message_can_generate_payload_for_ont_library_types():
     }
 
 
-def test_output_traction_message_can_generate_payload_for_tubes():
+def test_traction_reception_message_can_generate_payload_for_tubes():
     my_date = datetime.utcnow()
-    instance = OutputTractionMessage()
+    instance = TractionReceptionMessage()
 
     request = instance.create_request()
     request.accession_number = "AN1234"
@@ -577,9 +577,9 @@ def test_output_traction_message_can_generate_payload_for_tubes():
     }
 
 
-def test_output_traction_message_can_generate_payload_for_mix_of_plate_and_tubes():
+def test_traction_reception_message_can_generate_payload_for_mix_of_plate_and_tubes():
     my_date = datetime.utcnow()
-    instance = OutputTractionMessage()
+    instance = TractionReceptionMessage()
 
     request = instance.create_request()
     request.accession_number = "AN1234"
@@ -777,7 +777,7 @@ def test_output_traction_message_can_generate_payload_for_mix_of_plate_and_tubes
     }
 
 
-def test_output_traction_message_can_detect_errors_on_sent(config):
+def test_traction_reception_message_can_detect_errors_on_sent(config):
     vt = valid_traction_message()
 
     with requests_mock.Mocker() as m:
@@ -788,7 +788,7 @@ def test_output_traction_message_can_detect_errors_on_sent(config):
     assert len(vt.errors) > 0
 
 
-def test_output_traction_message_can_add_to_message_property_when_not_sent(valid_feedback_message):
+def test_traction_reception_message_can_add_to_message_property_when_not_sent(valid_feedback_message):
     vt = valid_traction_message()
 
     assert vt.validate()
@@ -800,7 +800,7 @@ def test_output_traction_message_can_add_to_message_property_when_not_sent(valid
     assert not feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_message_property_when_sent(
+def test_traction_reception_message_can_add_to_message_property_when_sent(
     config, traction_success_creation_response, valid_feedback_message
 ):
     vt = valid_traction_message()
@@ -816,8 +816,8 @@ def test_output_traction_message_can_add_to_message_property_when_sent(
     assert feedback.operation_was_error_free
 
 
-def test_output_traction_message_can_add_to_message_property_when_errors(valid_feedback_message):
-    instance = OutputTractionMessage()
+def test_traction_reception_message_can_add_to_message_property_when_errors(valid_feedback_message):
+    instance = TractionReceptionMessage()
 
     request = instance.create_request()
     request.container_barcode = "1"

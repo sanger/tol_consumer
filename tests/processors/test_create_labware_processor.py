@@ -170,7 +170,7 @@ def test_create_labware_processor_when_traction_sends_422(
                                 "field": "dict",
                                 "origin": "root",
                                 "description": (
-                                    'Traction send request failed, instance: "OutputTractionMessage",'
+                                    'Traction send request failed, instance: "TractionReceptionMessage",'
                                     ' text: "HTTP CODE: 422, MSG: This is an error"'
                                 ),
                             }
@@ -210,7 +210,7 @@ def test_create_labware_processor_when_traction_sends_500(config, valid_create_l
                             "field": "dict",
                             "origin": "root",
                             "description": (
-                                'Traction send request failed, instance: "OutputTractionMessage",'
+                                'Traction send request failed, instance: "TractionReceptionMessage",'
                                 ' text: "HTTP CODE: 500, MSG: Another error"'
                             ),
                         }

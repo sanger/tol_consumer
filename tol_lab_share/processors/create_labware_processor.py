@@ -8,8 +8,7 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from tol_lab_share import error_codes
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.traction.output_traction_message import OutputTractionMessage
-from tol_lab_share.traction.traction_qc_message import TractionQcMessage
+from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
 
 logger = logging.getLogger(__name__)
 
@@ -57,15 +56,15 @@ class CreateLabwareProcessor:
         input.add_to_message_property(output_feedback_message)
 
         if validation:
-            output_traction_message = OutputTractionMessage()
-            input.add_to_message_property(output_traction_message)
+            traction_reception_message = TractionReceptionMessage()
+            input.add_to_message_property(traction_reception_message)
             logger.info("Attempting to send to traction")
-            output_traction_message.send(url=self._config.TRACTION_URL)
-            output_traction_message.add_to_message_property(output_feedback_message)
+            traction_reception_message.send(url=self._config.TRACTION_URL)
+            traction_reception_message.add_to_message_property(output_feedback_message)
 
-            if len(output_traction_message.errors) > 0:
+            if len(traction_reception_message.errors) > 0:
                 error_codes.ERROR_16_PROBLEM_TALKING_WITH_TRACTION.trigger(
-                    text=f":{output_traction_message.errors}", instance=self
+                    text=f":{traction_reception_message.errors}", instance=self
                 )
             else:
                 self.send_qc_data_to_traction(input, output_feedback_message)

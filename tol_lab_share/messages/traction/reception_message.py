@@ -16,7 +16,7 @@ from tol_lab_share.helpers import get_config
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 
-class OutputTractionMessageRequest:
+class TractionReceptionMessageRequest:
     """Class that manages the information of a single Traction request instance as part of the Traction message."""
 
     def __init__(self):
@@ -62,12 +62,12 @@ class Serializer:
     """Class to manage the serialization of requests."""
 
     @staticmethod
-    def request_payload(request: OutputTractionMessageRequest) -> dict[str, Any]:
+    def request_payload(request: TractionReceptionMessageRequest) -> dict[str, Any]:
         """Generate the request payload for the given request.
         The payload varies depending on whether the library type is ONT or not.
 
         Args:
-            request (OutputTractionMessageRequest): The request to generate the payload for.
+            request (TractionReceptionMessageRequest): The request to generate the payload for.
 
         Returns:
             dict[str, Any]: A dictionary containing the Traction "request" payload for the request.
@@ -85,11 +85,11 @@ class Serializer:
         return request_payload
 
     @staticmethod
-    def sample_payload(request: OutputTractionMessageRequest) -> dict[str, Any]:
+    def sample_payload(request: TractionReceptionMessageRequest) -> dict[str, Any]:
         """Generate the sample payload for the given request.
 
         Args:
-            request (OutputTractionMessageRequest): The request to generate the payload for.
+            request (TractionReceptionMessageRequest): The request to generate the payload for.
 
         Returns:
             dict[str, Any]: A dictionary containing the Traction "sample" payload for the request.
@@ -117,11 +117,11 @@ class Serializer:
 class PlateSerializer(Serializer):
     """Class to manage the serialization of plate requests."""
 
-    def __init__(self, plate_requests: list[OutputTractionMessageRequest]):
+    def __init__(self, plate_requests: list[TractionReceptionMessageRequest]):
         """Constructor.
 
         Args:
-            plate_requests (list[OutputTractionMessageRequest]): The list of requests to serialize for a single plate.
+            plate_requests (list[TractionReceptionMessageRequest]): The list of requests to serialize for a single plate.
         """
         self._requests = plate_requests
 
@@ -156,11 +156,11 @@ class PlateSerializer(Serializer):
 class TubeSerializer(Serializer):
     """Class to manage the serialization of tube requests."""
 
-    def __init__(self, tube_request: OutputTractionMessageRequest):
+    def __init__(self, tube_request: TractionReceptionMessageRequest):
         """Constructor.
 
         Args:
-            tube_request (OutputTractionMessageRequest): The request to serialize for a single tube.
+            tube_request (TractionReceptionMessageRequest): The request to serialize for a single tube.
         """
         self._request = tube_request
 
@@ -178,13 +178,13 @@ class TubeSerializer(Serializer):
         }
 
 
-class OutputTractionMessage(MessageProperty):
-    """Class that handles the generation and publishing of a message to Traction."""
+class TractionReceptionMessage(MessageProperty):
+    """Class that handles the generation and publishing of a reception message to Traction."""
 
     def __init__(self):
         """Reset initial data."""
         super().__init__(Input(self))
-        self._requests: list[OutputTractionMessageRequest] = []
+        self._requests: list[TractionReceptionMessageRequest] = []
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
@@ -207,13 +207,13 @@ class OutputTractionMessage(MessageProperty):
         """
         return [self.check_has_requests, self.check_requests_have_all_content, self.check_no_errors]
 
-    def create_request(self) -> OutputTractionMessageRequest:
+    def create_request(self) -> TractionReceptionMessageRequest:
         """Creates a new request and returns it. It will be appended to the list of requests.
 
         Returns:
-            OutputTractionMessageRequest: The newly created request.
+            TractionReceptionMessageRequest: The newly created request.
         """
-        self._requests.append(OutputTractionMessageRequest())
+        self._requests.append(TractionReceptionMessageRequest())
         return self._requests[-1]
 
     def plates_attributes(self) -> list[dict[str, Any]]:
