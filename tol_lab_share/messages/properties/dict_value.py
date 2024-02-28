@@ -2,13 +2,13 @@ from .message_property import MessageProperty
 from functools import cached_property
 from tol_lab_share import error_codes
 import logging
-from tol_lab_share.message_properties.definitions.input import Input
+from .value import Value
 from typing import Callable, Any
 
 logger = logging.getLogger(__name__)
 
 
-class DictInput(MessageProperty):
+class DictValue(MessageProperty):
     """MessageProperty subclass to manage parsing of the access to the key of a
     dictionary. The input can be a valid dict or another MessageProperty that provides
     as value a valid dict. If the input is not a valid dict, or if the key does not
@@ -29,7 +29,7 @@ class DictInput(MessageProperty):
         """
         super().__init__(input)
         if not isinstance(input, MessageProperty):
-            self._input = Input(input)
+            self._input = Value(input)
         else:
             self._input = input
         self._key = key

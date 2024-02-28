@@ -9,8 +9,8 @@ from tol_lab_share import error_codes
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_SOURCE
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
-from tol_lab_share.message_properties.definitions.input import Input
-from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.messages.properties import Value
+from tol_lab_share.messages.properties.message_property import MessageProperty
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 logger = logging.getLogger(__name__)
@@ -92,7 +92,7 @@ class TractionQcMessage(MessageProperty):
 
     def __init__(self):
         """Resets initial data"""
-        super().__init__(Input(self))
+        super().__init__(Value(self))
         self._requests: list[TractionQcMessageRequest] = []
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED

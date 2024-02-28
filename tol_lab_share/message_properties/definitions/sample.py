@@ -36,7 +36,7 @@ from tol_lab_share.message_properties.definitions.concentration import Concentra
 from tol_lab_share.message_properties.definitions.cost_code import CostCode
 from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
-from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.messages.properties import DictValue
 from tol_lab_share.message_properties.definitions.donor_id import DonorId
 from tol_lab_share.message_properties.definitions.final_nano_drop import FinalNanoDrop
 from tol_lab_share.message_properties.definitions.final_nano_drop_230 import FinalNanoDrop230
@@ -57,7 +57,7 @@ from tol_lab_share.message_properties.definitions.taxon_id import TaxonId
 from tol_lab_share.message_properties.definitions.uuid import Uuid
 from tol_lab_share.message_properties.definitions.volume import Volume
 
-from .message_property import MessageProperty
+from ...messages.properties.message_property import MessageProperty
 
 logger = logging.getLogger(__name__)
 
@@ -68,34 +68,34 @@ class Sample(MessageProperty):
     def __init__(self, input: Any):
         super().__init__(input)
 
-        self.add_property("accession_number", AccessionNumber(DictInput(input, SAMPLE_ACCESSION_NUMBER)))
-        self.add_property("collection_date", DateUtc(DictInput(input, SAMPLE_COLLECTION_DATE)))
-        self.add_property("common_name", CommonName(DictInput(input, SAMPLE_COMMON_NAME)))
-        self.add_property("concentration", Concentration(DictInput(input, SAMPLE_CONCENTRATION)))
-        self.add_property("cost_code", CostCode(DictInput(input, SAMPLE_COST_CODE)))
-        self.add_property("country_of_origin", CountryOfOrigin(DictInput(input, SAMPLE_COUNTRY_OF_ORIGIN)))
-        self.add_property("date_submitted_utc", DateUtc(DictInput(input, DATE_SUBMITTED_UTC)))
-        self.add_property("donor_id", DonorId(DictInput(input, SAMPLE_DONOR_ID)))
-        self.add_property("final_nano_drop_230", FinalNanoDrop230(DictInput(input, FINAL_NANODROP_230)))
-        self.add_property("final_nano_drop_280", FinalNanoDrop280(DictInput(input, FINAL_NANODROP_280)))
-        self.add_property("final_nano_drop", FinalNanoDrop(DictInput(input, FINAL_NANODROP)))
-        self.add_property("genome_size", GenomeSize(DictInput(input, SAMPLE_GENOME_SIZE)))
-        self.add_property("library_type", LibraryType(DictInput(input, SAMPLE_LIBRARY_TYPE)))
-        self.add_property("location", Location(DictInput(input, SAMPLE_LOCATION)))
-        self.add_property("post_spri_concentration", PostSPRIConcentration(DictInput(input, POST_SPRI_CONCENTRATION)))
-        self.add_property("post_spri_volume", PostSPRIVolume(DictInput(input, POST_SPRI_VOLUME)))
-        self.add_property("priority_level", PriorityLevel(DictInput(input, PRIORITY_LEVEL)))
-        self.add_property("public_name", PublicName(DictInput(input, SAMPLE_PUBLIC_NAME)))
-        self.add_property("sanger_sample_id", SangerSampleId(DictInput(input, SAMPLE_SANGER_SAMPLE_ID)))
+        self.add_property("accession_number", AccessionNumber(DictValue(input, SAMPLE_ACCESSION_NUMBER)))
+        self.add_property("collection_date", DateUtc(DictValue(input, SAMPLE_COLLECTION_DATE)))
+        self.add_property("common_name", CommonName(DictValue(input, SAMPLE_COMMON_NAME)))
+        self.add_property("concentration", Concentration(DictValue(input, SAMPLE_CONCENTRATION)))
+        self.add_property("cost_code", CostCode(DictValue(input, SAMPLE_COST_CODE)))
+        self.add_property("country_of_origin", CountryOfOrigin(DictValue(input, SAMPLE_COUNTRY_OF_ORIGIN)))
+        self.add_property("date_submitted_utc", DateUtc(DictValue(input, DATE_SUBMITTED_UTC)))
+        self.add_property("donor_id", DonorId(DictValue(input, SAMPLE_DONOR_ID)))
+        self.add_property("final_nano_drop_230", FinalNanoDrop230(DictValue(input, FINAL_NANODROP_230)))
+        self.add_property("final_nano_drop_280", FinalNanoDrop280(DictValue(input, FINAL_NANODROP_280)))
+        self.add_property("final_nano_drop", FinalNanoDrop(DictValue(input, FINAL_NANODROP)))
+        self.add_property("genome_size", GenomeSize(DictValue(input, SAMPLE_GENOME_SIZE)))
+        self.add_property("library_type", LibraryType(DictValue(input, SAMPLE_LIBRARY_TYPE)))
+        self.add_property("location", Location(DictValue(input, SAMPLE_LOCATION)))
+        self.add_property("post_spri_concentration", PostSPRIConcentration(DictValue(input, POST_SPRI_CONCENTRATION)))
+        self.add_property("post_spri_volume", PostSPRIVolume(DictValue(input, POST_SPRI_VOLUME)))
+        self.add_property("priority_level", PriorityLevel(DictValue(input, PRIORITY_LEVEL)))
+        self.add_property("public_name", PublicName(DictValue(input, SAMPLE_PUBLIC_NAME)))
+        self.add_property("sanger_sample_id", SangerSampleId(DictValue(input, SAMPLE_SANGER_SAMPLE_ID)))
         self.add_property(
-            "scientific_name", ScientificNameFromTaxonId(TaxonId(DictInput(input, SAMPLE_SANGER_TAXON_ID)))
+            "scientific_name", ScientificNameFromTaxonId(TaxonId(DictValue(input, SAMPLE_SANGER_TAXON_ID)))
         )
         self.add_property(
-            "sheared_femto_fragment_size", ShearedFemtoFragmentSize(DictInput(input, SHEARED_FEMTO_FRAGMENT_SIZE))
+            "sheared_femto_fragment_size", ShearedFemtoFragmentSize(DictValue(input, SHEARED_FEMTO_FRAGMENT_SIZE))
         )
-        self.add_property("shearing_qc_comments", ShearingAndQCComments(DictInput(input, SHEARING_QC_COMMENTS)))
-        self.add_property("study_uuid", Uuid(DictInput(input, SAMPLE_STUDY_UUID)))
-        self.add_property("supplier_sample_name", SupplierSampleName(DictInput(input, SUPPLIER_SAMPLE_NAME)))
-        self.add_property("taxon_id", TaxonId(DictInput(input, SAMPLE_TAXON_ID)))
-        self.add_property("uuid", Uuid(DictInput(input, SAMPLE_SANGER_UUID)))
-        self.add_property("volume", Volume(DictInput(input, SAMPLE_VOLUME)))
+        self.add_property("shearing_qc_comments", ShearingAndQCComments(DictValue(input, SHEARING_QC_COMMENTS)))
+        self.add_property("study_uuid", Uuid(DictValue(input, SAMPLE_STUDY_UUID)))
+        self.add_property("supplier_sample_name", SupplierSampleName(DictValue(input, SUPPLIER_SAMPLE_NAME)))
+        self.add_property("taxon_id", TaxonId(DictValue(input, SAMPLE_TAXON_ID)))
+        self.add_property("uuid", Uuid(DictValue(input, SAMPLE_SANGER_UUID)))
+        self.add_property("volume", Volume(DictValue(input, SAMPLE_VOLUME)))

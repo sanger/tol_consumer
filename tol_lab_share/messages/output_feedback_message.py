@@ -5,10 +5,10 @@ from tol_lab_share.constants import (
     RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
 )
 from tol_lab_share import error_codes
-from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.messages.properties.message_property import MessageProperty
 import logging
 from tol_lab_share.helpers import get_config
-from tol_lab_share.message_properties.definitions.input import Input
+from tol_lab_share.messages.properties import Value
 from typing import Any
 
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
@@ -22,7 +22,7 @@ class OutputFeedbackMessage(MessageProperty):
 
     def __init__(self):
         """Constructor that resets the state of a feedback message"""
-        super().__init__(Input(self))
+        super().__init__(Value(self))
 
         self.source_message_uuid: bytes | None = None
         self.count_of_total_samples: int | None = None

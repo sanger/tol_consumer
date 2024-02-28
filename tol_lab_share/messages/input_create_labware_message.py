@@ -8,8 +8,8 @@ from tol_lab_share.constants.input_create_labware_message import (
 from tol_lab_share.message_properties.definitions.message_uuid import MessageUuid
 from tol_lab_share.message_properties.definitions.labware import Labware
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
-from tol_lab_share.message_properties.definitions.message_property import MessageProperty
-from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.messages.properties.message_property import MessageProperty
+from tol_lab_share.messages.properties import DictValue
 
 import logging
 
@@ -30,9 +30,9 @@ class InputCreateLabwareMessage(MessageProperty):
         super().__init__(m)
         self._message = m.message
 
-        self.add_property("message_uuid", MessageUuid(DictInput(self._message, MESSAGE_UUID)))
-        self.add_property("labware", Labware(DictInput(self._message, LABWARE)))
-        self.add_property("create_date_utc", DateUtc(DictInput(self._message, CREATED_DATE_UTC)))
+        self.add_property("message_uuid", MessageUuid(DictValue(self._message, MESSAGE_UUID)))
+        self.add_property("labware", Labware(DictValue(self._message, LABWARE)))
+        self.add_property("create_date_utc", DateUtc(DictValue(self._message, CREATED_DATE_UTC)))
 
     @singledispatchmethod
     def add_to_message_property(self, message_property: MessageProperty) -> None:
@@ -46,7 +46,7 @@ class InputCreateLabwareMessage(MessageProperty):
         Args:
             feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage to add errors to.
         """
-        logger.debug("InputCreateLabware::add_to_message_property")
+        logger.debug("ValueCreateLabware::add_to_message_property")
         super().add_to_message_property(feedback_message)
 
         if len(self.errors) > 0:

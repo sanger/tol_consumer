@@ -1,4 +1,4 @@
-from .message_property import MessageProperty
+from ...messages.properties.message_property import MessageProperty
 import logging
 from typing import Callable
 from functools import cached_property

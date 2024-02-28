@@ -1,6 +1,6 @@
 from typing import Callable
 
-from .message_property import MessageProperty
+from ...messages.properties.message_property import MessageProperty
 
 
 class PriorityLevel(MessageProperty):

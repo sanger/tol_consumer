@@ -1,4 +1,4 @@
-from .message_property import MessageProperty
+from ...messages.properties.message_property import MessageProperty
 from typing import Callable
 
 

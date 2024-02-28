@@ -4,13 +4,13 @@ from typing import Any
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES
 from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES
 from tol_lab_share.message_properties.definitions.barcode import Barcode
-from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.messages.properties import DictValue
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.sample import Sample
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
 
-from .message_property import MessageProperty
+from ...messages.properties.message_property import MessageProperty
 from functools import singledispatchmethod
 
 logger = logging.getLogger(__name__)
@@ -22,13 +22,13 @@ class Labware(MessageProperty):
     def __init__(self, input: MessageProperty):
         super().__init__(input)
 
-        self.add_property("labware_type", LabwareType(DictInput(input, LABWARE_TYPE)))
-        self.add_property("barcode", Barcode(DictInput(input, BARCODE)))
+        self.add_property("labware_type", LabwareType(DictValue(input, LABWARE_TYPE)))
+        self.add_property("barcode", Barcode(DictValue(input, BARCODE)))
         self.add_property("samples", self._parse_samples(input))
 
     def _parse_samples(self, input: MessageProperty) -> list[MessageProperty]:
         """Parses the samples section and creates a sample for each position."""
-        samples_dict = DictInput(input, SAMPLES)
+        samples_dict = DictValue(input, SAMPLES)
         if samples_dict.validate():
             samples_list_dict: list[MessageProperty] = []
             for position in range(len(samples_dict.value)):

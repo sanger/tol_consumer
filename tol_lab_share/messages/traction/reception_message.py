@@ -4,8 +4,8 @@ from typing import Callable, Any
 from json import dumps
 from datetime import datetime
 from requests import post, codes
-from tol_lab_share.message_properties.definitions.message_property import MessageProperty
-from tol_lab_share.message_properties.definitions.input import Input
+from tol_lab_share.messages.properties.message_property import MessageProperty
+from tol_lab_share.messages.properties import Value
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES,
     OUTPUT_TRACTION_MESSAGE_SOURCE,
@@ -184,7 +184,7 @@ class TractionReceptionMessage(MessageProperty):
 
     def __init__(self):
         """Reset initial data."""
-        super().__init__(Input(self))
+        super().__init__(Value(self))
         self._requests: list[TractionReceptionMessageRequest] = []
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED

@@ -1,33 +1,33 @@
-from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.messages.properties import DictValue
 
 
 def test_dict_input_can_validate_when_valid():
-    input = DictInput({"name": 1}, "name")
+    input = DictValue({"name": 1}, "name")
     assert input.validate()
 
-    input = DictInput(DictInput({"name": {"first": "James"}}, "name"), "first")
+    input = DictValue(DictValue({"name": {"first": "James"}}, "name"), "first")
     assert input.validate()
 
 
 def test_dict_input_can_get_value_when_valid():
-    input = DictInput({"name": 1}, "name")
+    input = DictValue({"name": 1}, "name")
     assert input.validate()
 
 
 def test_dict_input_can_get_chained_value_when_valid():
-    input = DictInput(DictInput({"name": {"first": "James"}}, "name"), "first")
+    input = DictValue(DictValue({"name": {"first": "James"}}, "name"), "first")
     assert input.value == "James"
 
 
 def test_dict_input_can_validate_when_invalid():
-    input = DictInput({}, "name")
+    input = DictValue({}, "name")
     assert not input.validate()
 
-    input = DictInput({"other": 1}, "name")
+    input = DictValue({"other": 1}, "name")
     assert not input.validate()
 
-    input = DictInput(DictInput({"name": {"first": "James"}}, "name"), "second")
+    input = DictValue(DictValue({"name": {"first": "James"}}, "name"), "second")
     assert not input.validate()
 
-    input = DictInput(DictInput({"name": {"first": "James"}}, "WRONG!!!"), "second")
+    input = DictValue(DictValue({"name": {"first": "James"}}, "WRONG!!!"), "second")
     assert not input.validate()

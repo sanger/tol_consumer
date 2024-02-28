@@ -1,4 +1,4 @@
-from .message_property import MessageProperty
+from ...messages.properties.message_property import MessageProperty
 from uuid import UUID
 from tol_lab_share import error_codes
 

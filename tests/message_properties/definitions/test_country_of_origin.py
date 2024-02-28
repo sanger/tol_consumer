@@ -1,28 +1,28 @@
 from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
-from tol_lab_share.message_properties.definitions.input import Input
+from tol_lab_share.messages.properties import Value
 
 
 def test_CountryOfOrigin_check_CountryOfOrigin_is_valid():
-    instance = CountryOfOrigin(Input(None))
+    instance = CountryOfOrigin(Value(None))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = CountryOfOrigin(Input("1234"))
+    instance = CountryOfOrigin(Value("1234"))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = CountryOfOrigin(Input([]))
+    instance = CountryOfOrigin(Value([]))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = CountryOfOrigin(Input(1234))
+    instance = CountryOfOrigin(Value(1234))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = CountryOfOrigin(Input("Testing"))
+    instance = CountryOfOrigin(Value("Testing"))
     assert instance.validate() is False
     assert len(instance.errors) > 0
 
-    instance = CountryOfOrigin(Input("UNITED KINGDOM"))
+    instance = CountryOfOrigin(Value("UNITED KINGDOM"))
     assert instance.validate() is True
     assert len(instance.errors) == 0

@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.messages.properties.message_property import MessageProperty
 from tol_lab_share.message_properties.definitions.uuid import Uuid
 
 import logging

@@ -1,24 +1,23 @@
-from tol_lab_share.message_properties.definitions.message_property import MessageProperty
+from tol_lab_share.messages.properties.message_property import MessageProperty
 from unittest import mock
-from tol_lab_share.message_properties.definitions.input import Input
-from tol_lab_share.message_properties.definitions.dict_input import DictInput
+from tol_lab_share.messages.properties import DictValue, Value
 from tol_lab_share import error_codes
 import pytest
 from datetime import datetime
 
 
 def test_message_property_can_initialize():
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance is not None
 
 
 def test_message_property_can_validate():
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance.validate() is True
 
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     with mock.patch(
-        "tol_lab_share.message_properties.definitions.message_property.MessageProperty.validators",
+        "tol_lab_share.messages.properties.message_property.MessageProperty.validators",
         new_callable=mock.PropertyMock,
     ) as mock_my_property:
         mock_my_property.return_value = [lambda: False]
@@ -27,140 +26,140 @@ def test_message_property_can_validate():
 
 
 def test_message_property_can_get_value():
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance.value == "1234"
 
 
 def test_message_property_check_is_string():
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance.check_is_string() is True
 
-    instance = MessageProperty(Input(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
+    instance = MessageProperty(Value(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
     assert instance.check_is_string() is False
 
-    instance = MessageProperty(Input(""))
+    instance = MessageProperty(Value(""))
     assert instance.check_is_string() is True
 
-    instance = MessageProperty(Input(None))
+    instance = MessageProperty(Value(None))
     assert instance.check_is_string() is False
 
-    instance = MessageProperty(Input(1234))
+    instance = MessageProperty(Value(1234))
     assert instance.check_is_string() is False
 
-    instance = MessageProperty(Input({}))
+    instance = MessageProperty(Value({}))
     assert instance.check_is_string() is False
 
 
 def test_message_property_check_is_integer():
-    instance = MessageProperty(Input(None))
+    instance = MessageProperty(Value(None))
     assert instance.check_is_integer() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance.check_is_integer() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input([]))
+    instance = MessageProperty(Value([]))
     assert instance.check_is_integer() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(DictInput({"test": 1234}, "wrong!!"))
+    instance = MessageProperty(DictValue({"test": 1234}, "wrong!!"))
     assert instance.check_is_integer() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input(1234))
+    instance = MessageProperty(Value(1234))
     assert instance.check_is_integer() is True
     assert len(instance.errors) == 0
 
 
 def test_message_property_check_is_integer_string():
-    instance = MessageProperty(Input(None))
+    instance = MessageProperty(Value(None))
     assert instance.check_is_integer_string() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance.check_is_integer_string() is True
     assert len(instance.errors) == 0
 
-    instance = MessageProperty(Input([]))
+    instance = MessageProperty(Value([]))
     assert instance.check_is_integer_string() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input(1234))
+    instance = MessageProperty(Value(1234))
     assert instance.check_is_integer_string() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input("1234.0"))
+    instance = MessageProperty(Value("1234.0"))
     assert instance.check_is_integer_string() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input("abcd"))
+    instance = MessageProperty(Value("abcd"))
     assert instance.check_is_integer_string() is False
     assert len(instance.errors) > 0
 
 
 def test_message_property_check_is_float():
-    instance = MessageProperty(Input(None))
+    instance = MessageProperty(Value(None))
     assert instance.check_is_float() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance.check_is_float() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input([]))
+    instance = MessageProperty(Value([]))
     assert instance.check_is_float() is False
     assert len(instance.errors) > 0
 
-    instance = MessageProperty(Input(1234.3))
+    instance = MessageProperty(Value(1234.3))
     assert instance.check_is_float() is True
     assert len(instance.errors) == 0
 
-    instance = MessageProperty(DictInput({"test": 1234}, "wrong!!"))
+    instance = MessageProperty(DictValue({"test": 1234}, "wrong!!"))
     assert instance.check_is_float() is False
     assert len(instance.errors) > 0
 
 
 def test_message_property_check_is_date_utc():
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert instance.check_is_date_utc() is False
 
-    instance = MessageProperty(Input(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
+    instance = MessageProperty(Value(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
     assert instance.check_is_date_utc() is False
 
-    instance = MessageProperty(Input(""))
+    instance = MessageProperty(Value(""))
     assert instance.check_is_date_utc() is False
 
-    instance = MessageProperty(Input(None))
+    instance = MessageProperty(Value(None))
     assert instance.check_is_date_utc() is False
 
-    instance = MessageProperty(Input(datetime.utcnow()))
+    instance = MessageProperty(Value(datetime.utcnow()))
     assert instance.check_is_date_utc() is True
 
-    instance = MessageProperty(Input({}))
+    instance = MessageProperty(Value({}))
     assert instance.check_is_date_utc() is False
 
 
 def test_message_property_properties_and_has_property():
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert not instance.has_property("test")
     with pytest.raises(KeyError):
         instance.properties("test")
-    instance2 = MessageProperty(Input("1234"))
+    instance2 = MessageProperty(Value("1234"))
     instance.add_property("test", instance2)
     assert instance.has_property("test")
     assert instance.properties("test") == instance2
 
 
 def test_message_property_can_add_property():
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
 
     assert instance.property_name is None
     assert instance.property_source is None
 
     assert not instance.has_property("test")
 
-    instance2 = MessageProperty(Input("1234"))
+    instance2 = MessageProperty(Value("1234"))
 
     instance.add_property("test", instance2)
 
@@ -174,9 +173,9 @@ def test_message_property_can_add_property():
 
 
 def test_message_property_can_add_property_when_list():
-    instance = MessageProperty(Input("1234"))
-    instance2 = MessageProperty(Input("1234"))
-    instance3 = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
+    instance2 = MessageProperty(Value("1234"))
+    instance3 = MessageProperty(Value("1234"))
 
     instance.add_property("test", [instance2, instance3])
 
@@ -196,7 +195,7 @@ def test_message_property_can_add_property_when_list():
 
 def test_message_property_trigger_error():
     error = error_codes.ERROR_1_UNKNOWN
-    instance = MessageProperty(Input("1234"))
+    instance = MessageProperty(Value("1234"))
     assert len(instance.errors) == 0
     instance.trigger_error(error)
     assert len(instance.errors) == 1
@@ -204,9 +203,9 @@ def test_message_property_trigger_error():
     assert len(instance.errors) == 2
     assert instance.errors[1].field == error.field
 
-    instance1 = MessageProperty(Input("1234"))
-    instance2 = MessageProperty(Input("1234"))
-    instance3 = MessageProperty(Input("1234"))
+    instance1 = MessageProperty(Value("1234"))
+    instance2 = MessageProperty(Value("1234"))
+    instance3 = MessageProperty(Value("1234"))
     instance1.add_property("labware", instance2)
     instance2.add_property("sample", instance3)
 

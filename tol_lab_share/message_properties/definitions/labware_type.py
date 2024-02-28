@@ -1,5 +1,5 @@
 import string
-from .message_property import MessageProperty
+from ...messages.properties.message_property import MessageProperty
 from tol_lab_share import error_codes
 import logging
 from typing import Callable

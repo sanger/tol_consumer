@@ -1,17 +1,17 @@
 from tol_lab_share.message_properties.definitions.location import Location
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.labware import Labware
-from tol_lab_share.message_properties.definitions.input import Input
+from tol_lab_share.messages.properties import Value
 
 
 def build_location(location_data, labware_type_data):
-    labware = Labware(Input(None))
-    sample = Input(None)
-    lt = LabwareType(Input(labware_type_data))
+    labware = Labware(Value(None))
+    sample = Value(None)
+    lt = LabwareType(Value(labware_type_data))
     labware.add_property("labware_type", lt)
     labware.add_property("samples", [sample])
 
-    instance = Location(Input(location_data))
+    instance = Location(Value(location_data))
     sample.add_property("location", instance)
 
     return instance
