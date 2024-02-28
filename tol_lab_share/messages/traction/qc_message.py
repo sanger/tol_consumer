@@ -10,7 +10,7 @@ from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_SOURCE
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
 from tol_lab_share.messages.properties.value_wrappers import Value
-from tol_lab_share.messages.properties.message_property import MessageProperty
+from tol_lab_share.messages.properties import MessageProperty
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 
 logger = logging.getLogger(__name__)

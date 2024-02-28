@@ -1,4 +1,4 @@
-from tol_lab_share.messages.properties.message_property import MessageProperty
+from tol_lab_share.messages.properties import MessageProperty
 from unittest import mock
 from tol_lab_share.messages.properties.value_wrappers import DictValue, Value
 from tol_lab_share import error_codes
@@ -17,7 +17,7 @@ def test_message_property_can_validate():
 
     instance = MessageProperty(Value("1234"))
     with mock.patch(
-        "tol_lab_share.messages.properties.message_property.MessageProperty.validators",
+        "tol_lab_share.messages.properties.MessageProperty.validators",
         new_callable=mock.PropertyMock,
     ) as mock_my_property:
         mock_my_property.return_value = [lambda: False]

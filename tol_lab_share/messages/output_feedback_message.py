@@ -5,7 +5,7 @@ from tol_lab_share.constants import (
     RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK,
 )
 from tol_lab_share import error_codes
-from tol_lab_share.messages.properties.message_property import MessageProperty
+from tol_lab_share.messages.properties import MessageProperty
 import logging
 from tol_lab_share.helpers import get_config
 from tol_lab_share.messages.properties.value_wrappers import Value

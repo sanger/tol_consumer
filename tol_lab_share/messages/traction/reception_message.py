@@ -4,7 +4,7 @@ from typing import Callable, Any
 from json import dumps
 from datetime import datetime
 from requests import post, codes
-from tol_lab_share.messages.properties.message_property import MessageProperty
+from tol_lab_share.messages.properties import MessageProperty
 from tol_lab_share.messages.properties.value_wrappers import Value
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES,
