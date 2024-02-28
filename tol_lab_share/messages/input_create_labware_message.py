@@ -9,7 +9,7 @@ from tol_lab_share.message_properties.definitions.message_uuid import MessageUui
 from tol_lab_share.message_properties.definitions.labware import Labware
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 from tol_lab_share.messages.properties.message_property import MessageProperty
-from tol_lab_share.messages.properties import DictValue
+from tol_lab_share.messages.properties.value_wrappers import DictValue
 
 import logging
 

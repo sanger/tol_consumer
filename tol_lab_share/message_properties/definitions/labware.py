@@ -4,7 +4,7 @@ from typing import Any
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES
 from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES
 from tol_lab_share.message_properties.definitions.barcode import Barcode
-from tol_lab_share.messages.properties import DictValue
+from tol_lab_share.messages.properties.value_wrappers import DictValue
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.sample import Sample
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage

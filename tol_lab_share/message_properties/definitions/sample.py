@@ -36,7 +36,7 @@ from tol_lab_share.message_properties.definitions.concentration import Concentra
 from tol_lab_share.message_properties.definitions.cost_code import CostCode
 from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
 from tol_lab_share.message_properties.definitions.date_utc import DateUtc
-from tol_lab_share.messages.properties import DictValue
+from tol_lab_share.messages.properties.value_wrappers import DictValue
 from tol_lab_share.message_properties.definitions.donor_id import DonorId
 from tol_lab_share.message_properties.definitions.final_nano_drop import FinalNanoDrop
 from tol_lab_share.message_properties.definitions.final_nano_drop_230 import FinalNanoDrop230

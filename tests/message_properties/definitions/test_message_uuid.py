@@ -1,6 +1,6 @@
 from tol_lab_share.message_properties.definitions.message_uuid import MessageUuid
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.messages.properties import Value
+from tol_lab_share.messages.properties.value_wrappers import Value
 
 
 def test_uuid_add_to_message_property():

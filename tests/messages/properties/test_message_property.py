@@ -1,6 +1,6 @@
 from tol_lab_share.messages.properties.message_property import MessageProperty
 from unittest import mock
-from tol_lab_share.messages.properties import DictValue, Value
+from tol_lab_share.messages.properties.value_wrappers import DictValue, Value
 from tol_lab_share import error_codes
 import pytest
 from datetime import datetime

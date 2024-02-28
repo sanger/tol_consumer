@@ -1,4 +1,4 @@
-from tol_lab_share.messages.properties import Value
+from tol_lab_share.messages.properties.value_wrappers import Value
 
 
 def check_validates_string(klass):

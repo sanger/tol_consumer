@@ -1,5 +1,5 @@
 from tol_lab_share.message_properties.definitions.country_of_origin import CountryOfOrigin
-from tol_lab_share.messages.properties import Value
+from tol_lab_share.messages.properties.value_wrappers import Value
 
 
 def test_CountryOfOrigin_check_CountryOfOrigin_is_valid():

@@ -8,7 +8,7 @@ from tol_lab_share import error_codes
 from tol_lab_share.messages.properties.message_property import MessageProperty
 import logging
 from tol_lab_share.helpers import get_config
-from tol_lab_share.messages.properties import Value
+from tol_lab_share.messages.properties.value_wrappers import Value
 from typing import Any
 
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher

@@ -1,4 +1,4 @@
-from .message_property import MessageProperty
+from tol_lab_share.messages.properties import MessageProperty
 from functools import cached_property
 import logging
 

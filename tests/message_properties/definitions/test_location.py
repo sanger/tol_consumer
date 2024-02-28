@@ -1,7 +1,7 @@
 from tol_lab_share.message_properties.definitions.location import Location
 from tol_lab_share.message_properties.definitions.labware_type import LabwareType
 from tol_lab_share.message_properties.definitions.labware import Labware
-from tol_lab_share.messages.properties import Value
+from tol_lab_share.messages.properties.value_wrappers import Value
 
 
 def build_location(location_data, labware_type_data):
