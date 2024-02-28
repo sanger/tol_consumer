@@ -9,7 +9,7 @@ from tol_lab_share import error_codes
 from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
 from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
 from tol_lab_share.traction.output_traction_message import OutputTractionMessage
-from tol_lab_share.messages.traction_qc_message import TractionQcMessage
+from tol_lab_share.traction.traction_qc_message import TractionQcMessage
 
 logger = logging.getLogger(__name__)
 

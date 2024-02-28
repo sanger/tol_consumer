@@ -4,7 +4,7 @@ from datetime import datetime
 import pytest
 import requests_mock
 
-from tol_lab_share.messages.traction_qc_message import TractionQcMessage, QcRequestSerializer, TractionQcMessageRequest
+from tol_lab_share.traction.traction_qc_message import TractionQcMessage, QcRequestSerializer, TractionQcMessageRequest
 
 logger = logging.getLogger(__name__)
 
