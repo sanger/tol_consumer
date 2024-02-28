@@ -1,7 +1,6 @@
 from .message_property import MessageProperty
 from functools import cached_property
 import logging
-from typing import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -14,8 +13,3 @@ class Input(MessageProperty):
     @cached_property
     def value(self):
         return self._input
-
-    @property
-    def validators(self) -> list[Callable]:
-        """Defines the list of validators"""
-        return []
