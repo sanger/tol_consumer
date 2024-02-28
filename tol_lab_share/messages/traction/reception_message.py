@@ -121,7 +121,8 @@ class PlateSerializer(Serializer):
         """Constructor.
 
         Args:
-            plate_requests (list[TractionReceptionMessageRequest]): The list of requests to serialize for a single plate.
+            plate_requests (list[TractionReceptionMessageRequest]): The list of requests to serialize for a single
+                plate.
         """
         self._requests = plate_requests
 
