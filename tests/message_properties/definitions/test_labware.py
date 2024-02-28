@@ -1,7 +1,7 @@
 from tol_lab_share.message_properties.definitions.input import Input
 from tol_lab_share.message_properties.definitions.labware import Labware
 from tol_lab_share.message_properties.definitions.location import Location
-from tol_lab_share.messages.output_traction_message import OutputTractionMessage
+from tol_lab_share.traction.output_traction_message import OutputTractionMessage
 from tol_lab_share.messages.traction_qc_message import TractionQcMessage
 
 
