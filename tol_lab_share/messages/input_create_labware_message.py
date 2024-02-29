@@ -5,11 +5,9 @@ from tol_lab_share.constants.input_create_labware_message import (
     CREATED_DATE_UTC,
     LABWARE,
 )
-from tol_lab_share.message_properties.definitions.message_uuid import MessageUuid
-from tol_lab_share.message_properties.definitions.labware import Labware
-from tol_lab_share.message_properties.definitions.date_utc import DateUtc
 from tol_lab_share.messages.properties import MessageProperty
-from tol_lab_share.messages.properties.value_wrappers import DictValue
+from tol_lab_share.messages.properties.complex import DateUtc, Labware, MessageUuid
+from tol_lab_share.messages.properties.simple import DictValue
 
 import logging
 

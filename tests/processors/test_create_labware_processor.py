@@ -105,7 +105,7 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 "typeId": 2,
                                 "field": "final_nano_drop",
                                 "origin": "sample",
-                                "description": 'Not string, instance: "FinalNanoDrop"',
+                                "description": 'Not string, instance: "StringValue"',
                             },
                             {
                                 "typeId": 7,
@@ -123,7 +123,7 @@ def test_create_labware_processor_with_invalid_input_triggers_error(
                                 "typeId": 2,
                                 "field": "post_spri_volume",
                                 "origin": "sample",
-                                "description": 'Not string, instance: "PostSPRIVolume"',
+                                "description": 'Not string, instance: "StringValue"',
                             },
                         ],
                     }

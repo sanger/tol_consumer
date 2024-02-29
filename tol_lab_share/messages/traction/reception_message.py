@@ -5,7 +5,7 @@ from json import dumps
 from datetime import datetime
 from requests import post, codes
 from tol_lab_share.messages.properties import MessageProperty
-from tol_lab_share.messages.properties.value_wrappers import Value
+from tol_lab_share.messages.properties.simple import Value
 from tol_lab_share.constants import (
     OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES,
     OUTPUT_TRACTION_MESSAGE_SOURCE,
