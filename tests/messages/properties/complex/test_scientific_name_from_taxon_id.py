@@ -40,10 +40,10 @@ class TestScientificNameFromTaxonId:
 
             instance = ScientificNameFromTaxonId(Value("9600"))
             assert instance.value == "Pongo pygmaeus"  # This is the first time the value is retrieved.
-            assert instance.value == "Pongo pygmaeus"  # This must be using the cache, otherwise it would fail.
+            assert instance.value == "Pongo pygmaeus"  # This uses the cache on the property itself.
 
             instance2 = ScientificNameFromTaxonId(Value("9600"))
-            assert instance2.value == "Pongo pygmaeus"  # This must be using the cache, otherwise it would fail.
+            assert instance2.value == "Pongo pygmaeus"  # This uses the request cache, otherwise it would respond 500.
 
     def test_can_reset_cache(self, config, taxonomy_record):
         reset_cache()
@@ -57,15 +57,16 @@ class TestScientificNameFromTaxonId:
                 ],
             )
             instance = ScientificNameFromTaxonId(Value("9600"))
-            assert instance.value == "Pongo pygmaeus"
+            assert instance.value == "Pongo pygmaeus"  # This is the first time the value is retrieved.
 
             reset_cache()
-            assert instance.value == "Pongo pygmaeus"
+            assert instance.value == "Pongo pygmaeus"  # This uses the cache on the property itself.
 
+            # We need to use a new instance to test the request cache otherwise the property cache will be used.
             instance2 = ScientificNameFromTaxonId(Value("9600"))
             with pytest.raises(ExceptionErrorCode):
-                instance2.value
+                instance2.value  # With the request cache reset, a new instance causes the 500 response to be retrieved.
 
-            reset_cache()
-            instance3 = ScientificNameFromTaxonId(Value("9600"))
-            assert instance3.value == "Pongo pygmaeus"
+            # At this point, neither cache should have a value in them because of the exception
+            # so we expect the final 200 response to be returned and cached.
+            assert instance2.value == "Pongo pygmaeus"
