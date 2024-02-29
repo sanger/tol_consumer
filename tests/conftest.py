@@ -12,7 +12,7 @@ from lab_share_lib.constants import RABBITMQ_HEADER_KEY_SUBJECT, RABBITMQ_HEADER
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 
 from tol_lab_share.helpers import get_config
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 
 CONFIG = get_config("tol_lab_share.config.test")
 logging.config.dictConfig(CONFIG.LOGGING)
@@ -94,7 +94,7 @@ def traction_qc_success_response():
 
 @pytest.fixture()
 def valid_feedback_message():
-    instance = OutputFeedbackMessage()
+    instance = CreateLabwareFeedbackMessage()
     instance.count_of_total_samples = 0
     instance.count_of_valid_samples = 0
     instance.source_message_uuid = b"b01aa0ad-7b19-4f94-87e9-70d74fb8783c"

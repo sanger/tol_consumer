@@ -11,12 +11,12 @@ from tol_lab_share.messages.properties.simple import DictValue
 
 import logging
 
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
 
-class InputCreateLabwareMessage(MessageProperty):
+class CreateLabwareMessage(MessageProperty):
     """Class that handles parsing a TOL lab share message received"""
 
     def __init__(self, m: RabbitMessage):
@@ -37,12 +37,12 @@ class InputCreateLabwareMessage(MessageProperty):
         super().add_to_message_property(message_property)
 
     @add_to_message_property.register
-    def _(self, feedback_message: OutputFeedbackMessage) -> None:
-        """Adds errors from this message into an OutputFeedbackMessage.
+    def _(self, feedback_message: CreateLabwareFeedbackMessage) -> None:
+        """Adds errors from this message into an CreateLabwareFeedbackMessage.
         If errors are added, it will change the operation_was_error_free flag to False.
 
         Args:
-            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage to add errors to.
+            feedback_message (CreateLabwareFeedbackMessage): The CreateLabwareFeedbackMessage to add errors to.
         """
         logger.debug("ValueCreateLabware::add_to_message_property")
         super().add_to_message_property(feedback_message)

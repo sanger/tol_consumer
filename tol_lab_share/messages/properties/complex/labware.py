@@ -5,7 +5,7 @@ from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWAR
 from tol_lab_share.messages.properties.complex.labware_type import LabwareType
 from tol_lab_share.messages.properties.complex.sample import Sample
 from tol_lab_share.messages.properties.simple import DictValue, StringValue
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
 
 from tol_lab_share.messages.properties import MessageProperty
@@ -66,12 +66,12 @@ class Labware(MessageProperty):
         super().add_to_message_property(message_property)
 
     @add_to_message_property.register
-    def _(self, feedback_message: OutputFeedbackMessage) -> None:
-        """Adds the labware information to an OutputFeedbackMessage.
+    def _(self, feedback_message: CreateLabwareFeedbackMessage) -> None:
+        """Adds the labware information to an CreateLabwareFeedbackMessage.
         This includes the number of total samples and the number of valid samples.
 
         Args:
-            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage instance to add the data to.
+            feedback_message (CreateLabwareFeedbackMessage): The feedback message to add the data to.
         """
         logger.debug("Labware::add_to_message_property")
         super().add_to_message_property(feedback_message)
@@ -84,7 +84,7 @@ class Labware(MessageProperty):
         """Adds the labware information to an OutputTractionMessage.
 
         Args:
-            message (TractionReceptionMessage): The TractionReceptionMessage instance to add the data to.
+            message (TractionReceptionMessage): The Traction reception message to add the data to.
         """
         super().add_to_message_property(message)
 
@@ -115,7 +115,7 @@ class Labware(MessageProperty):
         """Adds the QC data for this labware to a TractionQcMessage.
 
         Args:
-            message (TractionQcMessage): The TractionsQcMessage instance to add the data to.
+            message (TractionQcMessage): The Traction QC message to add the data to.
         """
         super().add_to_message_property(message)
 

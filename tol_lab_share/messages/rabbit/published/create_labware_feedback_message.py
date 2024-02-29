@@ -17,7 +17,7 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 logger = logging.getLogger(__name__)
 
 
-class OutputFeedbackMessage(MessageProperty):
+class CreateLabwareFeedbackMessage(MessageProperty):
     """Class that handles the feedback message parsing for TOL lab share"""
 
     def __init__(self):
@@ -37,7 +37,7 @@ class OutputFeedbackMessage(MessageProperty):
     @property
     def origin(self):
         """ "Name of the origin for this property, set as a constant value."""
-        return "OutputFeedbackMessage"
+        return "CreateLabwareFeedbackMessage"
 
     def to_json(self) -> dict[str, Any]:
         """Returns a dict with the JSON-like representation of the message."""

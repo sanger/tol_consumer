@@ -11,7 +11,7 @@ from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
 from tol_lab_share.messages.properties import MessageProperty
 from tol_lab_share.messages.properties.simple import Value
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
@@ -216,12 +216,12 @@ class TractionQcMessage(MessageProperty):
         super().add_to_message_property(message_property)
 
     @add_to_message_property.register
-    def _(self, feedback_message: OutputFeedbackMessage) -> None:
-        """Adds errors about this TractionQcMessage to an OutputFeedbackMessage.
+    def _(self, feedback_message: CreateLabwareFeedbackMessage) -> None:
+        """Adds errors about this TractionQcMessage to an CreateLabwareFeedbackMessage.
         Also sets the operation_was_error_free to False if the message was not sent.
 
         Args:
-            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage to add the errors to.
+            feedback_message (CreateLabwareFeedbackMessage): The CreateLabwareFeedbackMessage to add the errors to.
         """
         if not self._sent:
             feedback_message.operation_was_error_free = False

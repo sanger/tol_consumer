@@ -4,7 +4,7 @@ from .uuid import Uuid
 
 import logging
 
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class MessageUuid(Uuid):
         super().add_to_message_property(message_property)
 
     @add_to_message_property.register
-    def _(self, feedback_message: OutputFeedbackMessage) -> None:
+    def _(self, feedback_message: CreateLabwareFeedbackMessage) -> None:
         """Adds the source message uuid to the feedback message passed as parameter
 
         Parameters:

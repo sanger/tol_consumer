@@ -13,7 +13,7 @@ from tol_lab_share.constants import (
 from tol_lab_share import error_codes
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
+from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 
 
 class TractionReceptionMessageRequest:
@@ -197,7 +197,7 @@ class TractionReceptionMessage(MessageProperty):
         Returns:
             str: The origin identifier.
         """
-        return "OutputFeedbackMessage"
+        return "CreateLabwareFeedbackMessage"
 
     @property
     def validators(self) -> list[Callable]:
@@ -331,12 +331,12 @@ class TractionReceptionMessage(MessageProperty):
         super().add_to_message_property(message_property)
 
     @add_to_message_property.register
-    def _(self, feedback_message: OutputFeedbackMessage) -> None:
-        """Adds error information to the an OutputFeedbackMessage.
+    def _(self, feedback_message: CreateLabwareFeedbackMessage) -> None:
+        """Adds error information to the an CreateLabwareFeedbackMessage.
         Also sets the operation_was_error_free to False if the message has not been sent.
 
         Args:
-            feedback_message (OutputFeedbackMessage): The OutputFeedbackMessage to add errors to.
+            feedback_message (CreateLabwareFeedbackMessage): The CreateLabwareFeedbackMessage to add errors to.
         """
         if not self._sent:
             feedback_message.operation_was_error_free = False
