@@ -209,59 +209,6 @@ class MessageProperty:
             self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
         return result
 
-    def check_is_integer_string(self) -> bool:
-        """Checks that the input provided value is an integer string.
-        Triggers an error if not
-        Returns:
-        bool with the result
-        """
-        logger.debug("MessageProperty::check_is_integer_string")
-        if not self.check_is_string():
-            return False
-
-        result = None
-        try:
-            result = int(self._input.value)
-        except ValueError:
-            pass
-        if result is None:
-            self.trigger_error(error_codes.ERROR_19_INPUT_IS_NOT_VALID_INTEGER_STRING)
-        return result is not None
-
-    def check_is_float_string(self) -> bool:
-        """Checks that the input provided value is a float string.
-        Triggers an error if not
-        Returns:
-        bool with the result
-        """
-        logger.debug("MessageProperty::check_is_float_string")
-        if not self.check_is_string():
-            return False
-
-        result = None
-        try:
-            result = float(self._input.value)
-        except ValueError:
-            pass
-        if result is None:
-            self.trigger_error(error_codes.ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING)
-        return result is not None
-
-    def check_is_float(self) -> bool:
-        """Checks that the input provided value is an instance of a float.
-        Triggers an error if not
-        Returns:
-        bool with the result
-        """
-        logger.debug("MessageProperty::check_is_float")
-        if not self.check_is_valid_input():
-            return False
-
-        result = isinstance(self._input.value, float)
-        if not result:
-            self.trigger_error(error_codes.ERROR_5_NOT_FLOAT)
-        return result
-
     def check_is_date_utc(self) -> bool:
         """Checks that the input provided value is an instance of a datetime.
         Triggers an error if not
