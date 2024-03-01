@@ -1,4 +1,4 @@
-from tol_lab_share.messages.traction import TractionReceptionMessage
+from tol_lab_share.messages.traction.reception_message import TractionReceptionMessage
 from datetime import datetime
 import requests_mock
 
