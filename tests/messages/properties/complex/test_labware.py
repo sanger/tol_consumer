@@ -1,5 +1,6 @@
-from tol_lab_share.messages.properties.complex import Labware, Location
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.labware import Labware
+from tol_lab_share.messages.properties.complex.location import Location
+from tol_lab_share.messages.properties.simple.value import Value
 from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
 
 

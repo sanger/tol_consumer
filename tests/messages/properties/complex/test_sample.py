@@ -1,6 +1,8 @@
 from tol_lab_share import error_codes
-from tol_lab_share.messages.properties.complex import Labware, LabwareType, Sample
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.labware import Labware
+from tol_lab_share.messages.properties.complex.labware_type import LabwareType
+from tol_lab_share.messages.properties.complex.sample import Sample
+from tol_lab_share.messages.properties.simple.value import Value
 
 
 def build_sample(sample_data):

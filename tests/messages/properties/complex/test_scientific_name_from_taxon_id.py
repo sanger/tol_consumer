@@ -1,8 +1,8 @@
 import requests_mock
 import pytest
 
-from tol_lab_share.messages.properties.complex import ScientificNameFromTaxonId
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.scientific_name_from_taxon_id import ScientificNameFromTaxonId
+from tol_lab_share.messages.properties.simple.value import Value
 from tol_lab_share.error_codes import ExceptionErrorCode
 from tests.messages.properties.helpers import check_validates_string
 

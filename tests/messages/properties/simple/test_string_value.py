@@ -1,4 +1,4 @@
-from tol_lab_share.messages.properties.simple import StringValue
+from tol_lab_share.messages.properties.simple.string_value import StringValue
 from tests.messages.properties.helpers import check_validates_string
 
 

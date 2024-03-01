@@ -1,5 +1,5 @@
-from tol_lab_share.messages.properties.complex import Uuid
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.uuid import Uuid
+from tol_lab_share.messages.properties.simple.value import Value
 
 
 class TestUuid:

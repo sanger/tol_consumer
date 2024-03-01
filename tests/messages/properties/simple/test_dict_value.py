@@ -1,4 +1,4 @@
-from tol_lab_share.messages.properties.simple import DictValue
+from tol_lab_share.messages.properties.simple.dict_value import DictValue
 
 
 class TestDictValue:

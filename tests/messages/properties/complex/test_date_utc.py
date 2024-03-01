@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from tol_lab_share.messages.properties.complex import DateUtc
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.date_utc import DateUtc
+from tol_lab_share.messages.properties.simple.value import Value
 
 
 class TestDateUtc:

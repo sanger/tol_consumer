@@ -1,5 +1,5 @@
-from tol_lab_share.messages.properties.complex import MessageUuid
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.message_uuid import MessageUuid
+from tol_lab_share.messages.properties.simple.value import Value
 from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 
 

@@ -1,5 +1,5 @@
-from tol_lab_share.messages.properties.complex import CountryOfOrigin
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.country_of_origin import CountryOfOrigin
+from tol_lab_share.messages.properties.simple.value import Value
 
 
 class TestCountryOfOrigin:

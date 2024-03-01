@@ -1,5 +1,5 @@
-from tol_lab_share.messages.properties.complex import LabwareType
-from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.properties.complex.labware_type import LabwareType
+from tol_lab_share.messages.properties.simple.value import Value
 
 
 class TestLabwareType:
