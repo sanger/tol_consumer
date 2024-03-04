@@ -6,10 +6,9 @@ from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 
 from tol_lab_share import error_codes
-from tol_lab_share.messages.input_create_labware_message import InputCreateLabwareMessage
-from tol_lab_share.messages.output_feedback_message import OutputFeedbackMessage
-from tol_lab_share.messages.output_traction_message import OutputTractionMessage
-from tol_lab_share.messages.traction_qc_message import TractionQcMessage
+from tol_lab_share.messages.rabbit.consumed import CreateLabwareMessage
+from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
+from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +30,7 @@ class CreateLabwareProcessor:
         self._config = config
 
     def process(self, message: RabbitMessage) -> bool:
-        """Receives a message from rabbitmq. Parses the message with InputCreateLabwareMessage and validates
+        """Receives a message from rabbitmq. Parses the message with CreateLabwareMessage and validates
         that it is correct. If is correct, it will generate a new OutputTractionMessage and send it to Traction.
         The result of this operation will be aggregated to a feedback message and this message will be published
         back into the feedback queue.
@@ -50,22 +49,22 @@ class CreateLabwareProcessor:
         logger.debug("CreateLabwareProcessor::process")
         logger.debug(f"Received: { message.message }")
 
-        output_feedback_message = OutputFeedbackMessage()
-        input = InputCreateLabwareMessage(message)
+        output_feedback_message = CreateLabwareFeedbackMessage()
+        input = CreateLabwareMessage(message)
         validation = input.validate()
 
         input.add_to_message_property(output_feedback_message)
 
         if validation:
-            output_traction_message = OutputTractionMessage()
-            input.add_to_message_property(output_traction_message)
+            traction_reception_message = TractionReceptionMessage()
+            input.add_to_message_property(traction_reception_message)
             logger.info("Attempting to send to traction")
-            output_traction_message.send(url=self._config.TRACTION_URL)
-            output_traction_message.add_to_message_property(output_feedback_message)
+            traction_reception_message.send(url=self._config.TRACTION_URL)
+            traction_reception_message.add_to_message_property(output_feedback_message)
 
-            if len(output_traction_message.errors) > 0:
+            if len(traction_reception_message.errors) > 0:
                 error_codes.ERROR_16_PROBLEM_TALKING_WITH_TRACTION.trigger(
-                    text=f":{output_traction_message.errors}", instance=self
+                    text=f":{traction_reception_message.errors}", instance=self
                 )
             else:
                 self.send_qc_data_to_traction(input, output_feedback_message)
@@ -86,7 +85,7 @@ class CreateLabwareProcessor:
         return True
 
     def send_qc_data_to_traction(
-        self, input: InputCreateLabwareMessage, feedback_message: OutputFeedbackMessage
+        self, input: CreateLabwareMessage, feedback_message: CreateLabwareFeedbackMessage
     ) -> bool:
         """Send qc data to traction, if there is any error, add to feedback message"""
         traction_qc_message = TractionQcMessage()
