@@ -5,6 +5,7 @@ from typing import Any, Callable
 
 from requests import codes, post
 
+from lab_share_lib.exceptions import TransientRabbitError
 from tol_lab_share import error_codes
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_SOURCE
 from tol_lab_share.error_codes import ErrorCode
@@ -202,7 +203,13 @@ class TractionQcMessage(MessageProperty):
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
-        r = post(url, headers=headers, data=dumps(self.payload(), default=str), verify=self._validate_certificates)
+        try:
+            r = post(url, headers=headers, data=dumps(self.payload(), default=str), verify=self._validate_certificates)
+        except Exception as ex:
+            logger.critical(f"Error submitting {self.__class__.__name__} to the Traction API.")
+            logger.exception(ex)
+
+            raise TransientRabbitError(f"There was an error POSTing the {self.__class__.__name__} to the Traction API.")
 
         self._sent = r.status_code == codes.created
         if not self._sent:
