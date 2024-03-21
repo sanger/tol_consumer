@@ -309,6 +309,21 @@ class TractionReceptionMessage(MessageProperty):
             error_codes.ERROR_13_TRACTION_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
         )
 
+    def raise_submission_error(self, cause: Exception | None = None) -> None:
+        """Raises an error when submitting the message to Traction with an optional cause exception.
+
+        Args:
+            cause (Exception): The exception that caused the need to raise.
+
+        Raises:
+            TransientRabbitError: Always raised to cause a 30 second delay before trying to process the message again.
+        """
+        logger.critical(f"Error submitting {self.__class__.__name__} to the Traction API.")
+        if cause:
+            logger.exception(cause)
+
+        raise TransientRabbitError(f"There was an error POSTing the {self.__class__.__name__} to the Traction API.")
+
     def send(self, url: str) -> bool:
         """Sends a Traction API request to the provided URL.
         If the send fails, an error code will be recorded.
@@ -324,10 +339,10 @@ class TractionReceptionMessage(MessageProperty):
         try:
             r = post(url, headers=headers, data=dumps(self.payload()), verify=self._validate_certificates)
         except Exception as ex:
-            logger.critical(f"Error submitting {self.__class__.__name__} to the Traction API.")
-            logger.exception(ex)
+            self.raise_submission_error(ex)
 
-            raise TransientRabbitError(f"There was an error POSTing the {self.__class__.__name__} to the Traction API.")
+        if r.status_code == codes.bad_gateway:
+            self.raise_submission_error()
 
         self._sent = r.status_code == codes.created
         if not self._sent:
