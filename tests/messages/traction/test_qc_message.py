@@ -1,12 +1,18 @@
-import logging
 from datetime import datetime
 
+from unittest.mock import patch
 import pytest
+import requests
 import requests_mock
 
 from tol_lab_share.messages.traction.qc_message import TractionQcMessage, QcRequestSerializer, TractionQcMessageRequest
+from lab_share_lib.exceptions import TransientRabbitError
 
-logger = logging.getLogger(__name__)
+
+@pytest.fixture(autouse=True)
+def mock_logger():
+    with patch("tol_lab_share.messages.traction.qc_message.logger") as logger:
+        yield logger
 
 
 class TestTractionQcMessage:
@@ -125,3 +131,30 @@ class TestTractionQcMessage:
         request = TractionQcMessageRequest()
         serial = QcRequestSerializer(request)
         assert serial.clear_empty_value_keys({"asdf": "1234", "bcde": ""}) == {"asdf": "1234"}
+
+    def test_raises_transient_error_when_traction_api_responds_502(self, valid_traction_qc_message, config):
+        # This happens when the Traction API is down but nginx is still up.
+        with requests_mock.Mocker() as m:
+            m.post(config.TRACTION_URL, text="Error", status_code=502)
+            with pytest.raises(TransientRabbitError):
+                valid_traction_qc_message.send(config.TRACTION_URL)
+
+    def test_raises_transient_error_when_post_raises(self, valid_traction_qc_message, config, mock_logger):
+        # This happens when nginx serving Traction API is down.
+        cause = requests.exceptions.RequestException()
+
+        with requests_mock.Mocker() as m:
+            m.post(config.TRACTION_URL, exc=cause)
+            with pytest.raises(TransientRabbitError) as raised:
+                valid_traction_qc_message.send(config.TRACTION_URL)
+
+            assert "QcMessage" in raised.value.message
+            mock_logger.exception.assert_called_once_with(cause)
+
+    def test_can_detect_other_errors_on_sent(self, valid_traction_qc_message, config):
+        with requests_mock.Mocker() as m:
+            m.post(config.TRACTION_URL, text="Error", status_code=422)
+            valid_traction_qc_message.send(config.TRACTION_URL)
+
+        assert not valid_traction_qc_message.validate()
+        assert len(valid_traction_qc_message.errors) > 0

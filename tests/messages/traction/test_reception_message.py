@@ -1,6 +1,16 @@
+from unittest.mock import patch
+import pytest
+import requests
 from tol_lab_share.messages.traction.reception_message import TractionReceptionMessage
+from lab_share_lib.exceptions import TransientRabbitError
 from datetime import datetime
 import requests_mock
+
+
+@pytest.fixture(autouse=True)
+def mock_logger():
+    with patch("tol_lab_share.messages.traction.reception_message.logger") as logger:
+        yield logger
 
 
 def valid_traction_message():
@@ -768,7 +778,29 @@ class TestTractionReceptionMessage:
             }
         }
 
-    def test_can_detect_errors_on_sent(self, config):
+    def test_raises_transient_error_when_traction_api_responds_502(self, config):
+        # This happens when the Traction API is down but nginx is still up.
+        vt = valid_traction_message()
+
+        with requests_mock.Mocker() as m:
+            m.post(config.TRACTION_URL, text="Error", status_code=502)
+            with pytest.raises(TransientRabbitError):
+                vt.send(config.TRACTION_URL)
+
+    def test_raises_transient_error_when_post_raises(self, config, mock_logger):
+        # This happens when nginx serving Traction API is down.
+        vt = valid_traction_message()
+        cause = requests.exceptions.RequestException()
+
+        with requests_mock.Mocker() as m:
+            m.post(config.TRACTION_URL, exc=cause)
+            with pytest.raises(TransientRabbitError) as raised:
+                vt.send(config.TRACTION_URL)
+
+            assert "ReceptionMessage" in raised.value.message
+            mock_logger.exception.assert_called_once_with(cause)
+
+    def test_can_detect_other_errors_on_sent(self, config):
         vt = valid_traction_message()
 
         with requests_mock.Mocker() as m:
