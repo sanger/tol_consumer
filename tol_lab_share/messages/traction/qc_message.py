@@ -5,6 +5,7 @@ from typing import Any, Callable
 
 from requests import codes, post
 
+from lab_share_lib.exceptions import TransientRabbitError
 from tol_lab_share import error_codes
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_SOURCE
 from tol_lab_share.error_codes import ErrorCode
@@ -190,6 +191,21 @@ class TractionQcMessage(MessageProperty):
             error_codes.ERROR_27_TRACTION_QC_REQUEST_FAILED, text=f"HTTP CODE: { status_code }, MSG: {error_str}"
         )
 
+    def raise_submission_error(self, cause: Exception | None = None) -> None:
+        """Raises an error when submitting the message to Traction with an optional cause exception.
+
+        Args:
+            cause (Exception): The exception that caused the need to raise.
+
+        Raises:
+            TransientRabbitError: Always raised to cause a 30 second delay before trying to process the message again.
+        """
+        logger.critical(f"Error submitting {self.__class__.__name__} to the Traction API.")
+        if cause:
+            logger.exception(cause)
+
+        raise TransientRabbitError(f"There was an error POSTing the {self.__class__.__name__} to the Traction API.")
+
     def send(self, url: str) -> bool:
         """Sends a request to Traction. If is correct returns true, if not it will trigger an error and
         return False
@@ -202,7 +218,13 @@ class TractionQcMessage(MessageProperty):
         """
         headers = {"Content-type": "application/vnd.api+json", "Accept": "application/vnd.api+json"}
 
-        r = post(url, headers=headers, data=dumps(self.payload(), default=str), verify=self._validate_certificates)
+        try:
+            r = post(url, headers=headers, data=dumps(self.payload(), default=str), verify=self._validate_certificates)
+        except Exception as ex:
+            self.raise_submission_error(ex)
+
+        if r.status_code == codes.bad_gateway:
+            self.raise_submission_error()
 
         self._sent = r.status_code == codes.created
         if not self._sent:
