@@ -3,7 +3,7 @@ How to run
 
 1. Create a docker image for the project that we will use to run the code.
 This saves a lot of problems when installing dependent libraries in local.
-To build you have to reference to the root folder of the project that contains the 
+To build you have to reference to the root folder of the project that contains the
 Dockerfile file, for example, if you run the command from inside this folder it should be:
 
 ```bash
@@ -17,7 +17,6 @@ SETTINGS_MODULE=tol_lab_share.config.defaults
 LOCALHOST=host.docker.internal
 REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 REDPANDA_URL=...
-REDPANDA_API_KEY=...
 RABBITMQ_HOST=...
 RABBITMQ_USERNAME=...
 RABBITMQ_PASSWORD=...
@@ -30,7 +29,6 @@ SETTINGS_MODULE=tol_lab_share.config.defaults
 LOCALHOST=host.docker.internal
 REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 REDPANDA_URL=http://host.docker.internal:8081
-REDPANDA_API_KEY=redpanda-test
 RABBITMQ_HOST=host.docker.internal
 RABBITMQ_PORT=5672
 RABBITMQ_USERNAME=admin

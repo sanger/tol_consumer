@@ -10,7 +10,6 @@ from lab_share_lib.types import RabbitServerDetails
 from testing_data import build_create_labware_96_msg, build_create_tube_msg, build_update_labware_msg
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost")
-REDPANDA_API_KEY = os.getenv("REDPANDA_API_KEY", "test")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
 RABBITMQ_PORT = os.getenv("RABBITMQ_PORT", "5671")
 RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME", "psd")
@@ -60,7 +59,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    registry = SchemaRegistry(REDPANDA_URL, REDPANDA_API_KEY, verify=False)
+    registry = SchemaRegistry(REDPANDA_URL, verify=False)
 
     rabbitmq_details = RabbitServerDetails(
         uses_ssl=True,
