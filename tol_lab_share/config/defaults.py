@@ -28,7 +28,6 @@ RABBITMQ_FEEDBACK_EXCHANGE = "psd.tol"
 # RedPanda details
 ###
 REDPANDA_BASE_URI = f"http://{os.environ.get('LOCALHOST', '127.0.0.1')}:8081"
-REDPANDA_API_KEY = ""
 
 
 RABBITMQ_PUBLISH_RETRY_DELAY = 5

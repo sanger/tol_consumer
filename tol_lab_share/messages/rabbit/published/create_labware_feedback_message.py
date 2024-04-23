@@ -73,7 +73,7 @@ class CreateLabwareFeedbackMessage(MessageProperty):
         encoded_message = None
         try:
             encoded_message = encoder.encode([message])
-        except BaseException as e:
+        except Exception as e:
             self.trigger_error(error_codes.ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE, text=str(e))
             return
 
