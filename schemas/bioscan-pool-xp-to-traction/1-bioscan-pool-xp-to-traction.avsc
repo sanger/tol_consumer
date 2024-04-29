@@ -111,7 +111,7 @@
                     },
                     {
                         "name": "sampleUuid",
-                        "type": "string",
+                        "type": "version4MessageUuid",
                         "doc": "The UTF-8 byte encoded unique sample UUID the request belongs to. Will be stored as external_id in Traction."
                     },
                     {
