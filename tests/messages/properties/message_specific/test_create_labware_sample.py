@@ -21,7 +21,7 @@ def check_error_is_present(sample, error_code, field):
     assert any([((x.type_id == error_code.type_id) and (x.field == field)) for x in sample.errors])
 
 
-class TestSample:
+class TestCreateLabwareSample:
     def test_validators_when_sample_is_valid(self, valid_create_labware_sample):
         instance = build_sample(valid_create_labware_sample)
         assert instance.validate() is True
