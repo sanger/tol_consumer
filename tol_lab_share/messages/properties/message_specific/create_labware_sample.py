@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 
 
 class CreateLabwareSample(MessageProperty):
-    """MessageProperty that handles the parsing of a labware section for the TOL message."""
+    """MessageProperty that handles the parsing of a sample section for a create labware message."""
 
     def __init__(self, input: Any):
         super().__init__(input)
