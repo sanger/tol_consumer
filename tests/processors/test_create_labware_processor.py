@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests_mock
 
+from lab_share_lib.processing.base_processor import BaseProcessor
 from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK
 from tol_lab_share.messages.rabbit.consumed import CreateLabwareMessage
 from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
@@ -10,9 +11,16 @@ from tol_lab_share.processors.create_labware_processor import CreateLabwareProce
 
 
 class TestCreateLabwareProcessor:
+    def test_is_subclass_of_base_processor(self):
+        assert issubclass(CreateLabwareProcessor, BaseProcessor)
+
     def test_can_be_initialised(self, config):
         schema_registry = MagicMock()
         assert CreateLabwareProcessor(schema_registry, MagicMock(), config) is not None
+
+    def test_instantiate_returns_instance(self, config):
+        instance = CreateLabwareProcessor.instantiate(MagicMock(), MagicMock(), config)
+        assert isinstance(instance, CreateLabwareProcessor)
 
     def test_valid_input_can_run_process(
         self,
