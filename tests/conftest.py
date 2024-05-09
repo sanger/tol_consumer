@@ -124,7 +124,7 @@ def taxonomy_record():
 
 
 @pytest.fixture
-def valid_sample():
+def valid_create_labware_sample():
     return {
         "accessionNumber": "EE1234",
         "commonName": "Mus Musculus",
@@ -156,7 +156,7 @@ def valid_sample():
 
 
 @pytest.fixture
-def invalid_sample():
+def invalid_create_labware_sample():
     return {
         "accessionNumber": "EE1234",
         "commonName": 1234,

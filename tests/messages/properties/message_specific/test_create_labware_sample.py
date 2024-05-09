@@ -22,12 +22,12 @@ def check_error_is_present(sample, error_code, field):
 
 
 class TestSample:
-    def test_validators_when_sample_is_valid(self, valid_sample):
-        instance = build_sample(valid_sample)
+    def test_validators_when_sample_is_valid(self, valid_create_labware_sample):
+        instance = build_sample(valid_create_labware_sample)
         assert instance.validate() is True
         assert len(instance.errors) == 0
 
-    def test_validators_when_sample_is_invalid(self, invalid_sample):
+    def test_validators_when_sample_is_invalid(self, invalid_create_labware_sample):
         lt = LabwareType(Value("Plate12x8"))
         labware = Labware(Value("Bubidibu"))
         labware._properties["labware_type"] = lt
@@ -36,7 +36,7 @@ class TestSample:
         assert instance.validate() is False
         assert len(instance.errors) > 0
 
-        instance = build_sample(invalid_sample)
+        instance = build_sample(invalid_create_labware_sample)
         assert instance.validate() is False
 
         check_error_is_present(instance, error_codes.ERROR_2_NOT_STRING, "common_name")
