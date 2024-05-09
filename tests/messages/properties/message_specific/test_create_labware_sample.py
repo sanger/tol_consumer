@@ -1,13 +1,13 @@
 from tol_lab_share import error_codes
 from tol_lab_share.messages.properties.complex.labware import Labware
 from tol_lab_share.messages.properties.complex.labware_type import LabwareType
-from tol_lab_share.messages.properties.complex.sample import Sample
+from tol_lab_share.messages.properties.message_specific import CreateLabwareSample
 from tol_lab_share.messages.properties.simple.value import Value
 
 
 def build_sample(sample_data):
     labware = Labware(Value(None))
-    sample = Sample(sample_data)
+    sample = CreateLabwareSample(sample_data)
     lt = LabwareType(Value("Plate12x8"))
 
     labware.add_property("labware_type", lt)

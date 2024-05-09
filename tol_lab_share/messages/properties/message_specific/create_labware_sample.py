@@ -30,19 +30,20 @@ from tol_lab_share.constants.input_create_labware_message import (
     SUPPLIER_SAMPLE_NAME,
     SAMPLE_TAXON_ID,
 )
-from .country_of_origin import CountryOfOrigin
-from .date_utc import DateUtc
-from .location import Location
-from .scientific_name_from_taxon_id import ScientificNameFromTaxonId
-from .uuid import Uuid
-from tol_lab_share.messages.properties.simple import DictValue, StringValue
+from ..complex.country_of_origin import CountryOfOrigin
+from ..complex.date_utc import DateUtc
+from ..complex.location import Location
+from ..complex.scientific_name_from_taxon_id import ScientificNameFromTaxonId
+from ..complex.uuid import Uuid
+from ..simple.dict_value import DictValue
+from ..simple.string_value import StringValue
 
 from tol_lab_share.messages.properties import MessageProperty
 
 logger = logging.getLogger(__name__)
 
 
-class Sample(MessageProperty):
+class CreateLabwareSample(MessageProperty):
     """MessageProperty that handles the parsing of a labware section for the TOL message."""
 
     def __init__(self, input: Any):
