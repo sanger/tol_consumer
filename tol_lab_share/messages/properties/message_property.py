@@ -169,10 +169,11 @@ class MessageProperty:
         return []
 
     def check_is_valid_input(self) -> bool:
-        """Checks that the input provided value can pass all its internal validations.
-        Triggers an error if not
+        """Validates that the provided input passes its own validity checks.  When the validity of the input is False,
+        an "invalid input" error is triggered:
+
         Returns:
-        bool with the result
+            bool: True if the input is valid, False otherwise.
         """
         logger.debug("MessageProperty::check_is_valid_input")
         result = self._input.validate()
@@ -181,10 +182,11 @@ class MessageProperty:
         return cast(bool, result)
 
     def check_is_float(self) -> bool:
-        """Checks that the input provided value is an instance of a float.
-        Triggers an error if not
+        """Validates that the input value is a float. Note that other numeric types that can be expressed as a float are
+        not acceptable. When the value cannot be identified as a float, a "not float" error is triggered:
+
         Returns:
-        bool with the result
+            bool: True if the input value is a float, False otherwise.
         """
         logger.debug("MessageProperty::check_is_float")
         if not self.check_is_valid_input():
@@ -196,10 +198,17 @@ class MessageProperty:
         return result
 
     def integer_checker(self, optional: bool = False) -> Callable:
-        """Checks that the input provided value is an instance of an integer.
-        Triggers an error if not
+        """Provides a check method that validates that the input value is an integer. When the check method is called
+        and either of the following conditions are identified, a "not integer" error is triggered:
+
+        - The input value is not an integer.
+        - The input value is None and the optional flag is False.
+
+        Parameters:
+            optional (bool) flag that indicates if the input value can be None.
+
         Returns:
-        bool with the result
+            Callable: A function that checks if the input value is an integer.
         """
 
         def check_is_integer() -> bool:
@@ -215,8 +224,8 @@ class MessageProperty:
         return check_is_integer
 
     def string_checker(self, optional: bool = False) -> Callable:
-        """Provides a check method that validates that the input provided value is a string. When the check method is
-        called and either of the following conditions are identified, a "not string" error is triggered:
+        """Provides a check method that validates that the input value is a string. When the check method is called and
+        either of the following conditions are identified, a "not string" error is triggered:
 
         - The input value is not a string.
         - The input value is None and the optional flag is False.
@@ -240,10 +249,12 @@ class MessageProperty:
         return check_is_string
 
     def check_is_datetime(self) -> bool:
-        """Checks that the input provided value is an instance of a datetime.
-        Triggers an error if not
+        """Validates that the input value is a datetime object. Note that other types such as strings containing a date
+        and/or time are not acceptable. When the value cannot be identified as a datetime, a "not valid date" error is
+        triggered:
+
         Returns:
-        bool with the result
+            bool: True if the input value is a datetime, False otherwise.
         """
         logger.debug("MessageProperty::check_is_datetime")
         if not self.check_is_valid_input():
