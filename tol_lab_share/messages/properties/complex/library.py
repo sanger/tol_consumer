@@ -5,10 +5,8 @@ from tol_lab_share.constants.input_bioscan_pool_xp_to_traction_message import (
     LIBRARY_INSERT_SIZE,
 )
 from tol_lab_share.messages.properties.simple import DictValue, StringValue, FloatValue, IntValue
-from tol_lab_share.messages.traction import TractionReceptionMessage
 
 from tol_lab_share.messages.properties import MessageProperty
-from functools import singledispatchmethod
 
 import logging
 
@@ -25,16 +23,3 @@ class Library(MessageProperty):
         self.add_property("concentration", FloatValue(DictValue(input, LIBRARY_CONCENTRATION)))
         self.add_property("box_barcode", StringValue(DictValue(input, LIBRARY_BOX_BARCODE)))
         self.add_property("insert_size", IntValue(DictValue(input, LIBRARY_INSERT_SIZE, optional=True), optional=True))
-
-    @singledispatchmethod
-    def add_to_message_property(self, message_property: MessageProperty) -> None:
-        super().add_to_message_property(message_property)
-
-    @add_to_message_property.register
-    def _(self, message: TractionReceptionMessage) -> None:
-        """Adds the library information to an OutputTractionMessage.
-
-        Args:
-            message (TractionReceptionMessage): The Traction reception message to add the data to.
-        """
-        super().add_to_message_property(message)
