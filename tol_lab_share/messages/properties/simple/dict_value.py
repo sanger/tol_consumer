@@ -12,7 +12,7 @@ class DictValue(MessageProperty):
     exist, it will trigger an error on validation.
     """
 
-    def __init__(self, input: MessageProperty | dict[str, Any], key: str):
+    def __init__(self, input: MessageProperty | dict[str, Any], key: str, optional: bool = False):
         """Constructor that will create an instance to manage the access of the input
         dictionary using the key provided as argument.
 
@@ -30,6 +30,7 @@ class DictValue(MessageProperty):
         else:
             self._input = input
         self._key = key
+        self._optional = optional
 
     @property
     def validators(self) -> list[Callable]:
@@ -48,9 +49,10 @@ class DictValue(MessageProperty):
         if not self.check_iterable():
             return False
 
-        if self._key not in self._input.value:
+        if self._key not in self._input.value and not self._optional:
             self.trigger_error(error_codes.ERROR_10_DICT_WRONG_KEY, text=f"wrong key: {self._key}")
             return False
+
         return True
 
     def check_iterable(self) -> bool:
@@ -72,4 +74,9 @@ class DictValue(MessageProperty):
         Returns:
         Any value stored inside the dict for that key
         """
-        return self._input.value[self._key]
+        try:
+            return self._input.value[self._key]
+        except KeyError:
+            if self._optional:
+                return None
+            raise

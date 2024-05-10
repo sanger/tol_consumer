@@ -35,14 +35,14 @@ class MessageProperty:
         self.property_type: str = PROPERTY_TYPE_PROPERTY
 
     def validate(self) -> bool:
-        return self._validation_status
+        return self._cached_validation
 
     @cached_property
-    def _validation_status(self) -> bool:
-        """Runs all validations in both the internal properties and in the instance itself, and
-        returns a boolean with the result.
+    def _cached_validation(self) -> bool:
+        """Runs validations on all the instance properties and on the instance itself.
+
         Returns:
-        bool with the result of all validations aggregated
+            True is all validations pass, False otherwise.
         """
         return all(list([self._validate_properties(), self._validate_instance()]))
 
@@ -180,19 +180,30 @@ class MessageProperty:
             self.trigger_error(error_codes.ERROR_9_INVALID_INPUT)
         return cast(bool, result)
 
-    def check_is_string(self) -> bool:
-        """Checks that the input provided value is an instance of a string.
-        Triggers an error if not
+    def string_checker(self, optional: bool = False) -> Callable:
+        """Provides a check method that validates that the input provided value is a string. When the check method is
+        called and either of the following conditions are identified, a "not string" error is triggered:
+
+        - The input value is not a string.
+        - The input value is None and the optional flag is False.
+
+        Parameters:
+            optional (bool) flag that indicates if the input value can be None.
+
         Returns:
-        bool with the result
+            Callable: A function that checks if the input value is a string.
         """
-        logger.debug("MessageProperty::check_is_string")
-        if not self.check_is_valid_input():
-            return False
-        result = isinstance(self._input.value, str)
-        if not result:
-            self.trigger_error(error_codes.ERROR_2_NOT_STRING)
-        return result
+
+        def check_is_string() -> bool:
+            logger.debug("MessageProperty::check_is_string")
+            if not self.check_is_valid_input():
+                return False
+            result = isinstance(self._input.value, str) or (optional and self._input.value is None)
+            if not result:
+                self.trigger_error(error_codes.ERROR_2_NOT_STRING)
+            return result
+
+        return check_is_string
 
     def check_is_integer(self) -> bool:
         """Checks that the input provided value is an instance of an integer.

@@ -25,24 +25,26 @@ class TestMessageProperty:
         instance = MessageProperty(Value("1234"))
         assert instance.value == "1234"
 
-    def test_check_is_string(self):
+    @pytest.mark.parametrize("optional", [True, False])
+    def test_string_checker(self, optional):
         instance = MessageProperty(Value("1234"))
-        assert instance.check_is_string() is True
+        assert instance.string_checker(optional=optional)() is True
 
         instance = MessageProperty(Value(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
-        assert instance.check_is_string() is False
+        assert instance.string_checker(optional=optional)() is False
 
         instance = MessageProperty(Value(""))
-        assert instance.check_is_string() is True
-
-        instance = MessageProperty(Value(None))
-        assert instance.check_is_string() is False
+        assert instance.string_checker(optional=optional)() is True
 
         instance = MessageProperty(Value(1234))
-        assert instance.check_is_string() is False
+        assert instance.string_checker(optional=optional)() is False
 
         instance = MessageProperty(Value({}))
-        assert instance.check_is_string() is False
+        assert instance.string_checker(optional=optional)() is False
+
+        # Note that this is the only test that has a different expectation when optional changes value.
+        instance = MessageProperty(Value(None))
+        assert instance.string_checker(optional=optional)() is optional
 
     def test_check_is_integer(self):
         instance = MessageProperty(Value(None))
