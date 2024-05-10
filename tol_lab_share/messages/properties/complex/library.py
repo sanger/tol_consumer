@@ -4,7 +4,7 @@ from tol_lab_share.constants.input_bioscan_pool_xp_to_traction_message import (
     LIBRARY_BOX_BARCODE,
     LIBRARY_INSERT_SIZE,
 )
-from tol_lab_share.messages.properties.simple import DictValue, StringValue, Value
+from tol_lab_share.messages.properties.simple import DictValue, StringValue, FloatValue, IntValue
 from tol_lab_share.messages.traction import TractionReceptionMessage
 
 from tol_lab_share.messages.properties import MessageProperty
@@ -21,10 +21,10 @@ class Library(MessageProperty):
     def __init__(self, input: MessageProperty):
         super().__init__(input)
 
-        self.add_property("volume", Value(DictValue(input, LIBRARY_VOLUME)))
-        self.add_property("concentration", Value(DictValue(input, LIBRARY_CONCENTRATION)))
+        self.add_property("volume", FloatValue(DictValue(input, LIBRARY_VOLUME)))
+        self.add_property("concentration", FloatValue(DictValue(input, LIBRARY_CONCENTRATION)))
         self.add_property("box_barcode", StringValue(DictValue(input, LIBRARY_BOX_BARCODE)))
-        self.add_property("insert_size", Value(DictValue(input, LIBRARY_INSERT_SIZE)))
+        self.add_property("insert_size", IntValue(DictValue(input, LIBRARY_INSERT_SIZE, optional=True), optional=True))
 
     @singledispatchmethod
     def add_to_message_property(self, message_property: MessageProperty) -> None:

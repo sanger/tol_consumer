@@ -1,7 +1,7 @@
 import pytest
 from tol_lab_share import error_codes
 from tol_lab_share.messages.properties.complex.request import Request
-from tol_lab_share.messages.properties.simple.dict_value import Value
+from tol_lab_share.messages.properties.simple import Value
 
 
 @pytest.fixture
@@ -37,7 +37,6 @@ class TestBioscanPoolXpSample:
         "valid_request", [{}, {"genomeSize": ""}, {"genomeSize": "1,234,567,890 bp"}], indirect=True
     )
     def test_validators_when_request_is_valid(self, valid_request):
-        print(valid_request.value)
         instance = Request(valid_request)
         assert instance.validate() is True
         assert len(instance.errors) == 0
