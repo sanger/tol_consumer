@@ -19,7 +19,6 @@ class TestStringValue:
     )
     def test_validates_strings(self, test_value, optional, should_be_valid):
         instance = StringValue(Value(test_value), optional=optional)
-        assert instance.string_checker(optional=optional)() is should_be_valid
         assert instance.validate() is should_be_valid
         if should_be_valid:
             assert len(instance.errors) == 0

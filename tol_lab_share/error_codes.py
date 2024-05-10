@@ -186,7 +186,7 @@ ERROR_19_INPUT_IS_NOT_VALID_INTEGER_STRING = ErrorCode(
     19, "parsing", "input", "The input provided is not a valid integer."
 )
 ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING = ErrorCode(20, "parsing", "input", "The input provided is not a valid float.")
-ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC = ErrorCode(21, "parsing", "input", "The input provided is not a valid date.")
+ERROR_21_INPUT_IS_NOT_VALID_DATE = ErrorCode(21, "parsing", "input", "The input provided is not a valid date.")
 ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE = ErrorCode(
     22,
     "parsing",

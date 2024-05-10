@@ -37,12 +37,12 @@
                     {
                         "name": "volume",
                         "type": "float",
-                        "doc": "The volume of the library in µL. Must be greater than or equal to 0."
+                        "doc": "The volume of the library in µL. Must be greater than or equal to 0.0."
                     },
                     {
                         "name": "concentration",
                         "type": "float",
-                        "doc": "The concentration of the library in ng/µL. Must be greater than or equal to 0."
+                        "doc": "The concentration of the library in ng/µL. Must be greater than or equal to 0.0."
                     },
                     {
                         "name": "boxBarcode",

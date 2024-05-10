@@ -4,7 +4,7 @@ from tol_lab_share.messages.properties.simple.dict_value import DictValue
 from tol_lab_share.messages.properties.simple.value import Value
 from tol_lab_share import error_codes
 import pytest
-from datetime import datetime
+from datetime import datetime, UTC
 
 
 class TestMessageProperty:
@@ -22,69 +22,140 @@ class TestMessageProperty:
             assert instance.validate() is False
 
     def test_can_retrieve_value(self):
-        instance = MessageProperty(Value("1234"))
-        assert instance.value == "1234"
+        value = "1234"
+        instance = MessageProperty(Value(value))
+        assert instance.value == value
 
-    @pytest.mark.parametrize("optional", [True, False])
-    def test_string_checker(self, optional):
-        instance = MessageProperty(Value("1234"))
-        assert instance.string_checker(optional=optional)() is True
-
-        instance = MessageProperty(Value(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
-        assert instance.string_checker(optional=optional)() is False
-
-        instance = MessageProperty(Value(""))
-        assert instance.string_checker(optional=optional)() is True
-
-        instance = MessageProperty(Value(1234))
-        assert instance.string_checker(optional=optional)() is False
-
-        instance = MessageProperty(Value({}))
-        assert instance.string_checker(optional=optional)() is False
-
-        # Note that this is the only test that has a different expectation when optional changes value.
-        instance = MessageProperty(Value(None))
-        assert instance.string_checker(optional=optional)() is optional
-
-    def test_check_is_integer(self):
-        instance = MessageProperty(Value(None))
-        assert instance.check_is_integer() is False
-        assert len(instance.errors) > 0
-
-        instance = MessageProperty(Value("1234"))
-        assert instance.check_is_integer() is False
-        assert len(instance.errors) > 0
-
-        instance = MessageProperty(Value([]))
-        assert instance.check_is_integer() is False
-        assert len(instance.errors) > 0
-
-        instance = MessageProperty(DictValue({"test": 1234}, "wrong!!"))
-        assert instance.check_is_integer() is False
-        assert len(instance.errors) > 0
-
-        instance = MessageProperty(Value(1234))
-        assert instance.check_is_integer() is True
+    def test_check_is_float_accepts_float(self):
+        instance = MessageProperty(Value(1234.0))
+        assert instance.check_is_float() is True
         assert len(instance.errors) == 0
 
-    def test_check_is_date_utc(self):
-        instance = MessageProperty(Value("1234"))
-        assert instance.check_is_date_utc() is False
+    @pytest.mark.parametrize(
+        "input_value",
+        ["1234.0", [], {}, b"1234.0", 1234, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
+        ids=[
+            "a string",
+            "a list",
+            "a dictionary",
+            "binary data",
+            "an integer",
+            "datetime",
+            "an invalid message property",
+        ],
+    )
+    def test_check_is_float_rejects(self, input_value):
+        instance = MessageProperty(Value(input_value))
+        assert instance.check_is_float() is False
+        assert len(instance.errors) > 0
 
-        instance = MessageProperty(Value(b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9"))
-        assert instance.check_is_date_utc() is False
+    @pytest.mark.parametrize("optional", [True, False])
+    def test_integer_checker_accepts_an_integer(self, optional):
+        instance = MessageProperty(Value(1234))
+        assert instance.integer_checker(optional=optional)() is True
+        assert len(instance.errors) == 0
 
-        instance = MessageProperty(Value(""))
-        assert instance.check_is_date_utc() is False
-
+    def test_integer_checker_accepts_none_when_optional(self):
         instance = MessageProperty(Value(None))
-        assert instance.check_is_date_utc() is False
+        assert instance.integer_checker(optional=True)() is True
+        assert len(instance.errors) == 0
 
-        instance = MessageProperty(Value(datetime.utcnow()))
-        assert instance.check_is_date_utc() is True
+    @pytest.mark.parametrize(
+        "input_value",
+        ["1234", [], {}, b"1234", 1234.0, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
+        ids=[
+            "string integer",
+            "a list",
+            "a dictionary",
+            "binary data",
+            "a float",
+            "datetime",
+            "an invalid message property",
+        ],
+    )
+    @pytest.mark.parametrize("optional", [True, False], ids=["optional", "not optional"])
+    def test_integer_checker_rejects(self, input_value, optional):
+        instance = MessageProperty(Value(input_value))
+        assert instance.integer_checker(optional=optional)() is False
+        assert len(instance.errors) > 0
 
-        instance = MessageProperty(Value({}))
-        assert instance.check_is_date_utc() is False
+    def test_integer_checker_rejects_none_when_not_optional(self):
+        instance = MessageProperty(Value(None))
+        assert instance.integer_checker(optional=False)() is False
+        assert len(instance.errors) > 0
+
+    def test_integer_checker_rejects_none_with_default_optional_flag(self):
+        instance = MessageProperty(Value(None))
+        assert instance.integer_checker()() is False
+        assert len(instance.errors) > 0
+
+    @pytest.mark.parametrize(
+        "input_value",
+        ["1234", ""],
+        ids=["a populated string", "an empty string"],
+    )
+    @pytest.mark.parametrize("optional", [True, False])
+    def test_string_checker_accepts(self, input_value, optional):
+        instance = MessageProperty(Value(input_value))
+        assert instance.string_checker(optional=optional)() is True
+        assert len(instance.errors) == 0
+
+    def test_string_checker_accepts_none_when_optional(self):
+        instance = MessageProperty(Value(None))
+        assert instance.string_checker(optional=True)() is True
+        assert len(instance.errors) == 0
+
+    @pytest.mark.parametrize(
+        "input_value",
+        [[], {}, b"1234", 1234, 1234.0, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
+        ids=[
+            "a list",
+            "a dictionary",
+            "binary data",
+            "an integer",
+            "a float",
+            "datetime",
+            "an invalid message property",
+        ],
+    )
+    @pytest.mark.parametrize("optional", [True, False])
+    def test_string_checker_rejects(self, input_value, optional):
+        instance = MessageProperty(Value(input_value))
+        assert instance.string_checker(optional=optional)() is False
+        assert len(instance.errors) > 0
+
+    def test_string_checker_rejects_none_when_not_optional(self):
+        instance = MessageProperty(Value(None))
+        assert instance.string_checker(optional=False)() is False
+        assert len(instance.errors) > 0
+
+    def test_string_checker_rejects_none_with_default_optional_flag(self):
+        instance = MessageProperty(Value(None))
+        assert instance.string_checker()() is False
+        assert len(instance.errors) > 0
+
+    def test_check_is_datetime_accepts_datetime(self):
+        instance = MessageProperty(Value(datetime.now(UTC)))
+        assert instance.check_is_datetime() is True
+        assert len(instance.errors) == 0
+
+    @pytest.mark.parametrize(
+        "input_value",
+        ["14/02/2024", [], {}, b"14/02/2024", 1234, 1234.0, DictValue({"test": 1234}, "wrong!!")],
+        ids=[
+            "a string",
+            "a list",
+            "a dictionary",
+            "binary data",
+            "an integer",
+            "a float",
+            "an invalid message property",
+        ],
+    )
+    def test_check_is_datetime_rejects(self, input_value):
+        instance = MessageProperty(Value(input_value))
+        assert instance.check_is_datetime() is False
+        assert len(instance.errors) > 0
 
     def test_has_property(self):
         instance = MessageProperty(Value("1234"))
