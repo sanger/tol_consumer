@@ -21,7 +21,7 @@ def invalid_library():
     return Value(
         {
             "volume": "NotAFloat",
-            "concentration": 1234, # Also not a float
+            "concentration": 1234,  # Also not a float
         }
     )
 
