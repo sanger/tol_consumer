@@ -7,7 +7,8 @@ from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinary, AvroEncoderJson
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from lab_share_lib.types import RabbitServerDetails
-from testing_data import build_create_labware_96_msg, build_create_tube_msg, build_update_labware_msg
+from bioscan_pool_xp_messages import build_bioscan_pool_xp_msg
+from create_labware_messages import build_create_labware_96_msg, build_create_tube_msg, build_update_labware_msg
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
@@ -55,7 +56,9 @@ def send_message(msg, subject, registry, publisher):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="TOL LabShare message publisher demo script.")
-    parser.add_argument("unique_id")
+    parser.add_argument("--unique_id", required=True, help="Unique ID for the messages.")
+    parser.add_argument("--message_types", required=True, help="The type of messages being sent.",
+                        choices=["create-update-labware", "bioscan-pool-xp-to-traction"])
 
     args = parser.parse_args()
 
@@ -71,12 +74,14 @@ if __name__ == "__main__":
     )
     publisher = BasicPublisher(rabbitmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
 
-    labware_uuid = str(uuid4()).encode()
-
     for pos in range(0, 5):
-        sample_msg = build_create_labware_96_msg(args.unique_id, pos)
-        update_msg = build_update_labware_msg(sample_msg)
-        tube_msg = build_create_tube_msg(args.unique_id, pos)
-        send_message(sample_msg, "create-labware", registry, publisher)
-        send_message(update_msg, "update-labware", registry, publisher)
-        send_message(tube_msg, "create-labware", registry, publisher)
+        if args.message_types == "creat-update-labware":
+            sample_msg = build_create_labware_96_msg(args.unique_id, pos)
+            update_msg = build_update_labware_msg(sample_msg)
+            tube_msg = build_create_tube_msg(args.unique_id, pos)
+            send_message(sample_msg, "create-labware", registry, publisher)
+            send_message(update_msg, "update-labware", registry, publisher)
+            send_message(tube_msg, "create-labware", registry, publisher)
+        elif args.message_types == "bioscan-pool-xp-to-traction":
+            pool_xp_msg = build_bioscan_pool_xp_msg(args.unique_id, pos)
+            send_message(pool_xp_msg, "bioscan-pool-xp-to-traction", registry, publisher)

@@ -47,5 +47,9 @@ the previous step:
 Note: Set the flag uses_ssl=False in tools/demo/publisher.py for local development to disable the use of ssl.
 
 ```bash
-   pipenv run python tools/demo/publisher.py
+   pipenv run python tools/demo/publisher.py --unique_id={your_unique_id} --message_types={message_choice}
 ```
+
+The Unique ID lets you identify the generated messages more easily and will form part of the messages sent.
+The message types defines which types of message will be sent.
+To see valid values for `message_types` leave the value out of your run command and the usage will tell you the valid values you can choose from.
