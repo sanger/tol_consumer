@@ -1,10 +1,12 @@
 from tol_lab_share import error_codes
 from tol_lab_share.messages.rabbit.consumed.bioscan_pool_xp_to_traction_message import BioscanPoolXpToTractionMessage
 
+
 def check_error_is_present(message, error_code, field):
     assert any(
         [((x.type_id == error_code.type_id) and (x.field == field)) for x in message.errors]
     ), f"Error type '{error_code.type_id}' for field '{field}' not found among {message.errors}"
+
 
 class TestBioscanPoolXpToTractionMessage:
     def test_validates_true_when_valid(self, valid_bioscan_pool_xp_to_traction_message):
