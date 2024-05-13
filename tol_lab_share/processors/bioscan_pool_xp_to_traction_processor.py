@@ -28,6 +28,7 @@ class BioscanPoolXpToTractionProcessor(BaseProcessor):
         self._schema_registry = schema_registry
         self._config = config
 
+    @staticmethod
     def instantiate(
         schema_registry: SchemaRegistry, _: BasicPublisher, config: Any
     ) -> "BioscanPoolXpToTractionProcessor":
