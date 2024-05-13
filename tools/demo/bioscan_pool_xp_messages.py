@@ -4,8 +4,10 @@ from uuid import uuid4
 # Pacbio_HiFi, Saphyr_v1, ONT_Ultralong
 LIBRARY_TYPE = "Pacbio_HiFi"
 
+
 def barcode_for_unique_id(labtype, unique_id, msg_idx):
     return f"BARCODE-{labtype}-{unique_id}-{msg_idx}"
+
 
 def build_bioscan_pool_xp_msg(unique_id, msg_idx):
     return {

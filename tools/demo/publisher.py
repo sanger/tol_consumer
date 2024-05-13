@@ -1,6 +1,5 @@
 import argparse
 import os
-from uuid import uuid4
 
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinaryMessage, AvroEncoderJson
@@ -51,10 +50,16 @@ def send_message(msg, subject, encoder, registry, publisher):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="TOL LabShare message publisher demo script.")
-    parser.add_argument("--encoder", default="json", help="The encoder to use for the messages.", choices=["json", "binary"])
+    parser.add_argument(
+        "--encoder", default="json", help="The encoder to use for the messages.", choices=["json", "binary"]
+    )
     parser.add_argument("--unique_id", required=True, help="Unique ID for the messages.")
-    parser.add_argument("--message_types", required=True, help="The type of messages being sent.",
-                        choices=["create-update-labware", "bioscan-pool-xp-to-traction"])
+    parser.add_argument(
+        "--message_types",
+        required=True,
+        help="The type of messages being sent.",
+        choices=["create-update-labware", "bioscan-pool-xp-to-traction"],
+    )
 
     args = parser.parse_args()
 
