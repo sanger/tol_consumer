@@ -45,7 +45,6 @@ class BioscanPoolXpToTractionProcessor(BaseProcessor):
             message (RabbitMessage) The RabbitMQ message to be processed.
         """
         LOGGER.debug("BioscanPoolXpToTractionProcessor::process")
-        LOGGER.debug(f"Received: { message.message }")
 
         input = BioscanPoolXpToTractionMessage(message)
 
