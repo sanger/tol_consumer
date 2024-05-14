@@ -2,6 +2,7 @@ import pytest
 from tol_lab_share import error_codes
 from tol_lab_share.messages.properties.complex.request import Request
 from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.traction.reception_message import TractionReceptionMessageRequest
 
 
 @pytest.fixture
@@ -56,3 +57,17 @@ class TestBioscanPoolXpSample:
         check_error_is_present(instance, error_codes.ERROR_2_UUID_NOT_RIGHT_FORMAT, "study_uuid")
 
         assert len(instance.errors) == 4
+
+    @pytest.mark.parametrize(
+        "valid_request", [{}, {"genomeSize": ""}, {"genomeSize": "1,234,567,890 bp"}], indirect=True
+    )
+    def test_add_to_message_property_for_traction_reception_message_request(self, valid_request):
+        instance = Request(valid_request)
+
+        request = TractionReceptionMessageRequest()
+        instance.add_to_message_property(request)
+
+        assert request.cost_code == "CostCode789"
+        assert request.genome_size == valid_request.value.get("genomeSize", None)
+        assert request.library_type == "LibraryType123"
+        assert request.study_uuid == "12345678-1234-1234-1234-1234567890ab"
