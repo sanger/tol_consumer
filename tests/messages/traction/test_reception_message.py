@@ -778,6 +778,66 @@ class TestTractionReceptionMessage:
             }
         }
 
+    def test_can_generate_payload_for_tube_with_library(self):
+        instance = TractionReceptionMessage()
+
+        request = instance.create_request()
+        request.container_barcode = "1"
+        request.container_type = "tubes"
+        request.cost_code = "S1234"
+        request.genome_size = "123,456,789"
+        request.library_concentration = 55.95
+        request.library_insert_size = 120381
+        request.library_type = "library"
+        request.library_volume = 69.69
+        request.sample_name = "test1"
+        request.sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
+        request.species = "test species"
+        request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
+        request.template_prep_kit_box_barcode = "box_barcode_001"
+
+        assert instance.payload() == {
+            "data": {
+                "type": "receptions",
+                "attributes": {
+                    "source": "tol-lab-share.tol",
+                    "plates_attributes": [],
+                    "tubes_attributes": [
+                        {
+                            "barcode": "1",
+                            "type": "tubes",
+                            "library": {
+                                "concentration": 55.95,
+                                "insert_size": 120381,
+                                "template_prep_kit_box_barcode": "box_barcode_001",
+                                "volume": 69.69,
+                            },
+                            "request": {
+                                "cost_code": "S1234",
+                                "estimate_of_gb_required": "123,456,789",
+                                "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                                "library_type": "library",
+                            },
+                            "sample": {
+                                "accession_number": None,
+                                "country_of_origin": None,
+                                "date_of_sample_collection": None,
+                                "donor_id": None,
+                                "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                                "name": "test1",
+                                "priority_level": None,
+                                "public_name": None,
+                                "sanger_sample_id": None,
+                                "species": "test species",
+                                "supplier_name": None,
+                                "taxon_id": None,
+                            },
+                        },
+                    ],
+                },
+            }
+        }
+
     def test_raises_transient_error_when_traction_api_responds_502(self, config):
         # This happens when the Traction API is down but nginx is still up.
         vt = valid_traction_message()
