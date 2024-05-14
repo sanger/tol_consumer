@@ -3,7 +3,7 @@ import pytest
 import requests
 from tol_lab_share.messages.traction.reception_message import TractionReceptionMessage
 from lab_share_lib.exceptions import TransientRabbitError
-from datetime import datetime
+from datetime import UTC, datetime
 import requests_mock
 
 
@@ -43,7 +43,7 @@ class TestTractionReceptionMessage:
         assert valid_traction_message().validate()
 
     def test_can_generate_payload_for_plates(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
@@ -153,7 +153,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_multiple_plates(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         # Mix the order of the requests to ensure the grouping for plates works.
@@ -364,7 +364,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_ont_library_types(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
@@ -476,7 +476,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_tubes(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
@@ -580,7 +580,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_mix_of_plate_and_tubes(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
