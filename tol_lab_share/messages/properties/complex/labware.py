@@ -81,7 +81,7 @@ class Labware(MessageProperty):
 
     @add_to_message_property.register
     def _(self, message: TractionReceptionMessage) -> None:
-        """Adds the labware information to an OutputTractionMessage.
+        """Adds the labware information to a TractionReceptionMessage.
 
         Args:
             message (TractionReceptionMessage): The Traction reception message to add the data to.
