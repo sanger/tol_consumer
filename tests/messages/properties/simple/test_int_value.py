@@ -4,10 +4,7 @@ from tol_lab_share.messages.properties.simple import DictValue, IntValue, Value
 
 
 class TestIntValue:
-    @pytest.mark.parametrize(
-        "test_value",
-        (1234, 9876),
-    )
+    @pytest.mark.parametrize("test_value", (1234, 9876))
     @pytest.mark.parametrize("optional", (True, False), ids=["optional", "not optional"])
     def test_validates_true(self, test_value, optional):
         instance = IntValue(Value(test_value), optional=optional)
@@ -16,8 +13,17 @@ class TestIntValue:
 
     @pytest.mark.parametrize(
         "test_value",
-        ["1234", [], {}, b"1234", 1234.0, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
-        ids=["a string", "a list", "a dictionary", "binary data", "a float", "datetime", "an invalid message property"],
+        ["1234", [], {}, b"1234", 1234.0, True, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
+        ids=[
+            "a string",
+            "a list",
+            "a dictionary",
+            "binary data",
+            "a float",
+            "a boolean",
+            "datetime",
+            "an invalid message property",
+        ],
     )
     @pytest.mark.parametrize("optional", (True, False), ids=["optional", "not optional"])
     def test_validates_false(self, test_value, optional):

@@ -181,6 +181,23 @@ class MessageProperty:
             self.trigger_error(error_codes.ERROR_9_INVALID_INPUT)
         return cast(bool, result)
 
+    def check_is_boolean(self) -> bool:
+        """Validates that the input value is a boolean. Note that other values that can represent a boolean, such as 0
+        for False and -1 or 1 for True, are not acceptable. When the value cannot be identified as a boolean, a "not
+        boolean" error is triggered:
+
+        Returns:
+            bool: True if the input value is a boolean, False otherwise.
+        """
+        logger.debug("MessageProperty::check_is_boolean")
+        if not self.check_is_valid_input():
+            return False
+
+        result = isinstance(self._input.value, bool)
+        if not result:
+            self.trigger_error(error_codes.ERROR_29_NOT_BOOLEAN)
+        return result
+
     def check_is_float(self) -> bool:
         """Validates that the input value is a float. Note that other numeric types that can be expressed as a float are
         not acceptable. When the value cannot be identified as a float, a "not float" error is triggered:
@@ -216,7 +233,10 @@ class MessageProperty:
             if not self.check_is_valid_input():
                 return False
 
-            result = isinstance(self._input.value, int) or (optional and self._input.value is None)
+            # Booleans are instances of int, so we need to explicitly exclude them
+            result = (isinstance(self._input.value, int) and not type(self._input.value) is bool) or (
+                optional and self._input.value is None
+            )
             if not result:
                 self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
             return result
