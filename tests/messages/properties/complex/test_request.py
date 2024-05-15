@@ -18,6 +18,10 @@ def valid_request(request):
 
 @pytest.fixture
 def invalid_request():
+    # Request is invalid because:
+    # - costCode is not a string
+    # - libraryType is not optional but missing
+    # - studyUuid is not binary data
     return Value(
         {
             "costCode": 1234,

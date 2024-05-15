@@ -18,6 +18,10 @@ def valid_library(request):
 
 @pytest.fixture
 def invalid_library():
+    # Library is invalid because:
+    # - volume is not a float
+    # - concentration is not a float
+    # - boxBarcode is not optional but missing
     return Value(
         {
             "volume": "NotAFloat",

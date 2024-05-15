@@ -17,6 +17,10 @@ def valid_sample():
 
 @pytest.fixture
 def invalid_sample():
+    # Sample is invalid because:
+    # - sampleName is not a string
+    # - sampleUuid is not binary data
+    # - speciesName is not optional but missing
     return Value(
         {
             "sampleName": 42,
