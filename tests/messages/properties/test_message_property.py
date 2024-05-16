@@ -26,6 +26,31 @@ class TestMessageProperty:
         instance = MessageProperty(Value(value))
         assert instance.value == value
 
+    @pytest.mark.parametrize("input_value", [True, False])
+    def test_check_is_boolean_accepts_boolean(self, input_value):
+        instance = MessageProperty(Value(input_value))
+        assert instance.check_is_boolean() is True
+        assert len(instance.errors) == 0
+
+    @pytest.mark.parametrize(
+        "input_value",
+        ["True", [], {}, b"True", 1, 1.0, datetime.now(UTC), DictValue({"test": True}, "wrong!!")],
+        ids=[
+            "a string",
+            "a list",
+            "a dictionary",
+            "binary data",
+            "an integer",
+            "a float",
+            "datetime",
+            "an invalid message property",
+        ],
+    )
+    def test_check_is_boolean_rejects(self, input_value):
+        instance = MessageProperty(Value(input_value))
+        assert instance.check_is_boolean() is False
+        assert len(instance.errors) > 0
+
     def test_check_is_float_accepts_float(self):
         instance = MessageProperty(Value(1234.0))
         assert instance.check_is_float() is True
@@ -33,13 +58,14 @@ class TestMessageProperty:
 
     @pytest.mark.parametrize(
         "input_value",
-        ["1234.0", [], {}, b"1234.0", 1234, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
+        ["1234.0", [], {}, b"1234.0", 1234, True, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
         ids=[
             "a string",
             "a list",
             "a dictionary",
             "binary data",
             "an integer",
+            "a boolean",
             "datetime",
             "an invalid message property",
         ],
@@ -62,13 +88,14 @@ class TestMessageProperty:
 
     @pytest.mark.parametrize(
         "input_value",
-        ["1234", [], {}, b"1234", 1234.0, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
+        ["1234", [], {}, b"1234", 1234.0, True, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
         ids=[
             "string integer",
             "a list",
             "a dictionary",
             "binary data",
             "a float",
+            "a boolean",
             "datetime",
             "an invalid message property",
         ],
@@ -107,13 +134,14 @@ class TestMessageProperty:
 
     @pytest.mark.parametrize(
         "input_value",
-        [[], {}, b"1234", 1234, 1234.0, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
+        [[], {}, b"1234", 1234, 1234.0, True, datetime.now(UTC), DictValue({"test": 1234}, "wrong!!")],
         ids=[
             "a list",
             "a dictionary",
             "binary data",
             "an integer",
             "a float",
+            "a boolean",
             "datetime",
             "an invalid message property",
         ],
@@ -141,7 +169,7 @@ class TestMessageProperty:
 
     @pytest.mark.parametrize(
         "input_value",
-        ["14/02/2024", [], {}, b"14/02/2024", 1234, 1234.0, DictValue({"test": 1234}, "wrong!!")],
+        ["14/02/2024", [], {}, b"14/02/2024", 1234, 1234.0, True, DictValue({"test": 1234}, "wrong!!")],
         ids=[
             "a string",
             "a list",
@@ -149,6 +177,7 @@ class TestMessageProperty:
             "binary data",
             "an integer",
             "a float",
+            "a boolean",
             "an invalid message property",
         ],
     )
