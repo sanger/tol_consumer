@@ -35,14 +35,14 @@ class MessageProperty:
         self.property_type: str = PROPERTY_TYPE_PROPERTY
 
     def validate(self) -> bool:
-        return self._validation_status
+        return self._cached_validation
 
     @cached_property
-    def _validation_status(self) -> bool:
-        """Runs all validations in both the internal properties and in the instance itself, and
-        returns a boolean with the result.
+    def _cached_validation(self) -> bool:
+        """Runs validations on all the instance properties and on the instance itself.
+
         Returns:
-        bool with the result of all validations aggregated
+            True is all validations pass, False otherwise.
         """
         return all(list([self._validate_properties(), self._validate_instance()]))
 
@@ -169,10 +169,11 @@ class MessageProperty:
         return []
 
     def check_is_valid_input(self) -> bool:
-        """Checks that the input provided value can pass all its internal validations.
-        Triggers an error if not
+        """Validates that the provided input passes its own validity checks.  When the validity of the input is False,
+        an "invalid input" error is triggered:
+
         Returns:
-        bool with the result
+            bool: True if the input is valid, False otherwise.
         """
         logger.debug("MessageProperty::check_is_valid_input")
         result = self._input.validate()
@@ -180,48 +181,108 @@ class MessageProperty:
             self.trigger_error(error_codes.ERROR_9_INVALID_INPUT)
         return cast(bool, result)
 
-    def check_is_string(self) -> bool:
-        """Checks that the input provided value is an instance of a string.
-        Triggers an error if not
-        Returns:
-        bool with the result
-        """
-        logger.debug("MessageProperty::check_is_string")
-        if not self.check_is_valid_input():
-            return False
-        result = isinstance(self._input.value, str)
-        if not result:
-            self.trigger_error(error_codes.ERROR_2_NOT_STRING)
-        return result
+    def check_is_boolean(self) -> bool:
+        """Validates that the input value is a boolean. Note that other values that can represent a boolean, such as 0
+        for False and -1 or 1 for True, are not acceptable. When the value cannot be identified as a boolean, a "not
+        boolean" error is triggered:
 
-    def check_is_integer(self) -> bool:
-        """Checks that the input provided value is an instance of an integer.
-        Triggers an error if not
         Returns:
-        bool with the result
+            bool: True if the input value is a boolean, False otherwise.
         """
-        logger.debug("MessageProperty::check_is_integer")
+        logger.debug("MessageProperty::check_is_boolean")
         if not self.check_is_valid_input():
             return False
 
-        result = isinstance(self._input.value, int)
+        result = isinstance(self._input.value, bool)
         if not result:
-            self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
+            self.trigger_error(error_codes.ERROR_29_NOT_BOOLEAN)
         return result
 
-    def check_is_date_utc(self) -> bool:
-        """Checks that the input provided value is an instance of a datetime.
-        Triggers an error if not
+    def check_is_float(self) -> bool:
+        """Validates that the input value is a float. Note that other numeric types that can be expressed as a float are
+        not acceptable. When the value cannot be identified as a float, a "not float" error is triggered:
+
         Returns:
-        bool with the result
+            bool: True if the input value is a float, False otherwise.
         """
-        logger.debug("MessageProperty::check_is_date_utc")
+        logger.debug("MessageProperty::check_is_float")
+        if not self.check_is_valid_input():
+            return False
+
+        result = isinstance(self._input.value, float)
+        if not result:
+            self.trigger_error(error_codes.ERROR_5_NOT_FLOAT)
+        return result
+
+    def integer_checker(self, optional: bool = False) -> Callable:
+        """Provides a check method that validates that the input value is an integer. When the check method is called
+        and either of the following conditions are identified, a "not integer" error is triggered:
+
+        - The input value is not an integer.
+        - The input value is None and the optional flag is False.
+
+        Parameters:
+            optional (bool) flag that indicates if the input value can be None.
+
+        Returns:
+            Callable: A function that checks if the input value is an integer.
+        """
+
+        def check_is_integer() -> bool:
+            logger.debug("MessageProperty::check_is_integer")
+            if not self.check_is_valid_input():
+                return False
+
+            # Booleans are instances of int, so we need to explicitly exclude them
+            result = (isinstance(self._input.value, int) and not type(self._input.value) is bool) or (
+                optional and self._input.value is None
+            )
+            if not result:
+                self.trigger_error(error_codes.ERROR_3_NOT_INTEGER)
+            return result
+
+        return check_is_integer
+
+    def string_checker(self, optional: bool = False) -> Callable:
+        """Provides a check method that validates that the input value is a string. When the check method is called and
+        either of the following conditions are identified, a "not string" error is triggered:
+
+        - The input value is not a string.
+        - The input value is None and the optional flag is False.
+
+        Parameters:
+            optional (bool) flag that indicates if the input value can be None.
+
+        Returns:
+            Callable: A function that checks if the input value is a string.
+        """
+
+        def check_is_string() -> bool:
+            logger.debug("MessageProperty::check_is_string")
+            if not self.check_is_valid_input():
+                return False
+            result = isinstance(self._input.value, str) or (optional and self._input.value is None)
+            if not result:
+                self.trigger_error(error_codes.ERROR_2_NOT_STRING)
+            return result
+
+        return check_is_string
+
+    def check_is_datetime(self) -> bool:
+        """Validates that the input value is a datetime object. Note that other types such as strings containing a date
+        and/or time are not acceptable. When the value cannot be identified as a datetime, a "not valid date" error is
+        triggered:
+
+        Returns:
+            bool: True if the input value is a datetime, False otherwise.
+        """
+        logger.debug("MessageProperty::check_is_datetime")
         if not self.check_is_valid_input():
             return False
 
         result = isinstance(self._input.value, datetime.datetime)
         if not result:
-            self.trigger_error(error_codes.ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC)
+            self.trigger_error(error_codes.ERROR_21_INPUT_IS_NOT_VALID_DATE)
         return result
 
     def _validate_properties(self) -> bool:

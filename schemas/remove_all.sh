@@ -1,7 +1,7 @@
 #!/bin/bash
-if [ $# -ne 2 ]; then
+if [ $# -ne 1 ]; then
   echo "Syntax:"
-  echo "  remove_all.sh <REDPANDA_URL> <API_KEY>"
+  echo "  remove_all.sh <REDPANDA_URL>"
   echo "where:"
   echo "  <REDPANDA_URL>: URL to connect to RedPanda where the schemas will be removed"
   exit 1

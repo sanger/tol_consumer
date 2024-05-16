@@ -67,7 +67,7 @@ class Location(MessageProperty):
             return False
         if (self._input.value is None) and (len(self.labware_type().valid_locations()) == 0):
             return True
-        if not self.check_is_string():
+        if not self.string_checker()():
             return False
         result = self.padded() in self.labware_type().valid_locations()
         if not result:

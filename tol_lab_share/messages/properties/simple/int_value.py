@@ -2,8 +2,8 @@ from tol_lab_share.messages.properties import MessageProperty
 from typing import Callable
 
 
-class StringValue(MessageProperty):
-    """A simple string value. The value will be validated to be a string."""
+class IntValue(MessageProperty):
+    """A simple integer value. The value will be validated to be a int."""
 
     def __init__(self, input: MessageProperty, optional: bool = False):
         super().__init__(input)
@@ -11,5 +11,5 @@ class StringValue(MessageProperty):
 
     @property
     def validators(self) -> list[Callable]:
-        """Validate the value to be a string."""
-        return [self.string_checker(optional=self._optional)]
+        """Validate the value to be a integer."""
+        return [self.integer_checker(optional=self._optional)]

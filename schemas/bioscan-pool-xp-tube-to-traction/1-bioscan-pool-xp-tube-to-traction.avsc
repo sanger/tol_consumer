@@ -37,12 +37,12 @@
                     {
                         "name": "volume",
                         "type": "float",
-                        "doc": "The volume of the library in µL. Must be greater than or equal to 0."
+                        "doc": "The volume of the library in µL. Must be greater than or equal to 0.0."
                     },
                     {
                         "name": "concentration",
                         "type": "float",
-                        "doc": "The concentration of the library in ng/µL. Must be greater than or equal to 0."
+                        "doc": "The concentration of the library in ng/µL. Must be greater than or equal to 0.0."
                     },
                     {
                         "name": "boxBarcode",
@@ -111,7 +111,7 @@
                     },
                     {
                         "name": "sampleUuid",
-                        "type": "string",
+                        "type": "version4MessageUuid",
                         "doc": "The UTF-8 byte encoded unique sample UUID the request belongs to. Will be stored as external_id in Traction."
                     },
                     {

@@ -4,8 +4,12 @@ from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
-from tests.data.examples_create_labware_messages import (
-    TEST_CREATE_LABWARE_MSG_OBJECT,
+from tests.data.example_bioscan_pool_xp_to_traction_messages import (
+    TEST_VALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT,
+    TEST_INVALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT,
+)
+from tests.data.example_create_labware_messages import (
+    TEST_VALID_CREATE_LABWARE_MSG_OBJECT,
     TEST_INVALID_CREATE_LABWARE_MSG_OBJECT,
 )
 from lab_share_lib.constants import RABBITMQ_HEADER_KEY_SUBJECT, RABBITMQ_HEADER_KEY_VERSION
@@ -28,44 +32,49 @@ HEADERS = {
     RABBITMQ_HEADER_KEY_VERSION: "3",
 }
 
-ENCODED_BODY = "Encoded body"
-VALID_DECODED_LIST = [TEST_CREATE_LABWARE_MSG_OBJECT]
-INVALID_DECODED_LIST = [TEST_INVALID_CREATE_LABWARE_MSG_OBJECT]
-
 
 @pytest.fixture
-def unchecked_create_labware_message():
-    return RabbitMessage(HEADERS, ENCODED_BODY)
+def generic_rabbit_message():
+    return RabbitMessage(HEADERS, "Generic Body")
 
 
-@pytest.fixture
-def valid_decoder():
+def mock_decoder(message_object):
     decoder = MagicMock()
-    decoder.decode.return_value = VALID_DECODED_LIST
+    decoder.decode.return_value = [message_object]
 
     return decoder
 
 
 @pytest.fixture
-def invalid_decoder():
-    decoder = MagicMock()
-    decoder.decode.return_value = INVALID_DECODED_LIST
+def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
+    decoder = mock_decoder(TEST_VALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT)
+    generic_rabbit_message.decode(decoder)
 
-    return decoder
-
-
-@pytest.fixture
-def valid_create_labware_message(unchecked_create_labware_message, valid_decoder):
-    unchecked_create_labware_message.decode(valid_decoder)
-
-    return unchecked_create_labware_message
+    return generic_rabbit_message
 
 
 @pytest.fixture
-def invalid_create_labware_message(unchecked_create_labware_message, invalid_decoder):
-    unchecked_create_labware_message.decode(invalid_decoder)
+def invalid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
+    decoder = mock_decoder(TEST_INVALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT)
+    generic_rabbit_message.decode(decoder)
 
-    return unchecked_create_labware_message
+    return generic_rabbit_message
+
+
+@pytest.fixture
+def valid_create_labware_message(generic_rabbit_message):
+    decoder = mock_decoder(TEST_VALID_CREATE_LABWARE_MSG_OBJECT)
+    generic_rabbit_message.decode(decoder)
+
+    return generic_rabbit_message
+
+
+@pytest.fixture
+def invalid_create_labware_message(generic_rabbit_message):
+    decoder = mock_decoder(TEST_INVALID_CREATE_LABWARE_MSG_OBJECT)
+    generic_rabbit_message.decode(decoder)
+
+    return generic_rabbit_message
 
 
 @pytest.fixture
@@ -124,7 +133,7 @@ def taxonomy_record():
 
 
 @pytest.fixture
-def valid_sample():
+def valid_create_labware_sample():
     return {
         "accessionNumber": "EE1234",
         "commonName": "Mus Musculus",
@@ -156,7 +165,7 @@ def valid_sample():
 
 
 @pytest.fixture
-def invalid_sample():
+def invalid_create_labware_sample():
     return {
         "accessionNumber": "EE1234",
         "commonName": 1234,
