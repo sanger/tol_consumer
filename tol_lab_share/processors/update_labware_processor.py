@@ -45,7 +45,6 @@ class UpdateLabwareProcessor(BaseProcessor):
         bool indicating if the message was correctly consumed
         """
         logger.debug("UpdateLabwareProcessor::process")
-        logger.debug(f"Received: { message.message }")
 
         message = {
             "sourceMessageUuid": str(message.message["messageUuid"].decode()),

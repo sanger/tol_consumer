@@ -55,7 +55,6 @@ class CreateLabwareProcessor(BaseProcessor):
         If not, it will return False, which will trigger sending this message to the dead letters queue.
         """
         logger.debug("CreateLabwareProcessor::process")
-        logger.debug(f"Received: { message.message }")
 
         output_feedback_message = CreateLabwareFeedbackMessage()
         input = CreateLabwareMessage(message)

@@ -77,7 +77,7 @@ if __name__ == "__main__":
     encoder = args.encoder
 
     for pos in range(0, 5):
-        if args.message_types == "creat-update-labware":
+        if args.message_types == "create-update-labware":
             sample_msg = build_create_labware_96_msg(args.unique_id, pos)
             update_msg = build_update_labware_msg(sample_msg)
             tube_msg = build_create_tube_msg(args.unique_id, pos)

@@ -1,6 +1,6 @@
 import logging
 import logging.config
-from datetime import datetime
+from datetime import UTC, datetime
 from unittest.mock import MagicMock
 
 import pytest
@@ -48,7 +48,7 @@ def mock_decoder(message_object):
 @pytest.fixture
 def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
     decoder = mock_decoder(TEST_VALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT)
-    generic_rabbit_message.decode(decoder)
+    generic_rabbit_message.decode([decoder])
 
     return generic_rabbit_message
 
@@ -56,7 +56,7 @@ def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
 @pytest.fixture
 def invalid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
     decoder = mock_decoder(TEST_INVALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT)
-    generic_rabbit_message.decode(decoder)
+    generic_rabbit_message.decode([decoder])
 
     return generic_rabbit_message
 
@@ -64,7 +64,7 @@ def invalid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
 @pytest.fixture
 def valid_create_labware_message(generic_rabbit_message):
     decoder = mock_decoder(TEST_VALID_CREATE_LABWARE_MSG_OBJECT)
-    generic_rabbit_message.decode(decoder)
+    generic_rabbit_message.decode([decoder])
 
     return generic_rabbit_message
 
@@ -72,7 +72,7 @@ def valid_create_labware_message(generic_rabbit_message):
 @pytest.fixture
 def invalid_create_labware_message(generic_rabbit_message):
     decoder = mock_decoder(TEST_INVALID_CREATE_LABWARE_MSG_OBJECT)
-    generic_rabbit_message.decode(decoder)
+    generic_rabbit_message.decode([decoder])
 
     return generic_rabbit_message
 
@@ -140,7 +140,7 @@ def valid_create_labware_sample():
         "concentration": "5",
         "costCode": "S1234",
         "countryOfOrigin": "United Kingdom",
-        "dateSubmittedUTC": datetime.utcnow(),
+        "dateSubmittedUTC": datetime.now(UTC),
         "donorId": "cichlid_pacbio8196429",
         "finalNanoDrop": "150",
         "finalNanoDrop230": "200",
@@ -152,7 +152,7 @@ def valid_create_labware_sample():
         "postSPRIVolume": "10",
         "priorityLevel": "Medium",
         "publicName": "SamplePublicName1",
-        "sampleCollectionDateUtc": datetime.utcnow(),
+        "sampleCollectionDateUtc": datetime.now(UTC),
         "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6".encode(),
         "sangerSampleId": "cichlid_pacbio8196429",
         "shearedFemtoFragmentSize": "8",
@@ -172,7 +172,7 @@ def invalid_create_labware_sample():
         "concentration": "ee5",
         "costCode": 1234,
         "countryOfOrigin": 1234,
-        "dateSubmittedUTC": datetime.utcnow(),
+        "dateSubmittedUTC": datetime.now(UTC),
         "donorId": 1234,
         "finalNanoDrop": "150",
         "finalNanoDrop230": 200,
@@ -184,7 +184,7 @@ def invalid_create_labware_sample():
         "postSPRIVolume": "10",
         "priorityLevel": "Medium",
         "publicName": "1234",
-        "sampleCollectionDateUtc": datetime.utcnow(),
+        "sampleCollectionDateUtc": datetime.now(UTC),
         "sampleUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f6",
         "sangerSampleId": 1234,
         "shearedFemtoFragmentSize": "8",

@@ -2,6 +2,7 @@ import pytest
 from tol_lab_share import error_codes
 from tol_lab_share.messages.properties.complex.library import Library
 from tol_lab_share.messages.properties.simple import Value
+from tol_lab_share.messages.traction.reception_message import TractionReceptionMessageRequest
 
 
 @pytest.fixture
@@ -64,3 +65,20 @@ class TestBioscanPoolXpSample:
         check_error_is_present(instance, error_codes.ERROR_9_INVALID_INPUT, "box_barcode")
 
         assert len(instance.errors) == 3
+
+    @pytest.mark.parametrize(
+        "valid_library",
+        [{}, {"insertSize": -50}, {"insertSize": 0}, {"insertSize": 50}],
+        ids=["no insertSize", "insertSize=-50", "insertSize=0", "insertSize=50"],
+        indirect=True,
+    )
+    def test_add_to_message_property_for_traction_reception_message_request(self, valid_library):
+        instance = Library(valid_library)
+
+        request = TractionReceptionMessageRequest()
+        instance.add_to_message_property(request)
+
+        assert request.library_volume == 123.45
+        assert request.library_concentration == 345.678901
+        assert request.template_prep_kit_box_barcode == "BoxBarcode123"
+        assert request.library_insert_size == valid_library.value.get("insertSize", None)

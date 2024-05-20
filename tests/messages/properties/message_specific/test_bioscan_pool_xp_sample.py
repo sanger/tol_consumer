@@ -2,6 +2,7 @@ import pytest
 from tol_lab_share import error_codes
 from tol_lab_share.messages.properties.message_specific.bioscan_pool_xp_sample import BioscanPoolXpSample
 from tol_lab_share.messages.properties.simple.dict_value import Value
+from tol_lab_share.messages.traction.reception_message import TractionReceptionMessageRequest
 
 
 @pytest.fixture
@@ -56,3 +57,13 @@ class TestBioscanPoolXpSample:
         check_error_is_present(instance, error_codes.ERROR_9_INVALID_INPUT, "species_name")
 
         assert len(instance.errors) == 4
+
+    def test_add_to_message_property_for_traction_reception_message_request(self, valid_sample):
+        instance = BioscanPoolXpSample(valid_sample)
+
+        request = TractionReceptionMessageRequest()
+        instance.add_to_message_property(request)
+
+        assert request.sample_name == "ValidSample"
+        assert request.sample_uuid == "12345678-1234-1234-1234-1234567890ab"
+        assert request.species == "ValidSpecies"
