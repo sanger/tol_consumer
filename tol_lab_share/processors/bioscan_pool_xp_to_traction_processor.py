@@ -7,7 +7,8 @@ from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 
 from tol_lab_share import error_codes
-from tol_lab_share.messages.rabbit.consumed import BioscanPoolXpToTractionMessage
+from tol_lab_share.messages.consumed import BioscanPoolXpToTractionMessage, BioscanPoolXpToTractionValidator
+from tol_lab_share.messages.mappers.bioscan_pool_xp_to_traction import BioscanPoolXpToTractionMapper
 from tol_lab_share.messages.traction import TractionReceptionMessage
 
 LOGGER = logging.getLogger(__name__)
@@ -16,41 +17,41 @@ LOGGER = logging.getLogger(__name__)
 class BioscanPoolXpToTractionProcessor(BaseProcessor):
     """Processor for consumed messages exporting Pool XP tubes to Traction."""
 
-    def __init__(self, schema_registry: SchemaRegistry, config: Any):
+    def __init__(self, config: Any):
         """Prepare the initial internal state of the processor.
 
         Args:
-            schema_registry (SchemaRegistry): a schema registry for message parsing.
             config (Any): main configuration for the app.
         """
         LOGGER.debug("BioscanPoolXpToTractionProcessor::__init__")
 
-        self._schema_registry = schema_registry
         self._config = config
 
     @staticmethod
     def instantiate(
-        schema_registry: SchemaRegistry, _: BasicPublisher, config: Any
+        _schema_registry: SchemaRegistry, _basic_publisher: BasicPublisher, config: Any
     ) -> "BioscanPoolXpToTractionProcessor":
         """Instantiate a BioscanPoolXpToTractionProcessor."""
-        return BioscanPoolXpToTractionProcessor(schema_registry, config)
+        return BioscanPoolXpToTractionProcessor(config)
 
-    def process(self, message: RabbitMessage) -> bool:
+    def process(self, rabbit_message: RabbitMessage) -> bool:
         """Processes a RabbitMQ message. The message will be parsed by BioscanPoolXpToTractionMessage and validated.
         If the message is correct, a new TractionReceptionMessage will be generated and sent to Traction.
         Note that no feedback message is generated for messages of this type, so message publishers will need to
         check the success of this process by polling the Traction API instead.
 
         Args:
-            message (RabbitMessage) The RabbitMQ message to be processed.
+            rabbit_message (RabbitMessage) The RabbitMQ message to be processed.
         """
         LOGGER.debug("BioscanPoolXpToTractionProcessor::process")
 
-        input = BioscanPoolXpToTractionMessage(message)
+        message = BioscanPoolXpToTractionMessage(rabbit_message.message)
+        validator = BioscanPoolXpToTractionValidator(message)
 
-        if input.validate():
+        if validator.validate():
             traction_reception_message = TractionReceptionMessage()
-            input.add_to_message_property(traction_reception_message)
+            BioscanPoolXpToTractionMapper.map(message, traction_reception_message)
+
             LOGGER.info("Attempting to send to traction")
             traction_reception_message.send(url=self._config.TRACTION_URL)
 
@@ -60,7 +61,7 @@ class BioscanPoolXpToTractionProcessor(BaseProcessor):
                 )
                 return False
         else:
-            error_codes.ERROR_17_INPUT_MESSAGE_INVALID.trigger(text=f":{input.errors}", instance=self)
+            error_codes.ERROR_17_INPUT_MESSAGE_INVALID.trigger(text=f":{validator.errors}", instance=self)
             return False
 
         return True
