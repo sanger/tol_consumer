@@ -54,7 +54,7 @@
                     "doc": "Unique id to identify the sample inside Sanger lims"
                   },
                   {
-                    "name": "location", "type": ["null", "int"], "default": null,
+                    "name": "location", "type": ["null", "string"], "default": null,
                     "doc": "The location for the sample inside the labware, or null if location is not relevant in labware (Eg: tube)."
                   },
                   {
