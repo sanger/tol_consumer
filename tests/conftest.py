@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 
 import pytest
 from tests.data.example_bioscan_pool_xp_to_traction_messages import (
-    TEST_VALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT,
-    TEST_INVALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT,
+    VALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD,
+    INVALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD,
 )
 from tests.data.example_create_labware_messages import (
     TEST_VALID_CREATE_LABWARE_MSG_OBJECT,
@@ -20,6 +20,27 @@ from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 
 CONFIG = get_config("tol_lab_share.config.test")
 logging.config.dictConfig(CONFIG.LOGGING)
+
+
+@pytest.fixture
+def any():
+    def type_checker(expected_type):
+        class TypeChecker:
+            def __init__(self, expected_type):
+                self.expected_type = expected_type
+
+            def __eq__(self, other):
+                return isinstance(other, self.expected_type)
+
+            def __ne__(self, other):
+                return not isinstance(other, self.expected_type)
+
+            def __repr__(self):
+                return f"Any({self.expected_type.__name__})"
+
+        return TypeChecker(expected_type)
+
+    return type_checker
 
 
 @pytest.fixture
@@ -47,7 +68,7 @@ def mock_decoder(message_object):
 
 @pytest.fixture
 def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
-    decoder = mock_decoder(TEST_VALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT)
+    decoder = mock_decoder(VALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD)
     generic_rabbit_message.decode([decoder])
 
     return generic_rabbit_message
@@ -55,7 +76,7 @@ def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
 
 @pytest.fixture
 def invalid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
-    decoder = mock_decoder(TEST_INVALID_BIOSCAN_POOL_XP_TO_TRACTION_MSG_OBJECT)
+    decoder = mock_decoder(INVALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD)
     generic_rabbit_message.decode([decoder])
 
     return generic_rabbit_message
