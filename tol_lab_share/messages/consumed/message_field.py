@@ -15,8 +15,8 @@ class MessageField:
                 Use this to convert the value to a different type or perform mappings.
                 Defaults to None (no transformation).
         """
-        self._key = key
         self._path = path
+        self._key = key
         self._dict = dict
         self._transform = transform or (lambda v: v)
 
