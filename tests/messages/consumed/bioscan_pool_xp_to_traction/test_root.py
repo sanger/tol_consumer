@@ -18,7 +18,7 @@ from tol_lab_share.messages.consumed.bioscan_pool_xp_to_traction.root import Roo
 
 @pytest.fixture
 def subject():
-    return Root(VALID_PAYLOAD)
+    return Root(VALID_PAYLOAD.copy())
 
 
 class TestRoot:

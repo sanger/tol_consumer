@@ -32,24 +32,19 @@ VALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD: dict[str, Any] = {
 
 # The following message object has been annotated with what is wrong with it.
 INVALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD: dict[str, Any] = {
-    "messageUuid": "0123456789ab-cdef-0123-456789abcdef".encode(),  # badly formatted UUID
+    "messageUuid": "01234-56789ab-cdef-0123-456789abcdef".encode(),  # badly formatted UUID
     "messageCreateDateUtc": datetime.now(UTC),
-    # tubeBarcode is not optional but missing
-    "library": {
-        # concentration is not optional but is missing
-        "volume": "23.4",  # should be a float
-        "boxBarcode": None,  # not optional
-        "insertSize": 100.0,  # should be an integer
-    },
+    "tubeBarcode": "TUBE001",
+    "library": VALID_LIBRARY_PAYLOAD,  # No checks are performed on library
     "request": {
-        "costCode": 1234,  # should be a string
-        # genome size is not optional but is missing
-        "libraryType": None,  # not optional
-        "studyUuid": "456789ab-cdef-0123-4567890abcdef0123".encode(),  # badly formatted UUID
+        "costCode": "S1234",
+        "genomeSize": "123456 bp",
+        "libraryType": "Pacbio_HiFi",
+        "studyUuid": "456789ab-cdef-0123-456789ab-cdef0123".encode(),  # badly formatted UUID
     },
     "sample": {
-        # sampleName is not optional but is missing
-        "sampleUuid": "89abcdef-0123-4567-89ab-cdef01234567",  # badly formatted UUID
-        "speciesName": None,  # not optional
+        "sampleName": "SampleName",
+        "sampleUuid": "89abcdef-0123-456789ab-cdef0123-4567".encode(),  # badly formatted UUID
+        "speciesName": "Mus Musculus",
     },
 }

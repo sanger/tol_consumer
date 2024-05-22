@@ -13,7 +13,7 @@ from tol_lab_share.messages.consumed.bioscan_pool_xp_to_traction.sample import S
 
 @pytest.fixture
 def subject():
-    return Sample(VALID_SAMPLE_PAYLOAD, "path", "parent_path")
+    return Sample(VALID_SAMPLE_PAYLOAD.copy(), "path", "parent_path")
 
 
 class TestSample:

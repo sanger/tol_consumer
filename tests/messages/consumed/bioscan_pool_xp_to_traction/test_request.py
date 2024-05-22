@@ -14,7 +14,7 @@ from tol_lab_share.messages.consumed.bioscan_pool_xp_to_traction.request import 
 
 @pytest.fixture
 def subject():
-    return Request(VALID_REQUEST_PAYLOAD, "path", "parent_path")
+    return Request(VALID_REQUEST_PAYLOAD.copy(), "path", "parent_path")
 
 
 class TestRequest:

@@ -13,7 +13,7 @@ from tol_lab_share.messages.consumed.bioscan_pool_xp_to_traction.library import 
 
 @pytest.fixture
 def subject():
-    return Library(VALID_LIBRARY_PAYLOAD, "path", "parent_path")
+    return Library(VALID_LIBRARY_PAYLOAD.copy(), "path", "parent_path")
 
 
 class TestLibrary:
