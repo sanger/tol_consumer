@@ -112,7 +112,15 @@ class TestBioscanPoolXpToTractionProcessor:
 
         error_records = [r for r in caplog.records if r.levelname == "ERROR"]
         assert len(error_records) == 4
-        assert 'Uuid has wrong format, text: "input: 01234-56789ab-cdef-0123-456789abcdef"' in [r.message for r in error_records]
-        assert 'Uuid has wrong format, text: "input: 456789ab-cdef-0123-456789ab-cdef0123"' in [r.message for r in error_records]
-        assert 'Uuid has wrong format, text: "input: 89abcdef-0123-456789ab-cdef0123-4567"' in [r.message for r in error_records]
-        assert any([r.message.startswith("There was a problem while validating the input message") for r in error_records])
+        assert 'Uuid has wrong format, text: "input: 01234-56789ab-cdef-0123-456789abcdef"' in [
+            r.message for r in error_records
+        ]
+        assert 'Uuid has wrong format, text: "input: 456789ab-cdef-0123-456789ab-cdef0123"' in [
+            r.message for r in error_records
+        ]
+        assert 'Uuid has wrong format, text: "input: 89abcdef-0123-456789ab-cdef0123-4567"' in [
+            r.message for r in error_records
+        ]
+        assert any(
+            [r.message.startswith("There was a problem while validating the input message") for r in error_records]
+        )
