@@ -95,9 +95,9 @@ class ErrorCode:
         """
         message = self.description
         if instance is not None:
-            message += ', instance: "' + str(type(instance).__name__) + '"'
+            message += f', instance: "{type(instance).__name__}"'
         if text is not None:
-            message += ', text: "' + text + '"'
+            message += f', text: "{text}"'
         return str(message)
 
     def trigger(

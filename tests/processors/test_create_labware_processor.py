@@ -22,6 +22,16 @@ class TestCreateLabwareProcessor:
         instance = CreateLabwareProcessor.instantiate(MagicMock(), MagicMock(), config)
         assert isinstance(instance, CreateLabwareProcessor)
 
+    def test_instantiate_passes_arguments_to_init(self, config):
+        schema_registry = MagicMock()
+        basic_publisher = MagicMock()
+
+        with patch("tol_lab_share.processors.create_labware_processor.CreateLabwareProcessor.__init__") as init_mock:
+            init_mock.return_value = None
+            CreateLabwareProcessor.instantiate(schema_registry, basic_publisher, config)
+
+        init_mock.assert_called_with(schema_registry, basic_publisher, config)
+
     def test_valid_input_can_run_process(
         self,
         config,
