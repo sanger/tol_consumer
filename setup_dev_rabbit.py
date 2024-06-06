@@ -11,232 +11,203 @@ PORT = "8080"
 USERNAME = "admin"
 PASSWORD = "development"
 
-VHOST = "tol"
-EXCHANGE_TYPE = "topic"
-AE_EXCHANGE_TYPE = "fanout"
-DL_EXCHANGE_TYPE = "topic"
-QUEUE_TYPE = "classic"
+class RabbitSetupTool:
+    def __init__(self, vhost):
+        self.vhost = vhost
 
-DL_EXCHANGE = "tol.dead-letters"
-CRUD_DL_QUEUE = "tol.crud-operations.dead-letters"
-FEEDBACK_DL_QUEUE = "tol.feedback.dead-letters"
+    def setup(self):
+        self._download_rabbitmq_admin_tool()
+        self._declare_vhost()
 
-TOL_TEAM_AE_EXCHANGE = "tol-team.tol.unrouted"
-TOL_TEAM_UNROUTED_QUEUE = "tol-team.tol.unrouted"
+    def _download_rabbitmq_admin_tool(self):
+        print(f"Downloading {RABBITMQ_ADMIN_FILE} tool and setting as executable for your user")
+        urllib.request.urlretrieve(f"http://{HOST}:{PORT}/cli/{RABBITMQ_ADMIN_FILE}", RABBITMQ_ADMIN_FILE)
+        st = os.stat(RABBITMQ_ADMIN_FILE)
+        os.chmod(RABBITMQ_ADMIN_FILE, st.st_mode | stat.S_IXUSR)
+        print()
 
-TOL_TEAM_EXCHANGE = "tol-team.tol"
-CRUD_QUEUE = "tol.crud-operations"
-CRUD_ROUTING_KEY = "crud.#"
+    def _print_command_output(self, specific_command):
+        command_parts = [
+            f"./{RABBITMQ_ADMIN_FILE}",
+            f"--host={HOST}",
+            f"--port={PORT}",
+            f"--username={USERNAME}",
+            f"--password={PASSWORD}",
+            f"--vhost={self.vhost}",
+            *specific_command,
+        ]
 
-PSD_AE_EXCHANGE = "psd.tol.unrouted"
-PSD_UNROUTED_QUEUE = "psd.tol.unrouted"
+        print(subprocess.run(command_parts, encoding="utf-8", stdout=subprocess.PIPE).stdout)
 
-PSD_EXCHANGE = "psd.tol"
-FEEDBACK_QUEUE = "tol.feedback"
-FEEDBACK_ROUTING_KEY = "feedback.#"
+    def _declare_vhost(self):
+        print(f"Declaring vhost '{self.vhost}'")
+        self._print_command_output(["declare", "vhost", f"name={self.vhost}"])
+
+    def _declare_exchange(self, name, type, arguments = None):
+        print(f"Declaring exchange '{name}'")
+
+        command = [
+            "declare",
+            "exchange",
+            f"name={name}",
+            f"type={type}",
+        ]
+
+        if arguments is not None:
+            command.append(f"arguments={json.dumps(arguments)}")
+
+        self._print_command_output(command)
+
+    def _declare_queue(self, name, queue_type, arguments = None):
+        print(f"Declaring queue '{name}'")
+
+        command = [
+            "declare",
+            "queue",
+            f"name={name}",
+            f"queue_type={queue_type}",
+        ]
+
+        if arguments is not None:
+            command.append(f"arguments={json.dumps(arguments)}")
+
+        self._print_command_output(command)
+
+    def _declare_binding(self, source, destination, routing_key = None, arguments = None):
+        print(f"Declaring binding from '{source}' to '{destination}'")
+
+        command = [
+            "declare",
+            "binding",
+            f"source={source}",
+            f"destination={destination}",
+        ]
+
+        if routing_key is not None:
+            command.append(f"routing_key={routing_key}")
+
+        if arguments is not None:
+            command.append(f"arguments={json.dumps(arguments)}")
+
+        self._print_command_output(command)
 
 
-def print_command_output(specific_command):
-    command_parts = [
-        f"./{RABBITMQ_ADMIN_FILE}",
-        f"--host={HOST}",
-        f"--port={PORT}",
-        f"--username={USERNAME}",
-        f"--password={PASSWORD}",
-        f"--vhost={VHOST}",
-        *specific_command,
-    ]
+class CreateUpdateMessagesRabbitSetupTool(RabbitSetupTool):
+    def __init__(self):
+        self.VHOST = "tol"
+        super().__init__(self.VHOST)
 
-    print(subprocess.run(command_parts, encoding="utf-8", stdout=subprocess.PIPE).stdout)
+        self.EXCHANGE_TYPE = "topic"
+        self.AE_EXCHANGE_TYPE = "fanout"
+        self.DL_EXCHANGE_TYPE = "topic"
+        self.QUEUE_TYPE = "classic"
+
+        self.DL_EXCHANGE = "tol.dead-letters"
+        self.CRUD_DL_QUEUE = "tol.crud-operations.dead-letters"
+        self.FEEDBACK_DL_QUEUE = "tol.feedback.dead-letters"
+
+        self.TOL_TEAM_AE_EXCHANGE = "tol-team.tol.unrouted"
+        self.TOL_TEAM_UNROUTED_QUEUE = "tol-team.tol.unrouted"
+
+        self.TOL_TEAM_EXCHANGE = "tol-team.tol"
+        self.CRUD_QUEUE = "tol.crud-operations"
+        self.CRUD_ROUTING_KEY = "crud.#"
+
+        self.PSD_AE_EXCHANGE = "psd.tol.unrouted"
+        self.PSD_UNROUTED_QUEUE = "psd.tol.unrouted"
+
+        self.PSD_EXCHANGE = "psd.tol"
+        self.FEEDBACK_QUEUE = "tol.feedback"
+        self.FEEDBACK_ROUTING_KEY = "feedback.#"
+
+    def setup(self):
+        super().setup()
+
+        # Dead letter exchange
+        self._declare_exchange(self.DL_EXCHANGE, self.DL_EXCHANGE_TYPE)
+
+        # CRUD dead letter queue
+        self._declare_queue(self.CRUD_DL_QUEUE, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE})
+        self._declare_binding(self.DL_EXCHANGE, self.CRUD_DL_QUEUE, routing_key = self.CRUD_ROUTING_KEY)
+
+        # Feedback dead letter queue
+        self._declare_queue(self.FEEDBACK_DL_QUEUE, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE})
+        self._declare_binding(self.DL_EXCHANGE, self.FEEDBACK_DL_QUEUE, routing_key = self.FEEDBACK_ROUTING_KEY)
+
+        # TOL team alternate exchange
+        self._declare_exchange(self.TOL_TEAM_AE_EXCHANGE, self.AE_EXCHANGE_TYPE)
+        self._declare_queue(self.TOL_TEAM_UNROUTED_QUEUE, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE})
+        self._declare_binding(self.TOL_TEAM_AE_EXCHANGE, self.TOL_TEAM_UNROUTED_QUEUE)
+
+        # TOL team exchange
+        self._declare_exchange(
+            self.TOL_TEAM_EXCHANGE,
+            self.EXCHANGE_TYPE,
+            {"alternate-exchange": self.TOL_TEAM_AE_EXCHANGE},
+        )
+        self._declare_queue(
+            self.CRUD_QUEUE,
+            self.QUEUE_TYPE,
+            {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE},
+        )
+        self._declare_binding(self.TOL_TEAM_EXCHANGE, self.CRUD_QUEUE, routing_key = self.CRUD_ROUTING_KEY)
+
+        # PSD alternate exchange
+        self._declare_exchange(self.PSD_AE_EXCHANGE, self.AE_EXCHANGE_TYPE)
+        self._declare_queue(self.PSD_UNROUTED_QUEUE, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE})
+        self._declare_binding(self.PSD_AE_EXCHANGE, self.PSD_UNROUTED_QUEUE)
+
+        # Feedback exchange
+        self._declare_exchange(
+            self.PSD_EXCHANGE,
+            self.EXCHANGE_TYPE,
+            {"alternate-exchange": self.PSD_AE_EXCHANGE},
+        )
+        self._declare_queue(
+            self.FEEDBACK_QUEUE,
+            self.QUEUE_TYPE,
+            {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE},
+        )
+        self._declare_binding(self.PSD_EXCHANGE, self.FEEDBACK_QUEUE, routing_key = self.FEEDBACK_ROUTING_KEY)
+
+class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
+    def __init__(self):
+        super().__init__("tol")
+
+        self.EXCHANGE = "limber"
+        self.DL_EXCHANGE = "dead-letters"
+        self.HEADERS_EXCHANGE_TYPE = "headers"
+
+        self.QUEUE_TYPE = "classic"
+        self.MESSAGE_TTL = 300000  # 5 minutes
+
+        self.CONSUMED_QUEUE_NAME = "tls.poolxp-export-to-traction"
+        self.LOGS_QUEUE_NAME = "logs.limber"
+        self.DL_QUEUE_NAME = "dead.poolxp-export-to-traction"
+
+        self.SUBJECT = "bioscan-pool-xp-tube-to-traction"
 
 
-print(f"Downloading {RABBITMQ_ADMIN_FILE} tool and setting as executable for your user")
-urllib.request.urlretrieve(f"http://{HOST}:{PORT}/cli/{RABBITMQ_ADMIN_FILE}", RABBITMQ_ADMIN_FILE)
-st = os.stat(RABBITMQ_ADMIN_FILE)
-os.chmod(RABBITMQ_ADMIN_FILE, st.st_mode | stat.S_IXUSR)
-print()
+    def setup(self):
+        super().setup()
 
-print(f"Declaring vhost '{VHOST}'")
-print_command_output(["declare", "vhost", f"name={VHOST}"])
+        # Exchanges
+        self._declare_exchange(self.EXCHANGE, self.HEADERS_EXCHANGE_TYPE)
+        self._declare_exchange(self.DL_EXCHANGE, self.HEADERS_EXCHANGE_TYPE)
 
-print(f"Declaring dead letter exchange '{DL_EXCHANGE}'")
-print_command_output(
-    [
-        "declare",
-        "exchange",
-        f"name={DL_EXCHANGE}",
-        f"type={DL_EXCHANGE_TYPE}",
-    ]
-)
+        # Queues
+        self._declare_queue(self.CONSUMED_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE})
+        self._declare_queue(self.LOGS_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL})
+        self._declare_queue(self.DL_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL})
 
-print(f"Declaring CRUD dead letters queue '{CRUD_DL_QUEUE}'")
-print_command_output(
-    [
-        "declare",
-        "queue",
-        f"name={CRUD_DL_QUEUE}",
-        f"queue_type={QUEUE_TYPE}",
-        f'arguments={json.dumps({"x-queue-type": QUEUE_TYPE})}',
-    ]
-)
+        # Bindings
+        self._declare_binding(self.EXCHANGE, self.CONSUMED_QUEUE_NAME, arguments = {"subject": self.SUBJECT})
+        self._declare_binding(self.EXCHANGE, self.LOGS_QUEUE_NAME)
+        self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments = {"subject": self.SUBJECT})
 
-print("Declaring CRUD dead letters binding")
-print_command_output(
-    [
-        "declare",
-        "binding",
-        f"source={DL_EXCHANGE}",
-        f"destination={CRUD_DL_QUEUE}",
-        f"routing_key={CRUD_ROUTING_KEY}",
-    ]
-)
 
-print(f"Declaring feedback dead letters queue '{FEEDBACK_DL_QUEUE}'")
-print_command_output(
-    [
-        "declare",
-        "queue",
-        f"name={FEEDBACK_DL_QUEUE}",
-        f"queue_type={QUEUE_TYPE}",
-        f'arguments={json.dumps({"x-queue-type": QUEUE_TYPE})}',
-    ]
-)
+create_update_setup_tool = CreateUpdateMessagesRabbitSetupTool()
+create_update_setup_tool.setup()
 
-print("Declaring feedback dead letters binding")
-print_command_output(
-    [
-        "declare",
-        "binding",
-        f"source={DL_EXCHANGE}",
-        f"destination={FEEDBACK_DL_QUEUE}",
-        f"routing_key={FEEDBACK_ROUTING_KEY}",
-    ]
-)
-
-print(f"Declaring TOL alternate exchange '{TOL_TEAM_AE_EXCHANGE}'")
-print_command_output(
-    [
-        "declare",
-        "exchange",
-        f"name={TOL_TEAM_AE_EXCHANGE}",
-        f"type={AE_EXCHANGE_TYPE}",
-    ]
-)
-
-print(f"Declaring TOL unrouted queue '{TOL_TEAM_UNROUTED_QUEUE}'")
-print_command_output(
-    [
-        "declare",
-        "queue",
-        f"name={TOL_TEAM_UNROUTED_QUEUE}",
-        f"queue_type={QUEUE_TYPE}",
-        f'arguments={json.dumps({"x-queue-type": QUEUE_TYPE})}',
-    ]
-)
-
-print("Declaring TOL unrouted binding")
-print_command_output(
-    [
-        "declare",
-        "binding",
-        f"source={TOL_TEAM_AE_EXCHANGE}",
-        f"destination={TOL_TEAM_UNROUTED_QUEUE}",
-    ]
-)
-
-print(f"Declaring TOL exchange '{TOL_TEAM_EXCHANGE}'")
-print_command_output(
-    [
-        "declare",
-        "exchange",
-        f"name={TOL_TEAM_EXCHANGE}",
-        f"type={EXCHANGE_TYPE}",
-        f'arguments={json.dumps({"alternate-exchange": TOL_TEAM_AE_EXCHANGE})}',
-    ]
-)
-
-print(f"Declaring CRUD queue '{CRUD_QUEUE}'")
-print_command_output(
-    [
-        "declare",
-        "queue",
-        f"name={CRUD_QUEUE}",
-        f"queue_type={QUEUE_TYPE}",
-        f'arguments={json.dumps({"x-queue-type": QUEUE_TYPE, "x-dead-letter-exchange": DL_EXCHANGE})}',
-    ]
-)
-
-print("Declaring CRUD binding")
-print_command_output(
-    [
-        "declare",
-        "binding",
-        f"source={TOL_TEAM_EXCHANGE}",
-        f"destination={CRUD_QUEUE}",
-        f"routing_key={CRUD_ROUTING_KEY}",
-    ]
-)
-
-print(f"Declaring PSD alternate exchange '{PSD_AE_EXCHANGE}'")
-print_command_output(
-    [
-        "declare",
-        "exchange",
-        f"name={PSD_AE_EXCHANGE}",
-        f"type={AE_EXCHANGE_TYPE}",
-    ]
-)
-
-print(f"Declaring PSD unrouted queue '{PSD_UNROUTED_QUEUE}'")
-print_command_output(
-    [
-        "declare",
-        "queue",
-        f"name={PSD_UNROUTED_QUEUE}",
-        f"queue_type={QUEUE_TYPE}",
-        f'arguments={json.dumps({"x-queue-type": QUEUE_TYPE})}',
-    ]
-)
-
-print("Declaring TOL unrouted binding")
-print_command_output(
-    [
-        "declare",
-        "binding",
-        f"source={PSD_AE_EXCHANGE}",
-        f"destination={PSD_UNROUTED_QUEUE}",
-    ]
-)
-
-print(f"Declaring feedback exchange '{PSD_EXCHANGE}'")
-print_command_output(
-    [
-        "declare",
-        "exchange",
-        f"name={PSD_EXCHANGE}",
-        f"type={EXCHANGE_TYPE}",
-        f'arguments={json.dumps({"alternate-exchange": PSD_AE_EXCHANGE})}',
-    ]
-)
-
-print(f"Declaring feedback queue '{FEEDBACK_QUEUE}'")
-print_command_output(
-    [
-        "declare",
-        "queue",
-        f"name={FEEDBACK_QUEUE}",
-        f"queue_type={QUEUE_TYPE}",
-        f'arguments={json.dumps({"x-queue-type": QUEUE_TYPE, "x-dead-letter-exchange": DL_EXCHANGE})}',
-    ]
-)
-
-print("Declaring feedback binding")
-print_command_output(
-    [
-        "declare",
-        "binding",
-        f"source={PSD_EXCHANGE}",
-        f"destination={FEEDBACK_QUEUE}",
-        f"routing_key={FEEDBACK_ROUTING_KEY}",
-    ]
-)
+bioscan_pool_xp_setup_tool = BioscanPoolXpRabbitSetupTool()
+bioscan_pool_xp_setup_tool.setup()
