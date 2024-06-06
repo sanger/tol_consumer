@@ -11,6 +11,7 @@ PORT = "8080"
 USERNAME = "admin"
 PASSWORD = "development"
 
+
 class RabbitSetupTool:
     def __init__(self, vhost):
         self.vhost = vhost
@@ -43,7 +44,7 @@ class RabbitSetupTool:
         print(f"Declaring vhost '{self.vhost}'")
         self._print_command_output(["declare", "vhost", f"name={self.vhost}"])
 
-    def _declare_exchange(self, name, type, arguments = None):
+    def _declare_exchange(self, name, type, arguments=None):
         print(f"Declaring exchange '{name}'")
 
         command = [
@@ -58,7 +59,7 @@ class RabbitSetupTool:
 
         self._print_command_output(command)
 
-    def _declare_queue(self, name, queue_type, arguments = None):
+    def _declare_queue(self, name, queue_type, arguments=None):
         print(f"Declaring queue '{name}'")
 
         command = [
@@ -73,7 +74,7 @@ class RabbitSetupTool:
 
         self._print_command_output(command)
 
-    def _declare_binding(self, source, destination, routing_key = None, arguments = None):
+    def _declare_binding(self, source, destination, routing_key=None, arguments=None):
         print(f"Declaring binding from '{source}' to '{destination}'")
 
         command = [
@@ -128,11 +129,11 @@ class CreateUpdateMessagesRabbitSetupTool(RabbitSetupTool):
 
         # CRUD dead letter queue
         self._declare_queue(self.CRUD_DL_QUEUE, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE})
-        self._declare_binding(self.DL_EXCHANGE, self.CRUD_DL_QUEUE, routing_key = self.CRUD_ROUTING_KEY)
+        self._declare_binding(self.DL_EXCHANGE, self.CRUD_DL_QUEUE, routing_key=self.CRUD_ROUTING_KEY)
 
         # Feedback dead letter queue
         self._declare_queue(self.FEEDBACK_DL_QUEUE, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE})
-        self._declare_binding(self.DL_EXCHANGE, self.FEEDBACK_DL_QUEUE, routing_key = self.FEEDBACK_ROUTING_KEY)
+        self._declare_binding(self.DL_EXCHANGE, self.FEEDBACK_DL_QUEUE, routing_key=self.FEEDBACK_ROUTING_KEY)
 
         # TOL team alternate exchange
         self._declare_exchange(self.TOL_TEAM_AE_EXCHANGE, self.AE_EXCHANGE_TYPE)
@@ -150,7 +151,7 @@ class CreateUpdateMessagesRabbitSetupTool(RabbitSetupTool):
             self.QUEUE_TYPE,
             {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE},
         )
-        self._declare_binding(self.TOL_TEAM_EXCHANGE, self.CRUD_QUEUE, routing_key = self.CRUD_ROUTING_KEY)
+        self._declare_binding(self.TOL_TEAM_EXCHANGE, self.CRUD_QUEUE, routing_key=self.CRUD_ROUTING_KEY)
 
         # PSD alternate exchange
         self._declare_exchange(self.PSD_AE_EXCHANGE, self.AE_EXCHANGE_TYPE)
@@ -168,7 +169,8 @@ class CreateUpdateMessagesRabbitSetupTool(RabbitSetupTool):
             self.QUEUE_TYPE,
             {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE},
         )
-        self._declare_binding(self.PSD_EXCHANGE, self.FEEDBACK_QUEUE, routing_key = self.FEEDBACK_ROUTING_KEY)
+        self._declare_binding(self.PSD_EXCHANGE, self.FEEDBACK_QUEUE, routing_key=self.FEEDBACK_ROUTING_KEY)
+
 
 class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
     def __init__(self):
@@ -187,7 +189,6 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
 
         self.SUBJECT = "bioscan-pool-xp-tube-to-traction"
 
-
     def setup(self):
         super().setup()
 
@@ -196,14 +197,22 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
         self._declare_exchange(self.DL_EXCHANGE, self.HEADERS_EXCHANGE_TYPE)
 
         # Queues
-        self._declare_queue(self.CONSUMED_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE})
-        self._declare_queue(self.LOGS_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL})
-        self._declare_queue(self.DL_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL})
+        self._declare_queue(
+            self.CONSUMED_QUEUE_NAME,
+            self.QUEUE_TYPE,
+            {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE},
+        )
+        self._declare_queue(
+            self.LOGS_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL}
+        )
+        self._declare_queue(
+            self.DL_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL}
+        )
 
         # Bindings
-        self._declare_binding(self.EXCHANGE, self.CONSUMED_QUEUE_NAME, arguments = {"subject": self.SUBJECT})
+        self._declare_binding(self.EXCHANGE, self.CONSUMED_QUEUE_NAME, arguments={"subject": self.SUBJECT})
         self._declare_binding(self.EXCHANGE, self.LOGS_QUEUE_NAME)
-        self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments = {"subject": self.SUBJECT})
+        self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments={"subject": self.SUBJECT})
 
 
 create_update_setup_tool = CreateUpdateMessagesRabbitSetupTool()
