@@ -23,7 +23,7 @@ RABBIT_SERVER_DETAILS = RabbitServerDetails(
 RABBITMQ_SERVERS = [
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
-        consumed_queue="tol.crud-operations",
+        consumed_queue="tls.poolxp-export-to-traction",
         processors={
             RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: BioscanPoolXpToTractionProcessor,
         },
