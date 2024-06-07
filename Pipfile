@@ -18,7 +18,7 @@ responses = "*"
 
 [packages]
 colorlog = "~=6.7"
-more-itertools = "~=9.0"
+more-itertools = "~=10.2"
 python-dotenv = "~=0.21"
 requests = "~=2.31"
 slackclient = "~=2.9"
