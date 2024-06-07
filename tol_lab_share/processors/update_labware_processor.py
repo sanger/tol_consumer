@@ -57,7 +57,7 @@ class UpdateLabwareProcessor(BaseProcessor):
         logger.debug(f"Sending: { encoded_message }")
 
         self._basic_publisher.publish_message(
-            self._config.RABBITMQ_FEEDBACK_EXCHANGE,
+            "psd.tol",
             RABBITMQ_ROUTING_KEY_UPDATE_LABWARE_FEEDBACK,
             encoded_message.body,
             RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK,

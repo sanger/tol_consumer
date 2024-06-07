@@ -82,7 +82,7 @@ class CreateLabwareProcessor(BaseProcessor):
             output_feedback_message.publish(
                 publisher=self._basic_publisher,
                 schema_registry=self._schema_registry,
-                exchange=self._config.RABBITMQ_FEEDBACK_EXCHANGE,
+                exchange="psd.tol",
             )
             logger.info("Message process completed")
         else:
