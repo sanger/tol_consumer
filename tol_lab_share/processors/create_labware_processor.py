@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from lab_share_lib.processing.base_processor import BaseProcessor
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
@@ -13,7 +14,7 @@ from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQc
 logger = logging.getLogger(__name__)
 
 
-class CreateLabwareProcessor:
+class CreateLabwareProcessor(BaseProcessor):
     """Class to handle consuming create-labware messages from TOL"""
 
     def __init__(self, schema_registry: SchemaRegistry, basic_publisher: BasicPublisher, config: Any):
@@ -28,6 +29,13 @@ class CreateLabwareProcessor:
         self._basic_publisher = basic_publisher
         self._schema_registry = schema_registry
         self._config = config
+
+    @staticmethod
+    def instantiate(
+        schema_registry: SchemaRegistry, basic_publisher: BasicPublisher, config: Any
+    ) -> "CreateLabwareProcessor":
+        """Instantiate a CreateLabwareProcessor"""
+        return CreateLabwareProcessor(schema_registry, basic_publisher, config)
 
     def process(self, message: RabbitMessage) -> bool:
         """Receives a message from rabbitmq. Parses the message with CreateLabwareMessage and validates
@@ -47,7 +55,6 @@ class CreateLabwareProcessor:
         If not, it will return False, which will trigger sending this message to the dead letters queue.
         """
         logger.debug("CreateLabwareProcessor::process")
-        logger.debug(f"Received: { message.message }")
 
         output_feedback_message = CreateLabwareFeedbackMessage()
         input = CreateLabwareMessage(message)
@@ -75,7 +82,7 @@ class CreateLabwareProcessor:
             output_feedback_message.publish(
                 publisher=self._basic_publisher,
                 schema_registry=self._schema_registry,
-                exchange=self._config.RABBITMQ_FEEDBACK_EXCHANGE,
+                exchange="psd.tol",
             )
             logger.info("Message process completed")
         else:

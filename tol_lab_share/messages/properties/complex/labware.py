@@ -1,7 +1,7 @@
 from typing import Any
 
 from .labware_type import LabwareType
-from .sample import Sample
+from tol_lab_share.messages.properties.message_specific import CreateLabwareSample
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES
 from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES
 from tol_lab_share.messages.properties.simple import DictValue, StringValue
@@ -33,7 +33,7 @@ class Labware(MessageProperty):
             samples_list_dict: list[MessageProperty] = []
             for position in range(len(samples_dict.value)):
                 sample = samples_dict.value[position]
-                samples_list_dict.append(Sample(sample))
+                samples_list_dict.append(CreateLabwareSample(sample))
         else:
             samples_list_dict = [samples_dict]
         return samples_list_dict
@@ -81,7 +81,7 @@ class Labware(MessageProperty):
 
     @add_to_message_property.register
     def _(self, message: TractionReceptionMessage) -> None:
-        """Adds the labware information to an OutputTractionMessage.
+        """Adds the labware information to a TractionReceptionMessage.
 
         Args:
             message (TractionReceptionMessage): The Traction reception message to add the data to.

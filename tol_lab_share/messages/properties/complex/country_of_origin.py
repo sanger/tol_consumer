@@ -29,7 +29,7 @@ class CountryOfOrigin(MessageProperty):
         if not self._input.validate():
             return result
 
-        if self.check_is_string():
+        if self.string_checker()():
             for country in COUNTRIES:
                 if self._input.value.lower() == country.lower():
                     result = True

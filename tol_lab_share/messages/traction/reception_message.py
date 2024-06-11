@@ -34,7 +34,10 @@ class TractionReceptionMessageRequest:
         self.date_of_sample_collection: datetime | None = None
         self.donor_id: str | None = None
         self.genome_size: str | None = None
+        self.library_concentration: float | None = None
+        self.library_insert_size: int | None = None
         self.library_type: str | None = None
+        self.library_volume: float | None = None
         self.priority_level: str | None = None
         self.public_name: str | None = None
         self.sample_name: str | None = None
@@ -44,6 +47,7 @@ class TractionReceptionMessageRequest:
         self.study_uuid: str | None = None
         self.supplier_name: str | None = None
         self.taxon_id: str | None = None
+        self.template_prep_kit_box_barcode: str | None = None
 
     def validate(self) -> bool:
         """Validate the information in this request.
@@ -64,6 +68,25 @@ class TractionReceptionMessageRequest:
 
 class Serializer:
     """Class to manage the serialization of requests."""
+
+    @staticmethod
+    def library_payload(request: TractionReceptionMessageRequest) -> dict[str, Any]:
+        """Generate the library payload for the given request.
+
+        Args:
+            request (TractionReceptionMessageRequest): The request to generate the payload for.
+
+        Returns:
+            dict[str, Any]: A dictionary containing the Traction "request" payload for the request.
+        """
+        library_payload = {
+            "volume": request.library_volume,
+            "template_prep_kit_box_barcode": request.template_prep_kit_box_barcode,
+            "concentration": request.library_concentration,
+            "insert_size": request.library_insert_size,
+        }
+
+        return library_payload
 
     @staticmethod
     def request_payload(request: TractionReceptionMessageRequest) -> dict[str, Any]:
@@ -175,12 +198,18 @@ class TubeSerializer(Serializer):
         Returns:
             dict[str, Any]: A dictionary containing the overall payload.
         """
-        return {
+        payload = {
             "barcode": self._request.container_barcode,
             "type": "tubes",
             "request": self.request_payload(self._request),
             "sample": self.sample_payload(self._request),
         }
+
+        library_payload = self.library_payload(self._request)
+        if any([val is not None for val in library_payload.values()]):
+            payload["library"] = library_payload
+
+        return payload
 
 
 class TractionReceptionMessage(MessageProperty):

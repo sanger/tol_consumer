@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from unittest.mock import patch
 import pytest
@@ -30,7 +30,7 @@ class TestTractionQcMessage:
         request.final_nano_drop_230 = "230"
         request.final_nano_drop = "200"
         request.shearing_qc_comments = "Comments"
-        request.date_submitted_utc = datetime.utcnow().timestamp() * 1000
+        request.date_submitted_utc = datetime.now(UTC).timestamp() * 1000
 
         request = traction_qc_message.create_request()
         request.sanger_sample_id = "sanger_sample_id_DDD2"
@@ -42,7 +42,7 @@ class TestTractionQcMessage:
         request.final_nano_drop_230 = "130"
         request.final_nano_drop = "100"
         request.shearing_qc_comments = ""
-        request.date_submitted_utc = datetime.utcnow().timestamp() * 1000
+        request.date_submitted_utc = datetime.now(UTC).timestamp() * 1000
 
         return traction_qc_message
 
@@ -78,7 +78,7 @@ class TestTractionQcMessage:
                             "post_spri_volume": "20",
                             "sheared_femto_fragment_size": "5",
                             "shearing_qc_comments": "Comments",
-                            "date_submitted": datetime.utcnow().timestamp() * 1000,
+                            "date_submitted": datetime.now(UTC).timestamp() * 1000,
                             "labware_barcode": "FD20706500",
                             "sample_external_id": "sanger_sample_id_DDD",
                         },
@@ -89,7 +89,7 @@ class TestTractionQcMessage:
                             "post_spri_concentration": "10",
                             "post_spri_volume": "30",
                             "sheared_femto_fragment_size": "9",
-                            "date_submitted": datetime.utcnow().timestamp() * 1000,
+                            "date_submitted": datetime.now(UTC).timestamp() * 1000,
                             "labware_barcode": "FD20706501",
                             "sample_external_id": "sanger_sample_id_DDD2",
                         },

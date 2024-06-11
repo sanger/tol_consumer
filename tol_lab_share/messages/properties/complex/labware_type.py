@@ -18,7 +18,7 @@ class LabwareType(MessageProperty):
     @property
     def validators(self) -> list[Callable]:
         """Defines the list of validators"""
-        return [self.check_is_string, self.check_labware_type]
+        return [self.string_checker(), self.check_labware_type]
 
     def check_labware_type(self):
         """Checks that the received input contains a valid labware type. Triggers an error

@@ -39,7 +39,7 @@ class TestLabware:
         assert instance.validate() is False
         assert len(instance.errors) > 0
 
-    def test_count_of_total_samples(self, valid_sample):
+    def test_count_of_total_samples(self, valid_create_labware_sample):
         labware = {
             "labwareType": "Plate12x8",
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
@@ -56,7 +56,7 @@ class TestLabware:
             "labwareType": "Plate12x8",
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "1234",
-            "samples": [valid_sample, valid_sample],
+            "samples": [valid_create_labware_sample, valid_create_labware_sample],
         }
 
         instance = Labware(Value(labware2))
@@ -64,7 +64,7 @@ class TestLabware:
         assert instance.errors == []
         assert instance.count_of_total_samples() == 2
 
-    def test_count_of_valid_samples(self, valid_sample, invalid_sample):
+    def test_count_of_valid_samples(self, valid_create_labware_sample, invalid_create_labware_sample):
         labware = {
             "labwareType": "Plate12x8",
             "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
@@ -81,7 +81,7 @@ class TestLabware:
             "labwareType": "Plate12x8",
             "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
             "barcode": "1234",
-            "samples": [valid_sample, valid_sample],
+            "samples": [valid_create_labware_sample, valid_create_labware_sample],
         }
 
         instance = Labware(Value(labware2))
@@ -93,19 +93,19 @@ class TestLabware:
             "labwareType": "Plate12x8",
             "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
             "barcode": "1234",
-            "samples": [invalid_sample, valid_sample],
+            "samples": [invalid_create_labware_sample, valid_create_labware_sample],
         }
 
         instance = Labware(Value(labware2))
         instance.validate()
         assert instance.count_of_valid_samples() == 1
 
-    def test_add_to_traction_reception_message_with_plate(self, valid_sample):
+    def test_add_to_traction_reception_message_with_plate(self, valid_create_labware_sample):
         data = {
             "labwareType": "Plate12x8",
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
-            "samples": [valid_sample],
+            "samples": [valid_create_labware_sample],
         }
         instance = Labware(Value(data))
         assert instance.validate()
@@ -125,12 +125,12 @@ class TestLabware:
         assert traction_message._requests[0].container_type == "wells"
         assert traction_message._requests[0].cost_code == "S1234"
 
-    def test_add_to_traction_reception_message_with_tube(self, valid_sample):
+    def test_add_to_traction_reception_message_with_tube(self, valid_create_labware_sample):
         data = {
             "labwareType": "Tube",
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
-            "samples": [valid_sample],
+            "samples": [valid_create_labware_sample],
         }
         instance = Labware(Value(data))
 
@@ -149,12 +149,12 @@ class TestLabware:
         assert traction_message._requests[0].container_type == "tubes"
         assert traction_message._requests[0].cost_code == "S1234"
 
-    def test_add_to_traction_reception_message_uses_unpadded_location(self, valid_sample):
+    def test_add_to_traction_reception_message_uses_unpadded_location(self, valid_create_labware_sample):
         data = {
             "labwareType": "Plate12x8",
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
-            "samples": [valid_sample],
+            "samples": [valid_create_labware_sample],
         }
         instance = Labware(Value(data))
         instance.properties("samples")[0].add_property("location", Location(Value("B01")))
@@ -162,12 +162,12 @@ class TestLabware:
         instance.add_to_message_property(traction_message)
         assert traction_message._requests[0].container_location == "B1"
 
-    def test_add_to_traction_qc_message(self, valid_sample):
+    def test_add_to_traction_qc_message(self, valid_create_labware_sample):
         data = {
             "labwareType": "Plate12x8",
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
-            "samples": [valid_sample],
+            "samples": [valid_create_labware_sample],
         }
         instance = Labware(Value(data))
         assert instance.validate()

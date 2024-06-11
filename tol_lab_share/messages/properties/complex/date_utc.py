@@ -12,7 +12,7 @@ class DateUtc(MessageProperty):
     @property
     def validators(self) -> list[Callable]:
         """Defines the list of validators"""
-        return [self.check_is_date_utc]
+        return [self.check_is_datetime]
 
     @cached_property
     def value(self) -> Any:

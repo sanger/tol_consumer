@@ -3,7 +3,7 @@ import pytest
 import requests
 from tol_lab_share.messages.traction.reception_message import TractionReceptionMessage
 from lab_share_lib.exceptions import TransientRabbitError
-from datetime import datetime
+from datetime import UTC, datetime
 import requests_mock
 
 
@@ -43,7 +43,7 @@ class TestTractionReceptionMessage:
         assert valid_traction_message().validate()
 
     def test_can_generate_payload_for_plates(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
@@ -116,7 +116,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public1",
                                         "sanger_sample_id": "sample1",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
                                     },
@@ -139,7 +139,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public2",
                                         "sanger_sample_id": "sample2",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
                                     },
@@ -153,7 +153,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_multiple_plates(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         # Mix the order of the requests to ensure the grouping for plates works.
@@ -275,7 +275,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public1",
                                         "sanger_sample_id": "sample1",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
                                     },
@@ -298,7 +298,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public2",
                                         "sanger_sample_id": "sample2",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
                                     },
@@ -327,7 +327,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public3",
                                         "sanger_sample_id": "sample3",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
                                     },
@@ -350,7 +350,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public4",
                                         "sanger_sample_id": "sample4",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
                                     },
@@ -364,7 +364,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_ont_library_types(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
@@ -438,7 +438,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": "Medium",
                                         "public_name": "Public1",
                                         "sanger_sample_id": "sample1",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
                                     },
@@ -462,7 +462,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public2",
                                         "sanger_sample_id": "sample2",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
                                     },
@@ -476,7 +476,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_tubes(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
@@ -545,7 +545,7 @@ class TestTractionReceptionMessage:
                                 "priority_level": "High",
                                 "public_name": "Public1",
                                 "sanger_sample_id": "sample1",
-                                "species": "test " "species",
+                                "species": "test species",
                                 "supplier_name": "supplier1",
                                 "taxon_id": "9606",
                             },
@@ -569,7 +569,7 @@ class TestTractionReceptionMessage:
                                 "priority_level": "Low",
                                 "public_name": "Public2",
                                 "sanger_sample_id": "sample2",
-                                "species": "test " "species",
+                                "species": "test species",
                                 "supplier_name": "supplier2",
                                 "taxon_id": "9606",
                             },
@@ -580,7 +580,7 @@ class TestTractionReceptionMessage:
         }
 
     def test_can_generate_payload_for_mix_of_plate_and_tubes(self):
-        my_date = datetime.utcnow()
+        my_date = datetime.now(UTC)
         instance = TractionReceptionMessage()
 
         request = instance.create_request()
@@ -693,7 +693,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public1",
                                         "sanger_sample_id": "sample1",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
                                     },
@@ -716,7 +716,7 @@ class TestTractionReceptionMessage:
                                         "priority_level": None,
                                         "public_name": "Public2",
                                         "sanger_sample_id": "sample2",
-                                        "species": "test " "species",
+                                        "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
                                     },
@@ -744,7 +744,7 @@ class TestTractionReceptionMessage:
                                 "priority_level": "High",
                                 "public_name": "Public3",
                                 "sanger_sample_id": "sample3",
-                                "species": "test " "species",
+                                "species": "test species",
                                 "supplier_name": "supplier3",
                                 "taxon_id": "9606",
                             },
@@ -768,9 +768,69 @@ class TestTractionReceptionMessage:
                                 "priority_level": "Low",
                                 "public_name": "Public4",
                                 "sanger_sample_id": "sample4",
-                                "species": "test " "species",
+                                "species": "test species",
                                 "supplier_name": "supplier4",
                                 "taxon_id": "9606",
+                            },
+                        },
+                    ],
+                },
+            }
+        }
+
+    def test_can_generate_payload_for_tube_with_library(self):
+        instance = TractionReceptionMessage()
+
+        request = instance.create_request()
+        request.container_barcode = "1"
+        request.container_type = "tubes"
+        request.cost_code = "S1234"
+        request.genome_size = "123,456,789"
+        request.library_concentration = 55.95
+        request.library_insert_size = 120381
+        request.library_type = "library"
+        request.library_volume = 69.69
+        request.sample_name = "test1"
+        request.sample_uuid = "8860a6b4-82e2-451c-aba2-a3129c38c0fc"
+        request.species = "test species"
+        request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
+        request.template_prep_kit_box_barcode = "box_barcode_001"
+
+        assert instance.payload() == {
+            "data": {
+                "type": "receptions",
+                "attributes": {
+                    "source": "tol-lab-share.tol",
+                    "plates_attributes": [],
+                    "tubes_attributes": [
+                        {
+                            "barcode": "1",
+                            "type": "tubes",
+                            "library": {
+                                "concentration": 55.95,
+                                "insert_size": 120381,
+                                "template_prep_kit_box_barcode": "box_barcode_001",
+                                "volume": 69.69,
+                            },
+                            "request": {
+                                "cost_code": "S1234",
+                                "estimate_of_gb_required": "123,456,789",
+                                "external_study_id": "dd490ee5-fd1d-456d-99fd-eb9d3861e014",
+                                "library_type": "library",
+                            },
+                            "sample": {
+                                "accession_number": None,
+                                "country_of_origin": None,
+                                "date_of_sample_collection": None,
+                                "donor_id": None,
+                                "external_id": "8860a6b4-82e2-451c-aba2-a3129c38c0fc",
+                                "name": "test1",
+                                "priority_level": None,
+                                "public_name": None,
+                                "sanger_sample_id": None,
+                                "species": "test species",
+                                "supplier_name": None,
+                                "taxon_id": None,
                             },
                         },
                     ],

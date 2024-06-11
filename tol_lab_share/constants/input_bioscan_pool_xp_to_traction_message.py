@@ -1,0 +1,20 @@
+MESSAGE_UUID = "messageUuid"
+CREATED_DATE_UTC = "messageCreateDateUtc"
+TUBE_BARCODE = "tubeBarcode"
+LIBRARY = "library"
+REQUEST = "request"
+SAMPLE = "sample"
+
+LIBRARY_VOLUME = "volume"
+LIBRARY_CONCENTRATION = "concentration"
+LIBRARY_BOX_BARCODE = "boxBarcode"
+LIBRARY_INSERT_SIZE = "insertSize"
+
+REQUEST_COST_CODE = "costCode"
+REQUEST_GENOME_SIZE = "genomeSize"
+REQUEST_LIBRARY_TYPE = "libraryType"
+REQUEST_STUDY_UUID = "studyUuid"
+
+SAMPLE_SAMPLE_NAME = "sampleName"
+SAMPLE_SAMPLE_UUID = "sampleUuid"
+SAMPLE_SPECIES_NAME = "speciesName"

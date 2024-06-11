@@ -95,9 +95,9 @@ class ErrorCode:
         """
         message = self.description
         if instance is not None:
-            message += ', instance: "' + str(type(instance).__name__) + '"'
+            message += f', instance: "{type(instance).__name__}"'
         if text is not None:
-            message += ', text: "' + text + '"'
+            message += f', text: "{text}"'
         return str(message)
 
     def trigger(
@@ -186,7 +186,7 @@ ERROR_19_INPUT_IS_NOT_VALID_INTEGER_STRING = ErrorCode(
     19, "parsing", "input", "The input provided is not a valid integer."
 )
 ERROR_20_INPUT_IS_NOT_VALID_FLOAT_STRING = ErrorCode(20, "parsing", "input", "The input provided is not a valid float.")
-ERROR_21_INPUT_IS_NOT_VALID_DATE_UTC = ErrorCode(21, "parsing", "input", "The input provided is not a valid date.")
+ERROR_21_INPUT_IS_NOT_VALID_DATE = ErrorCode(21, "parsing", "input", "The input provided is not a valid date.")
 ERROR_22_CANNOT_ENCODE_FEEDBACK_MESSAGE = ErrorCode(
     22,
     "parsing",
@@ -211,3 +211,4 @@ ERROR_27_TRACTION_QC_REQUEST_FAILED = ErrorCode(27, "request", "dict", "Traction
 ERROR_28_PROBLEM_TALKING_TO_TRACTION = ErrorCode(
     28, "root", "traction", "There was a problem while sending qc message to traction"
 )
+ERROR_29_NOT_BOOLEAN = ErrorCode(29, "plate", "unknown", "Not a boolean")

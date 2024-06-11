@@ -4,7 +4,6 @@ import pytest
 from tol_lab_share.messages.properties.complex.scientific_name_from_taxon_id import ScientificNameFromTaxonId
 from tol_lab_share.messages.properties.simple.value import Value
 from tol_lab_share.error_codes import ExceptionErrorCode
-from tests.messages.properties.helpers import check_validates_string
 
 
 def reset_cache():
@@ -12,8 +11,23 @@ def reset_cache():
 
 
 class TestScientificNameFromTaxonId:
-    def test_validators_behave_correctly(self):
-        check_validates_string(ScientificNameFromTaxonId)
+    @pytest.mark.parametrize(
+        "test_value, should_be_valid",
+        [
+            (None, False),
+            (1234, False),
+            ([], False),
+            ("1234", True),
+        ],
+    )
+    def test_validates_strings(self, test_value, should_be_valid):
+        instance = ScientificNameFromTaxonId(Value(test_value))
+        assert instance.string_checker()() is should_be_valid
+        assert instance.validate() is should_be_valid
+        if should_be_valid:
+            assert len(instance.errors) == 0
+        else:
+            assert len(instance.errors) > 0
 
     def test_gets_taxon_id_from_ebi(self, config, taxonomy_record):
         reset_cache()

@@ -44,7 +44,7 @@ class CreateLabwareMessage(MessageProperty):
         Args:
             feedback_message (CreateLabwareFeedbackMessage): The CreateLabwareFeedbackMessage to add errors to.
         """
-        logger.debug("ValueCreateLabware::add_to_message_property")
+        logger.debug("CreateLabwareMessage::add_to_message_property")
         super().add_to_message_property(feedback_message)
 
         if len(self.errors) > 0:
