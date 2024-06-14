@@ -176,7 +176,7 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
     def __init__(self):
         super().__init__("tol")
 
-        self.EXCHANGE = "limber"
+        self.EXCHANGE = "sequencescape"
         self.DL_EXCHANGE = "dead-letters"
         self.HEADERS_EXCHANGE_TYPE = "headers"
 
@@ -184,7 +184,7 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
         self.MESSAGE_TTL = 300000  # 5 minutes
 
         self.CONSUMED_QUEUE_NAME = "tls.poolxp-export-to-traction"
-        self.LOGS_QUEUE_NAME = "logs.limber"
+        self.LOGS_QUEUE_NAME = "logs.sequencescape"
         self.DL_QUEUE_NAME = "dead.poolxp-export-to-traction"
 
         self.SUBJECT = "bioscan-pool-xp-tube-to-traction"
