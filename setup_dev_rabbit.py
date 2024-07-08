@@ -215,8 +215,54 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
         self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments={"subject": self.SUBJECT})
 
 
+class CreateAliquotRabbitSetupTool(RabbitSetupTool):
+    def __init__(self):
+        super().__init__("tol")
+
+        self.EXCHANGE = "traction"
+        self.DL_EXCHANGE = "dead-letters"
+        self.HEADERS_EXCHANGE_TYPE = "headers"
+
+        self.QUEUE_TYPE = "classic"
+        self.MESSAGE_TTL = 300000
+
+        self.CONSUMED_QUEUE_NAME = "tls.volume-tracking"
+        self.LOGS_QUEUE_NAME = "logs.traction"
+        self.DL_QUEUE_NAME = "dead.volume-tracking"
+
+        self.SUBJECT = "create-aliquot-in-mlwh"
+
+    def setup(self):
+        super().setup()
+
+        # Exchanges
+        self._declare_exchange(self.EXCHANGE, self.HEADERS_EXCHANGE_TYPE)
+        self._declare_exchange(self.DL_EXCHANGE, self.HEADERS_EXCHANGE_TYPE)
+
+        # Queues
+        self._declare_queue(
+            self.CONSUMED_QUEUE_NAME,
+            self.QUEUE_TYPE,
+            {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE},
+        )
+        self._declare_queue(
+            self.LOGS_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL}
+        )
+        self._declare_queue(
+            self.DL_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL}
+        )
+
+        # Bindings
+        self._declare_binding(self.EXCHANGE, self.CONSUMED_QUEUE_NAME, arguments={"subject": self.SUBJECT})
+        self._declare_binding(self.EXCHANGE, self.LOGS_QUEUE_NAME)
+        self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments={"subject": self.SUBJECT})
+
+
 create_update_setup_tool = CreateUpdateMessagesRabbitSetupTool()
 create_update_setup_tool.setup()
 
 bioscan_pool_xp_setup_tool = BioscanPoolXpRabbitSetupTool()
 bioscan_pool_xp_setup_tool.setup()
+
+volume_tracking_setup_tool = CreateAliquotRabbitSetupTool()
+volume_tracking_setup_tool.setup()

@@ -16,7 +16,7 @@ to run this one as it requires Rabbitmq to have started completely:
 1. Load Redpanda schemas:
 
     ```bash
-    ./schemas/push.sh http://localhost:8081 redpanda-test
+    ./schemas/push.sh http://localhost:8081
     ```
 
 1. Build docker image
@@ -30,12 +30,18 @@ to run this one as it requires Rabbitmq to have started completely:
     ```text
     SETTINGS_MODULE=tol_lab_share.config.defaults
     LOCALHOST=host.docker.internal
+    REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+    REDPANDA_URL=http://host.docker.internal:8081
+    RABBITMQ_HOST=host.docker.internal
+    RABBITMQ_PORT=5672
+    RABBITMQ_USERNAME=admin
+    RABBITMQ_PASSWORD=development
     ```
 
 1. Start interactive bash in docker container
 
     ```bash
-    docker run -ti -v $(pwd):/code --env-file=.env --entrypoint bash tol-lab-share:develop
+   docker run -ti -v $(pwd):/code -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro --env-file=.env --entrypoint bash tol-lab-share:develop
     ```
 
 1. Start the consumer service (inside the previous bash)

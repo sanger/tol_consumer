@@ -8,6 +8,7 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
 from bioscan_pool_xp_messages import build_bioscan_pool_xp_msg
 from create_labware_messages import build_create_labware_96_msg, build_create_tube_msg, build_update_labware_msg
+from create_aliquot_in_mlwh_messages import build_create_aliquot_message
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
@@ -26,7 +27,8 @@ def encoder_config_for(encoder_type_selection):
         return {"encoder_class": AvroEncoderBinaryMessage, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
 
 
-def send_message(msg, subject, encoder, registry, publisher):
+def send_message(msg, subject, encoder, registry, publisher, exchange=RABBITMQ_EXCHANGE,
+                 routing_key=RABBITMQ_ROUTING_KEY):
     print(f"Want to send { subject } message { msg }\n")
 
     encoder_class = encoder_config_for(encoder)["encoder_class"]
@@ -39,8 +41,8 @@ def send_message(msg, subject, encoder, registry, publisher):
     print(f"Publishing message { encoded_message }\n")
 
     publisher.publish_message(
-        RABBITMQ_EXCHANGE,
-        RABBITMQ_ROUTING_KEY,
+        exchange,
+        routing_key,
         encoded_message.body,
         subject,
         encoded_message.version,
@@ -58,7 +60,7 @@ if __name__ == "__main__":
         "--message_types",
         required=True,
         help="The type of messages being sent.",
-        choices=["create-update-labware", "bioscan-pool-xp-to-traction"],
+        choices=["create-update-labware", "bioscan-pool-xp-to-traction", "create-aliquot-in-mlwh"],
     )
 
     args = parser.parse_args()
@@ -66,7 +68,7 @@ if __name__ == "__main__":
     registry = SchemaRegistry(REDPANDA_URL, verify=False)
 
     rabbitmq_details = RabbitServerDetails(
-        uses_ssl=True,
+        uses_ssl=False,
         host=RABBITMQ_HOST,
         port=RABBITMQ_PORT,
         username=RABBITMQ_USERNAME,
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     publisher = BasicPublisher(rabbitmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
     encoder = args.encoder
 
-    for pos in range(0, 5):
+    for pos in range(0, 1):
         if args.message_types == "create-update-labware":
             sample_msg = build_create_labware_96_msg(args.unique_id, pos)
             update_msg = build_update_labware_msg(sample_msg)
@@ -87,3 +89,15 @@ if __name__ == "__main__":
         elif args.message_types == "bioscan-pool-xp-to-traction":
             pool_xp_msg = build_bioscan_pool_xp_msg(args.unique_id, pos)
             send_message(pool_xp_msg, "bioscan-pool-xp-tube-to-traction", encoder, registry, publisher)
+        elif args.message_types == "create-aliquot-in-mlwh":
+            create_aliquot_message = build_create_aliquot_message()
+            send_message(
+                create_aliquot_message,
+                "create-aliquot-in-mlwh",
+                encoder,
+                registry,
+                publisher,
+                exchange="traction",
+                routing_key=""
+            )
+

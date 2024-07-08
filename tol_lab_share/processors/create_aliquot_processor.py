@@ -38,7 +38,13 @@ class CreateAliquotProcessor(BaseProcessor):
         return CreateAliquotProcessor(schema_registry, basic_publisher, config)
 
     def process(self, message: RabbitMessage) -> bool:
-        """Receives a message from rabbitmq."""
+        """
+        1. Receives a message from rabbitmq.
+        2. Validates the message with RedPanda schema.
+        3. Push messages to the warehouse RMQ.
+        """
         logger.debug("CreateAliquotProcessor::process")
+
+        logger.info(f"Message received: {message}")
 
         return True

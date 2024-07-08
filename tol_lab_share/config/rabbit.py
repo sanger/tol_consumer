@@ -4,12 +4,14 @@ from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
 
 from tol_lab_share.constants import (
     RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION,
+    RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH,
     RABBITMQ_SUBJECT_CREATE_LABWARE,
     RABBITMQ_SUBJECT_UPDATE_LABWARE,
 )
 from tol_lab_share.processors.bioscan_pool_xp_to_traction_processor import BioscanPoolXpToTractionProcessor
 from tol_lab_share.processors.create_labware_processor import CreateLabwareProcessor
 from tol_lab_share.processors.update_labware_processor import UpdateLabwareProcessor
+from tol_lab_share.processors.create_aliquot_processor import CreateAliquotProcessor
 
 RABBIT_SERVER_DETAILS = RabbitServerDetails(
     uses_ssl=False,
@@ -38,6 +40,14 @@ RABBITMQ_SERVERS = [
         },
         publisher_details=RABBIT_SERVER_DETAILS,
     ),
+    RabbitConfig(
+        consumer_details=RABBIT_SERVER_DETAILS,
+        consumed_queue="tls.volume-tracking",
+        processors={
+            RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor
+        },
+        publisher_details=RABBIT_SERVER_DETAILS
+    )
 ]
 
 RABBITMQ_PUBLISH_RETRY_DELAY = 5
