@@ -1,0 +1,44 @@
+import logging
+from typing import Any
+
+from lab_share_lib.processing.base_processor import BaseProcessor
+from lab_share_lib.processing.rabbit_message import RabbitMessage
+from lab_share_lib.rabbit.basic_publisher import BasicPublisher
+from lab_share_lib.rabbit.schema_registry import SchemaRegistry
+
+# from tol_lab_share import error_codes
+
+# from tol_lab_share.messages.rabbit.consumed import CreateAliquotMessage
+# from tol_lab_share.messages.rabbit.published import CreateAliquotFeedbackMessage
+
+logger = logging.getLogger(__name__)
+
+
+class CreateAliquotProcessor(BaseProcessor):
+    """Class to handle consuming create-aliquot messages from TOL"""
+
+    def __init__(self, schema_registry: SchemaRegistry, basic_publisher: BasicPublisher, config: Any):
+        """Resets data for the processor
+        Parameters:
+        schema_registry (SchemaRegistry) the redpanda schema registry we will us to validate messages
+        basic_publisher (BasicPublisher) instance that will provide the communication with the queues system
+        config (Any) mainconfiguration from the app
+        """
+        logger.debug("CreateAliquotProcessor::__init__")
+
+        self._basic_publisher = basic_publisher
+        self._schema_registry = schema_registry
+        self._config = config
+
+    @staticmethod
+    def instantiate(
+        schema_registry: SchemaRegistry, basic_publisher: BasicPublisher, config: Any
+    ) -> "CreateAliquotProcessor":
+        """Instantiate a CreateAliquotProcessor"""
+        return CreateAliquotProcessor(schema_registry, basic_publisher, config)
+
+    def process(self, message: RabbitMessage) -> bool:
+        """Receives a message from rabbitmq."""
+        logger.debug("CreateAliquotProcessor::process")
+
+        return True
