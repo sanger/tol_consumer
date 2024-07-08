@@ -89,3 +89,17 @@ export LDFLAGS="-L$(brew --prefix)/lib"
 ```
 
 ![TOL Labware Production Flow - Architecture](https://github.com/sanger/tol-lab-share/assets/519327/5356846a-6d9b-4b8d-8ffb-af26d0776222)
+
+## Formatting, Type Checking and Linting
+
+Black is used as a formatter, to format code before committing:
+
+    black .
+
+Mypy is used as a type checker, to execute:
+
+    mypy .
+
+Flake8 is used for linting, to execute:
+
+    flake8
