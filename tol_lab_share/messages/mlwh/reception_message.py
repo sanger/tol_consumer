@@ -4,10 +4,8 @@ from typing import Any, Callable
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
-from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 
 from tol_lab_share import error_codes
-from tol_lab_share.constants import RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
 from tol_lab_share.messages.properties import MessageProperty
@@ -38,7 +36,7 @@ class AliquotMessage:
 
 
 class WarehouseReceptionMessage(MessageProperty):
-    """ Class that handles publishing of a volume tracking message to the warehouse """
+    """Class that handles publishing of a volume tracking message to the warehouse"""
 
     def __init__(self):
         """Reset initial data"""
@@ -62,6 +60,7 @@ class WarehouseReceptionMessage(MessageProperty):
     def validators(self) -> list[Callable]:
         return []
 
+    @property
     def errors(self) -> list[ErrorCode]:
         """A list of errors defined for this message."""
         return self._errors
@@ -77,10 +76,7 @@ class WarehouseReceptionMessage(MessageProperty):
     def to_json(self) -> dict[str, Any]:
         """Returns a dict with the JSON-like representation of the message."""
 
-        return {
-            "lims": self.lims,
-            "aliquot": self.aliquot
-        }
+        return {"lims": self.lims, "aliquot": self.aliquot}
 
     @staticmethod
     def encoder_config_for(encoder_type_selection: str) -> dict[str, Any]:
@@ -127,4 +123,3 @@ class WarehouseReceptionMessage(MessageProperty):
     def check_errors_correct(self) -> bool:
         """Returns the aggregation result of the validation of all errors content"""
         return all([error.validate() for error in self.errors])
-
