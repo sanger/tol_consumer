@@ -43,11 +43,9 @@ RABBITMQ_SERVERS = [
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.volume-tracking",
-        processors={
-            RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor
-        },
-        publisher_details=RABBIT_SERVER_DETAILS
-    )
+        processors={RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor},
+        publisher_details=RABBIT_SERVER_DETAILS,
+    ),
 ]
 
 RABBITMQ_PUBLISH_RETRY_DELAY = 5

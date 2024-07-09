@@ -16,7 +16,8 @@ class BaseValidator(ABC):
         self._errors: list[ErrorCode] = []
 
     @abstractmethod
-    def validate(self) -> bool: ...
+    def validate(self) -> bool:
+        ...
 
     @property
     def errors(self) -> list[ErrorCode]:

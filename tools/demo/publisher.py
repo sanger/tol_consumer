@@ -27,8 +27,9 @@ def encoder_config_for(encoder_type_selection):
         return {"encoder_class": AvroEncoderBinaryMessage, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
 
 
-def send_message(msg, subject, encoder, registry, publisher, exchange=RABBITMQ_EXCHANGE,
-                 routing_key=RABBITMQ_ROUTING_KEY):
+def send_message(
+    msg, subject, encoder, registry, publisher, exchange=RABBITMQ_EXCHANGE, routing_key=RABBITMQ_ROUTING_KEY
+):
     print(f"Want to send { subject } message { msg }\n")
 
     encoder_class = encoder_config_for(encoder)["encoder_class"]
@@ -98,6 +99,5 @@ if __name__ == "__main__":
                 registry,
                 publisher,
                 exchange="traction",
-                routing_key=""
+                routing_key="",
             )
-

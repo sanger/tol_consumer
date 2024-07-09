@@ -1,6 +1,7 @@
 from datetime import datetime, UTC
 from uuid import uuid4
 
+
 def build_create_aliquot_message():
     return {
         "messageUuid": str(uuid4()),
@@ -15,5 +16,5 @@ def build_create_aliquot_message():
         "usedByBarcode": "SQPP-111112",
         "volume": 1.0,
         "concentration": 2.0,
-        "recordedAt": datetime.now(UTC).timestamp() * 1000
+        "recordedAt": datetime.now(UTC).timestamp() * 1000,
     }
