@@ -22,6 +22,15 @@ RABBIT_SERVER_DETAILS = RabbitServerDetails(
     vhost="tol",
 )
 
+WAREHOUSE_RABBIT_SERVER_DETAILS = RabbitServerDetails(
+    uses_ssl=False,
+    host=os.environ.get("WAREHOUSE_RMQ_HOST", "127.0.0.1"),
+    port=5672,
+    username=os.environ.get("WAREHOUSE_RMQ_USER", "admin"),
+    password=os.environ.get("WAREHOUSE_RMQ_PASSWORD", "development"),
+    vhost="test",
+)
+
 RABBITMQ_SERVERS = [
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
@@ -44,7 +53,7 @@ RABBITMQ_SERVERS = [
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.volume-tracking",
         processors={RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor},
-        publisher_details=RABBIT_SERVER_DETAILS,
+        publisher_details=WAREHOUSE_RABBIT_SERVER_DETAILS,
     ),
 ]
 

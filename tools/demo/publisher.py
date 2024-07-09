@@ -8,7 +8,6 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
 from bioscan_pool_xp_messages import build_bioscan_pool_xp_msg
 from create_labware_messages import build_create_labware_96_msg, build_create_tube_msg, build_update_labware_msg
-from create_aliquot_in_mlwh_messages import build_create_aliquot_message
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
@@ -90,14 +89,3 @@ if __name__ == "__main__":
         elif args.message_types == "bioscan-pool-xp-to-traction":
             pool_xp_msg = build_bioscan_pool_xp_msg(args.unique_id, pos)
             send_message(pool_xp_msg, "bioscan-pool-xp-tube-to-traction", encoder, registry, publisher)
-        elif args.message_types == "create-aliquot-in-mlwh":
-            create_aliquot_message = build_create_aliquot_message()
-            send_message(
-                create_aliquot_message,
-                "create-aliquot-in-mlwh",
-                encoder,
-                registry,
-                publisher,
-                exchange="traction",
-                routing_key="",
-            )
