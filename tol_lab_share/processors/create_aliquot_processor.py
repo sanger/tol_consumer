@@ -48,15 +48,9 @@ class CreateAliquotProcessor(BaseProcessor):
         input_message_from_traction = TractionToWarehouseMessage(emq_message.message)
         output_warehouse_message = CreateAliquotInWarehouseMessage()
 
-        TractionToWarehouseMapper.map(
-            input_message_from_traction,
-            output_warehouse_message
-        )
+        TractionToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
         logger.info("Attempting to send the message to the warehouse.")
-        output_warehouse_message.publish(
-            self._basic_publisher,
-            "psd.tol-lab-share"
-        )
+        output_warehouse_message.publish(self._basic_publisher, "psd.tol-lab-share")
 
         logger.info("Message processing completed.")
         return True
