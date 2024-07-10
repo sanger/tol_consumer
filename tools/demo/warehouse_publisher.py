@@ -66,6 +66,8 @@ if __name__ == "__main__":
 
     message = json.dumps(build_create_aliquot_message())
 
+    logging.info(f"Message: {message}")
+
     publisher.publish_message(
         exchange=RABBITMQ_EXCHANGE,
         routing_key="staging.saved.aliquot.1000",
