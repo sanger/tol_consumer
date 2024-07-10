@@ -5,6 +5,7 @@ __all__ = [
     "BioscanPoolXpLibrary",
     "BioscanPoolXpRequest",
     "BioscanPoolXpSample",
+    "TractionToWarehouseMessage",
 ]
 
 from .message_field import MessageField
@@ -15,3 +16,4 @@ from .bioscan_pool_xp_to_traction import (
     BioscanPoolXpRequest,
     BioscanPoolXpSample,
 )
+from .traction_to_warehouse import TractionToWarehouseMessage

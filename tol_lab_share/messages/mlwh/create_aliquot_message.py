@@ -6,6 +6,7 @@ from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 
 from tol_lab_share import error_codes
+from tol_lab_share.constants import RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
 from tol_lab_share.messages.properties import MessageProperty
@@ -14,7 +15,7 @@ from tol_lab_share.messages.properties.simple import Value
 logger = logging.getLogger(__name__)
 
 
-class AliquotMessage:
+class Aliquot:
     """Class that serialises into an aliquot"""
 
     def __init__(self):
@@ -35,14 +36,14 @@ class AliquotMessage:
         self.created_at: str | None = None
 
 
-class WarehouseReceptionMessage(MessageProperty):
+class CreateAliquotInWarehouseMessage(MessageProperty):
     """Class that handles publishing of a volume tracking message to the warehouse"""
 
     def __init__(self):
         """Reset initial data"""
         super().__init__(Value(self))
         self.lims: str | None = None
-        self.aliquot: AliquotMessage | None = None
+        self.aliquot: Aliquot | None = None
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
@@ -57,13 +58,20 @@ class WarehouseReceptionMessage(MessageProperty):
         return "WarehouseReceptionMessage"
 
     @property
-    def validators(self) -> list[Callable]:
+    def validators(self) -> "list[Callable]":
         return []
 
     @property
-    def errors(self) -> list[ErrorCode]:
+    def errors(self) -> "list[ErrorCode]":
         """A list of errors defined for this message."""
         return self._errors
+
+    @staticmethod
+    def create_aliquot_message():
+        """Creates an empty warehouse message that should be populated by the mapper"""
+        message = CreateAliquotInWarehouseMessage()
+        message.aliquot = Aliquot()
+        return message
 
     def check_no_errors(self) -> bool:
         """Check that the message has no errors.
@@ -73,13 +81,13 @@ class WarehouseReceptionMessage(MessageProperty):
         """
         return not self.errors
 
-    def to_json(self) -> dict[str, Any]:
+    def to_json(self) -> "dict[str, Any]":
         """Returns a dict with the JSON-like representation of the message."""
 
         return {"lims": self.lims, "aliquot": self.aliquot}
 
     @staticmethod
-    def encoder_config_for(encoder_type_selection: str) -> dict[str, Any]:
+    def encoder_config_for(encoder_type_selection: str) -> "dict[str, Any]":
         """Returns a config object with the encoder class and encoder type depending of the encoder selected."""
         if encoder_type_selection == "json":
             return {"encoder_class": AvroEncoderJson, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON}
@@ -93,14 +101,14 @@ class WarehouseReceptionMessage(MessageProperty):
         schema_registry (SchemaRegistry) instance of schema registry that we will use to retrieve data from redpanda
         exchange (str) name of the exchange where we will publish the message in Rabbitmq
         """
-
         message = self.to_json()
-
         logger.info(f"Sending json: { message }")
-
+        if self.aliquot is None:
+            return False
+        routing_key = self._prepare_routing_key(self.aliquot.lims_uuid)
         publisher.publish_message(
             exchange,
-            None,
+            routing_key,
             message,
             None,
             None,
@@ -125,3 +133,10 @@ class WarehouseReceptionMessage(MessageProperty):
     def check_errors_correct(self) -> bool:
         """Returns the aggregation result of the validation of all errors content"""
         return all([error.validate() for error in self.errors])
+
+    @staticmethod
+    def _prepare_routing_key(lims_uuid: str | None) -> str:
+        """Prepares the routing key for create aliquot message to be sent to warehouse RabbitMQ"""
+        environment = get_config("").ENVIRONMENT_NAME
+
+        return RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT.format(environment, lims_uuid)

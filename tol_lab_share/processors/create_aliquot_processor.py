@@ -6,10 +6,6 @@ from lab_share_lib.processing.rabbit_message import RabbitMessage
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 
-# from tol_lab_share import error_codes
-
-# from tol_lab_share.messages.rabbit.consumed import CreateAliquotMessage
-# from tol_lab_share.messages.rabbit.published import CreateAliquotFeedbackMessage
 
 logger = logging.getLogger(__name__)
 
