@@ -19,7 +19,10 @@ from tol_lab_share.messages.consumed.record import Record
 
 
 class Root(Record):
-    """The root record of TractionVolumeTrackingMessage message"""
+    """
+    The root record of TractionVolumeTrackingMessage message.
+    This forms the message coming from traction to the message queue.
+    """
 
     def __init__(self, payload: dict):
         """Initialises the root record
