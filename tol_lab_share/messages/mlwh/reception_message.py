@@ -86,7 +86,7 @@ class WarehouseReceptionMessage(MessageProperty):
         else:
             return {"encoder_class": AvroEncoderBinary, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
 
-    def publish(self, publisher: BasicPublisher, exchange: str) -> None:
+    def publish(self, publisher: BasicPublisher, exchange: str) -> bool:
         """Publish a new message in the queue with the current contents of the feedback message
         Parameters:
         publisher (BasicPublisher) instance of basic publisher that we will use to connect to rabbitmq
@@ -106,6 +106,8 @@ class WarehouseReceptionMessage(MessageProperty):
             None,
             None,
         )
+
+        return True if self.check_no_errors() else False
 
     def check_defined_keys(self) -> bool:
         """Checks that the message has defined all required keys, or trigger an error if not"""

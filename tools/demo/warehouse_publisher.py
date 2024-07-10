@@ -1,6 +1,7 @@
 import json
 import os
 import argparse
+import logging
 from datetime import datetime, UTC
 from uuid import uuid4
 
@@ -14,6 +15,8 @@ RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD", "psd")
 RABBITMQ_VHOST = os.getenv("RABBITMQ_VHOST", "test")
 RABBITMQ_EXCHANGE = os.getenv("RABBITMQ_EXCHANGE", "psd.tol-lab-share")
 RABBITMQ_ROUTING_KEY = os.getenv("RABBITMQ_ROUTING_KEY", "development.saved.aliquots.*")
+
+logger = logging.getLogger(__name__)
 
 
 def build_create_aliquot_message():
@@ -58,11 +61,12 @@ if __name__ == "__main__":
 
     publisher = BasicPublisher(rmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
 
-    message = build_create_aliquot_message()
+    message = json.dumps(build_create_aliquot_message())
+
     publisher.publish_message(
         exchange=RABBITMQ_EXCHANGE,
-        routing_key=args.routing_key,
-        body=json.dumps(message),
+        routing_key="staging.saved.aliquot.1000",
+        body=message,
         subject=None,
         schema_version=None,
         encoder_type=None,
