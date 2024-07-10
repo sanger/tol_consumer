@@ -19,17 +19,17 @@ class TractionToWarehouseMapper:
         aliquot_message = destination.create_aliquot_message()
 
         # Populate aliquot
-        aliquot_message.aliquot.id_lims = source.lims_id
-        aliquot_message.aliquot.lims_uuid = source.lims_uuid
-        aliquot_message.aliquot.aliquot_type = source.aliquot_type
-        aliquot_message.aliquot.source_type = source.source_type
-        aliquot_message.aliquot.source_barcode = source.source_barcode
-        aliquot_message.aliquot.sample_name = source.sample_name
-        aliquot_message.aliquot.used_by_type = source.used_by_type
-        aliquot_message.aliquot.used_by_barcode = source.used_by_barcode
-        aliquot_message.aliquot.volume = source.volume
-        aliquot_message.aliquot.concentration = source.concentration
-        aliquot_message.aliquot.insert_size = source.insert_size
+        aliquot_message.aliquot.id_lims = source.lims_id.value
+        aliquot_message.aliquot.lims_uuid = source.lims_uuid.value
+        aliquot_message.aliquot.aliquot_type = source.aliquot_type.value
+        aliquot_message.aliquot.source_type = source.source_type.value
+        aliquot_message.aliquot.source_barcode = source.source_barcode.value
+        aliquot_message.aliquot.sample_name = source.sample_name.value
+        aliquot_message.aliquot.used_by_type = source.used_by_type.value
+        aliquot_message.aliquot.used_by_barcode = source.used_by_barcode.value
+        aliquot_message.aliquot.volume = source.volume.value
+        aliquot_message.aliquot.concentration = source.concentration.value
+        aliquot_message.aliquot.insert_size = source.insert_size.value
 
         # Populate lims
         aliquot_message.lims = TRACTION_LIMS

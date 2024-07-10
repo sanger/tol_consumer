@@ -39,4 +39,14 @@ class TestTractionToWarehouseMapper:
         assert aliquot_message.lims == TRACTION_LIMS
 
         # Assert the aliquot
-        assert aliquot_message.aliquot.id_lims.value == traction_to_warehouse_message.lims_id.value
+        assert aliquot_message.aliquot.id_lims == traction_to_warehouse_message.lims_id.value
+        assert aliquot_message.aliquot.lims_uuid == traction_to_warehouse_message.lims_uuid.value
+        assert aliquot_message.aliquot.aliquot_type == traction_to_warehouse_message.aliquot_type.value
+        assert aliquot_message.aliquot.source_type == traction_to_warehouse_message.source_type.value
+        assert aliquot_message.aliquot.source_barcode == traction_to_warehouse_message.source_barcode.value
+        assert aliquot_message.aliquot.sample_name == traction_to_warehouse_message.sample_name.value
+        assert aliquot_message.aliquot.used_by_type == traction_to_warehouse_message.used_by_type.value
+        assert aliquot_message.aliquot.used_by_barcode == traction_to_warehouse_message.used_by_barcode.value
+        assert aliquot_message.aliquot.volume == traction_to_warehouse_message.volume.value
+        assert aliquot_message.aliquot.concentration == traction_to_warehouse_message.concentration.value
+        assert aliquot_message.aliquot.insert_size == traction_to_warehouse_message.insert_size.value
