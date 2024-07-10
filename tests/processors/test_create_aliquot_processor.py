@@ -45,3 +45,6 @@ class TestCreateAliquotProcessor:
             CreateAliquotProcessor.instantiate(schema_registry, basic_publisher, config)
 
         init_mock.assert_called_with(schema_registry, basic_publisher, config)
+
+    def test_process_returns_true_for_valid_message(self, subject, valid_traction_to_warehouse_message):
+        assert subject.process(valid_traction_to_warehouse_message) is True

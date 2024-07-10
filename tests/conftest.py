@@ -8,6 +8,7 @@ from tests.data.example_bioscan_pool_xp_to_traction_messages import (
     VALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD,
     INVALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD,
 )
+from tests.data.example_create_aliquot_in_mlwh_messages import VALID_TRACTION_TO_WAREHOUSE_MESSAGE
 from tests.data.example_create_labware_messages import (
     TEST_VALID_CREATE_LABWARE_MSG_OBJECT,
     TEST_INVALID_CREATE_LABWARE_MSG_OBJECT,
@@ -69,6 +70,14 @@ def mock_decoder(message_object):
 @pytest.fixture
 def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
     decoder = mock_decoder(VALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD)
+    generic_rabbit_message.decode([decoder])
+
+    return generic_rabbit_message
+
+
+@pytest.fixture
+def valid_traction_to_warehouse_message(generic_rabbit_message):
+    decoder = mock_decoder(VALID_TRACTION_TO_WAREHOUSE_MESSAGE)
     generic_rabbit_message.decode([decoder])
 
     return generic_rabbit_message
