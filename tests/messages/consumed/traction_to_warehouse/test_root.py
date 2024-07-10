@@ -3,9 +3,22 @@ from unittest.mock import patch
 
 import pytest
 
-from tol_lab_share.constants.input_traction_volume_tracking_message import MESSAGE_UUID, CREATED_DATE_UTC, LIMS_ID, \
-    LIMS_UUID, ALIQUOT_TYPE, SOURCE_TYPE, SOURCE_BARCODE, SAMPLE_NAME, USED_BY_TYPE, USED_BY_BARCODE, VOLUME, \
-    CONCENTRATION, INSERT_SIZE, RECORDED_AT
+from tol_lab_share.constants.input_traction_volume_tracking_message import (
+    MESSAGE_UUID,
+    CREATED_DATE_UTC,
+    LIMS_ID,
+    LIMS_UUID,
+    ALIQUOT_TYPE,
+    SOURCE_TYPE,
+    SOURCE_BARCODE,
+    SAMPLE_NAME,
+    USED_BY_TYPE,
+    USED_BY_BARCODE,
+    VOLUME,
+    CONCENTRATION,
+    INSERT_SIZE,
+    RECORDED_AT,
+)
 from tol_lab_share.messages.consumed.traction_to_warehouse.root import Root
 from tests.data.example_create_aliquot_in_mlwh_messages import (
     VALID_TRACTION_TO_WAREHOUSE_MESSAGE as VALID_PAYLOAD,
@@ -163,4 +176,3 @@ class TestRoot:
 
     def test_recorded_at_value_correct(self, subject):
         assert subject.recorded_at.value == VALID_PAYLOAD[RECORDED_AT]
-

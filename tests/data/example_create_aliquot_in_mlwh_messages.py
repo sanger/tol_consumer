@@ -1,6 +1,7 @@
 from datetime import datetime, UTC
+from typing import Any
 
-VALID_TRACTION_TO_WAREHOUSE_MESSAGE = {
+VALID_TRACTION_TO_WAREHOUSE_MESSAGE: dict[str, Any] = {
     "limsId": "Traction",
     "messageCreateDateUtc": datetime.now(UTC),
     "messageUuid": "4b6b9444-8935-4376-929d-06dae7b775f3".encode(),
@@ -14,5 +15,5 @@ VALID_TRACTION_TO_WAREHOUSE_MESSAGE = {
     "sourceBarcode": "TRAC-2-1572",
     "sampleName": "DTOL8334991",
     "usedByBarcode": "SQPU-86258-I",
-    "usedByType": "none"
+    "usedByType": "none",
 }
