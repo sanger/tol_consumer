@@ -48,3 +48,9 @@ class TestCreateAliquotProcessor:
 
     def test_process_returns_true_for_valid_message(self, subject, valid_traction_to_warehouse_message):
         assert subject.process(valid_traction_to_warehouse_message) is True
+
+    def test_process_called_on_warehouse_messaage(
+        self, subject, valid_traction_to_warehouse_message, create_aliquot_in_warehouse_message
+    ):
+        subject.process(valid_traction_to_warehouse_message)
+        create_aliquot_in_warehouse_message.publish.assert_called_once()
