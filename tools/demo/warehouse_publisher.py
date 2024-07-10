@@ -44,6 +44,9 @@ def build_create_aliquot_message():
     }
 
 
+# This file is a demo script to test publishing messages to the warehouse rabbitmq.
+# Note that the routing key needs to be parameterised with the message id for the wildcard (#) in
+# staging.saved.aliquot.#. The environment (e.g. staging) needs to be read from a configuration file.
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="TOL LabShare message publisher demo script.")
     parser.add_argument("--routing_key", default="development.saved.aliquots.1", help="Routing key for the binding")
