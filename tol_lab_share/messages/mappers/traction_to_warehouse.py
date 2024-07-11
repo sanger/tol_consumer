@@ -1,3 +1,5 @@
+import datetime
+
 from tol_lab_share.constants.input_traction_volume_tracking_message import TRACTION_LIMS
 from tol_lab_share.messages.mlwh.create_aliquot_message import CreateAliquotInWarehouseMessage
 from tol_lab_share.messages.consumed import TractionToWarehouseMessage
@@ -5,6 +7,11 @@ from tol_lab_share.messages.consumed import TractionToWarehouseMessage
 
 class TractionToWarehouseMapper:
     """A mapper for transferring values from TractionVolumeTrackingMessage to CreateAliquotInWarehouseMessage"""
+
+    @staticmethod
+    def _map_timestamps(date_value: datetime.datetime) -> "str":
+        """Formats datetime timestamps"""
+        return date_value.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     @staticmethod
     def map(
@@ -30,6 +37,11 @@ class TractionToWarehouseMapper:
         aliquot_message.aliquot.volume = source.volume.value
         aliquot_message.aliquot.concentration = source.concentration.value
         aliquot_message.aliquot.insert_size = source.insert_size.value
+
+        # Populating the timestamps
+        aliquot_message.aliquot.created_at = TractionToWarehouseMapper._map_timestamps(source.create_date_utc.value)
+        aliquot_message.aliquot.recorded_at = TractionToWarehouseMapper._map_timestamps(source.recorded_at.value)
+        aliquot_message.aliquot.last_updated = TractionToWarehouseMapper._map_timestamps(source.recorded_at.value)
 
         # Populate lims
         aliquot_message.lims = TRACTION_LIMS

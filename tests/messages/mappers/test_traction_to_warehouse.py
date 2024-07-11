@@ -50,3 +50,12 @@ class TestTractionToWarehouseMapper:
         assert aliquot_message.aliquot.volume == traction_to_warehouse_message.volume.value
         assert aliquot_message.aliquot.concentration == traction_to_warehouse_message.concentration.value
         assert aliquot_message.aliquot.insert_size == traction_to_warehouse_message.insert_size.value
+        assert aliquot_message.aliquot.created_at == traction_to_warehouse_message.create_date_utc.value.strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        assert aliquot_message.aliquot.created_at == traction_to_warehouse_message.recorded_at.value.strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        assert aliquot_message.aliquot.last_updated == traction_to_warehouse_message.recorded_at.value.strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
