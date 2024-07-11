@@ -92,7 +92,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         exchange (str) name of the exchange where we will publish the message in Rabbitmq
         """
         message = self.to_json()
-        logger.info(f"Sending json: { message }")
+        logger.info(f"Sending json to the warehouse queue: { message }")
         publisher.publish_message(
             exchange,
             self._prepare_routing_key(lims_uuid),
