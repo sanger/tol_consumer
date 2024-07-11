@@ -92,3 +92,17 @@ class TestCreateAliquotProcessor:
         assert create_aliquot_message.aliquot.created_at == message["createdAt"].strftime("%Y-%m-%dT%H:%M:%SZ")
         assert create_aliquot_message.aliquot.recorded_at == message["recordedAt"].strftime("%Y-%m-%dT%H:%M:%SZ")
         assert create_aliquot_message.aliquot.last_updated == message["recordedAt"].strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    def test_process_called_publish_to_warehouse(
+        self, subject, valid_traction_to_warehouse_message, create_aliquot_in_warehouse_message
+    ):
+        subject.process(valid_traction_to_warehouse_message)
+
+        create_aliquot_in_warehouse_message.publish.assert_called_once()
+
+    def test_process_returns_false_when_mlwh_has_errors(
+        self, subject, valid_traction_to_warehouse_message, create_aliquot_in_warehouse_message
+    ):
+        create_aliquot_in_warehouse_message.errors = ["Error 1", "Error 2"]
+
+        assert not subject.process(valid_traction_to_warehouse_message)

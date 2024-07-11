@@ -5,6 +5,8 @@ from lab_share_lib.processing.base_processor import BaseProcessor
 from lab_share_lib.processing.rabbit_message import RabbitMessage
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
+
+from tol_lab_share import error_codes
 from tol_lab_share.messages.consumed import TractionToWarehouseMessage
 from tol_lab_share.messages.mappers.traction_to_warehouse import TractionToWarehouseMapper
 
@@ -51,6 +53,12 @@ class CreateAliquotProcessor(BaseProcessor):
         TractionToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
         logger.info("Attempting to send the message to the warehouse.")
         output_warehouse_message.publish(self._basic_publisher, "psd.tol-lab-share")
+
+        if len(output_warehouse_message.errors) > 0:
+            error_codes.ERROR_30_PROBLEM_TALKING_WITH_WAREHOUSE.trigger(
+                text=f":{output_warehouse_message.errors}", instance=self
+            )
+            return False
 
         logger.info("Message processing completed.")
         return True

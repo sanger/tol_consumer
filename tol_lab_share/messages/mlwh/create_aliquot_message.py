@@ -94,7 +94,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         else:
             return {"encoder_class": AvroEncoderBinary, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
 
-    def publish(self, publisher: BasicPublisher, exchange: str) -> bool:
+    def publish(self, publisher: BasicPublisher, exchange: str) -> None:
         """Publish a new message in the queue with the current contents of the feedback message
         Parameters:
         publisher (BasicPublisher) instance of basic publisher that we will use to connect to rabbitmq
@@ -103,8 +103,6 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         """
         message = self.to_json()
         logger.info(f"Sending json: { message }")
-        if self.aliquot is None:
-            return False
         routing_key = self._prepare_routing_key(self.aliquot.lims_uuid)
         publisher.publish_message(
             exchange,
@@ -114,8 +112,6 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
             None,
             None,
         )
-
-        return True if self.check_no_errors() else False
 
     def check_defined_keys(self) -> bool:
         """Checks that the message has defined all required keys, or trigger an error if not"""
