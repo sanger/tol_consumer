@@ -10,9 +10,9 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost:8081")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
-RABBITMQ_PORT = os.getenv("RABBITMQ_PORT", "8080")
-RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME", "psd")
-RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD", "psd")
+RABBITMQ_PORT = os.getenv("RABBITMQ_PORT", "5672")
+RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME", "admin")
+RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD", "development")
 RABBITMQ_VHOST = os.getenv("RABBITMQ_VHOST", "tol")
 RABBITMQ_EXCHANGE = os.getenv("RABBITMQ_EXCHANGE", "traction")
 SCHEMA_SUBJECT = "create-aliquot-in-mlwh"
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     publisher.publish_message(
         exchange=RABBITMQ_EXCHANGE,
-        routing_key=None,
+        routing_key="",
         body=encoded_message.body,
         subject=SCHEMA_SUBJECT,
         schema_version=encoded_message.version,
