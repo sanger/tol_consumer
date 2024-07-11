@@ -215,3 +215,4 @@ ERROR_29_NOT_BOOLEAN = ErrorCode(29, "plate", "unknown", "Not a boolean")
 ERROR_30_PROBLEM_TALKING_WITH_WAREHOUSE = ErrorCode(
     16, "root", "mwlh", "There was a problem while sending to warehouse"
 )
+ERROR_31_EMPTY_ALIQUOT = ErrorCode(29, "parsing", "aliquot", "Empty aliquot present.")

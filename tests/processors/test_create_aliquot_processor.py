@@ -106,3 +106,17 @@ class TestCreateAliquotProcessor:
         create_aliquot_in_warehouse_message.errors = ["Error 1", "Error 2"]
 
         assert not subject.process(valid_traction_to_warehouse_message)
+
+    def test_process_logs_the_error_when_mlwh_has_errors(
+        self, subject, valid_traction_to_warehouse_message, create_aliquot_in_warehouse_message, caplog
+    ):
+        create_aliquot_in_warehouse_message.errors = ["Error 1", "Error 2"]
+
+        subject.process(valid_traction_to_warehouse_message)
+
+        error_records = [r for r in caplog.records if r.levelname == "ERROR"]
+        assert len(error_records) == 1
+
+        error_record = error_records[0]
+        assert "There was a problem while sending to warehouse" in error_record.message
+        assert "['Error 1', 'Error 2']" in error_record.message

@@ -52,7 +52,18 @@ class CreateAliquotProcessor(BaseProcessor):
 
         TractionToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
         logger.info("Attempting to send the message to the warehouse.")
-        output_warehouse_message.publish(self._basic_publisher, "psd.tol-lab-share")
+
+        if output_warehouse_message.aliquot is None:
+            error_codes.ERROR_31_EMPTY_ALIQUOT.trigger(text=f":{output_warehouse_message.errors}", instance=self)
+            return False
+
+        if output_warehouse_message.aliquot.lims_uuid is None:
+            error_codes.ERROR_31_EMPTY_ALIQUOT.trigger(text=f":{output_warehouse_message.errors}", instance=self)
+            return False
+
+        output_warehouse_message.publish(
+            self._basic_publisher, "psd.tol-lab-share", output_warehouse_message.aliquot.lims_uuid
+        )
 
         if len(output_warehouse_message.errors) > 0:
             error_codes.ERROR_30_PROBLEM_TALKING_WITH_WAREHOUSE.trigger(
