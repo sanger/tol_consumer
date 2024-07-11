@@ -1,8 +1,6 @@
 import logging
 from typing import Any, Callable
 
-from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
-from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinary
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 
 from tol_lab_share import error_codes

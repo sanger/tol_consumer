@@ -75,7 +75,7 @@ class ErrorCode:
             return "sample"
         return "root"
 
-    def json(self) -> dict[str, Any]:
+    def json(self) -> "dict[str, Any]":
         """Returns a JSON-like representation of the ErrorCode"""
         return {
             "typeId": self.type_id,
