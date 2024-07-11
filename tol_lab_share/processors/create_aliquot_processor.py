@@ -53,11 +53,7 @@ class CreateAliquotProcessor(BaseProcessor):
         TractionToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
         logger.info("Attempting to send the message to the warehouse.")
 
-        if output_warehouse_message.aliquot is None:
-            error_codes.ERROR_31_EMPTY_ALIQUOT.trigger(text=f":{output_warehouse_message.errors}", instance=self)
-            return False
-
-        if output_warehouse_message.aliquot.lims_uuid is None:
+        if output_warehouse_message.aliquot is None or output_warehouse_message.aliquot.lims_uuid is None:
             error_codes.ERROR_31_EMPTY_ALIQUOT.trigger(text=f":{output_warehouse_message.errors}", instance=self)
             return False
 
