@@ -41,7 +41,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         """Reset initial data"""
         super().__init__(Value(self))
         self.lims: str | None = None
-        self.aliquot: Aliquot | None = None
+        self.aliquot: Aliquot = Aliquot()
         self._sent = False
         self._validate_certificates = get_config().CERTIFICATES_VALIDATION_ENABLED
 
