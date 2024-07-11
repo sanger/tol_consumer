@@ -73,25 +73,28 @@ class TestCreateAliquotProcessor:
 
         message = valid_traction_to_warehouse_message.message
 
-        create_aliquot_in_warehouse_message.create_aliquot_message.assert_called_once()
-        create_aliquot_message = create_aliquot_in_warehouse_message.create_aliquot_message.return_value
+        assert create_aliquot_in_warehouse_message.lims == message["limsId"]
 
-        assert create_aliquot_message.lims == message["limsId"]
+        assert create_aliquot_in_warehouse_message.aliquot.lims_uuid == message["limsUuid"]
+        assert create_aliquot_in_warehouse_message.aliquot.id_lims == message["limsId"]
+        assert create_aliquot_in_warehouse_message.aliquot.aliquot_type == message["aliquotType"]
+        assert create_aliquot_in_warehouse_message.aliquot.source_type == message["sourceType"]
+        assert create_aliquot_in_warehouse_message.aliquot.source_barcode == message["sourceBarcode"]
+        assert create_aliquot_in_warehouse_message.aliquot.sample_name == message["sampleName"]
+        assert create_aliquot_in_warehouse_message.aliquot.used_by_type == message["usedByType"]
+        assert create_aliquot_in_warehouse_message.aliquot.used_by_barcode == message["usedByBarcode"]
+        assert create_aliquot_in_warehouse_message.aliquot.volume == message["volume"]
+        assert create_aliquot_in_warehouse_message.aliquot.concentration == message["concentration"]
 
-        assert create_aliquot_message.aliquot.lims_uuid == message["limsUuid"]
-        assert create_aliquot_message.aliquot.id_lims == message["limsId"]
-        assert create_aliquot_message.aliquot.aliquot_type == message["aliquotType"]
-        assert create_aliquot_message.aliquot.source_type == message["sourceType"]
-        assert create_aliquot_message.aliquot.source_barcode == message["sourceBarcode"]
-        assert create_aliquot_message.aliquot.sample_name == message["sampleName"]
-        assert create_aliquot_message.aliquot.used_by_type == message["usedByType"]
-        assert create_aliquot_message.aliquot.used_by_barcode == message["usedByBarcode"]
-        assert create_aliquot_message.aliquot.volume == message["volume"]
-        assert create_aliquot_message.aliquot.concentration == message["concentration"]
-
-        assert create_aliquot_message.aliquot.created_at == message["createdAt"].strftime("%Y-%m-%dT%H:%M:%SZ")
-        assert create_aliquot_message.aliquot.recorded_at == message["recordedAt"].strftime("%Y-%m-%dT%H:%M:%SZ")
-        assert create_aliquot_message.aliquot.last_updated == message["recordedAt"].strftime("%Y-%m-%dT%H:%M:%SZ")
+        assert create_aliquot_in_warehouse_message.aliquot.created_at == message["createdAt"].strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        assert create_aliquot_in_warehouse_message.aliquot.recorded_at == message["recordedAt"].strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        assert create_aliquot_in_warehouse_message.aliquot.last_updated == message["recordedAt"].strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
 
     def test_process_called_publish_to_warehouse(
         self, subject, valid_traction_to_warehouse_message, create_aliquot_in_warehouse_message

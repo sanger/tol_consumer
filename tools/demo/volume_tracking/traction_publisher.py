@@ -23,9 +23,9 @@ logger = logging.getLogger(__name__)
 def build_traction_volume_tracking_message():
     return {
         "limsId": "Traction",
-        "messageCreateDateUtc": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "messageCreateDateUtc": datetime.datetime.now(datetime.UTC),
         "messageUuid": "4b6b9444-8935-4376-929d-06dae7b775f3",
-        "recordedAt": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "recordedAt": datetime.datetime.now(datetime.UTC),
         "volume": 1.5,
         "concentration": 10.0,
         "insertSize": 100,

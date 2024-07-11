@@ -17,9 +17,7 @@ def traction_to_warehouse_message():
 
 @pytest.fixture
 def mock_warehouse_message():
-    mock = MagicMock()
-    mock.create_aliquot_message.return_value = MagicMock()
-    return mock
+    return MagicMock()
 
 
 @pytest.fixture
@@ -32,30 +30,28 @@ class TestTractionToWarehouseMapper:
     def test_map_transfers_values(self, subject, traction_to_warehouse_message, mock_warehouse_message):
         subject.map(traction_to_warehouse_message, mock_warehouse_message)
 
-        mock_warehouse_message.create_aliquot_message.assert_called_once()
-        aliquot_message = mock_warehouse_message.create_aliquot_message.return_value
-
         # Assert the lims
-        assert aliquot_message.lims == TRACTION_LIMS
+        assert mock_warehouse_message.lims == TRACTION_LIMS
 
         # Assert the aliquot
-        assert aliquot_message.aliquot.id_lims == traction_to_warehouse_message.lims_id.value
-        assert aliquot_message.aliquot.lims_uuid == traction_to_warehouse_message.lims_uuid.value
-        assert aliquot_message.aliquot.aliquot_type == traction_to_warehouse_message.aliquot_type.value
-        assert aliquot_message.aliquot.source_type == traction_to_warehouse_message.source_type.value
-        assert aliquot_message.aliquot.source_barcode == traction_to_warehouse_message.source_barcode.value
-        assert aliquot_message.aliquot.sample_name == traction_to_warehouse_message.sample_name.value
-        assert aliquot_message.aliquot.used_by_type == traction_to_warehouse_message.used_by_type.value
-        assert aliquot_message.aliquot.used_by_barcode == traction_to_warehouse_message.used_by_barcode.value
-        assert aliquot_message.aliquot.volume == traction_to_warehouse_message.volume.value
-        assert aliquot_message.aliquot.concentration == traction_to_warehouse_message.concentration.value
-        assert aliquot_message.aliquot.insert_size == traction_to_warehouse_message.insert_size.value
-        assert aliquot_message.aliquot.created_at == traction_to_warehouse_message.create_date_utc.value.strftime(
+        assert mock_warehouse_message.aliquot.id_lims == traction_to_warehouse_message.lims_id.value
+        assert mock_warehouse_message.aliquot.lims_uuid == traction_to_warehouse_message.lims_uuid.value
+        assert mock_warehouse_message.aliquot.aliquot_type == traction_to_warehouse_message.aliquot_type.value
+        assert mock_warehouse_message.aliquot.source_type == traction_to_warehouse_message.source_type.value
+        assert mock_warehouse_message.aliquot.source_barcode == traction_to_warehouse_message.source_barcode.value
+        assert mock_warehouse_message.aliquot.sample_name == traction_to_warehouse_message.sample_name.value
+        assert mock_warehouse_message.aliquot.used_by_type == traction_to_warehouse_message.used_by_type.value
+        assert mock_warehouse_message.aliquot.used_by_barcode == traction_to_warehouse_message.used_by_barcode.value
+        assert mock_warehouse_message.aliquot.volume == traction_to_warehouse_message.volume.value
+        assert mock_warehouse_message.aliquot.concentration == traction_to_warehouse_message.concentration.value
+        assert mock_warehouse_message.aliquot.insert_size == traction_to_warehouse_message.insert_size.value
+        assert (
+            mock_warehouse_message.aliquot.created_at
+            == traction_to_warehouse_message.create_date_utc.value.strftime("%Y-%m-%dT%H:%M:%SZ")
+        )
+        assert mock_warehouse_message.aliquot.created_at == traction_to_warehouse_message.recorded_at.value.strftime(
             "%Y-%m-%dT%H:%M:%SZ"
         )
-        assert aliquot_message.aliquot.created_at == traction_to_warehouse_message.recorded_at.value.strftime(
-            "%Y-%m-%dT%H:%M:%SZ"
-        )
-        assert aliquot_message.aliquot.last_updated == traction_to_warehouse_message.recorded_at.value.strftime(
+        assert mock_warehouse_message.aliquot.last_updated == traction_to_warehouse_message.recorded_at.value.strftime(
             "%Y-%m-%dT%H:%M:%SZ"
         )
