@@ -86,14 +86,6 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
 
         return {"lims": self.lims, "aliquot": self.aliquot}
 
-    @staticmethod
-    def encoder_config_for(encoder_type_selection: str) -> "dict[str, Any]":
-        """Returns a config object with the encoder class and encoder type depending of the encoder selected."""
-        if encoder_type_selection == "json":
-            return {"encoder_class": AvroEncoderJson, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON}
-        else:
-            return {"encoder_class": AvroEncoderBinary, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
-
     def publish(self, publisher: BasicPublisher, exchange: str, lims_uuid: str) -> None:
         """Publish a new message in the queue with the current contents of the feedback message
         Parameters:
