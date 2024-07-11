@@ -215,6 +215,34 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
         self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments={"subject": self.SUBJECT})
 
 
+class MlwhRabbitSetupTool(RabbitSetupTool):
+    def __init__(self):
+        super().__init__("test")
+
+        self.EXCHANGE = "psd.tol-lab-share"
+        self.TOPIC_EXCHANGE_TYPE = "topic"
+
+        self.QUEUE_TYPE = "classic"
+        self.MESSAGE_TTL = 300000
+
+        self.CONSUMED_QUEUE_NAME = "psd.mlwh.multi-lims-warehouse-consumer"
+
+    def setup(self):
+        # Sets up the vhost
+        super().setup()
+
+        # Exchanges
+        self._declare_exchange(self.EXCHANGE, self.TOPIC_EXCHANGE_TYPE)
+
+        # Queues
+        self._declare_queue(
+            self.CONSUMED_QUEUE_NAME,
+            self.QUEUE_TYPE,
+            {"x-queue-type": self.QUEUE_TYPE},
+        )
+        self._declare_binding(self.EXCHANGE, self.CONSUMED_QUEUE_NAME, routing_key="development.saved.aliquot.#")
+
+
 class CreateAliquotRabbitSetupTool(RabbitSetupTool):
     def __init__(self):
         super().__init__("tol")
@@ -266,3 +294,6 @@ bioscan_pool_xp_setup_tool.setup()
 
 volume_tracking_setup_tool = CreateAliquotRabbitSetupTool()
 volume_tracking_setup_tool.setup()
+
+mlwh_setup_tool = MlwhRabbitSetupTool()
+mlwh_setup_tool.setup()
