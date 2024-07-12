@@ -98,10 +98,10 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         """
         return not self.errors
 
-    def to_json(self) -> "dict[str, Any]":
+    def to_string(self) -> str:
         """Returns a dict with the JSON-like representation of the message."""
 
-        return {"lims": self.lims, "aliquot": self.aliquot.to_dict()}
+        return json.dumps({"lims": self.lims, "aliquot": self.aliquot.to_dict()})
 
     def publish(self, publisher: BasicPublisher, exchange: str, lims_uuid: str) -> None:
         """Publish a new message in the queue with the current contents of the feedback message
@@ -110,7 +110,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         schema_registry (SchemaRegistry) instance of schema registry that we will use to retrieve data from redpanda
         exchange (str) name of the exchange where we will publish the message in Rabbitmq
         """
-        message = json.dumps(self.to_json())
+        message = self.to_string()
         routing_key = self._prepare_routing_key(lims_uuid)
         logger.info(f"Sending json to the warehouse queue: { message }")
         publisher.publish_message(
