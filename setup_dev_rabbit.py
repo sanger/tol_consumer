@@ -1,3 +1,7 @@
+"""
+All the constructs that are listed here are for setting the infrastructure up for local development.
+"""
+
 import json
 import os
 import stat
@@ -216,6 +220,11 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
 
 
 class MlwhRabbitSetupTool(RabbitSetupTool):
+    """
+    Sets up RabbitMQ exchanges, queues and vhosts to help testing pushing messages from traction to
+    warehouse. This sets up (simulates) the queue infrastructure (queues, exchanges and vhosts) at warehouse side.
+    """
+
     def __init__(self):
         super().__init__("test")
 
@@ -244,6 +253,14 @@ class MlwhRabbitSetupTool(RabbitSetupTool):
 
 
 class CreateAliquotRabbitSetupTool(RabbitSetupTool):
+    """
+    Sets up RabbitMQ exchanges, queues and vhosts to help testing pushing messages from traction to
+    warehouse. This sets up (simulates) the queue infrastructure on the enterprise message queue. This queue
+    is used by Traction to push messages to the warehouse. The messages pushed to this queue is consumed by
+    tol-lab-share that are then proxied to the warehouse rabbitmq instance set up using an instance of
+    MlwhRabbitSetupTool class.
+    """
+
     def __init__(self):
         super().__init__("tol")
 
