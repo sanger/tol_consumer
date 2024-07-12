@@ -1,9 +1,9 @@
+import json
 import logging
 from typing import Any, Callable
 
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 
-from tol_lab_share import error_codes
 from tol_lab_share.constants import RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT
 from tol_lab_share.error_codes import ErrorCode
 from tol_lab_share.helpers import get_config
@@ -32,6 +32,25 @@ class Aliquot:
         self.last_updated: str | None = None
         self.recorded_at: str | None = None
         self.created_at: str | None = None
+
+    def to_dict(self) -> dict:
+        """Convert the aliquot message to a JSON string"""
+        return {
+            "id_lims": self.id_lims,
+            "lims_uuid": str(self.lims_uuid),
+            "aliquot_type": self.aliquot_type,
+            "source_type": self.source_type,
+            "source_barcode": self.source_barcode,
+            "sample_name": self.sample_name,
+            "used_by_type": self.used_by_type,
+            "used_by_barcode": self.used_by_barcode,
+            "volume": self.volume,
+            "concentration": self.concentration,
+            "insert_size": self.insert_size,
+            "last_updated": self.last_updated,
+            "recorded_at": self.recorded_at,
+            "created_at": self.created_at,
+        }
 
 
 class CreateAliquotInWarehouseMessage(MessageProperty):
@@ -82,7 +101,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
     def to_json(self) -> "dict[str, Any]":
         """Returns a dict with the JSON-like representation of the message."""
 
-        return {"lims": self.lims, "aliquot": self.aliquot}
+        return {"lims": self.lims, "aliquot": self.aliquot.to_dict()}
 
     def publish(self, publisher: BasicPublisher, exchange: str, lims_uuid: str) -> None:
         """Publish a new message in the queue with the current contents of the feedback message
@@ -91,29 +110,17 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         schema_registry (SchemaRegistry) instance of schema registry that we will use to retrieve data from redpanda
         exchange (str) name of the exchange where we will publish the message in Rabbitmq
         """
-        message = self.to_json()
+        message = json.dumps(self.to_json())
+        routing_key = self._prepare_routing_key(lims_uuid)
         logger.info(f"Sending json to the warehouse queue: { message }")
         publisher.publish_message(
             exchange,
-            self._prepare_routing_key(lims_uuid),
+            routing_key,
             message,
             None,
             None,
             None,
         )
-
-    def check_defined_keys(self) -> bool:
-        """Checks that the message has defined all required keys, or trigger an error if not"""
-        json = self.to_json()
-        for key in ["sourceMessageUuid", "countOfTotalSamples", "countOfValidSamples", "operationWasErrorFree"]:
-            if json[key] is None:
-                self.trigger_error(
-                    error_codes.ERROR_15_FEEDBACK_UNDEFINED_KEY,
-                    text=f"Key {key} is undefined in feedback message",
-                )
-
-                return False
-        return True
 
     def check_errors_correct(self) -> bool:
         """Returns the aggregation result of the validation of all errors content"""
