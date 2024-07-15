@@ -19,7 +19,7 @@ from tol_lab_share.constants.input_traction_volume_tracking_message import (
     INSERT_SIZE,
     RECORDED_AT,
 )
-from tol_lab_share.messages.consumed.traction_to_warehouse.root import Root
+from tol_lab_share.messages.consumed.traction_to_warehouse.traction_to_mlwh_aliquot import Root
 from tests.data.example_create_aliquot_in_mlwh_messages import (
     VALID_TRACTION_TO_WAREHOUSE_MESSAGE as VALID_PAYLOAD,
 )

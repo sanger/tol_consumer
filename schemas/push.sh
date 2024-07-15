@@ -9,7 +9,7 @@ if [ $# -ne 1 ]; then
   echo "not work unless that restriction is temporarily removed in the nginx config."
   echo "A better option is to use the RedPanda Web Console instead."
   echo "Note: jq command line utility is a prerequisite for this. Make sure you have it installed."
-  echo "If not, use brew install jq to install it"
+  echo "If not, use `brew install jq` to install it"
   exit 1
 fi
 REDPANDA_URL=$1
