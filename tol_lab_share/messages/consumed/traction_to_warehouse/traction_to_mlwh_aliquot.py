@@ -18,7 +18,7 @@ from tol_lab_share.messages.consumed import MessageField
 from tol_lab_share.messages.consumed.record import Record
 
 
-class Root(Record):
+class TractionToMlwhAliquot(Record):
     """
     The root record of TractionVolumeTrackingMessage message.
     This forms the message coming from traction to the message queue.
