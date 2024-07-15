@@ -7,7 +7,7 @@ from tol_lab_share.messages.consumed import TractionToWarehouseMessage
 from tests.data.example_create_aliquot_in_mlwh_messages import (
     VALID_TRACTION_TO_WAREHOUSE_MESSAGE as VALID_PAYLOAD,
 )
-from tol_lab_share.messages.mappers.traction_to_warehouse import TractionToWarehouseMapper
+from tol_lab_share.messages.mappers.traction_to_warehouse import TractionCreateAliquotToWarehouseMapper
 
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def mock_warehouse_message():
 
 @pytest.fixture
 def subject():
-    return TractionToWarehouseMapper()
+    return TractionCreateAliquotToWarehouseMapper()
 
 
 class TestTractionToWarehouseMapper:

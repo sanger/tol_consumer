@@ -8,7 +8,7 @@ from lab_share_lib.rabbit.schema_registry import SchemaRegistry
 
 from tol_lab_share import error_codes
 from tol_lab_share.messages.consumed import TractionToWarehouseMessage
-from tol_lab_share.messages.mappers.traction_to_warehouse import TractionToWarehouseMapper
+from tol_lab_share.messages.mappers.traction_to_warehouse import TractionCreateAliquotToWarehouseMapper
 from tol_lab_share.messages.mlwh.create_aliquot_message import CreateAliquotInWarehouseMessage
 
 logger = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ class CreateAliquotProcessor(BaseProcessor):
         output_warehouse_message = CreateAliquotInWarehouseMessage()
 
         # Maps the message from traction to the message that needs to be sent to warehouse rmq
-        TractionToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
+        TractionCreateAliquotToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
 
         output_warehouse_message.publish(
             self._basic_publisher, "psd.tol-lab-share", str(input_message_from_traction.lims_uuid.value)

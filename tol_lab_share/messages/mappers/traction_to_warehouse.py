@@ -8,7 +8,7 @@ from tol_lab_share.messages.consumed import TractionToWarehouseMessage
 logger = logging.getLogger(__name__)
 
 
-class TractionToWarehouseMapper:
+class TractionCreateAliquotToWarehouseMapper:
     """A mapper for transferring values from TractionVolumeTrackingMessage to CreateAliquotInWarehouseMessage"""
 
     @staticmethod
@@ -41,9 +41,15 @@ class TractionToWarehouseMapper:
         destination.aliquot.insert_size = source.insert_size.value
 
         # Populating the timestamps
-        destination.aliquot.created_at = TractionToWarehouseMapper._map_timestamps(source.create_date_utc.value)
-        destination.aliquot.recorded_at = TractionToWarehouseMapper._map_timestamps(source.recorded_at.value)
-        destination.aliquot.last_updated = TractionToWarehouseMapper._map_timestamps(source.recorded_at.value)
+        destination.aliquot.created_at = TractionCreateAliquotToWarehouseMapper._map_timestamps(
+            source.create_date_utc.value
+        )
+        destination.aliquot.recorded_at = TractionCreateAliquotToWarehouseMapper._map_timestamps(
+            source.recorded_at.value
+        )
+        destination.aliquot.last_updated = TractionCreateAliquotToWarehouseMapper._map_timestamps(
+            source.recorded_at.value
+        )
 
         # Populate lims
         destination.lims = TRACTION_LIMS
