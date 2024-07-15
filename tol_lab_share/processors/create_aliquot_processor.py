@@ -32,10 +32,10 @@ class CreateAliquotProcessor(BaseProcessor):
 
     @staticmethod
     def instantiate(
-        _schema_registry: SchemaRegistry, _basic_publisher: BasicPublisher, config: Any
+        schema_registry: SchemaRegistry, basic_publisher: BasicPublisher, config: Any
     ) -> "CreateAliquotProcessor":
         """Instantiate a CreateAliquotProcessor"""
-        return CreateAliquotProcessor(_schema_registry, _basic_publisher, config)
+        return CreateAliquotProcessor(schema_registry, basic_publisher, config)
 
     def process(self, emq_message: RabbitMessage) -> bool:
         """
