@@ -129,6 +129,6 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
     @staticmethod
     def _prepare_routing_key(lims_uuid: str | None) -> str:
         """Prepares the routing key for create aliquot message to be sent to warehouse RabbitMQ"""
-        environment = get_config("").ENVIRONMENT_NAME
+        environment = get_config("").MLWH_ENVIRONMENT_NAME
 
         return RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT.format(environment=environment, lims_uuid=lims_uuid)

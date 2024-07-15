@@ -25,7 +25,7 @@ RABBIT_SERVER_DETAILS = RabbitServerDetails(
 # In our servers, this will be picked up using deployment project's
 # roles/deploy_tol_stack/templates/tol-lab-share/app_config.py.j2 and
 # environments/uat/group_vars/tol_swarm_managers.yml
-ENVIRONMENT_NAME = os.environ.get("ENVIRONMENT_NAME", "development")
+MLWH_ENVIRONMENT_NAME = os.environ.get("MLWH_ENVIRONMENT_NAME", "development")
 
 WAREHOUSE_RABBIT_SERVER_DETAILS = RabbitServerDetails(
     uses_ssl=False,
