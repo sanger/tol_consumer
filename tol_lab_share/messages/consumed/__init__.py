@@ -16,4 +16,4 @@ from .bioscan_pool_xp_to_traction import (
     BioscanPoolXpRequest,
     BioscanPoolXpSample,
 )
-from .traction_to_warehouse import TractionToWarehouseMessage
+from .traction_to_mlwh_aliquot import TractionToWarehouseMessage
