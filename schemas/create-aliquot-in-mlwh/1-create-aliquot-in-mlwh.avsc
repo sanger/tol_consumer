@@ -79,10 +79,10 @@
                     "pool",
                     "run",
                     "none"
-                ],
-                "default": "none"
+                ]
             },
-            "doc": "The type of the entity that the aliquot is used by"
+            "doc": "The type of the entity that the aliquot is used by",
+            "default": "none"
         },
         {
             "name": "usedByBarcode",
