@@ -41,7 +41,7 @@ to run this one as it requires Rabbitmq to have started completely:
 1. Start interactive bash in docker container
 
     ```bash
-   docker run -ti -v $(pwd):/code -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro --env-file=.env --entrypoint bash tol-lab-share:develop
+    docker run -ti -v $(pwd):/code -v /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro --env-file=.env --entrypoint bash tol-lab-share:develop
     ```
 
 1. Start the consumer service (inside the previous bash)
