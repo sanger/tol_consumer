@@ -1,3 +1,7 @@
+"""
+All the constructs that are listed here are for setting the infrastructure up for local development.
+"""
+
 import json
 import os
 import stat
@@ -215,8 +219,98 @@ class BioscanPoolXpRabbitSetupTool(RabbitSetupTool):
         self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments={"subject": self.SUBJECT})
 
 
+class MlwhRabbitSetupTool(RabbitSetupTool):
+    """
+    Sets up RabbitMQ exchanges, queues and vhosts to help testing pushing messages from traction to
+    warehouse. This sets up (simulates) the queue infrastructure (queues, exchanges and vhosts) at warehouse side.
+    """
+
+    def __init__(self):
+        super().__init__("test")
+
+        self.EXCHANGE = "psd.tol-lab-share"
+        self.TOPIC_EXCHANGE_TYPE = "topic"
+
+        self.QUEUE_TYPE = "classic"
+        self.MESSAGE_TTL = 300000
+
+        self.CONSUMED_QUEUE_NAME = "psd.mlwh.multi-lims-warehouse-consumer"
+
+    def setup(self):
+        # Sets up the vhost
+        super().setup()
+
+        # Exchanges
+        self._declare_exchange(self.EXCHANGE, self.TOPIC_EXCHANGE_TYPE)
+
+        # Queues
+        self._declare_queue(
+            self.CONSUMED_QUEUE_NAME,
+            self.QUEUE_TYPE,
+            {"x-queue-type": self.QUEUE_TYPE},
+        )
+        self._declare_binding(self.EXCHANGE, self.CONSUMED_QUEUE_NAME, routing_key="development.saved.aliquot.#")
+
+
+class CreateAliquotRabbitSetupTool(RabbitSetupTool):
+    """
+    Sets up RabbitMQ exchanges, queues and vhosts to help testing pushing messages from traction to
+    warehouse. This sets up (simulates) the queue infrastructure on the enterprise message queue. This queue
+    is used by Traction to push messages to the warehouse. The messages pushed to this queue is consumed by
+    tol-lab-share that are then proxied to the warehouse rabbitmq instance set up using an instance of
+    MlwhRabbitSetupTool class.
+    """
+
+    def __init__(self):
+        super().__init__("tol")
+
+        self.EXCHANGE = "traction"
+        self.DL_EXCHANGE = "dead-letters"
+        self.HEADERS_EXCHANGE_TYPE = "headers"
+
+        self.QUEUE_TYPE = "classic"
+        self.MESSAGE_TTL = 300000
+
+        self.CONSUMED_QUEUE_NAME = "tls.volume-tracking"
+        self.LOGS_QUEUE_NAME = "logs.traction"
+        self.DL_QUEUE_NAME = "dead.volume-tracking"
+
+        self.SUBJECT = "create-aliquot-in-mlwh"
+
+    def setup(self):
+        super().setup()
+
+        # Exchanges
+        self._declare_exchange(self.EXCHANGE, self.HEADERS_EXCHANGE_TYPE)
+        self._declare_exchange(self.DL_EXCHANGE, self.HEADERS_EXCHANGE_TYPE)
+
+        # Queues
+        self._declare_queue(
+            self.CONSUMED_QUEUE_NAME,
+            self.QUEUE_TYPE,
+            {"x-queue-type": self.QUEUE_TYPE, "x-dead-letter-exchange": self.DL_EXCHANGE},
+        )
+        self._declare_queue(
+            self.LOGS_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL}
+        )
+        self._declare_queue(
+            self.DL_QUEUE_NAME, self.QUEUE_TYPE, {"x-queue-type": self.QUEUE_TYPE, "x-message-ttl": self.MESSAGE_TTL}
+        )
+
+        # Bindings
+        self._declare_binding(self.EXCHANGE, self.CONSUMED_QUEUE_NAME, arguments={"subject": self.SUBJECT})
+        self._declare_binding(self.EXCHANGE, self.LOGS_QUEUE_NAME)
+        self._declare_binding(self.DL_EXCHANGE, self.DL_QUEUE_NAME, arguments={"subject": self.SUBJECT})
+
+
 create_update_setup_tool = CreateUpdateMessagesRabbitSetupTool()
 create_update_setup_tool.setup()
 
 bioscan_pool_xp_setup_tool = BioscanPoolXpRabbitSetupTool()
 bioscan_pool_xp_setup_tool.setup()
+
+volume_tracking_setup_tool = CreateAliquotRabbitSetupTool()
+volume_tracking_setup_tool.setup()
+
+mlwh_setup_tool = MlwhRabbitSetupTool()
+mlwh_setup_tool.setup()

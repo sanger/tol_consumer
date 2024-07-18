@@ -1,6 +1,13 @@
 How to run
 ----------
 
+0. Spin up the required dependency containers:
+
+```bash
+../docker/dependencies/up.sh
+python setup_dev_rabbit.py
+```
+
 1. Create a docker image for the project that we will use to run the code.
 This saves a lot of problems when installing dependent libraries in local.
 To build you have to reference to the root folder of the project that contains the
