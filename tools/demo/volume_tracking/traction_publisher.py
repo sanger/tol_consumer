@@ -3,10 +3,11 @@ import logging
 import os
 
 from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
-from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
-from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson
+from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
+from lab_share_lib.rabbit.avro_encoder import AvroEncoderJson, AvroEncoderBinaryMessage
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
+from argparse import ArgumentParser
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost:8081")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
@@ -39,7 +40,20 @@ def build_traction_volume_tracking_message():
     }
 
 
+def encoder_config_for(encoder_type_selection):
+    if encoder_type_selection == "json":
+        return {"encoder_class": AvroEncoderJson, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON}
+    else:
+        return {"encoder_class": AvroEncoderBinaryMessage, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY}
+
+
 if __name__ == "__main__":
+    parser = ArgumentParser(prog='tol-lab-share tools', description='Utility to push messages to the EMQ-simulate.')
+    parser.add_argument('-e', '--encoder')
+
+    args = parser.parse_args()
+    encoder_class_config = encoder_config_for(args)
+
     rmq_details = RabbitServerDetails(
         uses_ssl=False,
         host=RABBITMQ_HOST,
@@ -50,13 +64,12 @@ if __name__ == "__main__":
     )
 
     publisher = BasicPublisher(rmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
-
     message = build_traction_volume_tracking_message()
 
     logging.info(f"Message: {message}")
 
     registry = SchemaRegistry(REDPANDA_URL, verify=False)
-    encoder = AvroEncoderJson(registry, SCHEMA_SUBJECT)
+    encoder = encoder_class_config['encoder_class'](registry, SCHEMA_SUBJECT)
     encoded_message = encoder.encode([message], version="latest")
 
     publisher.publish_message(
@@ -65,5 +78,5 @@ if __name__ == "__main__":
         body=encoded_message.body,
         subject=SCHEMA_SUBJECT,
         schema_version=encoded_message.version,
-        encoder_type=RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON,
+        encoder_type=encoder_class_config['encoder_type'],
     )
