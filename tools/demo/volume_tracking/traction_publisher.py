@@ -48,8 +48,8 @@ def encoder_config_for(encoder_type_selection):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(prog='tol-lab-share tools', description='Utility to push messages to the EMQ-simulate.')
-    parser.add_argument('-e', '--encoder')
+    parser = ArgumentParser(prog="tol-lab-share tools", description="Utility to push messages to the EMQ-simulate.")
+    parser.add_argument("-e", "--encoder")
 
     args = parser.parse_args()
     encoder_class_config = encoder_config_for(args)
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     logging.info(f"Message: {message}")
 
     registry = SchemaRegistry(REDPANDA_URL, verify=False)
-    encoder = encoder_class_config['encoder_class'](registry, SCHEMA_SUBJECT)
+    encoder = encoder_class_config["encoder_class"](registry, SCHEMA_SUBJECT)
     encoded_message = encoder.encode([message], version="latest")
 
     publisher.publish_message(
@@ -78,5 +78,5 @@ if __name__ == "__main__":
         body=encoded_message.body,
         subject=SCHEMA_SUBJECT,
         schema_version=encoded_message.version,
-        encoder_type=encoder_class_config['encoder_type'],
+        encoder_type=encoder_class_config["encoder_type"],
     )
