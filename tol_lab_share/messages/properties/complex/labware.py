@@ -1,17 +1,15 @@
+import logging
+from functools import singledispatchmethod
 from typing import Any
 
-from .labware_type import LabwareType
-from tol_lab_share.messages.properties.message_specific import CreateLabwareSample
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES
-from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES, RETENTION_INSTRUCTION
+from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES
+from tol_lab_share.messages.properties import MessageProperty
+from tol_lab_share.messages.properties.message_specific import CreateLabwareSample
 from tol_lab_share.messages.properties.simple import DictValue, StringValue
 from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
-
-from tol_lab_share.messages.properties import MessageProperty
-from functools import singledispatchmethod
-
-import logging
+from .labware_type import LabwareType
 
 logger = logging.getLogger(__name__)
 
