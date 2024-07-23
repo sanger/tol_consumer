@@ -1,7 +1,7 @@
 from tol_lab_share.constants.input_traction_volume_tracking_message import (
     MESSAGE_UUID,
     CREATED_DATE_UTC,
-    LIMS_UUID,
+    ALIQUOT_UUID,
     ALIQUOT_TYPE,
     SOURCE_TYPE,
     SOURCE_BARCODE,
@@ -50,7 +50,7 @@ class TractionToMlwhAliquot(Record):
     @property
     def lims_uuid(self) -> MessageField:
         """Gets the UUID of the aliquot in the LIMS system as a string."""
-        return self._make_field(LIMS_UUID)
+        return self._make_field(ALIQUOT_UUID)
 
     @property
     def aliquot_type(self) -> MessageField:

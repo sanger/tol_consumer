@@ -30,7 +30,7 @@ def build_traction_volume_tracking_message():
         "concentration": 10.0,
         "insertSize": 100,
         "aliquotType": "primary",
-        "limsUuid": "4b6b9444-8935-4376-929d-06dae7b77523",
+        "aliquotUuid": "4b6b9444-8935-4376-929d-06dae7b77523",
         "sourceType": "library",
         "sourceBarcode": "TRAC-2-1572",
         "sampleName": "SAMPLENAME",
