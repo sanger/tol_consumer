@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+from uuid import UUID
 
 from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY
@@ -25,13 +26,13 @@ def build_traction_volume_tracking_message():
     return {
         "limsId": "Traction",
         "messageCreateDateUtc": datetime.datetime.now(datetime.UTC),
-        "messageUuid": "4b6b9444-8935-4376-929d-06dae7b775f3",
+        "messageUuid": UUID("4b6b9444-8935-4376-929d-06dae7b775f3"),
         "recordedAt": datetime.datetime.now(datetime.UTC),
         "volume": 1.5,
         "concentration": 10.0,
         "insertSize": 100,
         "aliquotType": "primary",
-        "limsUuid": "4b6b9444-8935-4376-929d-06dae7b77523",
+        "limsUuid": UUID("4b6b9444-8935-4376-929d-06dae7b77523"),
         "sourceType": "library",
         "sourceBarcode": "TRAC-2-1572",
         "sampleName": "SAMPLENAME",

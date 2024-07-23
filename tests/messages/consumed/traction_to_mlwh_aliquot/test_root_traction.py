@@ -85,11 +85,11 @@ class TestTractionToMlwhAliquot:
         ) as make_field:
             field = subject.lims_uuid
 
-        make_field.assert_called_once_with(LIMS_UUID)
+        make_field.assert_called_once_with(LIMS_UUID, any(Callable))
         assert field == make_field.return_value
 
     def test_lims_uuid_value_correct(self, subject):
-        assert subject.lims_uuid.value == VALID_PAYLOAD[LIMS_UUID]
+        assert subject.lims_uuid.value == VALID_PAYLOAD[LIMS_UUID].decode()
 
     def test_aliquot_type_returns_correct_field(self, subject, any):
         with patch(
