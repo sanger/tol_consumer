@@ -11,6 +11,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
             "samples": [],
+            "retentionInstruction": "Return to customer after 2 years",
         }
 
         instance = Labware(Value(labware))
@@ -23,6 +24,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
             "barcode": 1234,
             "samples": [],
+            "retentionInstruction": "Return to customer after 2 years",
         }
 
         instance = Labware(Value(labware))
@@ -34,6 +36,7 @@ class TestLabware:
             "labwareType": "Plate12x8",
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "samples": [],
+            "retentionInstruction": "Return to customer after 2 years",
         }
         instance = Labware(Value(labware))
         assert instance.validate() is False
@@ -45,6 +48,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "1234",
             "samples": [],
+            "retentionInstruction": "Return to customer after 2 years",
         }
 
         instance = Labware(Value(labware))
@@ -57,6 +61,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "1234",
             "samples": [valid_create_labware_sample, valid_create_labware_sample],
+            "retentionInstruction": "Return to customer after 2 years",
         }
 
         instance = Labware(Value(labware2))
@@ -70,6 +75,7 @@ class TestLabware:
             "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
             "barcode": "1234",
             "samples": [],
+            "retentionInstruction": "Return to customer after 2 years",
         }
 
         instance = Labware(Value(labware))
@@ -82,6 +88,7 @@ class TestLabware:
             "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
             "barcode": "1234",
             "samples": [valid_create_labware_sample, valid_create_labware_sample],
+            "retentionInstruction": "Return to customer after 2 years",
         }
 
         instance = Labware(Value(labware2))
@@ -94,6 +101,7 @@ class TestLabware:
             "labwareUuid": b"dd490ee5-fd1d-456d-99fd-eb9d3861e0f9",
             "barcode": "1234",
             "samples": [invalid_create_labware_sample, valid_create_labware_sample],
+            "retentionInstruction": "Return to customer after 2 years",
         }
 
         instance = Labware(Value(labware2))
@@ -106,6 +114,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
             "samples": [valid_create_labware_sample],
+            "retentionInstruction": "Return to customer after 2 years",
         }
         instance = Labware(Value(data))
         assert instance.validate()
@@ -131,6 +140,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
             "samples": [valid_create_labware_sample],
+            "retentionInstruction": "Return to customer after 2 years",
         }
         instance = Labware(Value(data))
 
@@ -155,6 +165,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
             "samples": [valid_create_labware_sample],
+            "retentionInstruction": "Return to customer after 2 years",
         }
         instance = Labware(Value(data))
         instance.properties("samples")[0].add_property("location", Location(Value("B01")))
@@ -168,6 +179,7 @@ class TestLabware:
             "labwareUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f9".encode(),
             "barcode": "BARCODE001",
             "samples": [valid_create_labware_sample],
+            "retentionInstruction": "Return to customer after 2 years",
         }
         instance = Labware(Value(data))
         assert instance.validate()
