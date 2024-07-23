@@ -28,7 +28,8 @@ from tol_lab_share.constants.input_create_labware_message import (
     SHEARED_FEMTO_FRAGMENT_SIZE,
     SHEARING_QC_COMMENTS,
     SUPPLIER_SAMPLE_NAME,
-    SAMPLE_TAXON_ID, RETENTION_INSTRUCTION,
+    SAMPLE_TAXON_ID,
+    RETENTION_INSTRUCTION,
 )
 from ..complex.country_of_origin import CountryOfOrigin
 from ..complex.date_utc import DateUtc

@@ -7,7 +7,6 @@ TEST_VALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
     "labware": {
         "labwareType": "Plate12x8",
         "barcode": "BARCODE001",
-        "retentionInstruction": "Return to customer after 2 years",
         "samples": [
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6".encode(),
@@ -36,6 +35,7 @@ TEST_VALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "Return to customer after 2 years",
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -64,6 +64,7 @@ TEST_VALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "Return to customer after 2 years",
             },
         ],
     },
@@ -76,7 +77,6 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
     "labware": {
         "labwareType": "Plate12x8",
         "barcode": "BARCODE001",
-        "retentionInstruction": "Return to customer after 2 years",
         "samples": [
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f6".encode(),
@@ -105,6 +105,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "Return to customer after 2 years",
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -133,6 +134,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "Return to customer after 2 years",
             },
         ],
     },
