@@ -28,7 +28,7 @@ from tol_lab_share.constants.input_create_labware_message import (
     SHEARED_FEMTO_FRAGMENT_SIZE,
     SHEARING_QC_COMMENTS,
     SUPPLIER_SAMPLE_NAME,
-    SAMPLE_TAXON_ID,
+    SAMPLE_TAXON_ID, RETENTION_INSTRUCTION,
 )
 from ..complex.country_of_origin import CountryOfOrigin
 from ..complex.date_utc import DateUtc
@@ -78,3 +78,4 @@ class CreateLabwareSample(MessageProperty):
         self.add_property("taxon_id", StringValue(DictValue(input, SAMPLE_TAXON_ID)))
         self.add_property("uuid", Uuid(DictValue(input, SAMPLE_SANGER_UUID)))
         self.add_property("volume", StringValue(DictValue(input, SAMPLE_VOLUME)))
+        self.add_property("retention_instruction", StringValue(DictValue(input, RETENTION_INSTRUCTION)))
