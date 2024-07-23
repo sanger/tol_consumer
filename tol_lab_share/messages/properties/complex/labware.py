@@ -25,7 +25,6 @@ class Labware(MessageProperty):
         self.add_property("labware_type", LabwareType(DictValue(input, LABWARE_TYPE)))
         self.add_property("barcode", StringValue(DictValue(input, BARCODE)))
         self.add_property("samples", self._parse_samples(input))
-        self.add_property("retention_instruction", StringValue(DictValue(input, RETENTION_INSTRUCTION)))
 
     def _parse_samples(self, input: MessageProperty) -> list[MessageProperty]:
         """Parses the samples section and creates a sample for each position."""

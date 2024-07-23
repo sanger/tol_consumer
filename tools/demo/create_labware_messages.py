@@ -24,6 +24,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
         "labware": {
             "labwareType": "Plate12x8",
             "barcode": barcode_for_unique_id("PLATE", unique_id, num_msg),
+            "retentionInstruction": "Return to customer after 2 years",
             "samples": [
                 {
                     "sampleUuid": str(uuid4()).encode(),
@@ -68,6 +69,7 @@ def build_create_tube_msg(unique_id, num_msg):
         "labware": {
             "labwareType": "Tube",
             "barcode": barcode_for_unique_id("TUBE", unique_id, num_msg),
+            "retentionInstruction": "Return to customer after 2 years",
             "samples": [
                 {
                     "sampleUuid": str(uuid4()).encode(),
