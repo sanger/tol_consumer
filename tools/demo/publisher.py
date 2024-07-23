@@ -77,7 +77,7 @@ if __name__ == "__main__":
     publisher = BasicPublisher(rabbitmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
     encoder = args.encoder
 
-    for pos in range(0, 1):
+    for pos in range(0, 5):
         if args.message_types == "create-update-labware":
             sample_msg = build_create_labware_96_msg(args.unique_id, pos)
             # update_msg = build_update_labware_msg(sample_msg)
