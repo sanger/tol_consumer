@@ -3,7 +3,7 @@ from typing import Any
 from .labware_type import LabwareType
 from tol_lab_share.messages.properties.message_specific import CreateLabwareSample
 from tol_lab_share.constants import OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES
-from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES
+from tol_lab_share.constants.input_create_labware_message import BARCODE, LABWARE_TYPE, SAMPLES, RETENTION_INSTRUCTION
 from tol_lab_share.messages.properties.simple import DictValue, StringValue
 from tol_lab_share.messages.rabbit.published import CreateLabwareFeedbackMessage
 from tol_lab_share.messages.traction import TractionReceptionMessage, TractionQcMessage
@@ -25,6 +25,7 @@ class Labware(MessageProperty):
         self.add_property("labware_type", LabwareType(DictValue(input, LABWARE_TYPE)))
         self.add_property("barcode", StringValue(DictValue(input, BARCODE)))
         self.add_property("samples", self._parse_samples(input))
+        self.add_property("retention_instruction", StringValue(DictValue(input, RETENTION_INSTRUCTION)))
 
     def _parse_samples(self, input: MessageProperty) -> list[MessageProperty]:
         """Parses the samples section and creates a sample for each position."""
