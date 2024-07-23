@@ -12,7 +12,7 @@ from create_labware_messages import build_create_labware_96_msg
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost:8081")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
-RABBITMQ_PORT = os.getenv("RABBITMQ_PORT", "5672")
+RABBITMQ_PORT = os.getenv("RABBITMQ_PORT", "5671")
 RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME", "admin")
 RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD", "development")
 RABBITMQ_VHOST = os.getenv("RABBITMQ_VHOST", "tol")
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     registry = SchemaRegistry(REDPANDA_URL, verify=False)
 
     rabbitmq_details = RabbitServerDetails(
-        uses_ssl=False,
+        uses_ssl=True,
         host=RABBITMQ_HOST,
         port=RABBITMQ_PORT,
         username=RABBITMQ_USERNAME,
