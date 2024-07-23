@@ -1,13 +1,14 @@
 import argparse
 import os
 
+from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
 from lab_share_lib.constants import RABBITMQ_HEADER_VALUE_ENCODER_TYPE_BINARY, RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON
 from lab_share_lib.rabbit.avro_encoder import AvroEncoderBinaryMessage, AvroEncoderJson
 from lab_share_lib.rabbit.basic_publisher import BasicPublisher
 from lab_share_lib.rabbit.schema_registry import SchemaRegistry
-from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
+
 from bioscan_pool_xp_messages import build_bioscan_pool_xp_msg
-from create_labware_messages import build_create_labware_96_msg, build_create_tube_msg, build_update_labware_msg
+from create_labware_messages import build_create_labware_96_msg
 
 REDPANDA_URL = os.getenv("REDPANDA_URL", "http://localhost:8081")
 RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
