@@ -19,7 +19,7 @@ class Aliquot:
     def __init__(self):
         """Constructor that initializes an aliquot message"""
         self.id_lims: str | None = None
-        self.lims_uuid: str | None = None
+        self.id_aliquot_lims: str | None = None
         self.aliquot_type: str | None = None
         self.source_type: str | None = None
         self.source_barcode: str | None = None
@@ -37,7 +37,7 @@ class Aliquot:
         """Convert the aliquot message to a JSON string"""
         return {
             "id_lims": self.id_lims,
-            "lims_uuid": str(self.lims_uuid),
+            "id_aliquot_lims": str(self.id_aliquot_lims),
             "aliquot_type": self.aliquot_type,
             "source_type": self.source_type,
             "source_barcode": self.source_barcode,

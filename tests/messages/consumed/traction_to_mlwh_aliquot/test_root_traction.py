@@ -7,7 +7,7 @@ from tol_lab_share.constants.input_traction_volume_tracking_message import (
     MESSAGE_UUID,
     CREATED_DATE_UTC,
     LIMS_ID,
-    LIMS_UUID,
+    ALIQUOT_ID,
     ALIQUOT_TYPE,
     SOURCE_TYPE,
     SOURCE_BARCODE,
@@ -83,13 +83,13 @@ class TestTractionToMlwhAliquot:
             "tol_lab_share.messages.consumed.traction_to_mlwh_aliquot.traction_to_mlwh_aliquot.TractionToMlwhAliquot."
             "_make_field"
         ) as make_field:
-            field = subject.lims_uuid
+            field = subject.aliquot_id
 
-        make_field.assert_called_once_with(LIMS_UUID, any(Callable))
+        make_field.assert_called_once_with(ALIQUOT_ID)
         assert field == make_field.return_value
 
     def test_lims_uuid_value_correct(self, subject):
-        assert subject.lims_uuid.value == VALID_PAYLOAD[LIMS_UUID].decode()
+        assert subject.aliquot_id.value == VALID_PAYLOAD[ALIQUOT_ID]
 
     def test_aliquot_type_returns_correct_field(self, subject, any):
         with patch(
