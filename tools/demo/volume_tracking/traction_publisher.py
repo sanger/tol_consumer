@@ -40,7 +40,7 @@ def build_traction_volume_tracking_message():
     }
 
 
-def encoder_config_for(encoder_type_selection):
+def read_encoder(encoder_type_selection):
     if encoder_type_selection == "json":
         return {"encoder_class": AvroEncoderJson, "encoder_type": RABBITMQ_HEADER_VALUE_ENCODER_TYPE_JSON}
     else:
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     parser.add_argument("-e", "--encoder")
 
     args = parser.parse_args()
-    encoder_class_config = encoder_config_for(args)
+    encoder_class_config = read_encoder(args)
 
     rmq_details = RabbitServerDetails(
         uses_ssl=False,
