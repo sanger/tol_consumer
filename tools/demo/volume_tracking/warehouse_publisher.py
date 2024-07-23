@@ -27,7 +27,7 @@ def build_create_aliquot_message():
         "lims": "traction",
         "aliquot": {
             "id_lims": "LIMS123456",
-            "lims_uuid": str(uuid4()),
+            "aliquot_uuid": str(uuid4()),
             "aliquot_type": "derived",
             "source_type": "primary",
             "source_barcode": "SRC123456",

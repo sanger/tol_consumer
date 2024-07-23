@@ -19,7 +19,7 @@ class Aliquot:
     def __init__(self):
         """Constructor that initializes an aliquot message"""
         self.id_lims: str | None = None
-        self.lims_uuid: str | None = None
+        self.aliquot_uuid: str | None = None
         self.aliquot_type: str | None = None
         self.source_type: str | None = None
         self.source_barcode: str | None = None
@@ -37,7 +37,7 @@ class Aliquot:
         """Convert the aliquot message to a JSON string"""
         return {
             "id_lims": self.id_lims,
-            "lims_uuid": str(self.lims_uuid),
+            "aliquot_uuid": str(self.aliquot_uuid),
             "aliquot_type": self.aliquot_type,
             "source_type": self.source_type,
             "source_barcode": self.source_barcode,
@@ -103,7 +103,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
 
         return json.dumps({"lims": self.lims, "aliquot": self.aliquot.to_dict()})
 
-    def publish(self, publisher: BasicPublisher, exchange: str, lims_uuid: str) -> None:
+    def publish(self, publisher: BasicPublisher, exchange: str, aliquot_uuid: str) -> None:
         """Publish a new message in the queue with the current contents of the feedback message
         Parameters:
         publisher (BasicPublisher) instance of basic publisher that we will use to connect to rabbitmq
@@ -111,7 +111,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         exchange (str) name of the exchange where we will publish the message in Rabbitmq
         """
         message = self.to_string()
-        routing_key = self._prepare_routing_key(lims_uuid)
+        routing_key = self._prepare_routing_key(aliquot_uuid)
         logger.info(f"Sending json to the warehouse queue: { message }")
         publisher.publish_message(
             exchange,
@@ -127,8 +127,8 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         return all([error.validate() for error in self.errors])
 
     @staticmethod
-    def _prepare_routing_key(lims_uuid: str | None) -> str:
+    def _prepare_routing_key(aliquot_uuid: str | None) -> str:
         """Prepares the routing key for create aliquot message to be sent to warehouse RabbitMQ"""
         environment = get_config("").MLWH_ENVIRONMENT_NAME
 
-        return RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT.format(environment=environment, lims_uuid=lims_uuid)
+        return RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT.format(environment=environment, aliquot_uuid=aliquot_uuid)

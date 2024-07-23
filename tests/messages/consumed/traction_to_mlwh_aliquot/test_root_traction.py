@@ -78,7 +78,7 @@ class TestTractionToMlwhAliquot:
     def test_lims_id_value_correct(self, subject):
         assert subject.lims_id.value == VALID_PAYLOAD[LIMS_ID]
 
-    def test_lims_uuid_returns_correct_field(self, subject, any):
+    def test_aliquot_uuid_returns_correct_field(self, subject, any):
         with patch(
             "tol_lab_share.messages.consumed.traction_to_mlwh_aliquot.traction_to_mlwh_aliquot.TractionToMlwhAliquot."
             "_make_field"
@@ -88,7 +88,7 @@ class TestTractionToMlwhAliquot:
         make_field.assert_called_once_with(ALIQUOT_UUID)
         assert field == make_field.return_value
 
-    def test_lims_uuid_value_correct(self, subject):
+    def test_aliquot_uuid_value_correct(self, subject):
         assert subject.aliquot_uuid.value == VALID_PAYLOAD[ALIQUOT_UUID]
 
     def test_aliquot_type_returns_correct_field(self, subject, any):

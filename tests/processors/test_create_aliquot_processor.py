@@ -75,7 +75,7 @@ class TestCreateAliquotProcessor:
 
         assert create_aliquot_in_warehouse_message.lims == message["limsId"]
 
-        assert create_aliquot_in_warehouse_message.aliquot.lims_uuid == message["aliquotUuid"]
+        assert create_aliquot_in_warehouse_message.aliquot.aliquot_uuid == message["aliquotUuid"]
         assert create_aliquot_in_warehouse_message.aliquot.id_lims == message["limsId"]
         assert create_aliquot_in_warehouse_message.aliquot.aliquot_type == message["aliquotType"]
         assert create_aliquot_in_warehouse_message.aliquot.source_type == message["sourceType"]
