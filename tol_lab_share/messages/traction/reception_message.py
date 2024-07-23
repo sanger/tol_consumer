@@ -48,6 +48,7 @@ class TractionReceptionMessageRequest:
         self.supplier_name: str | None = None
         self.taxon_id: str | None = None
         self.template_prep_kit_box_barcode: str | None = None
+        self.retention_instruction: str = "return_to_customer_after_2_years"
 
     def validate(self) -> bool:
         """Validate the information in this request.
@@ -138,6 +139,7 @@ class Serializer:
             "species": request.species,
             "supplier_name": request.supplier_name,
             "taxon_id": request.taxon_id,
+            "retention_instruction": request.retention_instruction,
         }
 
 
