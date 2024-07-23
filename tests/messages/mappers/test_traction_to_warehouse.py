@@ -35,7 +35,7 @@ class TestTractionToWarehouseMapper:
 
         # Assert the aliquot
         assert mock_warehouse_message.aliquot.id_lims == traction_to_warehouse_message.lims_id.value
-        assert mock_warehouse_message.aliquot.lims_uuid == traction_to_warehouse_message.lims_uuid.value
+        assert mock_warehouse_message.aliquot.lims_uuid == traction_to_warehouse_message.aliquot_uuid.value
         assert mock_warehouse_message.aliquot.aliquot_type == traction_to_warehouse_message.aliquot_type.value
         assert mock_warehouse_message.aliquot.source_type == traction_to_warehouse_message.source_type.value
         assert mock_warehouse_message.aliquot.source_barcode == traction_to_warehouse_message.source_barcode.value

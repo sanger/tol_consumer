@@ -48,7 +48,7 @@ class TractionToMlwhAliquot(Record):
         return self._make_field(LIMS_ID)
 
     @property
-    def lims_uuid(self) -> MessageField:
+    def aliquot_uuid(self) -> MessageField:
         """Gets the UUID of the aliquot in the LIMS system as a string."""
         return self._make_field(ALIQUOT_UUID)
 

@@ -53,7 +53,7 @@ class CreateAliquotProcessor(BaseProcessor):
         TractionCreateAliquotToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
 
         output_warehouse_message.publish(
-            self._basic_publisher, "psd.tol-lab-share", str(input_message_from_traction.lims_uuid.value)
+            self._basic_publisher, "psd.tol-lab-share", str(input_message_from_traction.aliquot_uuid.value)
         )
 
         if len(output_warehouse_message.errors) > 0:
