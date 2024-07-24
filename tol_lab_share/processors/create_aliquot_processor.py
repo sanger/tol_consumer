@@ -52,9 +52,7 @@ class CreateAliquotProcessor(BaseProcessor):
         # Maps the message from traction to the message that needs to be sent to warehouse rmq
         TractionCreateAliquotToWarehouseMapper.map(input_message_from_traction, output_warehouse_message)
 
-        output_warehouse_message.publish(
-            self._basic_publisher, "psd.tol-lab-share", str(input_message_from_traction.aliquot_uuid.value)
-        )
+        output_warehouse_message.publish(self._basic_publisher, "psd.tol-lab-share")
 
         if len(output_warehouse_message.errors) > 0:
             error_codes.ERROR_30_PROBLEM_TALKING_WITH_WAREHOUSE.trigger(

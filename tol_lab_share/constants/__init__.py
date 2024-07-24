@@ -8,7 +8,7 @@ RABBITMQ_SUBJECT_UPDATE_LABWARE = "update-labware"
 RABBITMQ_FEEDBACK_EXCHANGE = "psd.tol"
 RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK = "feedback.created.labware"
 RABBITMQ_ROUTING_KEY_UPDATE_LABWARE_FEEDBACK = "feedback.updated.labware"
-RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT = "{environment}.saved.aliquot.{aliquot_uuid}"
+RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT = "{environment}.saved.aliquot"
 RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK = "create-labware-feedback"
 RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK = "update-labware-feedback"
 

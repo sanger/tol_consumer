@@ -103,7 +103,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
 
         return json.dumps({"lims": self.lims, "aliquot": self.aliquot.to_dict()})
 
-    def publish(self, publisher: BasicPublisher, exchange: str, aliquot_uuid: str) -> None:
+    def publish(self, publisher: BasicPublisher, exchange: str) -> None:
         """Publish a new message in the queue with the current contents of the feedback message
         Parameters:
         publisher (BasicPublisher) instance of basic publisher that we will use to connect to rabbitmq
@@ -111,7 +111,7 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         exchange (str) name of the exchange where we will publish the message in Rabbitmq
         """
         message = self.to_string()
-        routing_key = self._prepare_routing_key(aliquot_uuid)
+        routing_key = self._prepare_routing_key()
         logger.info(f"Sending json to the warehouse queue: { message }")
         publisher.publish_message(
             exchange,
@@ -127,8 +127,8 @@ class CreateAliquotInWarehouseMessage(MessageProperty):
         return all([error.validate() for error in self.errors])
 
     @staticmethod
-    def _prepare_routing_key(aliquot_uuid: str | None) -> str:
+    def _prepare_routing_key() -> str:
         """Prepares the routing key for create aliquot message to be sent to warehouse RabbitMQ"""
         environment = get_config("").MLWH_ENVIRONMENT_NAME
 
-        return RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT.format(environment=environment, aliquot_uuid=aliquot_uuid)
+        return RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT.format(environment=environment)
