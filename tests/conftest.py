@@ -191,7 +191,7 @@ def valid_create_labware_sample():
         "supplierSampleName": "SampleSupplied1",
         "taxonId": "10090",
         "volume": "5",
-        "retentionInstruction": "Return to customer after 2 years",
+        "retentionInstruction": "return_to_customer_after_2_years",
     }
 
 
@@ -224,7 +224,7 @@ def invalid_create_labware_sample():
         "supplierSampleName": "1234",
         "taxonId": "ee10090",
         "volume": "ee5",
-        "retentionInstruction": "Return to customer after 2 years",
+        "retentionInstruction": "return_to_customer_after_2_years",
     }
 
 

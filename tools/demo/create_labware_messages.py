@@ -52,7 +52,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "shearingAndQCComments": "Comments",
                     "dateSubmittedUTC": datetime.now(UTC).timestamp() * 1000,
                     "priorityLevel": "Medium",
-                    "retentionInstruction": "Return to customer after 2 years",
+                    "retentionInstruction": "return_to_customer_after_2_years",
                 }
                 for letter in range(ord("A"), ord("H") + 1)
                 for pos in range(1, 13)
@@ -97,7 +97,7 @@ def build_create_tube_msg(unique_id, num_msg):
                     "shearingAndQCComments": "Comments",
                     "dateSubmittedUTC": datetime.now(UTC).timestamp() * 1000,
                     "priorityLevel": "Medium",
-                    "retentionInstruction": "Return to customer after 2 years",
+                    "retentionInstruction": "return_to_customer_after_2_years",
                 }
             ],
         },
