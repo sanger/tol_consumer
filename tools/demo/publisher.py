@@ -95,4 +95,8 @@ if __name__ == "__main__":
     else:
         if args.message_types == "create-update-labware":
             sample_msg = build_create_labware_96_msg(args.unique_id, 1)
+            update_msg = build_update_labware_msg(sample_msg)
+            tube_msg = build_create_tube_msg(args.unique_id, 3)
+            send_message(update_msg, "update-labware", encoder, registry, publisher)
+            send_message(tube_msg, "create-labware", encoder, registry, publisher)
             send_message(sample_msg, "create-labware", encoder, registry, publisher)
