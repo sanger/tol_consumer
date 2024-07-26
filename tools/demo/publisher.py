@@ -61,6 +61,7 @@ if __name__ == "__main__":
         help="The type of messages being sent.",
         choices=["create-update-labware", "bioscan-pool-xp-to-traction"],
     )
+    parser.add_argument("--loop", required=False, default=False, help="Send request iteratively", choices=[True, False])
 
     args = parser.parse_args()
 
@@ -77,14 +78,21 @@ if __name__ == "__main__":
     publisher = BasicPublisher(rabbitmq_details, publish_retry_delay=5, publish_max_retries=36, verify_cert=False)
     encoder = args.encoder
 
-    for pos in range(0, 5):
+    loop = bool(args.loop)
+
+    if loop:
+        for pos in range(0, 5):
+            if args.message_types == "create-update-labware":
+                sample_msg = build_create_labware_96_msg(args.unique_id, pos)
+                update_msg = build_update_labware_msg(sample_msg)
+                tube_msg = build_create_tube_msg(args.unique_id, pos)
+                send_message(sample_msg, "create-labware", encoder, registry, publisher)
+                send_message(update_msg, "update-labware", encoder, registry, publisher)
+                send_message(tube_msg, "create-labware", encoder, registry, publisher)
+            elif args.message_types == "bioscan-pool-xp-to-traction":
+                pool_xp_msg = build_bioscan_pool_xp_msg(args.unique_id, pos)
+                send_message(pool_xp_msg, "bioscan-pool-xp-tube-to-traction", encoder, registry, publisher)
+    else:
         if args.message_types == "create-update-labware":
-            sample_msg = build_create_labware_96_msg(args.unique_id, pos)
-            update_msg = build_update_labware_msg(sample_msg)
-            tube_msg = build_create_tube_msg(args.unique_id, pos)
+            sample_msg = build_create_labware_96_msg(args.unique_id, 1)
             send_message(sample_msg, "create-labware", encoder, registry, publisher)
-            send_message(update_msg, "update-labware", encoder, registry, publisher)
-            send_message(tube_msg, "create-labware", encoder, registry, publisher)
-        elif args.message_types == "bioscan-pool-xp-to-traction":
-            pool_xp_msg = build_bioscan_pool_xp_msg(args.unique_id, pos)
-            send_message(pool_xp_msg, "bioscan-pool-xp-tube-to-traction", encoder, registry, publisher)
