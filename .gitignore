@@ -142,3 +142,6 @@ dmypy.json
 
 # RabbitMQ admin tool
 rabbitmqadmin
+
+# PyCharm
+.idea

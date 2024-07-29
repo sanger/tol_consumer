@@ -75,7 +75,7 @@ class ErrorCode:
             return "sample"
         return "root"
 
-    def json(self) -> dict[str, Any]:
+    def json(self) -> "dict[str, Any]":
         """Returns a JSON-like representation of the ErrorCode"""
         return {
             "typeId": self.type_id,
@@ -212,3 +212,7 @@ ERROR_28_PROBLEM_TALKING_TO_TRACTION = ErrorCode(
     28, "root", "traction", "There was a problem while sending qc message to traction"
 )
 ERROR_29_NOT_BOOLEAN = ErrorCode(29, "plate", "unknown", "Not a boolean")
+ERROR_30_PROBLEM_TALKING_WITH_WAREHOUSE = ErrorCode(
+    16, "root", "mwlh", "There was a problem while sending to warehouse"
+)
+ERROR_31_EMPTY_ALIQUOT = ErrorCode(29, "parsing", "aliquot", "Empty aliquot present.")
