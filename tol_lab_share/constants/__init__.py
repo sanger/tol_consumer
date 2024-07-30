@@ -16,3 +16,6 @@ RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK = "update-labware-feedback"
 OUTPUT_TRACTION_MESSAGE_SOURCE = "tol-lab-share.tol"
 
 OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES = Literal["tubes", "wells"]
+
+PROCESSOR = "processor"
+SCHEMA_VERSION = "schema_version"
