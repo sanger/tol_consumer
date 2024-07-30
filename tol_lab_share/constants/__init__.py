@@ -8,7 +8,7 @@ RABBITMQ_SUBJECT_UPDATE_LABWARE = "update-labware"
 RABBITMQ_FEEDBACK_EXCHANGE = "psd.tol"
 RABBITMQ_ROUTING_KEY_CREATE_LABWARE_FEEDBACK = "feedback.created.labware"
 RABBITMQ_ROUTING_KEY_UPDATE_LABWARE_FEEDBACK = "feedback.updated.labware"
-RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT = "{environment}.saved.aliquot.{lims_uuid}"
+RABBITMQ_ROUTING_KEY_CREATE_ALIQUOT = "{environment}.saved.aliquot"
 RABBITMQ_SUBJECT_CREATE_LABWARE_FEEDBACK = "create-labware-feedback"
 RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK = "update-labware-feedback"
 
@@ -16,3 +16,6 @@ RABBITMQ_SUBJECT_UPDATE_LABWARE_FEEDBACK = "update-labware-feedback"
 OUTPUT_TRACTION_MESSAGE_SOURCE = "tol-lab-share.tol"
 
 OUTPUT_TRACTION_MESSAGE_CONTAINER_TYPES = Literal["tubes", "wells"]
+
+PROCESSOR = "processor"
+SCHEMA_VERSION = "schema_version"

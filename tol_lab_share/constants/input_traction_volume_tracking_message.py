@@ -1,7 +1,7 @@
 MESSAGE_UUID = "messageUuid"
 CREATED_DATE_UTC = "messageCreateDateUtc"
 LIMS_ID = "limsId"
-LIMS_UUID = "limsUuid"
+ALIQUOT_UUID = "aliquotUuid"
 ALIQUOT_TYPE = "aliquotType"
 SOURCE_TYPE = "sourceType"
 SOURCE_BARCODE = "sourceBarcode"

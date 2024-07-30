@@ -12,6 +12,7 @@ from tol_lab_share.processors.bioscan_pool_xp_to_traction_processor import Biosc
 from tol_lab_share.processors.create_labware_processor import CreateLabwareProcessor
 from tol_lab_share.processors.update_labware_processor import UpdateLabwareProcessor
 from tol_lab_share.processors.create_aliquot_processor import CreateAliquotProcessor
+from tol_lab_share.constants import PROCESSOR, SCHEMA_VERSION
 
 RABBIT_SERVER_DETAILS = RabbitServerDetails(
     uses_ssl=False,
@@ -43,6 +44,12 @@ RABBITMQ_SERVERS = [
         processors={
             RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: BioscanPoolXpToTractionProcessor,
         },
+        message_subjects={
+            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: {
+                PROCESSOR: BioscanPoolXpToTractionProcessor,
+                SCHEMA_VERSION: 1,
+            }
+        },
         publisher_details=RABBIT_SERVER_DETAILS,
     ),
     RabbitConfig(
@@ -52,12 +59,28 @@ RABBITMQ_SERVERS = [
             RABBITMQ_SUBJECT_CREATE_LABWARE: CreateLabwareProcessor,
             RABBITMQ_SUBJECT_UPDATE_LABWARE: UpdateLabwareProcessor,
         },
+        message_subjects={
+            RABBITMQ_SUBJECT_CREATE_LABWARE: {
+                PROCESSOR: CreateLabwareProcessor,
+                SCHEMA_VERSION: 1,
+            },
+            RABBITMQ_SUBJECT_UPDATE_LABWARE: {
+                PROCESSOR: UpdateLabwareProcessor,
+                SCHEMA_VERSION: 1,
+            }
+        },
         publisher_details=RABBIT_SERVER_DETAILS,
     ),
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.volume-tracking",
         processors={RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor},
+        message_subjects={
+            RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: {
+                PROCESSOR: CreateAliquotProcessor,
+                SCHEMA_VERSION: 1,
+            }
+        },
         publisher_details=WAREHOUSE_RABBIT_SERVER_DETAILS,
     ),
 ]

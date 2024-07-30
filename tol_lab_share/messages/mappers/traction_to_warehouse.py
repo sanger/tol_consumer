@@ -29,7 +29,7 @@ class TractionCreateAliquotToWarehouseMapper:
 
         # Populate aliquot
         destination.aliquot.id_lims = source.lims_id.value
-        destination.aliquot.lims_uuid = source.lims_uuid.value
+        destination.aliquot.aliquot_uuid = source.aliquot_uuid.value
         destination.aliquot.aliquot_type = source.aliquot_type.value
         destination.aliquot.source_type = source.source_type.value
         destination.aliquot.source_barcode = source.source_barcode.value
