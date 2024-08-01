@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b166ee50a0601ec9f51b8df0986c2bb7583953f98a73a7520ff294361f38b34f"
+            "sha256": "9cb049d6ecaee9d56f997e79155de70b7ad1ad47604c26997f23248b863f839e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -453,7 +453,7 @@
         "lab-share-lib": {
             "editable": false,
             "git": "https://github.com/sanger/lab-share-lib.git",
-            "ref": "dedcc2d5a1111f00c89c7e0f15842d3ce99d6586"
+            "ref": "10408d2dce0c0a6f54a8b31fabd170c706cd0281"
         },
         "more-itertools": {
             "hashes": [

@@ -40,9 +40,6 @@ RABBITMQ_SERVERS = [
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.poolxp-export-to-traction",
-        processors={
-            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: BioscanPoolXpToTractionProcessor,
-        },
         message_subjects={
             RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: ProcessorSchemaConfig(
                 processor=BioscanPoolXpToTractionProcessor, reader_schema_version="1"
@@ -53,10 +50,6 @@ RABBITMQ_SERVERS = [
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tol.crud-operations",
-        processors={
-            RABBITMQ_SUBJECT_CREATE_LABWARE: CreateLabwareProcessor,
-            RABBITMQ_SUBJECT_UPDATE_LABWARE: UpdateLabwareProcessor,
-        },
         message_subjects={
             RABBITMQ_SUBJECT_CREATE_LABWARE: ProcessorSchemaConfig(
                 processor=CreateLabwareProcessor, reader_schema_version="1"
@@ -70,7 +63,6 @@ RABBITMQ_SERVERS = [
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.volume-tracking",
-        processors={RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor},
         message_subjects={
             RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: ProcessorSchemaConfig(
                 processor=CreateAliquotProcessor, reader_schema_version="1"
