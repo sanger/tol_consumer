@@ -59,7 +59,7 @@ if __name__ == "__main__":
         "--message_types",
         required=True,
         help="The type of messages being sent.",
-        choices=["create-update-labware", "bioscan-pool-xp-to-traction"],
+        choices=["create-update-labware", "bioscan-pool-xp-to-traction", "create-labware"],
     )
     parser.add_argument("--loop", required=False, default=False, help="Send request iteratively", choices=[True, False])
 
