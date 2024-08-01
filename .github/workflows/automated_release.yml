@@ -5,6 +5,8 @@ on:
     branches:
       - develop
       - master
+    tags:
+      - '*-uat'
 
 env:
   IMAGE_NAME: ${{ github.repository }}/${{ github.event.repository.name }}
