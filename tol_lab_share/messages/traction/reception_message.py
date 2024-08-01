@@ -48,7 +48,7 @@ class TractionReceptionMessageRequest:
         self.supplier_name: str | None = None
         self.taxon_id: str | None = None
         self.template_prep_kit_box_barcode: str | None = None
-        self.retention_instruction: str = "return_to_customer_after_2_years"
+        self.retention_instruction: str | None = None
 
     def validate(self) -> bool:
         """Validate the information in this request.

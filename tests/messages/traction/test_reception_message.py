@@ -66,6 +66,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier1"
         request.taxon_id = "9606"
+        request.retention_instruction = 'return_to_customer_after_2_years'
 
         request = instance.create_request()
         request.accession_number = "AN1235"
@@ -822,6 +823,7 @@ class TestTractionReceptionMessage:
         request.species = "test species"
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.template_prep_kit_box_barcode = "box_barcode_001"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         assert instance.payload() == {
             "data": {
