@@ -22,7 +22,7 @@ more-itertools = "~=10.3"
 python-dotenv = "~=1.0"
 requests = "~=2.31"
 slackclient = "~=2.9"
-lab-share-lib = {editable = false,git = 'https://github.com/sanger/lab-share-lib.git',ref = '932737eb89664339106b66ec76650ff0396cc4e8'}
+lab-share-lib = {editable = false,git = 'https://github.com/sanger/lab-share-lib.git',ref = '3ee8cb182588306ae76f67384c63ea3f8054933d'}
 requests-mock = "*"
 types-requests = "*"
 python-snappy = "*"

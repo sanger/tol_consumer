@@ -70,7 +70,7 @@ def mock_decoder(message_object):
 @pytest.fixture
 def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
     decoder = mock_decoder(VALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD)
-    generic_rabbit_message.decode([decoder])
+    generic_rabbit_message.decode([decoder], "1")
 
     return generic_rabbit_message
 
@@ -78,7 +78,7 @@ def valid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
 @pytest.fixture
 def valid_traction_to_warehouse_message(generic_rabbit_message):
     decoder = mock_decoder(VALID_TRACTION_TO_WAREHOUSE_MESSAGE)
-    generic_rabbit_message.decode([decoder])
+    generic_rabbit_message.decode([decoder], "1")
 
     return generic_rabbit_message
 
@@ -86,7 +86,7 @@ def valid_traction_to_warehouse_message(generic_rabbit_message):
 @pytest.fixture
 def invalid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
     decoder = mock_decoder(INVALID_BIOSCAN_POOL_XP_TO_TRACTION_PAYLOAD)
-    generic_rabbit_message.decode([decoder])
+    generic_rabbit_message.decode([decoder], "1")
 
     return generic_rabbit_message
 
@@ -94,7 +94,7 @@ def invalid_bioscan_pool_xp_to_traction_message(generic_rabbit_message):
 @pytest.fixture
 def valid_create_labware_message(generic_rabbit_message):
     decoder = mock_decoder(TEST_VALID_CREATE_LABWARE_MSG_OBJECT)
-    generic_rabbit_message.decode([decoder])
+    generic_rabbit_message.decode([decoder], "1")
 
     return generic_rabbit_message
 
@@ -102,7 +102,7 @@ def valid_create_labware_message(generic_rabbit_message):
 @pytest.fixture
 def invalid_create_labware_message(generic_rabbit_message):
     decoder = mock_decoder(TEST_INVALID_CREATE_LABWARE_MSG_OBJECT)
-    generic_rabbit_message.decode([decoder])
+    generic_rabbit_message.decode([decoder], "1")
 
     return generic_rabbit_message
 
