@@ -1,5 +1,5 @@
 import os
-from lab_share_lib.config.rabbit_config import RabbitConfig, ProcessorSchemaConfig
+from lab_share_lib.config.rabbit_config import RabbitConfig, MessageSubjectConfig
 from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
 
 from tol_lab_share.constants import (
@@ -41,7 +41,7 @@ RABBITMQ_SERVERS = [
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.poolxp-export-to-traction",
         message_subjects={
-            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: ProcessorSchemaConfig(
+            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: MessageSubjectConfig(
                 processor=BioscanPoolXpToTractionProcessor, reader_schema_version="1"
             )
         },
@@ -51,10 +51,10 @@ RABBITMQ_SERVERS = [
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tol.crud-operations",
         message_subjects={
-            RABBITMQ_SUBJECT_CREATE_LABWARE: ProcessorSchemaConfig(
+            RABBITMQ_SUBJECT_CREATE_LABWARE: MessageSubjectConfig(
                 processor=CreateLabwareProcessor, reader_schema_version="1"
             ),
-            RABBITMQ_SUBJECT_UPDATE_LABWARE: ProcessorSchemaConfig(
+            RABBITMQ_SUBJECT_UPDATE_LABWARE: MessageSubjectConfig(
                 processor=UpdateLabwareProcessor, reader_schema_version="1"
             ),
         },
@@ -64,7 +64,7 @@ RABBITMQ_SERVERS = [
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.volume-tracking",
         message_subjects={
-            RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: ProcessorSchemaConfig(
+            RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: MessageSubjectConfig(
                 processor=CreateAliquotProcessor, reader_schema_version="1"
             )
         },
