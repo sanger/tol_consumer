@@ -107,6 +107,7 @@ class Labware(MessageProperty):
             request.study_uuid = sample.properties("study_uuid").value
             request.supplier_name = sample.properties("supplier_sample_name").value
             request.taxon_id = sample.properties("taxon_id").value
+            request.retention_instruction = sample.properties("retention_instruction").value
 
     @add_to_message_property.register
     def _(self, message: TractionQcMessage) -> None:

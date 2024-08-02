@@ -101,7 +101,7 @@ if __name__ == "__main__":
             send_message(tube_msg, "create-labware", encoder, registry, publisher)
             send_message(sample_msg, "create-labware", encoder, registry, publisher)
         elif args.message_types == "create-labware":
-            sample_msg = build_create_labware_96_msg(args.unique_id, 1)
-            send_message(sample_msg, "create-labware", encoder, registry, publisher)
+            tube_msg = build_create_tube_msg(args.unique_id, 3)
+            send_message(tube_msg, "create-labware", encoder, registry, publisher)
         else:
             print("Error in argument inputs.")
