@@ -185,6 +185,20 @@
                                         "name": "priorityLevel",
                                         "type": "string",
                                         "doc": "Priority level (if High or Medium)"
+                                    },
+                                    {
+                                        "name": "retentionInstruction",
+                                        "type": {
+                                            "type": "enum",
+                                            "name": "allowedRetentionInstruction",
+                                            "symbols": [
+                                                "destroy_after_2_years",
+                                                "return_to_customer_after_2_years",
+                                                "long_term_storage"
+                                            ]
+                                        },
+                                        "default": "return_to_customer_after_2_years",
+                                        "doc": "The retention instruction (what the customer wants to happen to the sample)"
                                     }
                                 ]
                             }

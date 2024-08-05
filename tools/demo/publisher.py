@@ -40,7 +40,7 @@ def send_message(msg, subject, encoder, registry, publisher):
 
     encoder = encoder_class(registry, subject)
 
-    encoded_message = encoder.encode([msg], version="latest")
+    encoded_message = encoder.encode([msg], version="1")
 
     print(f"Publishing message { encoded_message }\n")
 
@@ -106,11 +106,11 @@ if __name__ == "__main__":
             send_message(tube_msg, "create-labware", encoder, registry, publisher)
             send_message(sample_msg, "create-labware", encoder, registry, publisher)
         elif args.message_types == "create-labware":
-            tube_msg = build_create_tube_msg(args.unique_id, 3)
+            # tube_msg = build_create_tube_msg(args.unique_id, 3)
             tube_msg_without_retention_instruction = build_create_tube_msg_without_retention_instruction(
                 args.unique_id, 4
             )
-            send_message(tube_msg, "create-labware", encoder, registry, publisher)
+            # send_message(tube_msg, "create-labware", encoder, registry, publisher)
             send_message(tube_msg_without_retention_instruction, "create-labware", encoder, registry, publisher)
         else:
             print("Error in argument inputs.")

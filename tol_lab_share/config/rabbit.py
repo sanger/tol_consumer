@@ -52,7 +52,7 @@ RABBITMQ_SERVERS = [
         consumed_queue="tol.crud-operations",
         message_subjects={
             RABBITMQ_SUBJECT_CREATE_LABWARE: MessageSubjectConfig(
-                processor=CreateLabwareProcessor, reader_schema_version="1"
+                processor=CreateLabwareProcessor, reader_schema_version="2"
             ),
             RABBITMQ_SUBJECT_UPDATE_LABWARE: MessageSubjectConfig(
                 processor=UpdateLabwareProcessor, reader_schema_version="1"
