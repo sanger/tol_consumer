@@ -66,6 +66,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier1"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         request = instance.create_request()
         request.accession_number = "AN1235"
@@ -87,6 +88,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier2"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         assert instance.payload() == {
             "data": {
@@ -119,6 +121,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                                 {
@@ -142,6 +145,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                             ],
@@ -180,6 +184,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier1"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         # Second plate, first well (B1).
         request = instance.create_request()
@@ -202,6 +207,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier1"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         # First plate, second well (B1).
         request = instance.create_request()
@@ -224,6 +230,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier2"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         # Second plate, second well (C1).
         request = instance.create_request()
@@ -246,6 +253,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier2"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         assert instance.payload() == {
             "data": {
@@ -278,6 +286,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                                 {
@@ -301,6 +310,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                             ],
@@ -330,6 +340,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                                 {
@@ -353,6 +364,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                             ],
@@ -387,6 +399,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier1"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         request = instance.create_request()
         request.accession_number = "AN1235"
@@ -408,6 +421,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier2"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         assert instance.payload() == {
             "data": {
@@ -441,6 +455,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                                 {
@@ -465,6 +480,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                             ],
@@ -498,6 +514,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier1"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         request = instance.create_request()
         request.accession_number = "AN1235"
@@ -518,6 +535,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier2"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         assert instance.payload() == {
             "data": {
@@ -548,6 +566,7 @@ class TestTractionReceptionMessage:
                                 "species": "test species",
                                 "supplier_name": "supplier1",
                                 "taxon_id": "9606",
+                                "retention_instruction": "return_to_customer_after_2_years",
                             },
                         },
                         {
@@ -572,6 +591,7 @@ class TestTractionReceptionMessage:
                                 "species": "test species",
                                 "supplier_name": "supplier2",
                                 "taxon_id": "9606",
+                                "retention_instruction": "return_to_customer_after_2_years",
                             },
                         },
                     ],
@@ -603,6 +623,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier1"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         request = instance.create_request()
         request.accession_number = "AN1235"
@@ -624,6 +645,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier2"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         request = instance.create_request()
         request.accession_number = "AN1236"
@@ -644,6 +666,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier3"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         request = instance.create_request()
         request.accession_number = "AN1237"
@@ -664,6 +687,7 @@ class TestTractionReceptionMessage:
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.supplier_name = "supplier4"
         request.taxon_id = "9606"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         assert instance.payload() == {
             "data": {
@@ -696,6 +720,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier1",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                                 {
@@ -719,6 +744,7 @@ class TestTractionReceptionMessage:
                                         "species": "test species",
                                         "supplier_name": "supplier2",
                                         "taxon_id": "9606",
+                                        "retention_instruction": "return_to_customer_after_2_years",
                                     },
                                 },
                             ],
@@ -747,6 +773,7 @@ class TestTractionReceptionMessage:
                                 "species": "test species",
                                 "supplier_name": "supplier3",
                                 "taxon_id": "9606",
+                                "retention_instruction": "return_to_customer_after_2_years",
                             },
                         },
                         {
@@ -771,6 +798,7 @@ class TestTractionReceptionMessage:
                                 "species": "test species",
                                 "supplier_name": "supplier4",
                                 "taxon_id": "9606",
+                                "retention_instruction": "return_to_customer_after_2_years",
                             },
                         },
                     ],
@@ -795,6 +823,7 @@ class TestTractionReceptionMessage:
         request.species = "test species"
         request.study_uuid = "dd490ee5-fd1d-456d-99fd-eb9d3861e014"
         request.template_prep_kit_box_barcode = "box_barcode_001"
+        request.retention_instruction = "return_to_customer_after_2_years"
 
         assert instance.payload() == {
             "data": {
@@ -831,6 +860,7 @@ class TestTractionReceptionMessage:
                                 "species": "test species",
                                 "supplier_name": None,
                                 "taxon_id": None,
+                                "retention_instruction": "return_to_customer_after_2_years",
                             },
                         },
                     ],

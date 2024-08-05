@@ -1,5 +1,5 @@
 import os
-from lab_share_lib.config.rabbit_config import RabbitConfig
+from lab_share_lib.config.rabbit_config import RabbitConfig, MessageSubjectConfig
 from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
 
 from tol_lab_share.constants import (
@@ -40,24 +40,34 @@ RABBITMQ_SERVERS = [
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.poolxp-export-to-traction",
-        processors={
-            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: BioscanPoolXpToTractionProcessor,
+        message_subjects={
+            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: MessageSubjectConfig(
+                processor=BioscanPoolXpToTractionProcessor, reader_schema_version="1"
+            )
         },
         publisher_details=RABBIT_SERVER_DETAILS,
     ),
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tol.crud-operations",
-        processors={
-            RABBITMQ_SUBJECT_CREATE_LABWARE: CreateLabwareProcessor,
-            RABBITMQ_SUBJECT_UPDATE_LABWARE: UpdateLabwareProcessor,
+        message_subjects={
+            RABBITMQ_SUBJECT_CREATE_LABWARE: MessageSubjectConfig(
+                processor=CreateLabwareProcessor, reader_schema_version="2"
+            ),
+            RABBITMQ_SUBJECT_UPDATE_LABWARE: MessageSubjectConfig(
+                processor=UpdateLabwareProcessor, reader_schema_version="1"
+            ),
         },
         publisher_details=RABBIT_SERVER_DETAILS,
     ),
     RabbitConfig(
         consumer_details=RABBIT_SERVER_DETAILS,
         consumed_queue="tls.volume-tracking",
-        processors={RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor},
+        message_subjects={
+            RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: MessageSubjectConfig(
+                processor=CreateAliquotProcessor, reader_schema_version="1"
+            )
+        },
         publisher_details=WAREHOUSE_RABBIT_SERVER_DETAILS,
     ),
 ]

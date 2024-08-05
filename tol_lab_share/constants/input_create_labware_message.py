@@ -5,6 +5,7 @@ LABWARE_TYPE = "labwareType"
 BARCODE = "barcode"
 SAMPLES = "samples"
 UUID = "labwareUuid"
+RETENTION_INSTRUCTION = "retentionInstruction"
 
 
 SAMPLE_PUBLIC_NAME = "publicName"
