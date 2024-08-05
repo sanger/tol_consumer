@@ -104,6 +104,11 @@ def build_create_tube_msg(unique_id, num_msg):
     }
 
 
+def build_create_tube_msg_without_retention_instruction(unique_id, num_msg):
+    tube_msg = build_create_tube_msg(unique_id, num_msg)
+    del tube_msg["labware"]["samples"][0]["retentionInstruction"]
+
+
 def build_update_labware_msg(sample_msg):
     return {
         "messageUuid": str(uuid4()).encode(),
