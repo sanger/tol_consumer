@@ -19,12 +19,10 @@ RABBITMQ_SERVERS = [
         consumed_queue="tol.crud-operations",
         message_subjects={
             RABBITMQ_SUBJECT_CREATE_LABWARE: MessageSubjectConfig(
-                processor=CreateLabwareProcessor,
-                reader_schema_version="2"
+                processor=CreateLabwareProcessor, reader_schema_version="2"
             ),
-            RABBITMQ_SUBJECT_UPDATE_LABWARE:  MessageSubjectConfig(
-                processor=UpdateLabwareProcessor,
-                reader_schema_version="1"
+            RABBITMQ_SUBJECT_UPDATE_LABWARE: MessageSubjectConfig(
+                processor=UpdateLabwareProcessor, reader_schema_version="1"
             ),
         },
         publisher_details=TOL_RABBIT_SERVER,
@@ -34,8 +32,7 @@ RABBITMQ_SERVERS = [
         consumed_queue="tls.poolxp-export-to-traction",
         message_subjects={
             RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: MessageSubjectConfig(
-                processor=BioscanPoolXpToTractionProcessor,
-                reader_schema_version="1"
+                processor=BioscanPoolXpToTractionProcessor, reader_schema_version="1"
             ),
         },
         publisher_details=ISG_RABBIT_SERVER,
@@ -45,8 +42,7 @@ RABBITMQ_SERVERS = [
         consumed_queue="tls.volume-tracking",
         message_subjects={
             RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: MessageSubjectConfig(
-                processor=CreateAliquotProcessor,
-                reader_schema_version="1"
+                processor=CreateAliquotProcessor, reader_schema_version="1"
             ),
         },
         publisher_details=MLWH_RABBIT_SERVER,
