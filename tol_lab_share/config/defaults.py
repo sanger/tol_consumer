@@ -2,7 +2,7 @@
 import os
 
 from tol_lab_share.config.logging import *
-from tol_lab_share.config.rabbit import *
+from .rabbit import *
 
 # If we're running in a container, then instead of localhost
 # we want host.docker.internal, you can specify this in the
@@ -26,3 +26,11 @@ SELECTED_ENCODER_FOR_FEEDBACK_MESSAGE = "binary"
 
 # Validate SSL certificate chain when connecting to https
 CERTIFICATES_VALIDATION_ENABLED = True
+
+RABBITMQ_PUBLISH_RETRY_DELAY = 5
+RABBITMQ_PUBLISH_RETRIES = 36  # 3 minutes of retries
+
+# In our servers, this will be picked up using deployment project's
+# roles/deploy_tol_stack/templates/tol-lab-share/app_config.py.j2 and
+# environments/uat/group_vars/tol_swarm_managers.yml
+MLWH_ENVIRONMENT_NAME = os.environ.get("MLWH_ENVIRONMENT_NAME", "development")
