@@ -23,9 +23,9 @@ jobs:
 
       - name: Create rst files for docs
         run: |
-          pip install pdoc
+          pip install pydoctor
           mkdir doc
-          pdoc --output-dir ./doc tol_lab_share
+          pydoctor --make-html --html-output=doc tol_lab_share
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
