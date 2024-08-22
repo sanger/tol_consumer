@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - '143-write-*'
   workflow_dispatch:
 
 jobs:
