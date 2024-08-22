@@ -5,7 +5,7 @@
 
 import os
 import sys
-import sphinx_pdj_theme  # type: ignore
+import sphinx_adc_theme
 
 # -- Path setup --------------------------------------------------------------
 
@@ -37,7 +37,6 @@ extensions = [
     "sphinx.ext.githubpages",  # Publish HTML to GitHub pages
     "sphinx.ext.mathjax",  # Support for math notation via MathJax
     "sphinx.ext.ifconfig",  # Conditional inclusion of content
-    "sphinx_rtd_theme",  # Read the Docs theme
 ]
 
 # Autodoc options
@@ -57,6 +56,6 @@ exclude_patterns = ["tol_lab_share.config"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_pdj_theme"
-html_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
+html_theme = 'sphinx_adc_theme'
+html_theme_path = [sphinx_adc_theme.get_html_theme_path()]
 html_static_path = ["_static"]
