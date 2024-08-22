@@ -16,14 +16,12 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.11
-      - name: Install pipenv
-        run: pip install pipenv
-      - name: Run tests
-        run: |
-          pipenv install --dev
 
       - name: Create rst files for docs
         run: |
+          pip install sphinx
+          pip install sphinx-autodoc-typehints
+          pipo install sphinx-pdj-theme
           mkdir doc
           sphinx-apidoc -o docs/source/ tol_lab_share tol_lab_share/config tol_lab_share/constants setup_dev_rabbit.py
           make html -C docs
