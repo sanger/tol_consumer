@@ -23,13 +23,9 @@ jobs:
 
       - name: Create rst files for docs
         run: |
-          pip install sphinx
-          pip install sphinx-autodoc-typehints
-          pip install sphinx-adc-theme
+          pip install pdoc
           mkdir doc
-          sphinx-apidoc -o docs/source/ tol_lab_share tol_lab_share/config tol_lab_share/constants setup_dev_rabbit.py
-          make html -C docs
-          cp -r docs/build/html/* doc/
+          pdoc --output-dir ./doc tol_lab_share
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3

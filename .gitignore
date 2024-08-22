@@ -81,6 +81,7 @@ instance/
 docs/_build/
 docs/build
 docs/tol_lab_share.**.rst
+doc
 
 # PyBuilder
 target/
