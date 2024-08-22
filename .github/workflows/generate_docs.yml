@@ -25,7 +25,7 @@ jobs:
         run: |
           pip install pydoctor
           mkdir doc
-          pydoctor --make-html --html-output=doc tol_lab_share
+          pydoctor --make-html --html-output=doc tol_lab_share || true
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
