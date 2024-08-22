@@ -226,7 +226,7 @@ class MlwhRabbitSetupTool(RabbitSetupTool):
     """
 
     def __init__(self):
-        super().__init__("test")
+        super().__init__("mlwh")
 
         self.EXCHANGE = "psd.tol-lab-share"
         self.TOPIC_EXCHANGE_TYPE = "topic"

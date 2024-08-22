@@ -35,6 +35,7 @@ TEST_VALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "return_to_customer_after_2_years",
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -63,6 +64,7 @@ TEST_VALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "return_to_customer_after_2_years",
             },
         ],
     },
@@ -103,6 +105,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "return_to_customer_after_2_years",
             },
             {
                 "sampleUuid": "dd490ee5-fd1d-456d-99fd-eb9d3861e0f7".encode(),
@@ -131,6 +134,7 @@ TEST_INVALID_CREATE_LABWARE_MSG_OBJECT: dict[str, Any] = {
                 "shearingAndQCComments": "Comments",
                 "dateSubmittedUTC": datetime.now(UTC),
                 "priorityLevel": "Medium",
+                "retentionInstruction": "return_to_customer_after_2_years",
             },
         ],
     },

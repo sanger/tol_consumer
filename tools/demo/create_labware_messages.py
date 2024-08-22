@@ -52,6 +52,7 @@ def build_create_labware_96_msg(unique_id, num_msg):
                     "shearingAndQCComments": "Comments",
                     "dateSubmittedUTC": datetime.now(UTC).timestamp() * 1000,
                     "priorityLevel": "Medium",
+                    "retentionInstruction": "return_to_customer_after_2_years",
                 }
                 for letter in range(ord("A"), ord("H") + 1)
                 for pos in range(1, 13)
@@ -61,6 +62,49 @@ def build_create_labware_96_msg(unique_id, num_msg):
 
 
 def build_create_tube_msg(unique_id, num_msg):
+    unique_id_lab = f"TOLTESTING-TUBE-{unique_id}-{num_msg}"
+    return {
+        "messageUuid": str(uuid4()).encode(),
+        "messageCreateDateUtc": datetime.now(UTC).timestamp() * 1000,
+        "labware": {
+            "labwareType": "Tube",
+            "barcode": barcode_for_unique_id("TUBE", unique_id, num_msg),
+            "samples": [
+                {
+                    "sampleUuid": str(uuid4()).encode(),
+                    "studyUuid": "28c96f02-a15c-11ed-b8de-fa163e1e3ca9".encode(),
+                    "sangerSampleId": f"sangerId-{unique_id_lab}",
+                    "supplierSampleName": f"SampleSupplied-{unique_id_lab}",
+                    "location": None,
+                    "volume": "5",
+                    "concentration": "5",
+                    "publicName": f"SamplePublicName-{unique_id_lab}",
+                    "taxonId": "10090",
+                    "commonName": "Mus Musculus",
+                    "donorId": f"donor-{unique_id_lab}",
+                    "libraryType": LIBRARY_TYPE,
+                    "countryOfOrigin": "United Kingdom",
+                    "genomeSize": "1",
+                    "accessionNumber": "A1234",
+                    "costCode": "S1234",
+                    "sampleCollectionDateUtc": datetime.now(UTC).timestamp() * 1000,
+                    "shearedFemtoFragmentSize": "5",
+                    "postSPRIConcentration": "10",
+                    "postSPRIVolume": "20",
+                    "finalNanoDrop280": "5",
+                    "finalNanoDrop230": "6",
+                    "finalNanoDrop": "7",
+                    "shearingAndQCComments": "Comments",
+                    "dateSubmittedUTC": datetime.now(UTC).timestamp() * 1000,
+                    "priorityLevel": "Medium",
+                    "retentionInstruction": "return_to_customer_after_2_years",
+                }
+            ],
+        },
+    }
+
+
+def build_create_tube_msg_without_retention_instruction(unique_id, num_msg):
     unique_id_lab = f"TOLTESTING-TUBE-{unique_id}-{num_msg}"
     return {
         "messageUuid": str(uuid4()).encode(),

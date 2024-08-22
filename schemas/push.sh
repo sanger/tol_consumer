@@ -18,7 +18,7 @@ CONTENT_TYPE="Content-Type: application/vnd.schemaregistry.v1+json"
 
 pushd "$(dirname "$0")"
 
-for schema in `find . -name "*.avsc"`; do
+for schema in `(find . -name "*.avsc" | sort)`; do
   schema_name=`dirname $schema | sed 's/\.//g' | sed 's/\///g'`
 
   # Convert to schema

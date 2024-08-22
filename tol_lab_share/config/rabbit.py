@@ -1,6 +1,4 @@
-import os
-from lab_share_lib.config.rabbit_config import RabbitConfig
-from lab_share_lib.config.rabbit_server_details import RabbitServerDetails
+from lab_share_lib.config.rabbit_config import RabbitConfig, MessageSubjectConfig
 
 from tol_lab_share.constants import (
     RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION,
@@ -13,54 +11,40 @@ from tol_lab_share.processors.create_labware_processor import CreateLabwareProce
 from tol_lab_share.processors.update_labware_processor import UpdateLabwareProcessor
 from tol_lab_share.processors.create_aliquot_processor import CreateAliquotProcessor
 
-RABBIT_SERVER_DETAILS = RabbitServerDetails(
-    uses_ssl=False,
-    host=os.environ.get("LOCALHOST", "127.0.0.1"),
-    port=5672,
-    username=os.environ.get("RABBITMQ_USER", "admin"),
-    password=os.environ.get("RABBITMQ_PASSWORD", "development"),
-    vhost="tol",
-)
-
-# In our servers, this will be picked up using deployment project's
-# roles/deploy_tol_stack/templates/tol-lab-share/app_config.py.j2 and
-# environments/uat/group_vars/tol_swarm_managers.yml
-MLWH_ENVIRONMENT_NAME = os.environ.get("MLWH_ENVIRONMENT_NAME", "development")
-
-WAREHOUSE_RABBIT_SERVER_DETAILS = RabbitServerDetails(
-    uses_ssl=False,
-    host=os.environ.get("WAREHOUSE_RMQ_HOST", "127.0.0.1"),
-    port=5672,
-    username=os.environ.get("WAREHOUSE_RMQ_USER", "admin"),
-    password=os.environ.get("WAREHOUSE_RMQ_PASSWORD", "development"),
-    vhost="test",
-)
+from .rabbit_servers import TOL_RABBIT_SERVER, ISG_RABBIT_SERVER, MLWH_RABBIT_SERVER
 
 RABBITMQ_SERVERS = [
     RabbitConfig(
-        consumer_details=RABBIT_SERVER_DETAILS,
-        consumed_queue="tls.poolxp-export-to-traction",
-        processors={
-            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: BioscanPoolXpToTractionProcessor,
-        },
-        publisher_details=RABBIT_SERVER_DETAILS,
-    ),
-    RabbitConfig(
-        consumer_details=RABBIT_SERVER_DETAILS,
+        consumer_details=TOL_RABBIT_SERVER,
         consumed_queue="tol.crud-operations",
-        processors={
-            RABBITMQ_SUBJECT_CREATE_LABWARE: CreateLabwareProcessor,
-            RABBITMQ_SUBJECT_UPDATE_LABWARE: UpdateLabwareProcessor,
+        message_subjects={
+            RABBITMQ_SUBJECT_CREATE_LABWARE: MessageSubjectConfig(
+                processor=CreateLabwareProcessor, reader_schema_version="2"
+            ),
+            RABBITMQ_SUBJECT_UPDATE_LABWARE: MessageSubjectConfig(
+                processor=UpdateLabwareProcessor, reader_schema_version="1"
+            ),
         },
-        publisher_details=RABBIT_SERVER_DETAILS,
+        publisher_details=TOL_RABBIT_SERVER,
     ),
     RabbitConfig(
-        consumer_details=RABBIT_SERVER_DETAILS,
+        consumer_details=ISG_RABBIT_SERVER,
+        consumed_queue="tls.poolxp-export-to-traction",
+        message_subjects={
+            RABBITMQ_SUBJECT_BIOSCAN_POOL_XP_TO_TRACTION: MessageSubjectConfig(
+                processor=BioscanPoolXpToTractionProcessor, reader_schema_version="1"
+            ),
+        },
+        publisher_details=ISG_RABBIT_SERVER,
+    ),
+    RabbitConfig(
+        consumer_details=ISG_RABBIT_SERVER,
         consumed_queue="tls.volume-tracking",
-        processors={RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: CreateAliquotProcessor},
-        publisher_details=WAREHOUSE_RABBIT_SERVER_DETAILS,
+        message_subjects={
+            RABBITMQ_SUBJECT_CREATE_ALIQUOT_IN_MLWH: MessageSubjectConfig(
+                processor=CreateAliquotProcessor, reader_schema_version="1"
+            ),
+        },
+        publisher_details=MLWH_RABBIT_SERVER,
     ),
 ]
-
-RABBITMQ_PUBLISH_RETRY_DELAY = 5
-RABBITMQ_PUBLISH_RETRIES = 36  # 3 minutes of retries
