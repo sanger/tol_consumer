@@ -21,7 +21,7 @@ jobs:
         run: |
           pip install sphinx
           pip install sphinx-autodoc-typehints
-          pipo install sphinx-pdj-theme
+          pip install sphinx-pdj-theme
           mkdir doc
           sphinx-apidoc -o docs/source/ tol_lab_share tol_lab_share/config tol_lab_share/constants setup_dev_rabbit.py
           make html -C docs
