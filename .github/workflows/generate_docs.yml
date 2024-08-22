@@ -27,7 +27,7 @@ jobs:
           pip install sphinx-autodoc-typehints
           pip install sphinx-adc-theme
           mkdir doc
-          sphinx-apidoc -o docs/source/ tol_lab_share tol_lab_share/config tol_lab_share/constants setup_dev_rabbit.py
+          sphinx-apidoc -o docs/source/ tol_lab_share tol_lab_share/config tol_lab_share/constants setup_dev_rabbit.py tol_lab_share/processors/__init__.py tol_lab_share/messages/__init__.py tol_lab_share/constants/__init__.py
           make html -C docs
           cp -r docs/build/html/* doc/
 
