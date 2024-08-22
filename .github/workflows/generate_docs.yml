@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Python, pipenv and Pipfile packages
+        uses: palewire/install-python-pipenv-pipfile@v4
+        with:
+          python-version: 3.11
+
+      - name: Create rst files for docs
+        run: |
+          mkdir doc
+          sphinx-apidoc -o docs/source/ tol_lab_share tol_lab_share/config tol_lab_share/constants setup_dev_rabbit.py
+          make html -C docs
+          cp -r docs/build/html/* doc/
+
+      - name: Upload artifact to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: doc
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # The deploy job will only run if the build job is successful
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+          
+          
