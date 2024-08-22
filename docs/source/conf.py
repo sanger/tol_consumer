@@ -5,7 +5,7 @@
 
 import os
 import sys
-import sphinx_pdj_theme
+import sphinx_pdj_theme # type: ignore
 
 # -- Path setup --------------------------------------------------------------
 
