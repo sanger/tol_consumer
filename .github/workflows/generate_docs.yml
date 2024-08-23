@@ -31,14 +31,14 @@ jobs:
         run: |
           pip install pydoctor
           mkdir doc
-          mkdir doc/api
+          mkdir doc/api-docs
           pydoctor \
           --project-name=tol-lab-share \
           --project-version=$VERSION \
           --project-url=https://github.com/sanger/tol-lab-share/ \
           --html-viewsource-base=https://github.com/sanger/tol-lab-share/tree/$LATEST_RELEASE_TAG \
           --make-html \
-          --html-output=doc/api \
+          --html-output=doc/api-docs \
           --project-base-dir="." \
           --docformat=google \
           --intersphinx=https://docs.python.org/3/objects.inv \
