@@ -44,6 +44,18 @@ jobs:
           --intersphinx=https://docs.python.org/3/objects.inv \
           ./tol_lab_share || true
 
+      - name: Install Python Dependencies for mkdocs documentation
+        run: |
+          pip install mkdocs
+          pip install mkdocs-material
+          pip install mkdocs-glightbox
+          pip install mkdocs-git-revision-date-localized-plugin
+
+      - name: Create mkdocs documentation
+        run: |
+          mkdocs build -f documentation/mkdocs.yml
+          cp -r site/* docs/
+
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
