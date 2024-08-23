@@ -39,7 +39,7 @@ jobs:
           --make-html \
           --html-output=doc \
           --project-base-dir="." \
-          --docformat=restructuredtext \
+          --docformat=google \
           --intersphinx=https://docs.python.org/3/objects.inv \
           ./tol_lab_share || true
 
