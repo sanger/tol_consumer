@@ -54,7 +54,7 @@ jobs:
       - name: Create mkdocs documentation
         run: |
           mkdocs build -f documentation/mkdocs.yml
-          cp -r documentation/site/* docs/
+          cp -r documentation/site/* doc/
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
