@@ -110,4 +110,4 @@ Flake8 is used for linting, to execute:
 
 ## API Docs
 
-API Docs can be accessed via [https://sanger.github.io/tol-lab-share/api-docs/](https://sanger.github.io/tol-lab-share/api/).
+API Docs can be accessed via [https://sanger.github.io/tol-lab-share/api-docs/](https://sanger.github.io/tol-lab-share/api-docs/).
