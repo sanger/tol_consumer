@@ -1,6 +1,7 @@
 site_name: Tol Lab Share
 nav:
   - Home: index.md
+  - lab-share-lib: lab-share-lib.md
   - Volume Tracking:
     - Process and Introduction: volume-tracking/volume-tracking-intro.md
     - Setting up for Volume Tracking: volume-tracking/setting-up-for-volume-tracking.md
