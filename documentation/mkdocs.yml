@@ -9,6 +9,7 @@ theme:
     name: material
     font: false
     favicon: img/favicon.png
+    logo: img/favicon.png
     palette:
         # Palette toggle for automatic mode
         - media: "(prefers-color-scheme)"
@@ -45,7 +46,6 @@ theme:
             - navigation.top
             - search.highlight
     icon:
-        logo: material/tray-full
         annotation: material/arrow-right-circle
         repo: material/github
 extra:
