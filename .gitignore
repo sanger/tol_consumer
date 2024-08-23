@@ -82,6 +82,7 @@ docs/_build/
 docs/build
 docs/tol_lab_share.**.rst
 doc
+documentation/site
 
 # PyBuilder
 target/
