@@ -5,13 +5,14 @@ class MessageField:
     """A wrapper for extracting a field name and value from a record payload."""
 
     def __init__(self, path: str, key: str, dict: dict[str, Any], transform: Callable | None = None):
-        """Initialises the message field.
+        """
+        Initialises the message field.
 
         Args:
             path (str): The path in the message to reach the field.
             key (str): The key for the field.
-            dict (dict[str, Any]): The record payload as a dictionary.
-            transform (Callable | None, optional): A transform function for the extracted value.
+            record (dict[str, Any]): The record payload as a dictionary.
+            transform (Optional[Callable], optional): A transform function for the extracted value.
                 Use this to convert the value to a different type or perform mappings.
                 Defaults to None (no transformation).
         """

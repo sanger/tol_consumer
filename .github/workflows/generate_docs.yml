@@ -21,11 +21,27 @@ jobs:
         with:
           python-version: 3.11
 
+      - name: Get latest release tag and version
+        run: |
+          LATEST_RELEASE_TAG=$(curl --silent "https://api.github.com/repos/sanger/tol-lab-share/releases/latest" | jq -r '.tag_name')
+          VERSION=${LATEST_RELEASE_TAG#v}
+          echo "LATEST_RELEASE_TAG: $LATEST_RELEASE_TAG and VERSION: $VERSION"
+
       - name: Create rst files for docs
         run: |
           pip install pydoctor
           mkdir doc
-          pydoctor --make-html --html-output=doc tol_lab_share || true
+          pydoctor \
+          --project-name=tol-lab-share \
+          --project-version=$VERSION \
+          --project-url=https://github.com/sanger/tol-lab-share/ \
+          --html-viewsource-base=https://github.com/sanger/tol-lab-share/tree/$LATEST_RELEASE_TAG \
+          --make-html \
+          --html-output=doc \
+          --project-base-dir="." \
+          --docformat=restructuredtext \
+          --intersphinx=https://docs.python.org/3/objects.inv \
+          ./tol_lab_share || true
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
