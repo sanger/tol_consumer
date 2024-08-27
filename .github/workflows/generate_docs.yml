@@ -26,9 +26,17 @@ jobs:
           VERSION=${LATEST_RELEASE_TAG#v}
           echo "LATEST_RELEASE_TAG: $LATEST_RELEASE_TAG and VERSION: $VERSION"
 
-      - name: Create rst files for docs
+      - name: Install dependencies for docs generation
         run: |
           pip install pydoctor
+          pip install mkdocs
+          pip install mkdocs-material
+          pip install mkdocs-glightbox
+          pip install mkdocs-git-revision-date-localized-plugin
+          pip install mkdocs-table-reader-plugin
+
+      - name: Create rst files for docs and generate api-docs
+        run: |
           mkdir doc
           mkdir doc/api-docs
           pydoctor \
@@ -42,14 +50,6 @@ jobs:
           --docformat=google \
           --intersphinx=https://docs.python.org/3/objects.inv \
           ./tol_lab_share || true
-
-      - name: Install Python Dependencies for mkdocs documentation
-        run: |
-          pip install mkdocs
-          pip install mkdocs-material
-          pip install mkdocs-glightbox
-          pip install mkdocs-git-revision-date-localized-plugin
-          pip install mkdocs-table-reader-plugin
 
       - name: Create mkdocs documentation
         run: |
