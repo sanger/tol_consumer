@@ -25,7 +25,7 @@ pipenv install --dev
 ### Setting up with Docker
 
 If you want to setup a local development environment with Docker please check
-the instructions in [SETUP_DOCKER.md](SETUP_DOCKER.md)
+the instructions in [SETUP_DOCKER.md](https://github.com/sanger/tol-lab-share/blob/develop/SETUP_DOCKER.md)
 
 ## Running
 
