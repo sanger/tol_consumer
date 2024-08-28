@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  pages: write      # Allow writing to the GitHub Pages
+  id-token: write   # Allow OIDC token to be issued
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.11
+
+      - name: Get latest release tag and version
+        run: |
+          LATEST_RELEASE_TAG=$(curl --silent "https://api.github.com/repos/sanger/tol-lab-share/releases/latest" | jq -r '.tag_name')
+          VERSION=${LATEST_RELEASE_TAG#v}
+          echo "LATEST_RELEASE_TAG: $LATEST_RELEASE_TAG and VERSION: $VERSION"
+
+      - name: Install dependencies for docs generation
+        run: |
+          pip install pydoctor
+          pip install mkdocs
+          pip install mkdocs-material
+          pip install mkdocs-glightbox
+          pip install mkdocs-git-revision-date-localized-plugin
+          pip install mkdocs-table-reader-plugin
+
+      - name: Create rst files for docs and generate api-docs
+        run: |
+          mkdir doc
+          mkdir doc/api-docs
+          pydoctor \
+          --project-name=tol-lab-share \
+          --project-version=$VERSION \
+          --project-url=https://github.com/sanger/tol-lab-share/ \
+          --html-viewsource-base=https://github.com/sanger/tol-lab-share/tree/$LATEST_RELEASE_TAG \
+          --make-html \
+          --html-output=doc/api-docs \
+          --project-base-dir="." \
+          --docformat=google \
+          --intersphinx=https://docs.python.org/3/objects.inv \
+          ./tol_lab_share || true
+
+      - name: Create mkdocs documentation
+        run: |
+          mkdocs build -f documentation/mkdocs.yml
+          cp -r documentation/site/* doc/
+
+      - name: Upload artifact to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: doc
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # The deploy job will only run if the build job is successful
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
