@@ -1,4 +1,4 @@
-FROM python:3.11.1-slim-bullseye
+FROM python:3.13-slim
 
 # > Setting PYTHONUNBUFFERED to a non empty value ensures that the python output is sent straight to
 # > terminal (e.g. your container log) without being first buffered and that you can see the output
