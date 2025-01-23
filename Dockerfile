@@ -1,4 +1,4 @@
-FROM python:3.13.0-slim-bullseye
+FROM python:3.13-slim
 
 # Setting PYTHONUNBUFFERED to a non-empty value ensures that the python output is sent straight to
 # terminal (e.g. your container log) without being first buffered and that you can see the output
@@ -16,6 +16,10 @@ RUN apt-get update && \
     libsnappy-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Rust and Cargo
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install the package manager - pipenv
 RUN pip install --upgrade pip && \
