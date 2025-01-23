@@ -11,7 +11,7 @@ RUN apt-get update && \
     apt-get install -y \
     build-essential \
     curl \
-    netcat \
+    netcat-openbsd \
     git \
     unixodbc-dev \
     libsnappy-dev
